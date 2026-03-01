@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --color-kahoot-red: #8B0000;
+  --color-kahoot-blue: #0F3460;
+  --color-kahoot-yellow: #B8860B;
+  --color-kahoot-green: #2E5A27;
+  --color-primary: #4A1C40;
+  --color-secondary: #D4AF37;
+
+  /* System-wide font: Inter (matches PinnacleGame style) */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-cinzel: 'Cinzel', serif;
+  --font-lora: 'Lora', serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  background-color: #1a1a1a;
+  color: #f1f5f9;
+}
+
+/* Custom Thematic Utilities */
+@utility font-cinzel {
+  font-family: var(--font-cinzel);
+}
+
+@utility font-lora {
+  font-family: var(--font-lora);
+}
+
+@utility bg-parchment {
+  background-color: #f4ebd8;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+}
+
+@utility gold-text-gradient {
+  background: linear-gradient(to bottom, #F9D423 0%, #D4AF37 50%, #C8860B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
