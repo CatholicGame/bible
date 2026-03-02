@@ -78,11 +78,11 @@ const HexagonBox = ({ children, className = "", onClick, disabled, isActive, isC
     );
 };
 
-const LifelineButton = ({ icon: Icon, text, isUsed, onClick, active }) => (
+const LifelineButton = ({ icon: Icon, text, isUsed, disabled, onClick, active }) => (
     <button
         onClick={onClick}
-        disabled={isUsed}
-        className={`relative w-12 h-10 md:w-14 md:h-12 rounded-full border border-blue-400/50 flex items-center justify-center transition-all ${isUsed ? 'opacity-30 grayscale cursor-not-allowed border-red-500' : active ? 'bg-amber-600 border-yellow-400 shadow-[0_0_15px_rgba(251,191,36,0.6)]' : 'bg-[#0f172a]/80 hover:bg-slate-800 hover:border-blue-300 text-white shadow-[0_0_10px_rgba(59,130,246,0.3)]'}`}
+        disabled={isUsed || disabled}
+        className={`relative w-12 h-10 md:w-14 md:h-12 rounded-full border border-blue-400/50 flex items-center justify-center transition-all ${(isUsed || disabled) ? 'opacity-30 grayscale cursor-not-allowed border-red-500' : active ? 'bg-amber-600 border-yellow-400 shadow-[0_0_15px_rgba(251,191,36,0.6)]' : 'bg-[#0f172a]/80 hover:bg-slate-800 hover:border-blue-300 text-white shadow-[0_0_10px_rgba(59,130,246,0.3)]'}`}
     >
         <span className="bg-gradient-to-b from-white/10 to-transparent absolute inset-0 rounded-full"></span>
         {Icon && <Icon size={18} className="relative z-10" />}
@@ -293,7 +293,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
         setTimeout(() => {
             if (currentQuestionIndex < DUMMY_QUESTIONS.length - 1 && selectedOption === DUMMY_QUESTIONS[currentQuestionIndex].answer) {
                 setIsSwapping(true); // mượn lại hiệu ứng chuyển câu
-                playMurmurSound(); // optional trang âm
+                // playMurmurSound(); // Đã tắt âm thanh whoosh tạm thời
 
                 setTimeout(() => {
                     setCurrentQuestionIndex(prev => prev + 1);
@@ -306,7 +306,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                 // Trường hợp skip
                 if (currentQuestionIndex < DUMMY_QUESTIONS.length - 1) {
                     setIsSwapping(true);
-                    playMurmurSound();
+                    // playMurmurSound(); // Đã tắt âm thanh whoosh tạm thời
                     setTimeout(() => {
                         setCurrentQuestionIndex(prev => prev + 1);
                         resetTurnState();
@@ -687,10 +687,10 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                 </button>
 
                                 <div className="flex gap-2 bg-slate-900/40 p-1 rounded-full backdrop-blur-sm border border-slate-700/30">
-                                    <LifelineButton text="50:50" isUsed={lifelines.fiftyFifty} onClick={useFiftyFifty} />
-                                    <LifelineButton icon={Phone} isUsed={lifelines.phone} onClick={usePhone} />
-                                    <LifelineButton icon={Users} isUsed={lifelines.audience} onClick={useAudience} />
-                                    <LifelineButton icon={RefreshCcw} isUsed={lifelines.swap} onClick={useSwap} />
+                                    <LifelineButton text="50:50" isUsed={lifelines.fiftyFifty} disabled={isAnswerRevealed} onClick={useFiftyFifty} />
+                                    <LifelineButton icon={Phone} isUsed={lifelines.phone} disabled={isAnswerRevealed} onClick={usePhone} />
+                                    <LifelineButton icon={Users} isUsed={lifelines.audience} disabled={isAnswerRevealed} onClick={useAudience} />
+                                    <LifelineButton icon={RefreshCcw} isUsed={lifelines.swap} disabled={isAnswerRevealed} onClick={useSwap} />
                                 </div>
 
                                 <div ref={xpBadgeRef} className="flex items-center gap-2 bg-amber-500/15 border border-amber-500/40 px-3 py-1.5 rounded-full backdrop-blur-sm">
@@ -968,7 +968,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             <div className="flex-1 flex flex-col lg:flex-row w-full max-w-7xl mx-auto overflow-hidden gap-2 lg:gap-8 pb-2 px-2 lg:px-4">
 
                                 {/* Left Side: Timer & Question Board */}
-                                <div className="flex-1 w-full order-2 lg:order-1 flex flex-col pt-2 pb-6 lg:pb-8 h-[75vh] lg:h-full justify-between items-center z-20 relative">
+                                <div className="flex-1 w-full order-2 lg:order-1 flex flex-col pt-2 pb-12 lg:pb-8 h-[75vh] lg:h-full justify-between items-center z-20 relative overflow-y-auto scrollbar-hide">
 
                                     {/* Encouragement Message Overlay */}
                                     <AnimatePresence>
@@ -978,7 +978,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                 animate={{ opacity: 1, scale: 1, y: -20 }}
                                                 exit={{ opacity: 0, scale: 1.1, y: -40 }}
                                                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                                className="absolute left-0 right-0 top-[28%] md:top-[32%] flex items-center justify-center z-[100] pointer-events-none"
+                                                className="absolute left-0 right-0 top-[18%] md:top-[20%] lg:top-[22%] flex items-center justify-center z-[100] pointer-events-none"
                                             >
                                                 <div
                                                     className={`text-2xl md:text-3xl lg:text-4xl font-black uppercase text-center tracking-wider px-6 py-2 rounded-xl border-t border-b border-white/20 bg-black/40 backdrop-blur-sm ${encouragementMessage.colorClass}`}
@@ -1077,7 +1077,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                                     exit={{ opacity: 0, y: 20, scale: 0.95 }}
                                                     transition={{ type: "spring", stiffness: 250, damping: 20 }}
-                                                    className="w-full mt-2 lg:mt-4 z-50 mb-4"
+                                                    className="w-full mt-2 lg:mt-4 z-50 mb-10 md:mb-12 shrink-0"
                                                 >
                                                     <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 md:p-6 shadow-2xl backdrop-blur-xl flex flex-col items-center text-center relative overflow-hidden">
 
