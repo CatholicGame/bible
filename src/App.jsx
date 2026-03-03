@@ -38,7 +38,9 @@ function App() {
   useEffect(() => {
     const savedUser = localStorage.getItem('guestSession');
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      const parsed = JSON.parse(savedUser);
+      // Ensure backward compat: older sessions may not have gameStats
+      setUser({ gameStats: {}, ...parsed });
       setCurrentView('menu');
     }
   }, []);
@@ -53,6 +55,7 @@ function App() {
       name: method === 'guest' ? (customName || 'Khách Vô Danh') : (method === 'facebook' ? 'Người chơi Facebook' : 'Người chơi Google'),
       score: baseScore,
       rank: getRankByScore(baseScore),
+      gameStats: {}, // { [gameId]: { xp: number, plays: number } }
     };
 
     setUser(mockUser);
@@ -101,6 +104,25 @@ function App() {
     setActiveMode(null);
     setRoomPin(null);
     setCurrentView('menu');
+  };
+
+  // Called when a game session ends with earned XP
+  const handleGameComplete = (gameId, earnedXP) => {
+    if (!gameId || !earnedXP) return;
+    setUser(prev => {
+      const prevStats = prev.gameStats || {};
+      const prevGame = prevStats[gameId] || { xp: 0, plays: 0 };
+      const updated = {
+        ...prev,
+        score: (prev.score || 0) + earnedXP,
+        gameStats: {
+          ...prevStats,
+          [gameId]: { xp: prevGame.xp + earnedXP, plays: prevGame.plays + 1 },
+        },
+      };
+      localStorage.setItem('guestSession', JSON.stringify(updated));
+      return updated;
+    });
   };
 
   return (
@@ -183,7 +205,7 @@ function App() {
               exit={{ opacity: 0, scale: 1.05 }}
               className="w-full h-full flex justify-center items-center z-10 relative overflow-y-auto"
             >
-              <PinnacleGame onLeaveGame={handleLeaveGame} />
+              <PinnacleGame onLeaveGame={handleLeaveGame} onGameComplete={(xp) => handleGameComplete('millionaire', xp)} />
             </motion.div>
           ) : (
             <motion.div

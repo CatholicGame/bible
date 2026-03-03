@@ -59,9 +59,10 @@ function useCardTransform(dragX, idx, cwRef) {
 }
 
 /* ─── Card ─── */
-const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress }) => {
+const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats }) => {
     const { scale, zIndex } = useCardTransform(dragX, idx, cwRef);
     const pointerDownX = useRef(0);
+    const hasStats = stats && stats.plays > 0;
     return (
         <motion.div style={{ width: CARD_W, height: CARD_H, scale, zIndex, flexShrink: 0, position: 'relative' }}>
             <motion.button
@@ -74,7 +75,6 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress }) => {
                 className="w-full h-full rounded-3xl overflow-hidden flex flex-col justify-between p-4 relative"
                 style={{
                     background: `linear-gradient(160deg,${game.from}ee,${game.to})`,
-                    /* Fake 3D: top highlight + dark bottom rim + deep drop shadow */
                     boxShadow: isSnapped
                         ? `inset 0 1px 0 rgba(255,255,255,0.28),
                            inset 0 -3px 0 rgba(0,0,0,0.4),
@@ -91,7 +91,7 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress }) => {
                 <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/10 pointer-events-none" />
                 {/* Top highlight stripe */}
                 <div className="absolute top-0 left-0 right-0 h-px bg-white/30 rounded-t-3xl pointer-events-none" />
-                {/* 3D Image Thumbnail centered against the colored card */}
+                {/* 3D Image Thumbnail */}
                 <div className="absolute inset-x-0 top-[8%] bottom-[30%] flex justify-center pointer-events-none drop-shadow-2xl">
                     <img src={game.image} alt={game.title} className="w-[150px] object-contain" />
                 </div>
@@ -105,6 +105,29 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress }) => {
                         {game.title}
                     </span>
                 </div>
+
+                {/* Stats badges: XP + plays */}
+                {hasStats && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="absolute bottom-[72px] left-0 right-0 flex justify-center gap-1.5 pointer-events-none select-none"
+                    >
+                        <span
+                            className="flex items-center gap-0.5 text-[9px] font-black text-yellow-200 px-1.5 py-0.5 rounded-full"
+                            style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,220,50,0.25)' }}
+                        >
+                            ⚡ {stats.xp.toLocaleString()} XP
+                        </span>
+                        <span
+                            className="flex items-center gap-0.5 text-[9px] font-black text-white/70 px-1.5 py-0.5 rounded-full"
+                            style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.15)' }}
+                        >
+                            🎮 {stats.plays} lần
+                        </span>
+                    </motion.div>
+                )}
+
                 {isSnapped && (
                     <motion.span initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }}
                         className="absolute top-3 right-3 text-[10px] font-black text-white/80 bg-white/25 px-2 py-0.5 rounded-full uppercase tracking-wide"
@@ -118,7 +141,7 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress }) => {
 };
 
 /* ══ MainMenu ══ */
-const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount }) => {
+const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName }) => {
     const containerRef = useRef(null);
     const cwRef = useRef(0);
     const dragX = useMotionValue(0);
@@ -391,6 +414,7 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount }) => {
                                             cwRef={cwRef}
                                             isSnapped={i === snapped}
                                             onPress={() => { if (i !== snapped) navigateTo(i); else handleSelect(game.id); }}
+                                            stats={(user?.gameStats || {})[game.id]}
                                         />
                                     ))}
                                 </motion.div>

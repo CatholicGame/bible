@@ -100,6 +100,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
     const [hiddenOptions, setHiddenOptions] = useState([]);
     const [encouragementMessage, setEncouragementMessage] = useState(null);
     const [answerStep, setAnswerStep] = useState('thinking'); // 'thinking' | 'explained'
+    const [explanationTimeLeft, setExplanationTimeLeft] = useState(15);
     const [isSkipped, setIsSkipped] = useState(false);
 
     const [confirmFiftyFifty, setConfirmFiftyFifty] = useState(false);
@@ -237,7 +238,24 @@ const PinnacleGame = ({ onLeaveGame }) => {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [gameState, currentQuestionIndex, isAnswerRevealed, confirmFiftyFifty, confirmAudience, confirmPhone, audienceState, phoneState]);
+    }, [gameState, currentQuestionIndex, isAnswerRevealed, confirmFiftyFifty, confirmAudience, confirmPhone, confirmSwap, audienceState, phoneState]);
+
+    useEffect(() => {
+        if (answerStep === 'explained') {
+            setExplanationTimeLeft(15);
+            const timer = setInterval(() => {
+                setExplanationTimeLeft(prev => {
+                    if (prev <= 1) {
+                        clearInterval(timer);
+                        handleNextQuestion();
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+            return () => clearInterval(timer);
+        }
+    }, [answerStep]);
 
     const handleTimeUp = () => {
         setIsAnswerRevealed(true);
@@ -1108,14 +1126,36 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                             })}
                                                         </div>
 
-                                                        {/* Next Button */}
-                                                        <button
-                                                            onClick={handleNextQuestion}
-                                                            className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2"
-                                                        >
-                                                            <span>{(!isSkipped && selectedOption !== DUMMY_QUESTIONS[currentQuestionIndex].answer) ? 'Kết thúc' : 'Tiếp tục'}</span>
-                                                            <ArrowLeft size={18} className="rotate-180" />
-                                                        </button>
+                                                        {/* Next Button wrapped with an SVG Timer Border */}
+                                                        <div className="relative mb-2 w-full md:w-auto inline-flex justify-center group">
+                                                            <button
+                                                                onClick={handleNextQuestion}
+                                                                className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all transform hover:scale-[1.02] active:scale-95 flex items-center gap-2 relative z-10"
+                                                            >
+                                                                <span>{(!isSkipped && selectedOption !== DUMMY_QUESTIONS[currentQuestionIndex].answer) ? 'Kết thúc' : 'Tiếp tục'}</span>
+                                                                <ArrowLeft size={18} className="rotate-180" />
+
+                                                                {/* Progress SVG surrounding button directly */}
+                                                                <svg
+                                                                    className="absolute inset-0 w-full h-full pointer-events-none"
+                                                                    style={{ overflow: 'visible' }}
+                                                                >
+                                                                    <rect
+                                                                        x="0" y="0"
+                                                                        width="100%" height="100%"
+                                                                        rx="12" ry="12"
+                                                                        fill="none"
+                                                                        stroke="#60A5FA"
+                                                                        strokeWidth="4"
+                                                                        pathLength="100"
+                                                                        strokeDasharray="100"
+                                                                        strokeDashoffset={(explanationTimeLeft / 15) * 100}
+                                                                        className="transition-all ease-linear"
+                                                                        style={{ transitionDuration: '1000ms' }}
+                                                                    />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </motion.div>
                                             )}
@@ -1191,50 +1231,109 @@ const PinnacleGame = ({ onLeaveGame }) => {
                     )}
 
                     {gameState === 'finished' && (
-                        <motion.div
-                            key="finished"
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="bg-blue-900/95 p-10 rounded-3xl shadow-[0_0_40px_rgba(30,58,138,0.8)] text-center border-4 border-yellow-500 m-auto max-w-2xl w-full text-white backdrop-blur-md"
-                        >
-                            <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
-                                transition={{ type: "spring", stiffness: 200, damping: 10, delay: 0.2 }}
-                                className="w-24 h-24 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-yellow-400"
-                            >
-                                <Trophy className="text-yellow-400" size={48} />
-                            </motion.div>
-
-                            <h2 className="text-4xl font-black mb-2 text-yellow-400 drop-shadow-lg uppercase tracking-wider">Trò chơi kết thúc!</h2>
-                            <p className="text-blue-200 mb-8 text-lg">Bạn đã hoàn thành chặng đường đỉnh cao.</p>
-
-                            <div className="bg-black/50 rounded-3xl p-8 mb-8 border border-blue-500/50">
-                                <div className="text-gray-400 mb-2 uppercase text-sm font-bold tracking-widest">Phần thưởng giành được</div>
-                                <div className="text-6xl font-black text-yellow-500 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] flex items-center justify-center gap-3">
-                                    {score.toLocaleString()} <span className="text-3xl text-yellow-200">XP</span>
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <button
-                                    onClick={handlePlayAgain}
-                                    className="flex-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-4 rounded-xl border border-blue-500 transition-colors"
-                                >
-                                    Chơi lại
-                                </button>
-                                <button
-                                    onClick={onLeaveGame}
-                                    className="flex-1 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-black font-black uppercase py-4 rounded-xl shadow-lg shadow-yellow-500/30 transition-colors"
-                                >
-                                    Về Menu chính
-                                </button>
-                            </div>
-                        </motion.div>
+                        <EndGameScreen score={score} handlePlayAgain={handlePlayAgain} onLeaveGame={onLeaveGame} />
                     )}
                 </AnimatePresence>
             </div>
         </div>
+    );
+};
+
+const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame }) => {
+    const [displayScore, setDisplayScore] = useState(0);
+    const lastSoundTime = useRef(0);
+
+    const playCoinSound = useCallback(() => {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1047, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1568, ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.15, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+            osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.2);
+        } catch (_) { }
+    }, []);
+
+    useEffect(() => {
+        let timer;
+        if (displayScore < score) {
+            const step = Math.max(1, Math.floor(score / 50));
+
+            timer = setTimeout(() => {
+                setDisplayScore(prev => {
+                    const next = Math.min(prev + step, score);
+                    const now = Date.now();
+
+                    if (now - lastSoundTime.current >= 1000) {
+                        playCoinSound();
+                        lastSoundTime.current = now;
+                    }
+
+                    return next;
+                });
+            }, 40);
+        }
+        return () => clearTimeout(timer);
+    }, [displayScore, score, playCoinSound]);
+
+    return (
+        <motion.div
+            key="finished"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-blue-900/95 p-10 rounded-3xl shadow-[0_0_40px_rgba(30,58,138,0.8)] text-center border-4 border-yellow-500 m-auto max-w-2xl w-full text-white backdrop-blur-md relative z-10"
+        >
+            <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
+                transition={{ type: "spring", stiffness: 200, damping: 10, delay: 0.2 }}
+                className="w-24 h-24 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-yellow-400"
+            >
+                <Trophy className="text-yellow-400" size={48} />
+            </motion.div>
+
+            <h2 className="text-4xl font-black mb-2 text-yellow-400 drop-shadow-lg uppercase tracking-wider">Trò chơi kết thúc!</h2>
+            <p className="text-blue-200 mb-8 text-lg">Bạn đã hoàn thành chặng đường đỉnh cao.</p>
+
+            <div className="bg-black/50 rounded-3xl p-8 mb-8 border border-blue-500/50 relative overflow-hidden">
+                <motion.div
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }}
+                    transition={{ repeat: Infinity, duration: 2 }}
+                    className="absolute inset-0 bg-yellow-500/20 rounded-3xl blur-2xl"
+                />
+                <div className="text-gray-400 mb-2 uppercase text-sm font-bold tracking-widest relative z-10">Phần thưởng giành được</div>
+                <div className="text-6xl font-black text-yellow-500 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] flex items-center justify-center gap-3 relative z-10">
+                    <motion.span
+                        key={displayScore}
+                        initial={{ y: -5, opacity: 0.8 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.1 }}
+                    >
+                        {displayScore.toLocaleString()}
+                    </motion.span>
+                    <span className="text-3xl text-yellow-200">XP</span>
+                </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 relative z-10">
+                <button
+                    onClick={handlePlayAgain}
+                    className="flex-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-4 rounded-xl border border-blue-500 transition-colors"
+                >
+                    Chơi lại
+                </button>
+                <button
+                    onClick={onLeaveGame}
+                    className="flex-1 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-black font-black uppercase py-4 rounded-xl shadow-lg shadow-yellow-500/30 transition-colors"
+                >
+                    Về Menu chính
+                </button>
+            </div>
+        </motion.div>
     );
 };
 

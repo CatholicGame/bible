@@ -48,3 +48,11 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
