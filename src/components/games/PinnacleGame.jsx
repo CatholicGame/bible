@@ -988,31 +988,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                 {/* Left Side: Timer & Question Board */}
                                 <div className="flex-1 w-full order-2 lg:order-1 flex flex-col pt-2 pb-12 lg:pb-8 h-[75vh] lg:h-full justify-between items-center z-20 relative overflow-y-auto scrollbar-hide">
 
-                                    {/* Encouragement Message Overlay */}
-                                    <AnimatePresence>
-                                        {encouragementMessage && (
-                                            <motion.div
-                                                initial={{ opacity: 0, scale: 0.5, y: 20 }}
-                                                animate={{ opacity: 1, scale: 1, y: -20 }}
-                                                exit={{ opacity: 0, scale: 1.1, y: -40 }}
-                                                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                                className="absolute left-0 right-0 top-[18%] md:top-[20%] lg:top-[22%] flex items-center justify-center z-[100] pointer-events-none"
-                                            >
-                                                <div
-                                                    className={`text-2xl md:text-3xl lg:text-4xl font-black uppercase text-center tracking-wider px-6 py-2 rounded-xl border-t border-b border-white/20 bg-black/40 backdrop-blur-sm ${encouragementMessage.colorClass}`}
-                                                    style={{
-                                                        textShadow: '0px 4px 10px rgba(0,0,0,0.8), 2px 2px 2px #000',
-                                                        filter: `drop-shadow(0 0 10px currentColor)`
-                                                    }}
-                                                >
-                                                    {encouragementMessage.text}
-                                                </div>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-
                                     {/* Timer */}
-                                    <div className="w-full flex justify-center shrink-0">
+                                    <div className="w-full flex flex-col items-center justify-center shrink-0 relative">
                                         <div className="relative w-20 h-20 md:w-28 md:h-28 rounded-full border-4 border-slate-700/50 flex flex-col items-center justify-center bg-[#020617]/80 shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-sm">
                                             <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full transform -rotate-90">
                                                 <circle cx="50" cy="50" r="46" className="stroke-slate-700/30" strokeWidth="6" fill="transparent" />
@@ -1020,6 +997,29 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                             </svg>
                                             <span className={`text-3xl md:text-4xl font-black ${timeLeft <= 10 ? 'text-red-500 animate-pulse' : 'text-slate-100'}`}>{timeLeft}</span>
                                         </div>
+
+                                        {/* Encouragement Message pinned exactly below timer */}
+                                        <AnimatePresence>
+                                            {encouragementMessage && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, scale: 0.5, y: -10 }}
+                                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                                    exit={{ opacity: 0, scale: 1.1, y: -20 }}
+                                                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                                    className="absolute top-full mt-3 md:mt-4 flex items-center justify-center z-[100] pointer-events-none whitespace-nowrap"
+                                                >
+                                                    <div
+                                                        className={`text-xl md:text-3xl lg:text-4xl font-black uppercase text-center tracking-wider px-6 py-2 rounded-xl border-t border-b border-white/20 bg-black/40 backdrop-blur-sm ${encouragementMessage.colorClass}`}
+                                                        style={{
+                                                            textShadow: '0px 4px 10px rgba(0,0,0,0.8), 2px 2px 2px #000',
+                                                            filter: `drop-shadow(0 0 10px currentColor)`
+                                                        }}
+                                                    >
+                                                        {encouragementMessage.text}
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
                                     </div>
 
                                     {/* Question & Options Area */}
