@@ -12,17 +12,19 @@ import bgImage from '../../assets/common/common_background.png';
 import imgMillionaire from '../../assets/games/millionaire.png';
 import imgQuiz from '../../assets/games/quiz.png';
 import imgTrueFalse from '../../assets/games/true_false.png';
-import imgSorting from '../../assets/games/sorting.png';
+import imgSorting from '../../assets/games/thumb_secret_words.png';
+import imgGolgotha from '../../assets/games/thumb_golgotha.png';
 
 const GAMES = [
-    { id: 'millionaire', title: 'Chinh Phục', subtitle: 'Núi Thánh', image: imgMillionaire, from: '#9333ea', to: '#4c1d95', isSoloOnly: true },
+    { id: 'millionaire', title: 'Ai là nhà thần học', subtitle: '', image: imgMillionaire, from: '#9333ea', to: '#4c1d95', isSoloOnly: true },
     { id: 'quiz', title: 'Trắc Nghiệm', subtitle: '4 Đáp Án', image: imgQuiz, from: '#e8294c', to: '#9b1c32', isSoloOnly: false },
     { id: 'true_false', title: 'Đúng / Sai', subtitle: 'Nhận Định', image: imgTrueFalse, from: '#16a34a', to: '#14532d', isSoloOnly: false },
-    { id: 'sorting', title: 'Sắp Xếp', subtitle: 'Sự Kiện', image: imgSorting, from: '#d97706', to: '#92400e', isSoloOnly: false },
+    { id: 'sorting', title: 'Giải ô chữ', subtitle: 'Sự Kiện', image: imgSorting, from: '#d97706', to: '#92400e', isSoloOnly: false },
+    { id: 'golgotha', title: 'Đỉnh Golgotha', subtitle: 'Đường Lên', image: imgGolgotha, from: '#0ea5e9', to: '#0369a1', isSoloOnly: false },
 ];
 
-const CARD_W = 185;
-const CARD_H = 260;
+const CARD_W = 259;
+const CARD_H = 364;
 const GAP = 28;           // tighter spacing
 const STEP = CARD_W + GAP; // 213px between card origins
 const MAX_SC = 1.12;         // center card ~12% bigger
@@ -93,44 +95,46 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats }) => {
                 <div className="absolute top-0 left-0 right-0 h-px bg-white/30 rounded-t-3xl pointer-events-none" />
                 {/* 3D Image Thumbnail */}
                 <div className="absolute inset-x-0 top-[8%] bottom-[30%] flex justify-center pointer-events-none drop-shadow-2xl">
-                    <img src={game.image} alt={game.title} className="w-[150px] object-contain" />
+                    <img
+                        src={game.image}
+                        alt={game.title}
+                        className={`${game.id === 'millionaire' ? 'w-[80%]' : 'w-[210px]'} object-contain`}
+                    />
                 </div>
 
                 {/* Subtitle / Title at bottom */}
-                <div className="absolute bottom-6 left-0 right-0 text-center select-none pointer-events-none">
-                    <span className="block text-[10px] font-black tracking-[0.15em] text-white/50 uppercase mb-0.5">
+                <div className="absolute bottom-8 left-0 right-0 text-center select-none pointer-events-none">
+                    <span className="block text-xs font-black tracking-[0.16em] text-white/60 uppercase mb-1">
                         {game.subtitle}
                     </span>
-                    <span className="block font-black text-[19px] leading-tight text-white drop-shadow-md">
+                    <span className="block font-black text-3xl leading-tight text-white drop-shadow-md">
                         {game.title}
                     </span>
                 </div>
 
                 {/* Stats badges: XP + plays */}
-                {hasStats && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="absolute bottom-[72px] left-0 right-0 flex justify-center gap-1.5 pointer-events-none select-none"
+                <motion.div
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute bottom-[108px] left-0 right-0 flex justify-center gap-2 pointer-events-none select-none"
+                >
+                    <span
+                        className="flex items-center gap-1 text-xs font-black text-yellow-200 px-2.5 py-1 rounded-full"
+                        style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,220,50,0.25)' }}
                     >
-                        <span
-                            className="flex items-center gap-0.5 text-[9px] font-black text-yellow-200 px-1.5 py-0.5 rounded-full"
-                            style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,220,50,0.25)' }}
-                        >
-                            ⚡ {stats.xp.toLocaleString()} XP
-                        </span>
-                        <span
-                            className="flex items-center gap-0.5 text-[9px] font-black text-white/70 px-1.5 py-0.5 rounded-full"
-                            style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.15)' }}
-                        >
-                            🎮 {stats.plays} lần
-                        </span>
-                    </motion.div>
-                )}
+                        ⚡ {(stats?.xp || 0).toLocaleString()} XP
+                    </span>
+                    <span
+                        className="flex items-center gap-1 text-xs font-black text-white/70 px-2.5 py-1 rounded-full"
+                        style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.15)' }}
+                    >
+                        🎮 {stats?.plays || 0} lần
+                    </span>
+                </motion.div>
 
                 {isSnapped && (
                     <motion.span initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }}
-                        className="absolute top-3 right-3 text-[10px] font-black text-white/80 bg-white/25 px-2 py-0.5 rounded-full uppercase tracking-wide"
+                        className="absolute top-4 right-4 text-xs font-black text-white/80 bg-white/25 px-3 py-1 rounded-full uppercase tracking-widest"
                         style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 0 rgba(0,0,0,0.2)' }}>
                         Chơi
                     </motion.span>
