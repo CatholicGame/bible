@@ -309,22 +309,11 @@ const PinnacleGame = ({ onLeaveGame }) => {
         setEncouragementMessage(null);
 
         setTimeout(() => {
-            if (currentQuestionIndex < DUMMY_QUESTIONS.length - 1 && selectedOption === DUMMY_QUESTIONS[currentQuestionIndex].answer) {
-                setIsSwapping(true); // mượn lại hiệu ứng chuyển câu
-                // playMurmurSound(); // Đã tắt âm thanh whoosh tạm thời
+            const isCorrect = selectedOption === DUMMY_QUESTIONS[currentQuestionIndex].answer;
 
-                setTimeout(() => {
-                    setCurrentQuestionIndex(prev => prev + 1);
-                    resetTurnState();
-                    setIsSwapping(false);
-                }, 500);
-            } else if (selectedOption !== DUMMY_QUESTIONS[currentQuestionIndex].answer && !isSkipped) {
-                setGameState('finished');
-            } else if (isSkipped) {
-                // Trường hợp skip
+            if (isCorrect || isSkipped) {
                 if (currentQuestionIndex < DUMMY_QUESTIONS.length - 1) {
-                    setIsSwapping(true);
-                    // playMurmurSound(); // Đã tắt âm thanh whoosh tạm thời
+                    setIsSwapping(true); // mượn lại hiệu ứng chuyển câu
                     setTimeout(() => {
                         setCurrentQuestionIndex(prev => prev + 1);
                         resetTurnState();
@@ -333,6 +322,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
                 } else {
                     setGameState('finished');
                 }
+            } else {
+                setGameState('finished');
             }
         }, 400); // Wait 400ms for the explanation panel to exit completely
     };
@@ -1127,35 +1118,37 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                         </div>
 
                                                         {/* Next Button wrapped with an SVG Timer Border */}
-                                                        <div className="relative mb-2 w-full md:w-auto inline-flex justify-center group">
-                                                            <button
-                                                                onClick={handleNextQuestion}
-                                                                className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all transform hover:scale-[1.02] active:scale-95 flex items-center gap-2 relative z-10"
-                                                            >
-                                                                <span>{(!isSkipped && selectedOption !== DUMMY_QUESTIONS[currentQuestionIndex].answer) ? 'Kết thúc' : 'Tiếp tục'}</span>
-                                                                <ArrowLeft size={18} className="rotate-180" />
-
-                                                                {/* Progress SVG surrounding button directly */}
-                                                                <svg
-                                                                    className="absolute inset-0 w-full h-full pointer-events-none"
-                                                                    style={{ overflow: 'visible' }}
+                                                        {currentQuestionIndex < DUMMY_QUESTIONS.length - 1 && (
+                                                            <div className="relative mb-2 w-full md:w-auto inline-flex justify-center group">
+                                                                <button
+                                                                    onClick={handleNextQuestion}
+                                                                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all transform hover:scale-[1.02] active:scale-95 flex items-center gap-2 relative z-10"
                                                                 >
-                                                                    <rect
-                                                                        x="0" y="0"
-                                                                        width="100%" height="100%"
-                                                                        rx="12" ry="12"
-                                                                        fill="none"
-                                                                        stroke="#60A5FA"
-                                                                        strokeWidth="4"
-                                                                        pathLength="100"
-                                                                        strokeDasharray="100"
-                                                                        strokeDashoffset={(explanationTimeLeft / 15) * 100}
-                                                                        className="transition-all ease-linear"
-                                                                        style={{ transitionDuration: '1000ms' }}
-                                                                    />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
+                                                                    <span>{(!isSkipped && selectedOption !== DUMMY_QUESTIONS[currentQuestionIndex].answer) ? 'Kết thúc' : 'Tiếp tục'}</span>
+                                                                    <ArrowLeft size={18} className="rotate-180" />
+
+                                                                    {/* Progress SVG surrounding button directly */}
+                                                                    <svg
+                                                                        className="absolute inset-0 w-full h-full pointer-events-none"
+                                                                        style={{ overflow: 'visible' }}
+                                                                    >
+                                                                        <rect
+                                                                            x="0" y="0"
+                                                                            width="100%" height="100%"
+                                                                            rx="12" ry="12"
+                                                                            fill="none"
+                                                                            stroke="#60A5FA"
+                                                                            strokeWidth="4"
+                                                                            pathLength="100"
+                                                                            strokeDasharray="100"
+                                                                            strokeDashoffset={(explanationTimeLeft / 15) * 100}
+                                                                            className="transition-all ease-linear"
+                                                                            style={{ transitionDuration: '1000ms' }}
+                                                                        />
+                                                                    </svg>
+                                                                </button>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </motion.div>
                                             )}
@@ -1239,6 +1232,82 @@ const PinnacleGame = ({ onLeaveGame }) => {
     );
 };
 
+const Confetti = () => {
+    const [particles, setParticles] = useState([]);
+
+    useEffect(() => {
+        const colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#facc15', '#2dd4bf'];
+        const shapes = ['rounded-sm', 'rounded-full', 'rounded-none'];
+        const newParticles = [];
+        const numPieces = 150;
+
+        for (let i = 0; i < numPieces; i++) {
+            // Spawn mostly from the two bottom corners (like cannons)
+            const isLeftCannon = Math.random() > 0.5;
+            const originX = isLeftCannon ? (Math.random() * 20) : (80 + Math.random() * 20); // 0-20vw or 80-100vw
+
+            // Trajectory angle: shoot inwards and upwards
+            // Left cannon shoots roughly between 45 and 85 degrees (up and right)
+            // Right cannon shoots roughly between 95 and 135 degrees (up and left)
+            const baseAngle = isLeftCannon ? -Math.PI / 3 : -Math.PI * 2 / 3;
+            const angleSpread = (Math.random() - 0.5) * Math.PI / 4;
+            const angle = baseAngle + angleSpread;
+
+            // Force and distance
+            const velocity = 60 + Math.random() * 120;
+            const targetX = Math.cos(angle) * velocity;
+            const peakY = Math.sin(angle) * velocity * 3; // negative Y (upwards)
+
+            newParticles.push({
+                id: `cnf-${i}`,
+                x: `${originX}vw`,
+                y: `100vh`, // Bottom of screen
+                moveX: targetX,
+                peakY: peakY, // apex of the blast
+                color: colors[Math.floor(Math.random() * colors.length)],
+                shape: shapes[Math.floor(Math.random() * shapes.length)],
+                delay: Math.random() * 0.5, // slightly staggered shot
+                rotation: Math.random() * 720 - 360,
+                width: 6 + Math.random() * 6,
+                height: 6 + Math.random() * 8
+            });
+        }
+        setParticles(newParticles);
+    }, []);
+
+    return (
+        <div className="fixed inset-0 pointer-events-none z-[1000] overflow-hidden">
+            {particles.map((p) => (
+                <motion.div
+                    key={p.id}
+                    className={`absolute ${p.shape}`}
+                    style={{
+                        left: p.x,
+                        top: p.y,
+                        backgroundColor: p.color,
+                        width: p.width,
+                        height: p.height
+                    }}
+                    initial={{ scale: 0, opacity: 1, rotate: 0 }}
+                    animate={{
+                        x: [0, p.moveX, p.moveX + (p.moveX * 0.5)], // move outward, then drift further
+                        y: [0, p.peakY, 100], // Start bottom(0), shoot up, fall down (positive values relative to start are off-screen but we use vh so 100 is ok, wait, we are animating transform relative to pos. So 0 -> -600 -> +200)
+                        rotate: [0, p.rotation, p.rotation * 2],
+                        scale: [0, 1.2, 1, 0.8],
+                        opacity: [1, 1, 1, 0]
+                    }}
+                    transition={{
+                        duration: 3 + Math.random() * 2, // 3 to 5 seconds
+                        ease: "easeOut",
+                        delay: p.delay,
+                        times: [0, 0.2, 1] // Shoot up fast in first 20%, fall and spin for 80%
+                    }}
+                />
+            ))}
+        </div>
+    );
+};
+
 const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame }) => {
     const [displayScore, setDisplayScore] = useState(0);
     const lastSoundTime = useRef(0);
@@ -1281,59 +1350,62 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame }) => {
     }, [displayScore, score, playCoinSound]);
 
     return (
-        <motion.div
-            key="finished"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-blue-900/95 p-10 rounded-3xl shadow-[0_0_40px_rgba(30,58,138,0.8)] text-center border-4 border-yellow-500 m-auto max-w-2xl w-full text-white backdrop-blur-md relative z-10"
-        >
+        <>
+            {score >= 500 && <Confetti />}
             <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
-                transition={{ type: "spring", stiffness: 200, damping: 10, delay: 0.2 }}
-                className="w-24 h-24 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-yellow-400"
+                key="finished"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-blue-900/95 p-10 rounded-3xl shadow-[0_0_40px_rgba(30,58,138,0.8)] text-center border-4 border-yellow-500 m-auto max-w-2xl w-full text-white backdrop-blur-md relative z-10"
             >
-                <Trophy className="text-yellow-400" size={48} />
-            </motion.div>
-
-            <h2 className="text-4xl font-black mb-2 text-yellow-400 drop-shadow-lg uppercase tracking-wider">Trò chơi kết thúc!</h2>
-            <p className="text-blue-200 mb-8 text-lg">Bạn đã hoàn thành chặng đường đỉnh cao.</p>
-
-            <div className="bg-black/50 rounded-3xl p-8 mb-8 border border-blue-500/50 relative overflow-hidden">
                 <motion.div
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                    className="absolute inset-0 bg-yellow-500/20 rounded-3xl blur-2xl"
-                />
-                <div className="text-gray-400 mb-2 uppercase text-sm font-bold tracking-widest relative z-10">Phần thưởng giành được</div>
-                <div className="text-6xl font-black text-yellow-500 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] flex items-center justify-center gap-3 relative z-10">
-                    <motion.span
-                        key={displayScore}
-                        initial={{ y: -5, opacity: 0.8 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.1 }}
-                    >
-                        {displayScore.toLocaleString()}
-                    </motion.span>
-                    <span className="text-3xl text-yellow-200">XP</span>
-                </div>
-            </div>
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
+                    transition={{ type: "spring", stiffness: 200, damping: 10, delay: 0.2 }}
+                    className="w-24 h-24 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-yellow-400"
+                >
+                    <Trophy className="text-yellow-400" size={48} />
+                </motion.div>
 
-            <div className="flex flex-col sm:flex-row gap-4 relative z-10">
-                <button
-                    onClick={handlePlayAgain}
-                    className="flex-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-4 rounded-xl border border-blue-500 transition-colors"
-                >
-                    Chơi lại
-                </button>
-                <button
-                    onClick={onLeaveGame}
-                    className="flex-1 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-black font-black uppercase py-4 rounded-xl shadow-lg shadow-yellow-500/30 transition-colors"
-                >
-                    Về Menu chính
-                </button>
-            </div>
-        </motion.div>
+                <h2 className="text-4xl font-black mb-2 text-yellow-400 drop-shadow-lg uppercase tracking-wider">Trò chơi kết thúc!</h2>
+                <p className="text-blue-200 mb-8 text-lg">Bạn đã hoàn thành chặng đường đỉnh cao.</p>
+
+                <div className="bg-black/50 rounded-3xl p-8 mb-8 border border-blue-500/50 relative overflow-hidden">
+                    <motion.div
+                        animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }}
+                        transition={{ repeat: Infinity, duration: 2 }}
+                        className="absolute inset-0 bg-yellow-500/20 rounded-3xl blur-2xl"
+                    />
+                    <div className="text-gray-400 mb-2 uppercase text-sm font-bold tracking-widest relative z-10">Phần thưởng giành được</div>
+                    <div className="text-6xl font-black text-yellow-500 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] flex items-center justify-center gap-3 relative z-10">
+                        <motion.span
+                            key={displayScore}
+                            initial={{ y: -5, opacity: 0.8 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.1 }}
+                        >
+                            {displayScore.toLocaleString()}
+                        </motion.span>
+                        <span className="text-3xl text-yellow-200">XP</span>
+                    </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 relative z-10">
+                    <button
+                        onClick={handlePlayAgain}
+                        className="flex-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-4 rounded-xl border border-blue-500 transition-colors"
+                    >
+                        Chơi lại
+                    </button>
+                    <button
+                        onClick={onLeaveGame}
+                        className="flex-1 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-black font-black uppercase py-4 rounded-xl shadow-lg shadow-yellow-500/30 transition-colors"
+                    >
+                        Về Menu chính
+                    </button>
+                </div>
+            </motion.div>
+        </>
     );
 };
 
