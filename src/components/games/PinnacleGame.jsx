@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, ArrowLeft, CheckCircle2, XCircle, Play, Phone, Users, Shield, RefreshCcw, Flag, Star } from 'lucide-react';
-import pinnacleBackground from '../../assets/pinnacle/altp_background.png';
+import { Trophy, ArrowLeft, CheckCircle2, XCircle, Play, Phone, Users, Shield, RefreshCcw, Flag, Star, UserCircle2 } from 'lucide-react';
+import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.png';
+import mcAvatar from '../../assets/pinnacle/MC.png';
 
 const DUMMY_QUESTIONS = [
     { question: "Tên vị Giáo hoàng đầu tiên của Giáo hội Công giáo là gì?", options: ["Thánh Phêrô", "Thánh Phaolô", "Thánh Anrê", "Thánh Giacôbê"], answer: 0, explanation: "Chúa Giêsu đã trao chìa khóa Nước Trời cho **Thánh Phêrô**, đặt ngài làm nền tảng đầu tiên của Giáo hội." },
@@ -26,6 +27,118 @@ const REWARDS = [10, 20, 30, 40, 50, 100, 150, 200, 300, 500, 800, 1200, 2000, 3
 
 // Safe Milestone indices (0-indexed, so 4 is Question 5, 9 is Question 10)
 const MILESTONES = [4, 9, 14];
+
+// Messages based on state: 0=greeting, 1=correct, 2=wrong
+const MC_MESSAGES = [
+    { start: ["Câu hỏi đầu tiên đã xuất hiện. Chúc bạn khởi đầu thật tốt!", "Chúng ta bắt đầu hành trình tri thức với câu hỏi này. Chúc bạn may mắn!", "Xin Chúa chúc lành cho khởi đầu của bạn với câu hỏi đầu tiên."], correct: ["Chính xác! Rất dễ đúng không?", "Khởi đầu hoàn hảo!", "Tuyệt lắm!"], wrong: ["Ôi, một sự nhầm lẫn đáng tiếc!", "Không sao, làm lại nhé!", "Chưa đúng rồi!"] }, // Q1
+    { start: ["Câu hỏi tiếp theo đã hiện ra. Hãy suy nghĩ thật kỹ nhé!", "Chúc bạn tiếp tục có một lựa chọn đúng.", "Xin Chúa soi sáng để bạn tìm ra đáp án đúng."], correct: ["Rất tự tin!", "Chính xác!", "Đúng rồi!"], wrong: ["Rất tiếc, sai rồi!", "Ôi không!", "Hơi vội vàng rồi!"] }, // Q2
+    { start: ["Đây là câu hỏi thứ ba. Chúc bạn thêm một lần trả lời chính xác.", "Một câu hỏi mới dành cho bạn. Bình tĩnh và suy nghĩ nhé!", "Mong rằng kiến thức của bạn sẽ giúp bạn vượt qua câu hỏi này."], correct: ["Bạn trả lời rất tốt!", "Phong độ đang lên!", "Tốt lắm!"], wrong: ["Lại sai rồi!", "Tiếc quá!", "Chút nữa thì đúng!"] }, // Q3
+    { start: ["Câu hỏi mới đã xuất hiện. Chúc bạn chọn đúng đáp án!", "Hãy suy nghĩ thật kỹ trước khi đưa ra lựa chọn.", "Xin Chúa soi sáng để bạn tìm thấy câu trả lời đúng."], correct: ["Hay quá!", "Tuyệt vời, sắp tới mốc an toàn!", "Đỉnh!"], wrong: ["Thật sự đáng tiếc!", "Rất tiếc!", "Thật không may!"] }, // Q4
+    { start: ["Đây là câu hỏi thứ năm. Chúc bạn tiếp tục hành trình thật tốt.", "Một thử thách mới đang chờ bạn. Chúc bạn may mắn!", "Mong rằng bạn sẽ có thêm một đáp án chính xác."], correct: ["Tuyệt! Đã qua mốc đầu tiên!", "Cột mốc 5 an toàn nhé!", "Chúc mừng qua trạm 1!"], wrong: ["Mất cơ hội chốt mốc rồi!", "Tiếc quá đi!", "Sai ở mốc quan trọng!"] }, // Q5
+    { start: ["Chúng ta bước sang câu hỏi tiếp theo. Hãy suy nghĩ thật cẩn thận.", "Câu hỏi mới đã xuất hiện. Chúc bạn lựa chọn đúng!", "Xin Chúa chúc lành cho quyết định của bạn."], correct: ["Rất kiên cường!", "Đúng rồi!", "Kiến thức vững đấy!"], wrong: ["Câu này cũng khá khó!", "Rất dễ nhầm lẫn!", "Đáp án chưa chính xác!"] }, // Q6
+    { start: ["Đây là một câu hỏi không dễ. Chúc bạn bình tĩnh suy nghĩ.", "Câu hỏi tiếp theo đã xuất hiện. Hy vọng bạn sẽ tìm ra đáp án đúng.", "Xin Chúa soi sáng để bạn có lựa chọn chính xác."], correct: ["Tiếp tục duy trì nhé!", "Không tồi chút nào!", "Hay quá!"], wrong: ["Lựa chọn sai lầm!", "Rất tiếc!", "Không đúng rồi!"] }, // Q7
+    { start: ["Chúng ta tiếp tục với một câu hỏi mới. Chúc bạn may mắn!", "Câu hỏi thứ tám đã hiện ra. Hãy suy nghĩ thật kỹ.", "Mong rằng bạn sẽ tiếp tục trả lời đúng câu hỏi này."], correct: ["Một nửa chặng đường vinh quang!", "Hay lắm, cố lên!", "Bạn thực sự am hiểu!"], wrong: ["Dừng chân ở đây sao?", "Thật đáng tiếc!", "Sai rồi!"] }, // Q8
+    { start: ["Một câu hỏi mới đang chờ bạn. Chúc bạn thêm một lựa chọn chính xác.", "Hãy suy nghĩ thật cẩn thận trước khi chọn đáp án.", "Xin Chúa soi sáng để bạn tìm ra câu trả lời đúng."], correct: ["Chỉ một chút nữa thôi!", "Cố gắng lên!", "Đúng rồi, xuất sắc!"], wrong: ["Ôi tiếc quá, gần tới mốc 2 rồi!", "Sẩy chân đáng tiếc!", "Sai rồi!"] }, // Q9
+    { start: ["Câu hỏi thứ mười đã xuất hiện. Chúc bạn tiếp tục thành công.", "Đây là một thử thách quan trọng. Hãy suy nghĩ thật kỹ.", "Mong rằng kiến thức của bạn sẽ dẫn bạn đến đáp án đúng."], correct: ["Xuất sắc! Mốc 10 an toàn!", "Bạn đã vượt qua trạm thứ hai!", "Đỉnh cao phong độ!"], wrong: ["Thật sự buồn cho bạn!", "Tiếc quá, mốc 10 vuột mất!", "Sai mất rồi!"] }, // Q10
+    { start: ["Câu hỏi tiếp theo đã xuất hiện. Chúc bạn thật bình tĩnh.", "Một thử thách mới dành cho bạn. Chúc bạn may mắn!", "Xin Chúa soi sáng để bạn đưa ra lựa chọn đúng."], correct: ["Đẳng cấp là đây!", "Bạn là một đối thủ đáng gờm!", "Kiến thức quá khủng!"], wrong: ["Câu này khó thật sự!", "Dù sao cũng qua mốc 10 rồi!", "Tiếc quá!"] }, // Q11
+    { start: ["Đây là một câu hỏi khó. Chúc bạn suy nghĩ thật sáng suốt.", "Câu hỏi mới đã xuất hiện. Hy vọng bạn sẽ tìm ra đáp án đúng.", "Mong rằng bạn sẽ vượt qua thử thách này."], correct: ["Quá siêu phàm!", "Không có gì làm khó được bạn!", "Kiến thức thật đáng nể!"], wrong: ["Dừng lại ở đây sao?", "Khó quá phải không!", "Rất tiếc!"] }, // Q12
+    { start: ["Chúng ta đang tiến gần đến cuối hành trình. Chúc bạn may mắn!", "Câu hỏi tiếp theo đã hiện ra. Hãy suy nghĩ thật kỹ.", "Xin Chúa soi sáng để bạn tìm được câu trả lời đúng."], correct: ["Đừng run nhé!", "Tuyệt đỉnh trí tuệ!", "Thật không thể tin nổi!"], wrong: ["Sai ở những bước cuối cùng!", "Tiếc quá đi mất!", "Sai rồi!"] }, // Q13
+    { start: ["Đây là một trong những câu hỏi cuối cùng. Chúc bạn lựa chọn chính xác.", "Câu hỏi mới đã xuất hiện. Mong rằng bạn sẽ trả lời đúng.", "Xin Chúa chúc lành cho quyết định của bạn."], correct: ["Cơ hội lịch sử đây rồi!", "Chạm một tay vào đỉnh cao!", "Cố lên, 1 câu nữa thôi!"], wrong: ["Trời ơi, đau quá!", "Không sao, bạn đã rất tuyệt!", "Tiếc quá!"] }, // Q14
+    { start: ["Và đây là câu hỏi cuối cùng. Chúc bạn thành công!", "Câu hỏi cuối cùng đã xuất hiện. Hy vọng bạn sẽ chọn đúng đáp án.", "Xin Chúa soi sáng để bạn hoàn thành hành trình này."], correct: ["ĐỈNH CAO TRÍ TUỆ!", "Hoàn hảo 15/15!", "Huyền thoại là đây!", "Bạn đã lập kỷ lục mới!"], wrong: ["Ôi không! Câu cuối rồi mà!", "Thật sự quá tiếc!", "Gục ngã khoảnh khắc cuối!"] } // Q15
+];
+
+const MC_MESSAGES_AFTER_FINISH = [
+    // Level 1 -> index 0
+    [
+        "Rất tiếc, đáp án đúng không phải lựa chọn của bạn lần này. Nhưng hành trình học hỏi vẫn còn phía trước.",
+        "Không sao cả, đôi khi câu hỏi đầu tiên cũng khiến chúng ta bất ngờ. Hẹn gặp lại ở lần chơi tiếp theo!",
+        "Đáp án đúng là một lựa chọn khác. Hy vọng lần sau bạn sẽ khởi đầu tốt hơn."
+    ],
+    // Level 2 -> index 1
+    [
+        "Rất tiếc, bạn đã chọn chưa đúng. Nhưng đây cũng là cơ hội để chúng ta học thêm một kiến thức mới.",
+        "Đáp án đúng đã thuộc về một lựa chọn khác. Cảm ơn bạn đã tham gia!",
+        "Không sao cả, mỗi câu hỏi đều là một bài học thú vị."
+    ],
+    // Level 3 -> index 2
+    [
+        "Rất tiếc, bạn đã dừng lại ở câu hỏi này.",
+        "Đáp án đúng không phải lựa chọn của bạn. Nhưng bạn đã làm khá tốt!",
+        "Không sao cả, hy vọng bạn sẽ quay lại thử sức lần nữa."
+    ],
+    // Level 4 -> index 3
+    [
+        "Đáng tiếc, câu trả lời này chưa chính xác.",
+        "Đáp án đúng đã thuộc về phương án khác. Nhưng bạn đã tiến khá xa.",
+        "Cảm ơn bạn đã tham gia. Hẹn gặp lại trong lần thử thách tiếp theo!"
+    ],
+    // Level 5 -> index 4
+    [
+        "Rất tiếc, bạn đã dừng bước ở câu hỏi này.",
+        "Một chút thiếu may mắn trong lựa chọn của bạn lần này.",
+        "Nhưng bạn đã đi được một chặng đường khá tốt!"
+    ],
+    // Level 6 -> index 5
+    [
+        "Đáp án đúng là một lựa chọn khác. Rất tiếc cho bạn.",
+        "Bạn đã làm tốt cho đến câu hỏi này.",
+        "Hãy xem đây là một cơ hội để học thêm kiến thức mới."
+    ],
+    // Level 7 -> index 6
+    [
+        "Thật đáng tiếc, câu trả lời này chưa chính xác.",
+        "Bạn đã tiến khá sâu vào trò chơi. Rất tốt!",
+        "Hy vọng lần sau bạn sẽ đi xa hơn nữa."
+    ],
+    // Level 8 -> index 7
+    [
+        "Rất tiếc, câu hỏi này đã dừng bước bạn.",
+        "Đáp án đúng đã thuộc về phương án khác.",
+        "Nhưng bạn đã làm rất tốt cho đến đây."
+    ],
+    // Level 9 -> index 8
+    [
+        "Một lựa chọn đáng tiếc ở câu hỏi này.",
+        "Đáp án đúng là phương án khác. Nhưng bạn đã tiến rất xa.",
+        "Chúc bạn may mắn hơn ở lần chơi tiếp theo!"
+    ],
+    // Level 10 -> index 9
+    [
+        "Rất tiếc, câu trả lời này chưa chính xác.",
+        "Bạn đã đi được một chặng đường rất tốt trước khi dừng lại.",
+        "Cảm ơn bạn đã tham gia thử thách hôm nay."
+    ],
+    // Level 11 -> index 10
+    [
+        "Đây là một câu hỏi khó và rất tiếc bạn đã chọn chưa đúng.",
+        "Bạn đã tiến rất xa trong trò chơi.",
+        "Hy vọng lần sau bạn sẽ chinh phục được câu hỏi này."
+    ],
+    // Level 12 -> index 11
+    [
+        "Một lựa chọn đáng tiếc ở câu hỏi khó này.",
+        "Bạn đã gần chạm đến những câu hỏi cuối cùng.",
+        "Cảm ơn bạn đã tham gia hành trình hôm nay."
+    ],
+    // Level 13 -> index 12
+    [
+        "Thật đáng tiếc khi dừng lại ở câu hỏi này.",
+        "Bạn đã đi rất xa trong trò chơi.",
+        "Chỉ còn vài bước nữa thôi, hy vọng lần sau bạn sẽ đạt được!"
+    ],
+    // Level 14 -> index 13
+    [
+        "Rất tiếc, câu hỏi áp chót đã làm khó bạn.",
+        "Bạn đã tiến rất gần đến câu hỏi cuối cùng.",
+        "Một hành trình rất ấn tượng!"
+    ],
+    // Level 15 -> index 14
+    [
+        "Thật đáng tiếc, câu trả lời cuối cùng chưa chính xác.",
+        "Bạn đã đi trọn hành trình đến câu hỏi cuối cùng. Thật tuyệt vời!",
+        "Cảm ơn bạn đã tham gia thử thách hôm nay."
+    ]
+];
 
 const HexagonBox = ({ children, className = "", onClick, disabled, isActive, isCorrect, isWrong, isHidden }) => {
     let bg = 'rgba(15,23,42,0.82)';         // default: very dark navy, semi-transparent
@@ -138,6 +251,24 @@ const PinnacleGame = ({ onLeaveGame }) => {
     const [displayScore, setDisplayScore] = useState(0);  // animated display value
     const xpBadgeRef = useRef(null);
     const currentRowRef = useRef(null);
+
+    // MC Speech Bubble state
+    const [mcMessage, setMcMessage] = useState("");
+    const [showMcBubble, setShowMcBubble] = useState(false);
+    const [endMessage, setEndMessage] = useState(null);
+    const [showEndMessage, setShowEndMessage] = useState(true);
+
+    // Prompt MC on level changes
+    useEffect(() => {
+        if (gameState === 'playing' && !isAnswerRevealed && !isSwapping) {
+            const pool = MC_MESSAGES[currentQuestionIndex].start;
+            const msg = pool[Math.floor(Math.random() * pool.length)];
+            setMcMessage(msg);
+            setShowMcBubble(true);
+            const timer = setTimeout(() => setShowMcBubble(false), 4000); // 4 secs display
+            return () => clearTimeout(timer);
+        }
+    }, [currentQuestionIndex, gameState, isAnswerRevealed, isSwapping]);
 
     // Web Audio: coin ping sound
     const playCoinSound = useCallback(() => {
@@ -276,17 +407,47 @@ const PinnacleGame = ({ onLeaveGame }) => {
         if (isCorrect) {
             const reward = REWARDS[currentQuestionIndex];
             setEncouragementMessage(getEncouragement(currentQuestionIndex));
+
+            // Trigger MC correct logic
+            const pool = MC_MESSAGES[currentQuestionIndex].correct;
+            setMcMessage(pool[Math.floor(Math.random() * pool.length)]);
+            setShowMcBubble(true);
+
+            // Hide the reaction bubble shortly before the explanation
+            setTimeout(() => {
+                setShowMcBubble(false);
+            }, 1800);
+
+            // Fully prepare explanation and button, then pop out the bubble
+            setTimeout(() => {
+                setMcMessage(DUMMY_QUESTIONS[currentQuestionIndex].explanation);
+                setAnswerStep('explained');
+                setEncouragementMessage(null); // Gỡ chữ Tuyệt vời
+                setShowMcBubble(true);
+            }, 2000);
+
             spawnXPParticles();
 
             // Delay score update to match first particle arrival (~1.36s)
             setTimeout(() => setScore(reward), 1360);
-
-            // Chờ delay nhẹ 1.5s rồi hiện panel explains (auto next được gỡ bỏ)
-            setTimeout(() => {
-                setAnswerStep('explained');
-                setEncouragementMessage(null); // Gỡ chữ Tuyệt vời khi hiện giải thích
-            }, 1500);
         } else {
+            // Trigger MC wrong logic
+            const pool = MC_MESSAGES[currentQuestionIndex].wrong;
+            setMcMessage(pool[Math.floor(Math.random() * pool.length)]);
+            setShowMcBubble(true);
+
+            // Hide the reaction bubble shortly before the explanation
+            setTimeout(() => {
+                setShowMcBubble(false);
+            }, 1800);
+
+            // Fully prepare explanation and button, then pop out the bubble
+            setTimeout(() => {
+                setMcMessage(DUMMY_QUESTIONS[currentQuestionIndex].explanation);
+                setAnswerStep('explained');
+                setShowMcBubble(true);
+            }, 2000);
+
             setTimeout(() => {
                 // Find last milestone reached logic
                 let earnedScore = 0;
@@ -299,7 +460,16 @@ const PinnacleGame = ({ onLeaveGame }) => {
                 setScore(earnedScore);
                 setAnswerStep('explained');
                 // Người dùng phải ấn 'Kết thúc' ở panel giải thích để save change state finished.
-            }, 1000); // Rút ngắn lại thành 1s để hiện explanation sớm thay vì 4s chìm
+            }, 2500); // Rút ngắn lại thành 1s để hiện explanation sớm thay vì 4s chìm
+        }
+    };
+
+    const triggerEndGame = (levelIndex) => {
+        setGameState('finished');
+        if (MC_MESSAGES_AFTER_FINISH[levelIndex]) {
+            setEndMessage(MC_MESSAGES_AFTER_FINISH[levelIndex]);
+            setShowEndMessage(true);
+            setTimeout(() => setShowEndMessage(false), 8000); // Tăng thời gian hiển thị lên 8s
         }
     };
 
@@ -307,6 +477,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
         // Cho ẩn khung giải thích trước để UI reset layout về vị trí cũ một nhịp
         setAnswerStep('thinking');
         setEncouragementMessage(null);
+        setShowMcBubble(false); // Hide MC bubble when moving to next question
 
         setTimeout(() => {
             const isCorrect = selectedOption === DUMMY_QUESTIONS[currentQuestionIndex].answer;
@@ -320,10 +491,10 @@ const PinnacleGame = ({ onLeaveGame }) => {
                         setIsSwapping(false);
                     }, 500);
                 } else {
-                    setGameState('finished');
+                    triggerEndGame(currentQuestionIndex);
                 }
             } else {
-                setGameState('finished');
+                triggerEndGame(currentQuestionIndex);
             }
         }, 400); // Wait 400ms for the explanation panel to exit completely
     };
@@ -556,7 +727,9 @@ const PinnacleGame = ({ onLeaveGame }) => {
 
         // Chờ 1s cho kịp lật đáp án xong show mục giải thích
         setTimeout(() => {
+            setMcMessage(DUMMY_QUESTIONS[currentQuestionIndex].explanation);
             setAnswerStep('explained');
+            setShowMcBubble(true);
         }, 1000);
     };
 
@@ -613,31 +786,32 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 1.1 }}
-                            className="bg-blue-900/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border-4 border-blue-500 m-auto max-w-2xl w-full text-white"
+                            className="bg-gradient-to-b from-[#1e3a8a]/95 to-[#0f172a]/95 backdrop-blur-xl p-6 md:p-10 rounded-3xl shadow-[0_0_50px_rgba(30,58,138,0.3)] border-2 border-blue-400/30 m-auto max-w-2xl w-full text-white relative z-10"
                         >
-                            <div className="flex justify-between items-center mb-6">
-                                <button onClick={onLeaveGame} className="text-gray-300 hover:text-white transition-colors p-2 -ml-2 rounded-full hover:bg-blue-800">
+                            <div className="flex justify-between items-start mb-6">
+                                <button onClick={onLeaveGame} className="text-gray-300 hover:text-white transition-colors p-2 -ml-2 rounded-full hover:bg-white/10 mt-1">
                                     <ArrowLeft size={24} />
                                 </button>
-                                <div className="w-12 h-12 border-2 border-yellow-400 bg-blue-950 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(250,204,21,0.5)]">
-                                    <Trophy className="text-yellow-400" size={24} />
+                                {/* Top Right Trophy Badge */}
+                                <div className="absolute top-6 right-6 md:top-8 md:right-8 w-14 h-14 md:w-16 md:h-16 border-2 border-yellow-400 bg-blue-950/80 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(250,204,21,0.5)] z-20">
+                                    <Trophy className="text-yellow-400 drop-shadow-[0_0_5px_rgba(250,204,21,0.8)]" size={24} />
                                 </div>
                             </div>
 
-                            <h2 className="text-3xl font-black mb-4 tracking-tight text-center text-yellow-400 uppercase drop-shadow-md">Đỉnh Cao Hiểu Biết</h2>
+                            <h2 className="text-3xl md:text-4xl font-black mt-2 mb-8 tracking-wider text-center text-yellow-400 drop-shadow-md">ĐỈNH CAO HIỂU BIẾT</h2>
 
-                            <div className="space-y-4 mb-8 text-blue-100 bg-blue-950/50 p-6 rounded-2xl border border-blue-600/50">
-                                <p className="flex gap-3 items-start"><span className="text-yellow-400 font-bold">1.</span> Bạn sẽ trải qua 15 câu hỏi liên tiếp từ dễ đến khó.</p>
-                                <p className="flex gap-3 items-start"><span className="text-yellow-400 font-bold">2.</span> Vượt qua mỗi câu hỏi, bạn sẽ tích lũy được điểm XP vô cùng giá trị.</p>
-                                <p className="flex gap-3 items-start"><span className="text-yellow-400 font-bold">3.</span> Cột mốc an toàn: Câu 5 và Câu 10. Trả lời sai sau cột mốc sẽ giữ được điểm của cột mốc đó.</p>
-                                <p className="flex gap-3 items-start"><span className="text-yellow-400 font-bold">4.</span> Bạn có 4 quyền trợ giúp để sử dụng một lần duy nhất.</p>
+                            <div className="space-y-6 mb-10 text-slate-200 bg-blue-950/40 p-6 md:p-8 rounded-2xl border border-blue-400/20 text-base md:text-lg leading-relaxed shadow-inner font-medium">
+                                <p className="flex gap-4 items-start"><span className="text-yellow-400 font-bold shrink-0">1.</span> <span>Bạn sẽ trải qua 15 câu hỏi liên tiếp từ dễ đến khó.</span></p>
+                                <p className="flex gap-4 items-start"><span className="text-yellow-400 font-bold shrink-0">2.</span> <span>Vượt qua mỗi câu hỏi, bạn sẽ tích lũy được điểm XP vô cùng giá trị.</span></p>
+                                <p className="flex gap-4 items-start"><span className="text-yellow-400 font-bold shrink-0">3.</span> <span>Cột mốc an toàn: Câu 5 và Câu 10. Trả lời sai sau cột mốc sẽ giữ được điểm của cột mốc đó.</span></p>
+                                <p className="flex gap-4 items-start"><span className="text-yellow-400 font-bold shrink-0">4.</span> <span>Bạn có 4 quyền trợ giúp để sử dụng một lần duy nhất.</span></p>
                             </div>
 
                             <button
                                 onClick={handleStartGame}
-                                className="w-full bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-black font-black uppercase text-xl py-4 rounded-xl shadow-[0_0_20px_rgba(234,179,8,0.4)] transition-all flex justify-center items-center gap-2 transform hover:scale-[1.02] active:scale-[0.98]"
+                                className="w-full bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 text-black font-black uppercase tracking-wider text-xl py-4 rounded-xl shadow-[0_4px_15px_rgba(234,179,8,0.4)] transition-all flex justify-center items-center gap-2"
                             >
-                                <Play fill="currentColor" size={24} /> Bắt đầu ngay
+                                <Play fill="currentColor" size={24} /> BẮT ĐẦU NGAY
                             </button>
                         </motion.div>
                     )}
@@ -979,8 +1153,64 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                 {/* Left Side: Timer & Question Board */}
                                 <div className="flex-1 w-full order-2 lg:order-1 flex flex-col pt-2 pb-12 lg:pb-8 h-[75vh] lg:h-full justify-between items-center z-20 relative overflow-y-auto scrollbar-hide">
 
+                                    {/* MC Character */}
+                                    <div className="absolute top-0 right-2 md:right-8 lg:right-12 flex flex-col items-end z-[100] mt-6 md:mt-8 pointer-events-none">
+                                        <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 relative z-[101] pointer-events-auto group">
+                                            {/* Container background & clipped body */}
+                                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full border-[1.5px] border-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.5)] overflow-hidden transition-transform duration-300 group-hover:scale-105">
+                                                <img src={mcAvatar} alt="MC" className="absolute -bottom-[8%] left-1/2 -translate-x-1/2 translate-y-[5px] w-[115%] h-auto max-w-none object-bottom" />
+                                            </div>
+                                            {/* Popped out head */}
+                                            <div className="absolute inset-0 pointer-events-none z-10 transition-transform duration-300 group-hover:scale-105" style={{ clipPath: 'polygon(-50% -50%, 150% -50%, 150% 40%, -50% 40%)' }}>
+                                                <img src={mcAvatar} alt="MC" className="absolute -bottom-[8%] left-1/2 -translate-x-1/2 translate-y-[5px] w-[115%] h-auto max-w-none object-bottom drop-shadow-[0_-3px_5px_rgba(0,0,0,0.35)]" />
+                                            </div>
+                                        </div>
+                                        <AnimatePresence>
+                                            {showMcBubble && (
+                                                <motion.div
+                                                    layout
+                                                    initial={{ opacity: 0, scale: 0 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    exit={{ opacity: 0, scale: 0 }}
+                                                    transition={{
+                                                        layout: { type: "spring", stiffness: 500, damping: 30 },
+                                                        scale: { type: "spring", stiffness: 500, damping: 30 },
+                                                        opacity: { duration: 0.15 }
+                                                    }}
+                                                    style={{ transformOrigin: 'calc(100% - 30px) top' }}
+                                                    className="absolute top-full right-0 mt-4 min-w-[260px] max-w-[calc(100vw-32px)] md:max-w-[400px] z-[100] flex flex-col items-end md:items-center"
+                                                >
+                                                    {/* Custom Speech Bubble pointing UP towards right-aligned avatar */}
+                                                    <motion.div layout className="relative bg-white text-blue-900 text-sm md:text-base px-6 py-4 rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.6)] text-left md:text-center font-semibold leading-relaxed pointer-events-auto flex flex-col items-start md:items-center w-full">
+                                                        <div className="absolute -top-[14px] right-[18px] md:right-[26px] lg:right-[34px] w-0 h-0 border-x-[14px] border-x-transparent border-b-[16px] border-b-white pointer-events-none drop-shadow-sm"></div>
+
+                                                        {/* Text Content */}
+                                                        <motion.div layout className="w-full relative">
+                                                            {mcMessage.includes('**') ? (
+                                                                <span dangerouslySetInnerHTML={{ __html: mcMessage.replace(/\*\*(.*?)\*\*/g, '<span class="text-amber-600 font-bold">$1') }} />
+                                                            ) : (
+                                                                <span>{mcMessage}</span>
+                                                            )}
+                                                        </motion.div>
+
+                                                        {/* Next Question / End Game Button inside Bubble */}
+                                                        {answerStep === 'explained' && currentQuestionIndex < DUMMY_QUESTIONS.length - 1 && (
+                                                            <button
+                                                                onClick={handleNextQuestion}
+                                                                className="mt-3 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-xl shadow-[0_4px_10px_rgba(37,99,235,0.4)] transition-all transform hover:scale-[1.02] active:scale-95 flex items-center gap-2 mx-auto"
+                                                            >
+                                                                <span>{(!isSkipped && selectedOption !== DUMMY_QUESTIONS[currentQuestionIndex].answer) ? 'Kết thúc' : 'Tiếp tục'}</span>
+                                                                <ArrowLeft size={16} className="rotate-180" />
+                                                            </button>
+                                                        )}
+                                                    </motion.div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+
                                     {/* Timer */}
-                                    <div className="w-full flex flex-col items-center justify-center shrink-0 relative">
+                                    <div className="w-full flex flex-col items-center justify-center shrink-0 relative mt-2 md:mt-0">
                                         <div className="relative w-20 h-20 md:w-28 md:h-28 rounded-full border-4 border-slate-700/50 flex flex-col items-center justify-center bg-[#020617]/80 shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-sm">
                                             <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full transform -rotate-90">
                                                 <circle cx="50" cy="50" r="46" className="stroke-slate-700/30" strokeWidth="6" fill="transparent" />
@@ -989,28 +1219,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                             <span className={`text-3xl md:text-4xl font-black ${timeLeft <= 10 ? 'text-red-500 animate-pulse' : 'text-slate-100'}`}>{timeLeft}</span>
                                         </div>
 
-                                        {/* Encouragement Message pinned exactly below timer */}
-                                        <AnimatePresence>
-                                            {encouragementMessage && (
-                                                <motion.div
-                                                    initial={{ opacity: 0, scale: 0.5, y: -10 }}
-                                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                                    exit={{ opacity: 0, scale: 1.1, y: -20 }}
-                                                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                                    className="absolute top-full mt-3 md:mt-4 flex items-center justify-center z-[100] pointer-events-none whitespace-nowrap"
-                                                >
-                                                    <div
-                                                        className={`text-xl md:text-3xl lg:text-4xl font-black uppercase text-center tracking-wider px-6 py-2 rounded-xl border-t border-b border-white/20 bg-black/40 backdrop-blur-sm ${encouragementMessage.colorClass}`}
-                                                        style={{
-                                                            textShadow: '0px 4px 10px rgba(0,0,0,0.8), 2px 2px 2px #000',
-                                                            filter: `drop-shadow(0 0 10px currentColor)`
-                                                        }}
-                                                    >
-                                                        {encouragementMessage.text}
-                                                    </div>
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
+
                                     </div>
 
                                     {/* Question & Options Area */}
@@ -1077,83 +1286,6 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                 </motion.div>
                                             )}
                                         </AnimatePresence>
-
-                                        {/* Explanation Panel */}
-                                        <AnimatePresence>
-                                            {answerStep === 'explained' && (
-                                                <motion.div
-                                                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                    exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                                                    transition={{ type: "spring", stiffness: 250, damping: 20 }}
-                                                    className="w-full mt-2 lg:mt-4 z-50 mb-10 md:mb-12 shrink-0"
-                                                >
-                                                    <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 md:p-6 shadow-2xl backdrop-blur-xl flex flex-col items-center text-center relative overflow-hidden">
-
-                                                        {/* Dynamic Header */}
-                                                        {isSkipped ? (
-                                                            <div className="flex items-center gap-2 text-sky-400 mb-2 font-bold text-lg md:text-xl">
-                                                                <RefreshCcw size={24} />
-                                                                <span>Bạn đã bỏ qua câu hỏi này!</span>
-                                                            </div>
-                                                        ) : (
-                                                            <div className={`flex items-center gap-2 mb-2 font-black text-lg md:text-xl ${selectedOption === DUMMY_QUESTIONS[currentQuestionIndex].answer ? 'text-green-500' : 'text-red-500'}`}>
-                                                                {selectedOption === DUMMY_QUESTIONS[currentQuestionIndex].answer ? (
-                                                                    <><CheckCircle2 size={24} /> <span>Chính xác!</span></>
-                                                                ) : (
-                                                                    <><XCircle size={24} /> <span>Chưa đúng! Đáp án là {["A", "B", "C", "D"][DUMMY_QUESTIONS[currentQuestionIndex].answer]}</span></>
-                                                                )}
-                                                            </div>
-                                                        )}
-
-                                                        {/* Explanation Text */}
-                                                        <div className="text-slate-300 text-sm md:text-base leading-relaxed mb-6 max-w-3xl">
-                                                            {/* Parse bold text **...** */}
-                                                            {DUMMY_QUESTIONS[currentQuestionIndex].explanation.split(/(\*\*.*?\*\*)/).map((part, i) => {
-                                                                if (part.startsWith('**') && part.endsWith('**')) {
-                                                                    return <strong key={i} className="text-white font-bold">{part.slice(2, -2)}</strong>;
-                                                                }
-                                                                return <span key={i}>{part}</span>;
-                                                            })}
-                                                        </div>
-
-                                                        {/* Next Button wrapped with an SVG Timer Border */}
-                                                        {currentQuestionIndex < DUMMY_QUESTIONS.length - 1 && (
-                                                            <div className="relative mb-2 w-full md:w-auto inline-flex justify-center group">
-                                                                <button
-                                                                    onClick={handleNextQuestion}
-                                                                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all transform hover:scale-[1.02] active:scale-95 flex items-center gap-2 relative z-10"
-                                                                >
-                                                                    <span>{(!isSkipped && selectedOption !== DUMMY_QUESTIONS[currentQuestionIndex].answer) ? 'Kết thúc' : 'Tiếp tục'}</span>
-                                                                    <ArrowLeft size={18} className="rotate-180" />
-
-                                                                    {/* Progress SVG surrounding button directly */}
-                                                                    <svg
-                                                                        className="absolute inset-0 w-full h-full pointer-events-none"
-                                                                        style={{ overflow: 'visible' }}
-                                                                    >
-                                                                        <rect
-                                                                            x="0" y="0"
-                                                                            width="100%" height="100%"
-                                                                            rx="12" ry="12"
-                                                                            fill="none"
-                                                                            stroke="#60A5FA"
-                                                                            strokeWidth="4"
-                                                                            pathLength="100"
-                                                                            strokeDasharray="100"
-                                                                            strokeDashoffset={(explanationTimeLeft / 15) * 100}
-                                                                            className="transition-all ease-linear"
-                                                                            style={{ transitionDuration: '1000ms' }}
-                                                                        />
-                                                                    </svg>
-                                                                </button>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-
                                     </div>
                                 </div>
 
@@ -1224,93 +1356,168 @@ const PinnacleGame = ({ onLeaveGame }) => {
                     )}
 
                     {gameState === 'finished' && (
-                        <EndGameScreen score={score} handlePlayAgain={handlePlayAgain} onLeaveGame={onLeaveGame} />
+                        <EndGameScreen score={score} handlePlayAgain={handlePlayAgain} onLeaveGame={onLeaveGame} currentQuestionIndex={currentQuestionIndex} endMessage={endMessage} showEndMessage={showEndMessage} />
                     )}
                 </AnimatePresence>
             </div>
-        </div>
+        </div >
     );
 };
 
-const Confetti = () => {
-    const [particles, setParticles] = useState([]);
+// Confetti/Firework Component for high efficiency celebrations
+const Confetti = ({ questionIndex = 14 }) => {
+    const canvasRef = useRef(null);
+
+    // Determine number of positions: 11->2, 12->3, 13->4, 15(index 14)->5
+    const getNumPositions = (index) => {
+        if (index >= 14) return 5; // Câu 15
+        if (index >= 12) return 4; // Câu 13, 14
+        if (index === 11) return 3; // Câu 12
+        if (index === 10) return 2; // Câu 11
+        return 1; // Default fallback if called elsewhere
+    };
 
     useEffect(() => {
-        const colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#facc15', '#2dd4bf'];
-        const shapes = ['rounded-sm', 'rounded-full', 'rounded-none'];
-        const newParticles = [];
-        const numPieces = 150;
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        let animationFrameId;
 
-        for (let i = 0; i < numPieces; i++) {
-            // Spawn mostly from the two bottom corners (like cannons)
-            const isLeftCannon = Math.random() > 0.5;
-            const originX = isLeftCannon ? (Math.random() * 20) : (80 + Math.random() * 20); // 0-20vw or 80-100vw
+        const numPositions = getNumPositions(questionIndex);
+        const allParticles = [];
+        let firedCount = 0;
+        const totalFires = numPositions * 2 - 1; // e.g. 5 positions = 9 bursts (1->5 then 4->1)
 
-            // Trajectory angle: shoot inwards and upwards
-            // Left cannon shoots roughly between 45 and 85 degrees (up and right)
-            // Right cannon shoots roughly between 95 and 135 degrees (up and left)
-            const baseAngle = isLeftCannon ? -Math.PI / 3 : -Math.PI * 2 / 3;
-            const angleSpread = (Math.random() - 0.5) * Math.PI / 4;
-            const angle = baseAngle + angleSpread;
-
-            // Force and distance
-            const velocity = 60 + Math.random() * 120;
-            const targetX = Math.cos(angle) * velocity;
-            const peakY = Math.sin(angle) * velocity * 3; // negative Y (upwards)
-
-            newParticles.push({
-                id: `cnf-${i}`,
-                x: `${originX}vw`,
-                y: `100vh`, // Bottom of screen
-                moveX: targetX,
-                peakY: peakY, // apex of the blast
-                color: colors[Math.floor(Math.random() * colors.length)],
-                shape: shapes[Math.floor(Math.random() * shapes.length)],
-                delay: Math.random() * 0.5, // slightly staggered shot
-                rotation: Math.random() * 720 - 360,
-                width: 6 + Math.random() * 6,
-                height: 6 + Math.random() * 8
-            });
+        // Calculate sequence of x percentages
+        const sequence = [];
+        // L -> R
+        for (let i = 0; i < numPositions; i++) {
+            const pct = numPositions === 1 ? 0.5 : (i / (numPositions - 1)) * 0.8 + 0.1; // spread 10% to 90%
+            sequence.push(pct);
         }
-        setParticles(newParticles);
-    }, []);
+        // R -> L (excluding the last one already fired)
+        for (let i = numPositions - 2; i >= 0; i--) {
+            const pct = numPositions === 1 ? 0.5 : (i / (numPositions - 1)) * 0.8 + 0.1;
+            sequence.push(pct);
+        }
 
-    return (
-        <div className="fixed inset-0 pointer-events-none z-[1000] overflow-hidden">
-            {particles.map((p) => (
-                <motion.div
-                    key={p.id}
-                    className={`absolute ${p.shape}`}
-                    style={{
-                        left: p.x,
-                        top: p.y,
-                        backgroundColor: p.color,
-                        width: p.width,
-                        height: p.height
-                    }}
-                    initial={{ scale: 0, opacity: 1, rotate: 0 }}
-                    animate={{
-                        x: [0, p.moveX, p.moveX + (p.moveX * 0.5)], // move outward, then drift further
-                        y: [0, p.peakY, 100], // Start bottom(0), shoot up, fall down (positive values relative to start are off-screen but we use vh so 100 is ok, wait, we are animating transform relative to pos. So 0 -> -600 -> +200)
-                        rotate: [0, p.rotation, p.rotation * 2],
-                        scale: [0, 1.2, 1, 0.8],
-                        opacity: [1, 1, 1, 0]
-                    }}
-                    transition={{
-                        duration: 3 + Math.random() * 2, // 3 to 5 seconds
-                        ease: "easeOut",
-                        delay: p.delay,
-                        times: [0, 0.2, 1] // Shoot up fast in first 20%, fall and spin for 80%
-                    }}
-                />
-            ))}
-        </div>
-    );
+        const fireBurst = (index) => {
+            if (index >= sequence.length || !canvas) return;
+
+            const xPos = canvas.width * sequence[index];
+            const yPos = canvas.height; // Shoot from bottom
+
+            for (let i = 0; i < 60; i++) {
+                // Shoot upwards in a cone
+                const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI / 3;
+                // Reduce upward speed by 30%: old speed was 15 + random * 20
+                const speed = 10.5 + Math.random() * 14;
+
+                allParticles.push({
+                    x: xPos,
+                    y: yPos,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    // Substantially increase lifetime so they have time to fall down the whole screen
+                    life: 250 + Math.random() * 100,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    size: Math.random() * 7 + 4 // slightly bigger particles look better when slow
+                });
+            }
+
+            firedCount++;
+            if (firedCount < totalFires) {
+                setTimeout(() => fireBurst(firedCount), 300); // 300ms gap between bursts
+            }
+        };
+
+        // Resize
+        const resize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        resize();
+        window.addEventListener('resize', resize);
+
+        const animate = () => {
+            if (!canvas) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = allParticles.length - 1; i >= 0; i--) {
+                const p = allParticles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.15; // Decreased gravity for a slower, floaty fall
+
+                // Add a tiny bit of air resistance to horizontal movement
+                p.vx *= 0.99;
+
+                p.life--;
+                p.size *= 0.992; // Decay size much slower so they don't vanish mid-air
+
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, Math.max(0, p.size), 0, Math.PI * 2);
+                ctx.fill();
+
+                if (p.life <= 0) allParticles.splice(i, 1);
+            }
+
+            animationFrameId = requestAnimationFrame(animate);
+        };
+
+        animate();
+        fireBurst(0); // Start the chain
+
+        return () => {
+            window.removeEventListener('resize', resize);
+            cancelAnimationFrame(animationFrameId);
+        };
+    }, [questionIndex]);
+
+    return <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1000 }} />;
 };
 
-const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame }) => {
+const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionIndex, endMessage, showEndMessage }) => {
     const [displayScore, setDisplayScore] = useState(0);
     const lastSoundTime = useRef(0);
+    const [confettiKey, setConfettiKey] = useState(0);
+    const [showConfetti, setShowConfetti] = useState(score >= 500);
+    const [testIndex, setTestIndex] = useState(currentQuestionIndex);
+    const [visibleMessageIndex, setVisibleMessageIndex] = useState(0);
+
+    // Xử lý hiệu ứng hiển thị tuần tự các câu hội thoại
+    useEffect(() => {
+        if (showEndMessage && Array.isArray(endMessage) && visibleMessageIndex < endMessage.length) {
+            const timer = setTimeout(() => {
+                setVisibleMessageIndex(prev => prev + 1);
+            }, 2500); // Cứ 2.5s hiện thêm 1 câu
+            return () => clearTimeout(timer);
+        }
+    }, [showEndMessage, endMessage, visibleMessageIndex]);
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            const key = e.key.toLowerCase();
+            let newIndex = null;
+
+            if (key === 'e') newIndex = currentQuestionIndex;
+            else if (key === '1') newIndex = 10; // Q11 -> 2 pos
+            else if (key === '2') newIndex = 11; // Q12 -> 3 pos
+            else if (key === '3') newIndex = 12; // Q13 -> 4 pos
+            else if (key === '4') newIndex = 14; // Q15 -> 5 pos
+
+            if (newIndex !== null) {
+                setTestIndex(newIndex);
+                setShowConfetti(false);
+                setTimeout(() => {
+                    setConfettiKey(prev => prev + 1);
+                    setShowConfetti(true);
+                }, 10);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [currentQuestionIndex]);
 
     const playCoinSound = useCallback(() => {
         try {
@@ -1351,60 +1558,105 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame }) => {
 
     return (
         <>
-            {score >= 500 && <Confetti />}
+            {showConfetti && <Confetti key={confettiKey} questionIndex={testIndex} />}
             <motion.div
                 key="finished"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-blue-900/95 p-10 rounded-3xl shadow-[0_0_40px_rgba(30,58,138,0.8)] text-center border-4 border-yellow-500 m-auto max-w-2xl w-full text-white backdrop-blur-md relative z-10"
+                className="bg-white/10 p-6 md:p-10 rounded-3xl shadow-[0_0_50px_rgba(250,204,21,0.15)] text-center border-2 border-yellow-200/50 m-auto max-w-2xl w-full text-white backdrop-blur-xl relative z-10 lg:mt-32 mt-16"
             >
+
+                {/* Trophy Badge overlapping top border */}
                 <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
-                    transition={{ type: "spring", stiffness: 200, damping: 10, delay: 0.2 }}
-                    className="w-24 h-24 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-yellow-400"
+                    initial={{ scale: 0, y: 50 }}
+                    animate={{ scale: 1, y: 0 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+                    className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-36 bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] rounded-t-full rounded-b-xl flex items-center justify-center border-4 border-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.4)] z-20"
+                    style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}
                 >
-                    <Trophy className="text-yellow-400" size={48} />
+                    <div className="absolute inset-1 border border-yellow-300/50" style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}></div>
+                    <Trophy className="text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]" size={56} />
+                    {/* Stars around trophy */}
+                    <Star className="absolute top-6 left-4 text-yellow-200 fill-current opacity-70" size={12} />
+                    <Star className="absolute top-6 right-4 text-yellow-200 fill-current opacity-70" size={12} />
+                    <Star className="absolute bottom-10 left-6 text-yellow-200 fill-current opacity-50" size={8} />
+                    <Star className="absolute bottom-10 right-6 text-yellow-200 fill-current opacity-50" size={8} />
                 </motion.div>
 
-                <h2 className="text-4xl font-black mb-2 text-yellow-400 drop-shadow-lg uppercase tracking-wider">Trò chơi kết thúc!</h2>
-                <p className="text-blue-200 mb-8 text-lg">Bạn đã hoàn thành chặng đường đỉnh cao.</p>
+                <h2 className="text-3xl md:text-4xl font-black mt-10 md:mt-12 mb-6 text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-wider relative z-10">
+                    TRÒ CHƠI KẾT THÚC!
+                </h2>
+                {/* Central White Message Box container (MC's dialog) */}
+                <div className="bg-white/95 text-slate-800 rounded-3xl p-6 md:p-8 mb-8 shadow-[0_10px_30px_rgba(0,0,0,0.3)] min-h-[120px] flex items-center justify-center relative border border-white/50">
+                    <AnimatePresence mode="popLayout">
+                        {showEndMessage && Array.isArray(endMessage) && endMessage[visibleMessageIndex] ? (
+                            <motion.div
+                                key={`msg-${visibleMessageIndex}`}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
+                                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                                className="text-base md:text-xl font-medium leading-relaxed text-center absolute w-full px-6 italic text-slate-700"
+                            >
+                                {endMessage[visibleMessageIndex]}
+                            </motion.div>
+                        ) : (
+                            showEndMessage && endMessage && (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="text-base md:text-xl font-medium leading-relaxed text-center"
+                                >
+                                    {endMessage}
+                                </motion.div>
+                            )
+                        )}
 
-                <div className="bg-black/50 rounded-3xl p-8 mb-8 border border-blue-500/50 relative overflow-hidden">
-                    <motion.div
-                        animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }}
-                        transition={{ repeat: Infinity, duration: 2 }}
-                        className="absolute inset-0 bg-yellow-500/20 rounded-3xl blur-2xl"
-                    />
-                    <div className="text-gray-400 mb-2 uppercase text-sm font-bold tracking-widest relative z-10">Phần thưởng giành được</div>
-                    <div className="text-6xl font-black text-yellow-500 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] flex items-center justify-center gap-3 relative z-10">
+                        {!showEndMessage && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="text-base md:text-xl font-medium leading-relaxed text-center italic text-slate-600"
+                            >
+                                Hành trình học hỏi vẫn còn phía trước. Hãy sẵn sàng cho thử thách tiếp theo!
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                {/* Score Pill */}
+                <div className="flex items-center justify-center mb-10 w-full max-w-[280px] md:max-w-xs mx-auto">
+                    <div className="bg-[#1e293b]/90 py-4 md:py-5 px-8 flex flex-1 items-center justify-center gap-3 border-2 border-yellow-500/40 shadow-[0_0_20px_rgba(250,204,21,0.3)] rounded-full w-full">
                         <motion.span
                             key={displayScore}
                             initial={{ y: -5, opacity: 0.8 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.1 }}
+                            className="text-5xl font-black text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.6)]"
                         >
                             {displayScore.toLocaleString()}
                         </motion.span>
-                        <span className="text-3xl text-yellow-200">XP</span>
+                        <span className="text-2xl font-bold text-yellow-200 mt-1">XP</span>
                     </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 relative z-10">
+                {/* Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4 relative z-10 w-full max-w-lg mx-auto">
                     <button
                         onClick={handlePlayAgain}
-                        className="flex-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-4 rounded-xl border border-blue-500 transition-colors"
+                        className="flex-1 bg-[#1e3a8a] hover:bg-[#2563eb] text-white font-bold py-4 rounded-full shadow-[0_4px_15px_rgba(30,58,138,0.4)] transition-all uppercase tracking-wide border border-[#3b82f6]/50"
                     >
                         Chơi lại
                     </button>
                     <button
                         onClick={onLeaveGame}
-                        className="flex-1 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-black font-black uppercase py-4 rounded-xl shadow-lg shadow-yellow-500/30 transition-colors"
+                        className="flex-1 bg-gradient-to-b from-[#fbbf24] to-[#f59e0b] hover:from-[#fcd34d] hover:to-[#fbbf24] text-[#451a03] font-black uppercase py-4 rounded-full shadow-[0_4px_15px_rgba(245,158,11,0.4)] transition-all tracking-wide border border-[#fde68a]"
                     >
                         Về Menu chính
                     </button>
                 </div>
-            </motion.div>
+            </motion.div >
+
         </>
     );
 };

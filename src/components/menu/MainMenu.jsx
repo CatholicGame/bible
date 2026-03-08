@@ -98,7 +98,7 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats }) => {
                     <img
                         src={game.image}
                         alt={game.title}
-                        className={`${game.id === 'millionaire' ? 'w-[80%]' : 'w-[210px]'} object-contain`}
+                        className={`${game.id === 'millionaire' ? 'w-[75%]' : 'w-[180px]'} object-contain`}
                     />
                 </div>
 
