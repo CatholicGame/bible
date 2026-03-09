@@ -10,15 +10,11 @@ import bgImage from '../../assets/common/common_background.png';
 
 // Game thumbnail imports
 import imgMillionaire from '../../assets/games/millionaire.png';
-import imgQuiz from '../../assets/games/quiz.png';
-import imgTrueFalse from '../../assets/games/true_false.png';
 import imgSorting from '../../assets/games/thumb_secret_words.png';
 import imgGolgotha from '../../assets/games/thumb_golgotha.png';
 
 const GAMES = [
     { id: 'millionaire', title: 'Ai là nhà thần học', subtitle: '', image: imgMillionaire, from: '#9333ea', to: '#4c1d95', isSoloOnly: true },
-    { id: 'quiz', title: 'Trắc Nghiệm', subtitle: '4 Đáp Án', image: imgQuiz, from: '#e8294c', to: '#9b1c32', isSoloOnly: false },
-    { id: 'true_false', title: 'Đúng / Sai', subtitle: 'Nhận Định', image: imgTrueFalse, from: '#16a34a', to: '#14532d', isSoloOnly: false },
     { id: 'sorting', title: 'Giải ô chữ', subtitle: 'Sự Kiện', image: imgSorting, from: '#d97706', to: '#92400e', isSoloOnly: false },
     { id: 'golgotha', title: 'Đỉnh Golgotha', subtitle: 'Đường Lên', image: imgGolgotha, from: '#0ea5e9', to: '#0369a1', isSoloOnly: false },
 ];

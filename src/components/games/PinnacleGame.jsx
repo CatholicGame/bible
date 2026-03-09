@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, ArrowLeft, CheckCircle2, XCircle, Play, Phone, Users, Shield, RefreshCcw, Flag, Star, UserCircle2 } from 'lucide-react';
 import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.png';
 import mcAvatar from '../../assets/pinnacle/MC.png';
+import pointUpSfx from '../../assets/games/SFX/point_up.wav';
 
 const DUMMY_QUESTIONS = [
     { question: "Tên vị Giáo hoàng đầu tiên của Giáo hội Công giáo là gì?", options: ["Thánh Phêrô", "Thánh Phaolô", "Thánh Anrê", "Thánh Giacôbê"], answer: 0, explanation: "Chúa Giêsu đã trao chìa khóa Nước Trời cho **Thánh Phêrô**, đặt ngài làm nền tảng đầu tiên của Giáo hội." },
@@ -173,7 +174,7 @@ const HexagonBox = ({ children, className = "", onClick, disabled, isActive, isC
             <button
                 onClick={onClick}
                 disabled={disabled || isHidden}
-                className={`w-full relative px-6 md:px-12 py-3 outline-none transition-all duration-300 ${className}`}
+                className={`w-full relative px-4 md:px-12 py-2 md:py-3 outline-none transition-all duration-300 ${className}`}
                 style={{
                     clipPath: 'polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%)',
                     WebkitClipPath: 'polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%)',
@@ -206,6 +207,7 @@ const LifelineButton = ({ icon: Icon, text, isUsed, disabled, onClick, active })
 
 const PinnacleGame = ({ onLeaveGame }) => {
     const [gameState, setGameState] = useState('rules'); // 'rules', 'playing', 'finished'
+    const [introPhase, setIntroPhase] = useState(4); // 0=start, 1=ladder, 2=lifelines, 3=MC, 4=question/timer
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
     const [selectedOption, setSelectedOption] = useState(null);
@@ -252,6 +254,16 @@ const PinnacleGame = ({ onLeaveGame }) => {
     const xpBadgeRef = useRef(null);
     const currentRowRef = useRef(null);
 
+    // Auto-scroll the focused reward row on smaller screens
+    useEffect(() => {
+        if (gameState === 'playing' && introPhase >= 1 && currentRowRef.current) {
+            // Delay slightly to give time for cascade animation layout
+            setTimeout(() => {
+                currentRowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 500);
+        }
+    }, [currentQuestionIndex, introPhase, gameState]);
+
     // MC Speech Bubble state
     const [mcMessage, setMcMessage] = useState("");
     const [showMcBubble, setShowMcBubble] = useState(false);
@@ -260,7 +272,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
 
     // Prompt MC on level changes
     useEffect(() => {
-        if (gameState === 'playing' && !isAnswerRevealed && !isSwapping) {
+        if (gameState === 'playing' && introPhase === 4 && !isAnswerRevealed && !isSwapping) {
             const pool = MC_MESSAGES[currentQuestionIndex].start;
             const msg = pool[Math.floor(Math.random() * pool.length)];
             setMcMessage(msg);
@@ -268,7 +280,42 @@ const PinnacleGame = ({ onLeaveGame }) => {
             const timer = setTimeout(() => setShowMcBubble(false), 4000); // 4 secs display
             return () => clearTimeout(timer);
         }
-    }, [currentQuestionIndex, gameState, isAnswerRevealed, isSwapping]);
+    }, [currentQuestionIndex, gameState, introPhase, isAnswerRevealed, isSwapping]);
+
+    // Web Audio: intro active sound
+    const playActiveSound = useCallback(() => {
+        try {
+            const audio = new Audio(pointUpSfx);
+            audio.volume = 0.5;
+            audio.play().catch(e => console.log('Audio play failed', e));
+        } catch (_) { }
+    }, []);
+
+    useEffect(() => {
+        if (gameState === 'playing' && introPhase > 0 && introPhase < 4) {
+            let phaseTimer;
+            if (introPhase === 1) {
+                // Lifelines: start cascading after background
+                phaseTimer = setTimeout(() => {
+                    playActiveSound();
+                    setIntroPhase(2);
+                }, 1500); // wait for ladder to finish cascading
+            } else if (introPhase === 2) {
+                // MC
+                phaseTimer = setTimeout(() => {
+                    playActiveSound();
+                    setIntroPhase(3);
+                }, 1000);
+            } else if (introPhase === 3) {
+                // Question + Options: cascade options
+                phaseTimer = setTimeout(() => {
+                    playActiveSound();
+                    setIntroPhase(4);
+                }, 800);
+            }
+            return () => clearTimeout(phaseTimer);
+        }
+    }, [gameState, introPhase, playActiveSound]);
 
     // Web Audio: coin ping sound
     const playCoinSound = useCallback(() => {
@@ -352,10 +399,12 @@ const PinnacleGame = ({ onLeaveGame }) => {
     const handleStartGame = () => {
         setGameState('playing');
         setTimeLeft(30);
+        playActiveSound();
+        setIntroPhase(1);
     };
 
     useEffect(() => {
-        if (gameState !== 'playing' || isAnswerRevealed || confirmFiftyFifty || confirmAudience || confirmPhone || confirmSwap || audienceState || phoneState || isSwapping) return;
+        if (gameState !== 'playing' || introPhase < 4 || isAnswerRevealed || confirmFiftyFifty || confirmAudience || confirmPhone || confirmSwap || audienceState || phoneState || isSwapping) return;
 
         const timer = setInterval(() => {
             setTimeLeft(prev => {
@@ -369,7 +418,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [gameState, currentQuestionIndex, isAnswerRevealed, confirmFiftyFifty, confirmAudience, confirmPhone, confirmSwap, audienceState, phoneState]);
+    }, [gameState, introPhase, currentQuestionIndex, isAnswerRevealed, confirmFiftyFifty, confirmAudience, confirmPhone, confirmSwap, audienceState, phoneState]);
 
     useEffect(() => {
         if (answerStep === 'explained') {
@@ -528,6 +577,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
         setIsSwapping(false);
         setLifelines({ fiftyFifty: false, phone: false, audience: false, swap: false });
         setTimeLeft(30);
+        playActiveSound();
+        setIntroPhase(1);
     };
 
     // Lifeline handlers
@@ -786,21 +837,21 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 1.1 }}
-                            className="bg-gradient-to-b from-[#1e3a8a]/95 to-[#0f172a]/95 backdrop-blur-xl p-6 md:p-10 rounded-3xl shadow-[0_0_50px_rgba(30,58,138,0.3)] border-2 border-blue-400/30 m-auto max-w-2xl w-full text-white relative z-10"
+                            className="bg-gradient-to-b from-[#1e3a8a]/95 to-[#0f172a]/95 backdrop-blur-xl p-4 sm:p-6 md:p-10 rounded-2xl md:rounded-3xl shadow-[0_0_50px_rgba(30,58,138,0.3)] border-2 border-blue-400/30 m-auto max-w-2xl w-full text-white relative z-10 max-h-[90vh] overflow-y-auto scrollbar-hide"
                         >
-                            <div className="flex justify-between items-start mb-6">
+                            <div className="flex justify-between items-start mb-4 md:mb-6">
                                 <button onClick={onLeaveGame} className="text-gray-300 hover:text-white transition-colors p-2 -ml-2 rounded-full hover:bg-white/10 mt-1">
                                     <ArrowLeft size={24} />
                                 </button>
                                 {/* Top Right Trophy Badge */}
-                                <div className="absolute top-6 right-6 md:top-8 md:right-8 w-14 h-14 md:w-16 md:h-16 border-2 border-yellow-400 bg-blue-950/80 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(250,204,21,0.5)] z-20">
-                                    <Trophy className="text-yellow-400 drop-shadow-[0_0_5px_rgba(250,204,21,0.8)]" size={24} />
+                                <div className="absolute top-4 right-4 md:top-8 md:right-8 w-12 h-12 md:w-16 md:h-16 border-2 border-yellow-400 bg-blue-950/80 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(250,204,21,0.5)] z-20">
+                                    <Trophy className="text-yellow-400 drop-shadow-[0_0_5px_rgba(250,204,21,0.8)]" size={20} />
                                 </div>
                             </div>
 
-                            <h2 className="text-3xl md:text-4xl font-black mt-2 mb-8 tracking-wider text-center text-yellow-400 drop-shadow-md">ĐỈNH CAO HIỂU BIẾT</h2>
+                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mt-2 mb-4 md:mb-8 tracking-wider text-center text-yellow-400 drop-shadow-md">ĐỈNH CAO HIỂU BIẾT</h2>
 
-                            <div className="space-y-6 mb-10 text-slate-200 bg-blue-950/40 p-6 md:p-8 rounded-2xl border border-blue-400/20 text-base md:text-lg leading-relaxed shadow-inner font-medium">
+                            <div className="space-y-4 md:space-y-6 mb-6 md:mb-10 text-slate-200 bg-blue-950/40 p-4 sm:p-6 md:p-8 rounded-xl md:rounded-2xl border border-blue-400/20 text-sm sm:text-base md:text-lg leading-relaxed shadow-inner font-medium">
                                 <p className="flex gap-4 items-start"><span className="text-yellow-400 font-bold shrink-0">1.</span> <span>Bạn sẽ trải qua 15 câu hỏi liên tiếp từ dễ đến khó.</span></p>
                                 <p className="flex gap-4 items-start"><span className="text-yellow-400 font-bold shrink-0">2.</span> <span>Vượt qua mỗi câu hỏi, bạn sẽ tích lũy được điểm XP vô cùng giá trị.</span></p>
                                 <p className="flex gap-4 items-start"><span className="text-yellow-400 font-bold shrink-0">3.</span> <span>Cột mốc an toàn: Câu 5 và Câu 10. Trả lời sai sau cột mốc sẽ giữ được điểm của cột mốc đó.</span></p>
@@ -864,16 +915,29 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                 )}
                             </AnimatePresence>
                             {/* Top Bar: Lifelines */}
-                            <div className="flex justify-between items-start mb-2 px-2 md:px-4 shrink-0 relative z-50">
+                            <motion.div
+                                initial={{ opacity: 0, y: -20 }}
+                                animate={introPhase >= 2 ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+                                transition={{ duration: 0.5, type: 'spring' }}
+                                className="flex justify-between items-start mb-2 px-2 md:px-4 shrink-0 relative z-50"
+                            >
                                 <button onClick={onLeaveGame} className="text-slate-300 hover:text-white transition-all flex items-center gap-1 bg-slate-900/50 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-slate-700/50 backdrop-blur-sm text-sm md:text-base">
                                     <ArrowLeft size={16} /> Thoát
                                 </button>
 
                                 <div className="flex gap-2 bg-slate-900/40 p-1 rounded-full backdrop-blur-sm border border-slate-700/30">
-                                    <LifelineButton text="50:50" isUsed={lifelines.fiftyFifty} disabled={isAnswerRevealed} onClick={useFiftyFifty} />
-                                    <LifelineButton icon={Phone} isUsed={lifelines.phone} disabled={isAnswerRevealed} onClick={usePhone} />
-                                    <LifelineButton icon={Users} isUsed={lifelines.audience} disabled={isAnswerRevealed} onClick={useAudience} />
-                                    <LifelineButton icon={RefreshCcw} isUsed={lifelines.swap} disabled={isAnswerRevealed} onClick={useSwap} />
+                                    <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={introPhase >= 2 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }} transition={{ delay: 0.1, duration: 0.4 }}>
+                                        <LifelineButton text="50:50" isUsed={lifelines.fiftyFifty} disabled={isAnswerRevealed} onClick={useFiftyFifty} />
+                                    </motion.div>
+                                    <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={introPhase >= 2 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }} transition={{ delay: 0.25, duration: 0.4 }}>
+                                        <LifelineButton icon={Phone} isUsed={lifelines.phone} disabled={isAnswerRevealed} onClick={usePhone} />
+                                    </motion.div>
+                                    <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={introPhase >= 2 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }} transition={{ delay: 0.4, duration: 0.4 }}>
+                                        <LifelineButton icon={Users} isUsed={lifelines.audience} disabled={isAnswerRevealed} onClick={useAudience} />
+                                    </motion.div>
+                                    <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={introPhase >= 2 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }} transition={{ delay: 0.55, duration: 0.4 }}>
+                                        <LifelineButton icon={RefreshCcw} isUsed={lifelines.swap} disabled={isAnswerRevealed} onClick={useSwap} />
+                                    </motion.div>
                                 </div>
 
                                 <div ref={xpBadgeRef} className="flex items-center gap-2 bg-amber-500/15 border border-amber-500/40 px-3 py-1.5 rounded-full backdrop-blur-sm">
@@ -888,7 +952,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         {displayScore.toLocaleString()} XP
                                     </motion.span>
                                 </div>
-                            </div>
+                            </motion.div>
 
                             {/* Phone Confirmation Popup */}
                             <AnimatePresence>
@@ -1148,13 +1212,18 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             </AnimatePresence>
 
                             {/* Main Game Area */}
-                            <div className="flex-1 flex flex-col lg:flex-row w-full max-w-7xl mx-auto overflow-hidden gap-2 lg:gap-8 pb-2 px-2 lg:px-4">
+                            <div className="flex-1 flex flex-col landscape:flex-row lg:flex-row w-full max-w-7xl mx-auto overflow-hidden gap-2 landscape:gap-4 lg:gap-8 pb-2 px-2 lg:px-4">
 
                                 {/* Left Side: Timer & Question Board */}
-                                <div className="flex-1 w-full order-2 lg:order-1 flex flex-col pt-2 pb-12 lg:pb-8 h-[75vh] lg:h-full justify-between items-center z-20 relative overflow-y-auto scrollbar-hide">
+                                <div className="flex-1 w-full order-2 landscape:order-1 lg:order-1 flex flex-col pt-2 pb-12 landscape:pb-2 lg:pb-8 h-[75vh] landscape:h-full lg:h-full justify-between items-center z-20 relative overflow-y-auto scrollbar-hide">
 
                                     {/* MC Character */}
-                                    <div className="absolute top-0 right-2 md:right-8 lg:right-12 flex flex-col items-end z-[100] mt-6 md:mt-8 pointer-events-none">
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.5 }}
+                                        animate={introPhase >= 3 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                                        transition={{ duration: 0.5, type: 'spring' }}
+                                        className="absolute top-0 right-2 md:right-8 lg:right-12 flex flex-col items-end z-[100] mt-6 md:mt-8 pointer-events-none"
+                                    >
                                         <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 relative z-[101] pointer-events-auto group">
                                             {/* Container background & clipped body */}
                                             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full border-[1.5px] border-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.5)] overflow-hidden transition-transform duration-300 group-hover:scale-105">
@@ -1207,10 +1276,15 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                 </motion.div>
                                             )}
                                         </AnimatePresence>
-                                    </div>
+                                    </motion.div>
 
                                     {/* Timer */}
-                                    <div className="w-full flex flex-col items-center justify-center shrink-0 relative mt-2 md:mt-0">
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.5 }}
+                                        animate={introPhase >= 4 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                                        transition={{ duration: 0.5, type: 'spring' }}
+                                        className="w-full flex flex-col items-center justify-center shrink-0 relative mt-2 md:mt-0"
+                                    >
                                         <div className="relative w-20 h-20 md:w-28 md:h-28 rounded-full border-4 border-slate-700/50 flex flex-col items-center justify-center bg-[#020617]/80 shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-sm">
                                             <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full transform -rotate-90">
                                                 <circle cx="50" cy="50" r="46" className="stroke-slate-700/30" strokeWidth="6" fill="transparent" />
@@ -1220,10 +1294,15 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         </div>
 
 
-                                    </div>
+                                    </motion.div>
 
                                     {/* Question & Options Area */}
-                                    <div className="w-full max-w-4xl mx-auto flex flex-col gap-3 md:gap-4 px-2 lg:px-0">
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={introPhase >= 4 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+                                        transition={{ duration: 0.5, type: 'spring' }}
+                                        className="w-full max-w-4xl mx-auto flex flex-col gap-3 md:gap-4 px-2 lg:px-0"
+                                    >
 
                                         <AnimatePresence mode="wait">
                                             {!isSwapping && (
@@ -1232,12 +1311,12 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                     initial={{ opacity: 0, scale: 0.98 }}
                                                     animate={{ opacity: 1, scale: 1 }}
                                                     exit={{ opacity: 0, scale: 0.98 }}
-                                                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                                                    transition={{ duration: 0.3, ease: "easeInOut", delay: introPhase >= 4 && currentQuestionIndex === 0 ? 0.2 : 0 }}
                                                     className="w-full flex flex-col gap-3 md:gap-4"
                                                 >
                                                     {/* Question Box */}
-                                                    <HexagonBox className="min-h-[70px] md:min-h-[120px] flex items-center justify-center cursor-default">
-                                                        <h3 className="text-base md:text-xl lg:text-3xl font-bold text-center leading-snug tracking-wide text-slate-100 drop-shadow-lg w-full px-2 md:px-6">
+                                                    <HexagonBox className="min-h-[50px] md:min-h-[120px] flex items-center justify-center cursor-default">
+                                                        <h3 className="text-sm sm:text-base md:text-xl lg:text-3xl font-bold text-center leading-snug tracking-wide text-slate-100 drop-shadow-lg w-full px-1 md:px-6">
                                                             {DUMMY_QUESTIONS[currentQuestionIndex].question}
                                                         </h3>
                                                     </HexagonBox>
@@ -1265,34 +1344,45 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                             let isWrongChoice = isAnswerRevealed && isSel && !isCorrectChoice;
 
                                                             return (
-                                                                <HexagonBox
+                                                                <motion.div
                                                                     key={idx}
-                                                                    onClick={() => handleOptionSelect(idx)}
-                                                                    disabled={isAnswerRevealed || isScanningFiftyFifty}
-                                                                    isActive={isSel && !isAnswerRevealed}
-                                                                    isCorrect={isCorrectChoice}
-                                                                    isWrong={isWrongChoice}
-                                                                    isHidden={isHidden}
-                                                                    className="text-left py-2 md:py-4"
+                                                                    initial={{ opacity: 0, x: -30 }}
+                                                                    animate={introPhase >= 4 ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+                                                                    transition={{ duration: 0.4, delay: (introPhase >= 4 && currentQuestionIndex === 0 ? 0.5 : 0) + idx * 0.15 }}
                                                                 >
-                                                                    <div className="flex items-center gap-2 md:gap-4 w-full pr-2">
-                                                                        <span className="text-amber-500 font-black text-lg md:text-2xl drop-shadow-sm">{alphabet[idx]}:</span>
-                                                                        <span className="text-slate-200 text-sm md:text-lg font-medium flex-1 break-words leading-tight">{option}</span>
-                                                                    </div>
-                                                                </HexagonBox>
+                                                                    <HexagonBox
+                                                                        onClick={() => handleOptionSelect(idx)}
+                                                                        disabled={isAnswerRevealed || isScanningFiftyFifty}
+                                                                        isActive={isSel && !isAnswerRevealed}
+                                                                        isCorrect={isCorrectChoice}
+                                                                        isWrong={isWrongChoice}
+                                                                        isHidden={isHidden}
+                                                                        className="text-left py-1.5 md:py-4 h-full"
+                                                                    >
+                                                                        <div className="flex items-center gap-1.5 md:gap-4 w-full pr-1 md:pr-2">
+                                                                            <span className="text-amber-500 font-black text-base md:text-2xl drop-shadow-sm">{alphabet[idx]}:</span>
+                                                                            <span className="text-slate-200 text-xs sm:text-sm md:text-lg font-medium flex-1 break-words leading-tight">{option}</span>
+                                                                        </div>
+                                                                    </HexagonBox>
+                                                                </motion.div>
                                                             );
                                                         })}
                                                     </div>
                                                 </motion.div>
                                             )}
                                         </AnimatePresence>
-                                    </div>
+                                    </motion.div>
                                 </div>
 
                                 {/* Right Side: Reward Ladder (No-Scroll — fits in full height) */}
-                                <div className="w-full lg:w-72 flex flex-col shrink-0 order-1 lg:order-2 h-[20vh] lg:h-full lg:border-l lg:border-slate-700/50 lg:pl-4">
-                                    <div className="flex-1 flex flex-col h-full overflow-hidden justify-between">
-                                        <div className="flex flex-col-reverse gap-1 h-full justify-end">
+                                <motion.div
+                                    initial={{ opacity: 0, x: 50 }}
+                                    animate={introPhase >= 1 ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+                                    transition={{ duration: 0.5, type: 'spring' }}
+                                    className="w-full landscape:w-64 lg:w-72 flex flex-col shrink-0 order-1 landscape:order-2 lg:order-2 h-[20vh] landscape:min-h-[100%] lg:min-h-[20vh] landscape:h-full lg:h-full lg:max-h-full landscape:border-l lg:border-l landscape:border-slate-700/50 lg:border-slate-700/50 landscape:pl-4 lg:pl-4 overflow-hidden"
+                                >
+                                    <div className="flex-1 flex flex-col h-full overflow-y-auto scrollbar-hide scroll-smooth pb-4 justify-between">
+                                        <div className="flex flex-col-reverse gap-1 justify-end min-h-max">
                                             {REWARDS.map((reward, idx) => {
                                                 const qNum = idx + 1;
                                                 const isCurrent = idx === currentQuestionIndex;
@@ -1323,17 +1413,24 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                     shadow = '0 0 16px rgba(245,158,11,0.7)';
                                                 }
 
+                                                // Top-down cascade animation delay based on (14 - idx)
+                                                // items map from 0 to 14 (1 implies bottom, 15 implies top). Actually index 14 is top reward.
+                                                // So delay = (14 - idx) * 0.08 s
+                                                const cascadeDelay = (14 - idx) * 0.08;
+
                                                 return (
-                                                    <div
+                                                    <motion.div
                                                         key={idx}
                                                         ref={isCurrent ? currentRowRef : undefined}
+                                                        initial={{ opacity: 0, y: -20 }}
+                                                        animate={introPhase >= 1 ? { opacity, y: 0 } : { opacity: 0, y: -20 }}
+                                                        transition={{ duration: 0.3, delay: introPhase >= 1 ? cascadeDelay : 0 }}
                                                         className="relative flex items-center justify-between px-5 transition-all duration-300"
                                                         style={{
                                                             clipPath: 'polygon(4% 0%, 96% 0%, 100% 50%, 96% 100%, 4% 100%, 0% 50%)',
                                                             WebkitClipPath: 'polygon(4% 0%, 96% 0%, 100% 50%, 96% 100%, 4% 100%, 0% 50%)',
                                                             background: bg,
                                                             boxShadow: shadow,
-                                                            opacity,
                                                             paddingTop: isMilestone ? '5px' : '3px',
                                                             paddingBottom: isMilestone ? '5px' : '3px',
                                                         }}
@@ -1345,12 +1442,12 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                             )}
                                                         </div>
                                                         <span className={`text-sm ${isMilestone && !isCurrent ? 'font-bold' : 'font-semibold'}`} style={{ color: textColor }}>{reward.toLocaleString()}</span>
-                                                    </div>
+                                                    </motion.div>
                                                 );
                                             })}
                                         </div>
                                     </div>
-                                </div>
+                                </motion.div>
                             </div>
                         </motion.div>
                     )}
@@ -1563,7 +1660,7 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                 key="finished"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-white/10 p-6 md:p-10 rounded-3xl shadow-[0_0_50px_rgba(250,204,21,0.15)] text-center border-2 border-yellow-200/50 m-auto max-w-2xl w-full text-white backdrop-blur-xl relative z-10 lg:mt-32 mt-16"
+                className="bg-white/10 p-4 sm:p-6 md:p-10 rounded-2xl md:rounded-3xl shadow-[0_0_50px_rgba(250,204,21,0.15)] text-center border-2 border-yellow-200/50 m-auto max-w-2xl w-full text-white backdrop-blur-xl relative z-10 lg:mt-32 mt-14 md:mt-16 max-h-[90vh] overflow-y-auto scrollbar-hide"
             >
 
                 {/* Trophy Badge overlapping top border */}
@@ -1571,23 +1668,23 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                     initial={{ scale: 0, y: 50 }}
                     animate={{ scale: 1, y: 0 }}
                     transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                    className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-36 bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] rounded-t-full rounded-b-xl flex items-center justify-center border-4 border-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.4)] z-20"
+                    className="absolute -top-12 md:-top-16 left-1/2 -translate-x-1/2 w-24 h-28 md:w-32 md:h-36 bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] rounded-t-full rounded-b-xl flex items-center justify-center border-4 border-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.4)] z-20"
                     style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}
                 >
                     <div className="absolute inset-1 border border-yellow-300/50" style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}></div>
-                    <Trophy className="text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]" size={56} />
+                    <Trophy className="text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]" size={48} />
                     {/* Stars around trophy */}
-                    <Star className="absolute top-6 left-4 text-yellow-200 fill-current opacity-70" size={12} />
-                    <Star className="absolute top-6 right-4 text-yellow-200 fill-current opacity-70" size={12} />
-                    <Star className="absolute bottom-10 left-6 text-yellow-200 fill-current opacity-50" size={8} />
-                    <Star className="absolute bottom-10 right-6 text-yellow-200 fill-current opacity-50" size={8} />
+                    <Star className="absolute top-4 md:top-6 left-3 md:left-4 text-yellow-200 fill-current opacity-70" size={10} />
+                    <Star className="absolute top-4 md:top-6 right-3 md:right-4 text-yellow-200 fill-current opacity-70" size={10} />
+                    <Star className="absolute bottom-8 md:bottom-10 left-5 md:left-6 text-yellow-200 fill-current opacity-50" size={8} />
+                    <Star className="absolute bottom-8 md:bottom-10 right-5 md:right-6 text-yellow-200 fill-current opacity-50" size={8} />
                 </motion.div>
 
-                <h2 className="text-3xl md:text-4xl font-black mt-10 md:mt-12 mb-6 text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-wider relative z-10">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mt-8 md:mt-12 mb-4 md:mb-6 text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-wider relative z-10">
                     TRÒ CHƠI KẾT THÚC!
                 </h2>
                 {/* Central White Message Box container (MC's dialog) */}
-                <div className="bg-white/95 text-slate-800 rounded-3xl p-6 md:p-8 mb-8 shadow-[0_10px_30px_rgba(0,0,0,0.3)] min-h-[120px] flex items-center justify-center relative border border-white/50">
+                <div className="bg-white/95 text-slate-800 rounded-2xl md:rounded-3xl p-4 md:p-8 mb-6 md:mb-8 shadow-[0_10px_30px_rgba(0,0,0,0.3)] min-h-[80px] md:min-h-[120px] flex items-center justify-center relative border border-white/50">
                     <AnimatePresence mode="popLayout">
                         {showEndMessage && Array.isArray(endMessage) && endMessage[visibleMessageIndex] ? (
                             <motion.div
@@ -1596,7 +1693,7 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
                                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                                className="text-base md:text-xl font-medium leading-relaxed text-center absolute w-full px-6 italic text-slate-700"
+                                className="text-sm md:text-xl font-medium leading-relaxed text-center absolute w-full px-4 md:px-6 italic text-slate-700"
                             >
                                 {endMessage[visibleMessageIndex]}
                             </motion.div>
@@ -1605,7 +1702,7 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    className="text-base md:text-xl font-medium leading-relaxed text-center"
+                                    className="text-sm md:text-xl font-medium leading-relaxed text-center"
                                 >
                                     {endMessage}
                                 </motion.div>
@@ -1616,7 +1713,7 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="text-base md:text-xl font-medium leading-relaxed text-center italic text-slate-600"
+                                className="text-sm md:text-xl font-medium leading-relaxed text-center italic text-slate-600"
                             >
                                 Hành trình học hỏi vẫn còn phía trước. Hãy sẵn sàng cho thử thách tiếp theo!
                             </motion.div>
@@ -1625,32 +1722,32 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                 </div>
 
                 {/* Score Pill */}
-                <div className="flex items-center justify-center mb-10 w-full max-w-[280px] md:max-w-xs mx-auto">
-                    <div className="bg-[#1e293b]/90 py-4 md:py-5 px-8 flex flex-1 items-center justify-center gap-3 border-2 border-yellow-500/40 shadow-[0_0_20px_rgba(250,204,21,0.3)] rounded-full w-full">
+                <div className="flex items-center justify-center mb-6 md:mb-10 w-full max-w-[240px] md:max-w-xs mx-auto">
+                    <div className="bg-[#1e293b]/90 py-3 md:py-5 px-6 md:px-8 flex flex-1 items-center justify-center gap-2 md:gap-3 border-2 border-yellow-500/40 shadow-[0_0_20px_rgba(250,204,21,0.3)] rounded-full w-full">
                         <motion.span
                             key={displayScore}
                             initial={{ y: -5, opacity: 0.8 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.1 }}
-                            className="text-5xl font-black text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.6)]"
+                            className="text-3xl md:text-5xl font-black text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.6)]"
                         >
                             {displayScore.toLocaleString()}
                         </motion.span>
-                        <span className="text-2xl font-bold text-yellow-200 mt-1">XP</span>
+                        <span className="text-xl md:text-2xl font-bold text-yellow-200 mt-1">XP</span>
                     </div>
                 </div>
 
                 {/* Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 relative z-10 w-full max-w-lg mx-auto">
+                <div className="flex flex-col sm:flex-row gap-3 md:gap-4 relative z-10 w-full max-w-lg mx-auto">
                     <button
                         onClick={handlePlayAgain}
-                        className="flex-1 bg-[#1e3a8a] hover:bg-[#2563eb] text-white font-bold py-4 rounded-full shadow-[0_4px_15px_rgba(30,58,138,0.4)] transition-all uppercase tracking-wide border border-[#3b82f6]/50"
+                        className="flex-1 bg-[#1e3a8a] hover:bg-[#2563eb] text-white font-bold py-3 md:py-4 rounded-full shadow-[0_4px_15px_rgba(30,58,138,0.4)] transition-all uppercase tracking-wide border border-[#3b82f6]/50"
                     >
                         Chơi lại
                     </button>
                     <button
                         onClick={onLeaveGame}
-                        className="flex-1 bg-gradient-to-b from-[#fbbf24] to-[#f59e0b] hover:from-[#fcd34d] hover:to-[#fbbf24] text-[#451a03] font-black uppercase py-4 rounded-full shadow-[0_4px_15px_rgba(245,158,11,0.4)] transition-all tracking-wide border border-[#fde68a]"
+                        className="flex-1 bg-gradient-to-b from-[#fbbf24] to-[#f59e0b] hover:from-[#fcd34d] hover:to-[#fbbf24] text-[#451a03] font-black uppercase py-3 md:py-4 rounded-full shadow-[0_4px_15px_rgba(245,158,11,0.4)] transition-all tracking-wide border border-[#fde68a]"
                     >
                         Về Menu chính
                     </button>
