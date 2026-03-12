@@ -8,15 +8,26 @@ import {
 } from 'lucide-react';
 import { RANK_TIERS } from '../../utils/ranks';
 
-/* ── Map layout ── */
-const MAP_W = 1500;    // logical map width px
-const MAP_H = 320;     // logical map height px
+import imgActive from '../../assets/common/checkpoint_active.jpg';
+import imgInactive from '../../assets/common/checkpoint_inactive.jpg';
+import bgMap from '../../assets/common/bg_map.jpg';
 
+/* ── Layout ── */
+// Using proportional percentage positioning (py out of 100%) so nodes exactly stick to background features 
+// regardless of native image aspect ratio and screen width.
 const NODE_POSITIONS = [
-    { x: 80, y: 260 }, { x: 200, y: 220 }, { x: 320, y: 230 },
-    { x: 440, y: 190 }, { x: 560, y: 170 }, { x: 680, y: 160 },
-    { x: 800, y: 130 }, { x: 920, y: 110 }, { x: 1040, y: 90 },
-    { x: 1160, y: 100 }, { x: 1280, y: 60 }, { x: 1400, y: 40 },
+    { px: 25, py: 92.6 }, // 0: Nguoi tim hieu (Bottom left start)
+    { px: 65, py: 85.9 }, // 1: Du tong
+    { px: 55, py: 77.0 }, // 2: Chien con
+    { px: 25, py: 69.6 }, // 3: Thien than nho
+    { px: 45, py: 61.5 }, // 4: Thieu nhi Thanh The
+    { px: 75, py: 54.1 }, // 5: Len duong
+    { px: 60, py: 45.9 }, // 6: Nguoi phuc vu
+    { px: 30, py: 38.5 }, // 7: Mon de
+    { px: 40, py: 30.4 }, // 8: Giao ly vien
+    { px: 70, py: 22.2 }, // 9: Nguoi truyen giao
+    { px: 55, py: 14.1 }, // 10: Nguoi huong dan
+    { px: 35, py: 5.9  }, // 11: Chung nhan (Golgotha Peak)
 ];
 
 const RANK_ICONS = [
@@ -26,18 +37,30 @@ const RANK_ICONS = [
 
 const RankRoadmap = ({ currentScore, onBack }) => {
     const containerRef = useRef(null);
-    const [cw, setCw] = useState(0);   // container width
-    const dragX = useMotionValue(0);
+    const [ch, setCh] = useState(0);
+    const [cw, setCw] = useState(0);
+    const [imgAspect, setImgAspect] = useState(1); // Will be overwritten with native ratio
+    const dragY = useMotionValue(0);
 
-    /* Current rank index */
+    // Load native image dimensions once to compute exact MAP_H with zero stretching
+    useEffect(() => {
+        const img = new Image();
+        img.onload = () => {
+            if (img.naturalWidth > 0) {
+                setImgAspect(img.naturalHeight / img.naturalWidth);
+            }
+        };
+        img.src = bgMap;
+    }, []);
+
     const currentIdx = RANK_TIERS.reduce((best, tier, i) =>
         currentScore >= tier.minXP ? i : best, 0);
 
-    /* Measure container → set bounds + centre active node */
     useEffect(() => {
         const el = containerRef.current;
         if (!el) return;
         const measure = () => {
+            setCh(el.offsetHeight);
             setCw(el.offsetWidth);
         };
         measure();
@@ -46,197 +69,212 @@ const RankRoadmap = ({ currentScore, onBack }) => {
         return () => ro.disconnect();
     }, []);
 
-    useEffect(() => {
-        if (!cw) return;
-        const pos = NODE_POSITIONS[currentIdx];
-        // Centre the active node horizontally
-        const targetX = Math.min(0, Math.max(-(MAP_W - cw), cw / 2 - pos.x));
-        setTimeout(() => {
-            animate(dragX, targetX, { type: 'spring', stiffness: 200, damping: 28 });
-        }, 120);
-    }, [cw, currentIdx, dragX]);
+    // MAP_H: Derived from native image proportions so no pixel is ever stretched.
+    // background-size: 100% 100% will fill exactly this area at native ratio.
+    const MAP_H = cw > 0 ? cw * imgAspect : 0;
+    const yBottom = (ch && MAP_H > ch) ? -(MAP_H - ch) : 0;
 
-    /* Horizontal drag constraint only */
-    const xLeft = cw ? -(MAP_W - cw) : 0;
+    useEffect(() => {
+        if (!ch || MAP_H <= 0) return;
+        const pos = NODE_POSITIONS[currentIdx];
+        const actualY = (pos.py / 100) * MAP_H;
+        
+        let targetY = ch / 2 - actualY; // Center the node vertically
+        targetY = Math.min(0, Math.max(yBottom, targetY)); // Clamp bounds
+        
+        setTimeout(() => animate(dragY, targetY, { type: 'spring', stiffness: 200, damping: 28 }), 120);
+    }, [ch, cw, MAP_H, yBottom, currentIdx, dragY]);
+
+    // Node width calculation: We map the 0-100 percentage (px)
+    // not across the FULL container width, but across a padded safe-zone
+    // so nodes at 10% or 90% don't clip off the edges of the screen.
+    const getSafeX = (percentage, totalWidth) => {
+        if (!totalWidth) return 0;
+        // Padding: 40px left, 40px right (80px total safe space)
+        const safeWidth = totalWidth - 80;
+        return 40 + (percentage / 100) * safeWidth;
+    };
+
+    // Generate SVG path dynamically based on proportions
+    const getPathString = (width, height) => {
+        if (width === 0 || height === 0) return '';
+        
+        const getY = (py) => (py / 100) * height;
+        
+        // Start exactly at center of first node
+        let d = `M ${getSafeX(NODE_POSITIONS[0].px, width)},${getY(NODE_POSITIONS[0].py)} `;
+        
+        for (let i = 1; i < NODE_POSITIONS.length; i++) {
+            const prev = NODE_POSITIONS[i - 1];
+            const curr = NODE_POSITIONS[i];
+            const pX = getSafeX(prev.px, width);
+            const pY = getY(prev.py);
+            const cX = getSafeX(curr.px, width);
+            const cY = getY(curr.py);
+            
+            // Đường cong Smooth liên tiếp (Cubic Bezier S-curve)
+            const midY = (pY + cY) / 2;
+            d += `C ${pX},${midY} ${cX},${midY} ${cX},${cY} `;
+        }
+        return d;
+    };
+
+    const roadPath = getPathString(cw, MAP_H);
 
     return (
-        <div className="w-full h-full flex flex-col overflow-hidden"
-            style={{ background: 'linear-gradient(180deg,#0ea5e9 0%,#bfdbfe 100%)' }}>
+        <div className="w-full h-full flex flex-col overflow-hidden select-none"
+            style={{ background: '#0f172a' }}>
 
-            {/* ── Header ── */}
-            <div className="flex-shrink-0 flex items-center justify-between px-5 py-3 z-20 relative"
-                style={{
-                    background: 'rgba(0,0,0,0.4)',
-                    backdropFilter: 'blur(12px)',
-                    borderBottom: '1px solid rgba(255,255,255,0.08)',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
-                }}>
-                <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9, x: -2 }}
-                    onClick={onBack}
-                    className="w-9 h-9 flex items-center justify-center rounded-xl text-white/70 hover:text-white transition-colors"
-                    style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
-                    <ChevronLeft size={20} />
+            {/* Header */}
+            <div className="flex-shrink-0 flex items-center justify-between px-4 py-2.5 z-20 relative shadow-md"
+                style={{ background: '#1e293b', borderBottom: '4px solid #0f172a' }}>
+                <motion.button whileTap={{ y: 2 }} onClick={onBack}
+                    className="w-9 h-9 flex items-center justify-center rounded-full text-white"
+                    style={{ background: 'rgba(255,255,255,0.1)', border: '2px solid rgba(255,255,255,0.3)' }}>
+                    <ChevronLeft size={20} strokeWidth={3} />
                 </motion.button>
-
                 <div className="flex items-center gap-2">
                     <Mountain size={18} className="text-amber-400" />
-                    <span className="font-cinzel font-black text-base tracking-wider"
-                        style={{ background: 'linear-gradient(135deg,#fbbf24,#fde68a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                        HÀNH TRÌNH VƯƠN ĐỈNH
+                    <span className="font-black text-base tracking-wider text-white" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+                        ĐƯỜNG LÊN GOLGOTHA
                     </span>
                 </div>
-
                 <div className="w-9" />
             </div>
 
-            {/* ── Map area ── */}
-            <div ref={containerRef} className="flex-1 relative overflow-hidden" style={{ cursor: 'grab' }}>
-
-                {/* Magical floating light particles / Bokeh */}
-                <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                    {Array.from({ length: 25 }, (_, i) => (
-                        <motion.div key={i}
-                            className="absolute rounded-full bg-white"
-                            style={{
-                                left: `${(i * 37) % 100}%`,
-                                top: `${(i * 59) % 70}%`,
-                                width: 20 + (i % 30),
-                                height: 20 + (i % 30),
-                                opacity: 0.05 + (i % 5) * 0.05,
-                                filter: 'blur(8px)'
+            {/* Map area */}
+            <div className="flex-1 w-full relative overflow-hidden" style={{ cursor: 'grab' }}>
+                <div ref={containerRef} className="h-full w-full relative overflow-hidden">
+                    <motion.div
+                        drag="y"
+                        dragConstraints={{ top: yBottom, bottom: 0 }}
+                        dragElastic={0.05}
+                        style={{ y: dragY, width: '100%', height: MAP_H, position: 'absolute', top: 0, touchAction: 'pan-x' }}
+                    >
+                        {/* Background: sized to exactly native aspect ratio — zero stretch */}
+                        <div className="absolute inset-0 pointer-events-none"
+                            style={{ 
+                                backgroundImage: `url(${bgMap})`,
+                                // Force browser to use sharp rendering internally
+                                imageRendering: '-webkit-optimize-contrast',
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center top',
+                                backgroundRepeat: 'no-repeat',
                             }}
-                            animate={{ y: [-10, 10, -10], x: [-5, 5, -5] }}
-                            transition={{ duration: 4 + (i % 4), repeat: Infinity, ease: 'easeInOut' }}
                         />
-                    ))}
-                </div>
 
-                {/* Draggable map — horizontal only */}
-                <motion.div
-                    drag="x"
-                    dragConstraints={{ left: xLeft, right: 0 }}
-                    dragElastic={0.05}
-                    style={{ x: dragX, width: MAP_W, height: '100%', position: 'absolute', top: 0, touchAction: 'pan-y' }}
-                >
-                    {/* SVG landscape — fills container height via viewBox */}
-                    <svg width={MAP_W} height="100%" viewBox={`0 0 ${MAP_W} ${MAP_H}`} preserveAspectRatio="xMidYMid slice" className="absolute inset-0">
-                        {/* Gradient sky */}
-                        <defs>
-                            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#38bdf8" />
-                                <stop offset="100%" stopColor="#e0f2fe" />
-                            </linearGradient>
-                            <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#4ade80" />
-                                <stop offset="100%" stopColor="#16a34a" />
-                            </linearGradient>
-                            <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-                                <feDropShadow dx="0" dy="6" stdDeviation="4" floodOpacity="0.15" />
-                            </filter>
-                        </defs>
+                        {/* ── SVG Chart Line ── */}
+                        {cw > 0 && MAP_H > 0 && (
+                            <svg width="100%" height={MAP_H} viewBox={`0 0 ${cw} ${MAP_H}`}
+                                className="absolute inset-0 pointer-events-none">
+                                <defs>
+                                    <filter id="glow-line" x="-10%" y="-10%" width="120%" height="120%">
+                                        <feGaussianBlur stdDeviation="6" result="blur" />
+                                        <feMerge>
+                                            <feMergeNode in="blur" />
+                                            <feMergeNode in="SourceGraphic" />
+                                        </feMerge>
+                                    </filter>
+                                </defs>
 
-                        {/* Sky */}
-                        <rect width={MAP_W} height={MAP_H} fill="url(#sky)" />
+                                {/* Drop shadow */}
+                                <path d={roadPath}
+                                    fill="none" stroke="rgba(0,0,0,0.6)" strokeWidth="6" strokeLinecap="round"
+                                    style={{ transform: 'translateY(4px)' }}
+                                />
+                                
+                                {/* Glowing Chart Line */}
+                                <path d={roadPath}
+                                    fill="none" stroke="#fbbf24" strokeWidth="4" strokeLinecap="round"
+                                    filter="url(#glow-line)"
+                                />
+                                
+                                {/* Core Line */}
+                                <path d={roadPath}
+                                    fill="none" stroke="#fef08a" strokeWidth="3" strokeLinecap="round"
+                                    strokeDasharray="6 8"
+                                />
+                            </svg>
+                        )}
 
-                        {/* Bright sun at top-right */}
-                        <circle cx={1420} cy={60} r={120} fill="#fef08a" opacity="0.4" filter="blur(20px)" />
-                        <circle cx={1420} cy={60} r={45} fill="#fde047" opacity="0.9" filter="url(#shadow)" />
+                        {/* Rank nodes */}
+                        {cw > 0 && MAP_H > 0 && RANK_TIERS.map((tier, index) => {
+                            const pos = NODE_POSITIONS[index];
+                            
+                            const xPx = getSafeX(pos.px, cw);
+                            const yPx = (pos.py / 100) * MAP_H;
+                            
+                            const Icon = RANK_ICONS[index] || User;
+                            const isUnlocked = currentScore >= tier.minXP;
+                            const isCurrent = index === currentIdx;
 
-                        {/* Far mountains — light blue layer */}
-                        <path d="M 0,200 L 150,60 L 350,220 L 500,90 L 700,240 L 900,70 L 1100,260 L 1300,50 L 1500,200 L 1500,320 L 0,320 Z"
-                            fill="#7dd3fc" filter="url(#shadow)" />
-                        {/* Mid mountains — sky blue layer */}
-                        <path d="M -50,260 L 250,130 L 450,280 L 650,150 L 850,300 L 1050,130 L 1250,290 L 1450,110 L 1550,260 L 1550,320 L 0,320 Z"
-                            fill="#38bdf8" filter="url(#shadow)" />
-                        {/* Ground — lush green */}
-                        <path d="M -100,320 L 100,270 L 300,300 L 500,225 L 700,280 L 900,200 L 1100,260 L 1300,180 L 1500,240 L 1600,320 L -100,320 Z"
-                            fill="url(#ground)" filter="url(#shadow)" />
+                            return (
+                                <div key={tier.level}
+                                    className="absolute flex flex-col items-center"
+                                    style={{ left: xPx, top: yPx, transform: 'translate(-50%,-50%)', zIndex: isCurrent ? 30 : 20 }}>
 
-                        {/* Road — warm dirt path */}
-                        <path d="M 80,260 C 140,260 140,220 200,220 C 260,220 260,230 320,230 C 380,230 380,190 440,190 C 500,190 500,170 560,170 C 620,170 620,160 680,160 C 740,160 740,130 800,130 C 860,130 860,110 920,110 C 980,110 980,90 1040,90 C 1100,90 1100,100 1160,100 C 1220,100 1220,60 1280,60 C 1340,60 1340,40 1400,40"
-                            fill="none" stroke="#b45309" strokeWidth="36" strokeLinecap="round" filter="url(#shadow)" opacity="0.6" />
-                        {/* Road surface */}
-                        <path d="M 80,260 C 140,260 140,220 200,220 C 260,220 260,230 320,230 C 380,230 380,190 440,190 C 500,190 500,170 560,170 C 620,170 620,160 680,160 C 740,160 740,130 800,130 C 860,130 860,110 920,110 C 980,110 980,90 1040,90 C 1100,90 1100,100 1160,100 C 1220,100 1220,60 1280,60 C 1340,60 1340,40 1400,40"
-                            fill="none" stroke="#fcd34d" strokeWidth="28" strokeLinecap="round" />
-                        {/* Road dashes */}
-                        <path d="M 80,260 C 140,260 140,220 200,220 C 260,220 260,230 320,230 C 380,230 380,190 440,190 C 500,190 500,170 560,170 C 620,170 620,160 680,160 C 740,160 740,130 800,130 C 860,130 860,110 920,110 C 980,110 980,90 1040,90 C 1100,90 1100,100 1160,100 C 1220,100 1220,60 1280,60 C 1340,60 1340,40 1400,40"
-                            fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="4"
-                            strokeDasharray="12 12" strokeLinecap="round" />
-                    </svg>
-
-                    {/* Rank nodes */}
-                    {RANK_TIERS.map((tier, index) => {
-                        const pos = NODE_POSITIONS[index];
-                        const Icon = RANK_ICONS[index] || User;
-                        const isUnlocked = currentScore >= tier.minXP;
-                        const isCurrent = index === currentIdx;
-
-                        return (
-                            <div key={tier.level}
-                                className="absolute flex flex-col items-center"
-                                style={{ left: pos.x, top: pos.y, transform: 'translate(-50%,-50%)', zIndex: isCurrent ? 30 : 20 }}>
-
-                                {/* "You are here" tooltip */}
-                                {isCurrent && (
-                                    <motion.div
-                                        animate={{ y: [0, -4, 0] }} transition={{ duration: 1.8, repeat: Infinity }}
-                                        className="absolute -top-14 whitespace-nowrap text-xs font-black px-3 py-1 rounded-full text-white"
-                                        style={{
-                                            background: 'linear-gradient(135deg,#d97706,#f59e0b)',
-                                            boxShadow: '0 4px 0 rgba(0,0,0,0.4), 0 6px 16px rgba(245,158,11,0.5)',
-                                            border: '1.5px solid rgba(255,255,255,0.25)',
-                                        }}>
-                                        📍 Vị trí của bạn
-                                    </motion.div>
-                                )}
-
-                                {/* Node bubble with 3D effect */}
-                                <motion.div
-                                    initial={{ scale: 0.5, opacity: 0 }}
-                                    animate={{ scale: isCurrent ? 1.25 : 1, opacity: 1 }}
-                                    transition={{ delay: index * 0.04, type: 'spring', stiffness: 280, damping: 22 }}
-                                    className="relative flex items-center justify-center w-12 h-12 rounded-full"
-                                    style={isCurrent ? {
-                                        background: 'linear-gradient(145deg,#fde68a,#f59e0b)',
-                                        boxShadow: '0 0 0 3px rgba(251,191,36,0.4), 0 4px 0 #92400e, 0 8px 20px rgba(245,158,11,0.6)',
-                                        border: '2px solid rgba(255,255,255,0.4)',
-                                    } : isUnlocked ? {
-                                        background: 'linear-gradient(145deg,#86efac,#22c55e)',
-                                        boxShadow: '0 4px 0 #15803d, 0 6px 14px rgba(34,197,94,0.4)',
-                                        border: '2px solid rgba(255,255,255,0.3)',
-                                    } : {
-                                        background: 'linear-gradient(145deg,#f3f4f6,#d1d5db)',
-                                        boxShadow: '0 3px 0 #9ca3af, 0 5px 10px rgba(0,0,0,0.2)',
-                                        border: '2px solid rgba(255,255,255,0.6)',
-                                    }}
-                                >
-                                    <Icon size={22}
-                                        className={isCurrent ? 'text-amber-900' : isUnlocked ? 'text-green-900' : 'text-gray-400'}
-                                    />
-
-                                    {/* Check badge */}
-                                    {isUnlocked && !isCurrent && (
-                                        <div className="absolute -right-1.5 -bottom-1 bg-green-500 rounded-full flex items-center justify-center w-4 h-4 border-2 border-white/80">
-                                            <CheckCircle2 size={9} strokeWidth={3} className="text-white" />
-                                        </div>
+                                    {/* "You are here" floating tag */}
+                                    {isCurrent && (
+                                        <motion.div
+                                            animate={{ y: [0, -6, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                                            className="absolute whitespace-nowrap text-sm font-black text-white rounded-full px-4 py-1.5"
+                                            style={{
+                                                bottom: '100%', marginBottom: 12,
+                                                background: 'linear-gradient(135deg,#d97706,#b45309)',
+                                                border: '2px solid rgba(255,255,255,0.8)',
+                                                boxShadow: '0 6px 12px rgba(0,0,0,0.5)',
+                                            }}>
+                                            📍 Bạn đang ở đây
+                                        </motion.div>
                                     )}
-                                </motion.div>
 
-                                {/* Label */}
-                                <div className="absolute top-14 flex flex-col items-center w-32 pointer-events-none">
-                                    <span className="font-black text-[10px] text-center uppercase tracking-tight drop-shadow-lg whitespace-nowrap"
-                                        style={{ color: isCurrent ? '#fde68a' : isUnlocked ? '#86efac' : '#94a3b8' }}>
-                                        {tier.name}
-                                    </span>
-                                    <span className="text-[9px] font-bold mt-0.5 px-1.5 py-0.5 rounded"
-                                        style={{ background: 'rgba(0,0,0,0.5)', color: 'rgba(255,255,255,0.6)' }}>
-                                        {tier.minXP.toLocaleString()} XP
-                                    </span>
+                                    {/* Custom Image Checkpoints — raw image, no mask */}
+                                    <motion.div
+                                        initial={{ scale: 0.5, opacity: 0 }}
+                                        animate={{ scale: isCurrent ? 1.15 : 1, opacity: 1 }}
+                                        transition={{ delay: index * 0.05, type: 'spring', stiffness: 260, damping: 20 }}
+                                        style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.6))' }}
+                                    >
+                                        <img 
+                                            src={isUnlocked ? imgActive : imgInactive} 
+                                            alt={tier.name} 
+                                            style={{ 
+                                                // Responsive: 22vw ≈ 88px on 400px screen, capped at 96px on larger screens 
+                                                width: 'min(22vw, 96px)', 
+                                                height: 'min(22vw, 96px)', 
+                                                display: 'block', 
+                                                objectFit: 'contain' 
+                                            }}
+                                        />
+                                    </motion.div>
+
+                                    {/* Labels below nodes */}
+                                    <div className="absolute flex flex-col items-center pointer-events-none"
+                                        style={{ top: 'min(22vw, 96px)', left: '50%', transform: 'translateX(-50%)', width: 'min(36vw, 160px)' }}>
+                                        <span className="font-black text-center uppercase tracking-wide whitespace-nowrap"
+                                            style={{
+                                                fontSize: 'clamp(9px, 2.4vw, 12px)',
+                                                color: isCurrent ? '#fde68a' : isUnlocked ? '#86efac' : '#cbd5e1',
+                                                textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,1)',
+                                            }}>
+                                            {tier.name}
+                                        </span>
+                                        <span className="font-bold mt-0.5 px-1.5 py-0.5 rounded-md"
+                                            style={{ 
+                                                fontSize: 'clamp(8px, 2vw, 11px)',
+                                                background: 'rgba(0,0,0,0.75)', 
+                                                color: 'rgba(255,255,255,0.9)', 
+                                                backdropFilter: 'blur(4px)',
+                                                whiteSpace: 'nowrap',
+                                            }}>
+                                            {tier.minXP.toLocaleString()} XP
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        );
-                    })}
-                </motion.div>
+                            );
+                        })}
+                    </motion.div>
+                </div>
             </div>
         </div>
     );

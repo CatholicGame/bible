@@ -834,35 +834,42 @@ const PinnacleGame = ({ onLeaveGame }) => {
                     {gameState === 'rules' && (
                         <motion.div
                             key="rules"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 1.1 }}
-                            className="bg-gradient-to-b from-[#1e3a8a]/95 to-[#0f172a]/95 backdrop-blur-xl p-4 sm:p-6 md:p-10 rounded-2xl md:rounded-3xl shadow-[0_0_50px_rgba(30,58,138,0.3)] border-2 border-blue-400/30 m-auto max-w-2xl w-full text-white relative z-10 max-h-[90vh] overflow-y-auto scrollbar-hide"
+                            initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 1.1, y: 30 }}
+                            className="bg-[#3b82f6] p-4 sm:p-5 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border-4 border-[#1e3a8a] shadow-[0_8px_0_rgba(30,58,138,1)] m-auto max-w-md w-full text-white relative z-10 max-h-[85vh] overflow-y-auto scrollbar-hide"
                         >
-                            <div className="flex justify-between items-start mb-4 md:mb-6">
-                                <button onClick={onLeaveGame} className="text-gray-300 hover:text-white transition-colors p-2 -ml-2 rounded-full hover:bg-white/10 mt-1">
-                                    <ArrowLeft size={24} />
+                            {/* Header row: back + trophy */}
+                            <div className="flex justify-between items-center mb-1">
+                                <button onClick={onLeaveGame} className="text-white hover:text-yellow-400 transition-colors p-1.5 rounded-full bg-blue-700 border-3 border-[#1e3a8a] shadow-[0_3px_0_rgba(30,58,138,1)] active:translate-y-0.5 active:shadow-[0_0px_0_rgba(30,58,138,1)]">
+                                    <ArrowLeft size={20} strokeWidth={3} />
                                 </button>
-                                {/* Top Right Trophy Badge */}
-                                <div className="absolute top-4 right-4 md:top-8 md:right-8 w-12 h-12 md:w-16 md:h-16 border-2 border-yellow-400 bg-blue-950/80 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(250,204,21,0.5)] z-20">
-                                    <Trophy className="text-yellow-400 drop-shadow-[0_0_5px_rgba(250,204,21,0.8)]" size={20} />
+                                <div className="w-12 h-12 border-3 border-[#1e3a8a] bg-yellow-400 rounded-full flex items-center justify-center shadow-[0_3px_0_rgba(180,83,9,1)] overflow-hidden relative">
+                                    <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
+                                    <Trophy className="text-amber-700 drop-shadow-md relative z-10" size={22} strokeWidth={2.5} />
                                 </div>
                             </div>
 
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mt-2 mb-4 md:mb-8 tracking-wider text-center text-yellow-400 drop-shadow-md">ĐỈNH CAO HIỂU BIẾT</h2>
+                            {/* Title */}
+                            <h2 className="text-2xl sm:text-3xl font-black mb-4 tracking-widest text-center text-yellow-300 drop-shadow-[0_3px_0_rgba(180,83,9,1)] uppercase" style={{ WebkitTextStroke: '0.5px #78350f' }}>
+                                HƯỚNG DẪN
+                            </h2>
 
-                            <div className="space-y-4 md:space-y-6 mb-6 md:mb-10 text-slate-200 bg-blue-950/40 p-4 sm:p-6 md:p-8 rounded-xl md:rounded-2xl border border-blue-400/20 text-sm sm:text-base md:text-lg leading-relaxed shadow-inner font-medium">
-                                <p className="flex gap-4 items-start"><span className="text-yellow-400 font-bold shrink-0">1.</span> <span>Bạn sẽ trải qua 15 câu hỏi liên tiếp từ dễ đến khó.</span></p>
-                                <p className="flex gap-4 items-start"><span className="text-yellow-400 font-bold shrink-0">2.</span> <span>Vượt qua mỗi câu hỏi, bạn sẽ tích lũy được điểm XP vô cùng giá trị.</span></p>
-                                <p className="flex gap-4 items-start"><span className="text-yellow-400 font-bold shrink-0">3.</span> <span>Cột mốc an toàn: Câu 5 và Câu 10. Trả lời sai sau cột mốc sẽ giữ được điểm của cột mốc đó.</span></p>
-                                <p className="flex gap-4 items-start"><span className="text-yellow-400 font-bold shrink-0">4.</span> <span>Bạn có 4 quyền trợ giúp để sử dụng một lần duy nhất.</span></p>
+                            {/* Rules card */}
+                            <div className="space-y-3 mb-5 text-blue-950 bg-white p-4 sm:p-5 rounded-xl border-3 border-blue-300 shadow-[inset_0_-4px_0_rgba(191,219,254,1),0_5px_0_rgba(30,58,138,0.5)] text-sm sm:text-base font-bold leading-relaxed">
+                                <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">1</span> <span className="pt-0.5">Bạn sẽ trải qua 15 câu hỏi liên tiếp từ dễ đến khó.</span></div>
+                                <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">2</span> <span className="pt-0.5">Vượt qua mỗi câu hỏi, bạn sẽ tích lũy được điểm XP vô cùng giá trị.</span></div>
+                                <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">3</span> <span className="pt-0.5">Cột mốc an toàn: Câu 5 và Câu 10. Trả lời sai sau cột mốc sẽ giữ được điểm của cột mốc đó.</span></div>
+                                <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">4</span> <span className="pt-0.5">Bạn có 4 quyền trợ giúp để sử dụng một lần duy nhất.</span></div>
                             </div>
 
+                            {/* Start button */}
                             <button
                                 onClick={handleStartGame}
-                                className="w-full bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 text-black font-black uppercase tracking-wider text-xl py-4 rounded-xl shadow-[0_4px_15px_rgba(234,179,8,0.4)] transition-all flex justify-center items-center gap-2"
+                                className="w-full bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-widest text-lg py-3.5 rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center gap-2 relative overflow-hidden group hover:scale-[1.02]"
                             >
-                                <Play fill="currentColor" size={24} /> BẮT ĐẦU NGAY
+                                <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none"></div>
+                                <Play fill="currentColor" size={22} className="group-hover:scale-110 transition-transform relative z-10" /> <span className="relative z-10">BẮT ĐẦU NGAY</span>
                             </button>
                         </motion.div>
                     )}
@@ -1346,8 +1353,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                             return (
                                                                 <motion.div
                                                                     key={idx}
-                                                                    initial={{ opacity: 0, x: -30 }}
-                                                                    animate={introPhase >= 4 ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+                                                                    initial={{ opacity: 0, y: 20 }}
+                                                                    animate={introPhase >= 4 ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                                                                     transition={{ duration: 0.4, delay: (introPhase >= 4 && currentQuestionIndex === 0 ? 0.5 : 0) + idx * 0.15 }}
                                                                 >
                                                                     <HexagonBox
@@ -1660,7 +1667,7 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                 key="finished"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-white/10 p-4 sm:p-6 md:p-10 rounded-2xl md:rounded-3xl shadow-[0_0_50px_rgba(250,204,21,0.15)] text-center border-2 border-yellow-200/50 m-auto max-w-2xl w-full text-white backdrop-blur-xl relative z-10 lg:mt-32 mt-14 md:mt-16 max-h-[90vh] overflow-y-auto scrollbar-hide"
+                className="bg-white/10 rounded-2xl md:rounded-3xl shadow-[0_0_50px_rgba(250,204,21,0.15)] text-center border-2 border-yellow-200/50 m-auto max-w-2xl w-full text-white backdrop-blur-xl relative z-10 lg:mt-32 mt-16 md:mt-20 max-h-[90vh] flex flex-col"
             >
 
                 {/* Trophy Badge overlapping top border */}
@@ -1680,77 +1687,79 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                     <Star className="absolute bottom-8 md:bottom-10 right-5 md:right-6 text-yellow-200 fill-current opacity-50" size={8} />
                 </motion.div>
 
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mt-8 md:mt-12 mb-4 md:mb-6 text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-wider relative z-10">
-                    TRÒ CHƠI KẾT THÚC!
-                </h2>
-                {/* Central White Message Box container (MC's dialog) */}
-                <div className="bg-white/95 text-slate-800 rounded-2xl md:rounded-3xl p-4 md:p-8 mb-6 md:mb-8 shadow-[0_10px_30px_rgba(0,0,0,0.3)] min-h-[80px] md:min-h-[120px] flex items-center justify-center relative border border-white/50">
-                    <AnimatePresence mode="popLayout">
-                        {showEndMessage && Array.isArray(endMessage) && endMessage[visibleMessageIndex] ? (
-                            <motion.div
-                                key={`msg-${visibleMessageIndex}`}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
-                                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                                className="text-sm md:text-xl font-medium leading-relaxed text-center absolute w-full px-4 md:px-6 italic text-slate-700"
-                            >
-                                {endMessage[visibleMessageIndex]}
-                            </motion.div>
-                        ) : (
-                            showEndMessage && endMessage && (
+                <div className="p-4 sm:p-6 md:p-10 overflow-y-auto scrollbar-hide flex-1 w-full flex flex-col items-center">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mt-8 md:mt-12 mb-4 md:mb-6 text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-wider relative z-10 w-full">
+                        TRÒ CHƠI KẾT THÚC!
+                    </h2>
+                    {/* Central White Message Box container (MC's dialog) */}
+                    <div className="bg-white/95 text-slate-800 rounded-2xl md:rounded-3xl p-4 md:p-8 mb-6 md:mb-8 shadow-[0_10px_30px_rgba(0,0,0,0.3)] min-h-[80px] md:min-h-[120px] flex items-center justify-center relative border border-white/50 w-full">
+                        <AnimatePresence mode="popLayout">
+                            {showEndMessage && Array.isArray(endMessage) && endMessage[visibleMessageIndex] ? (
                                 <motion.div
+                                    key={`msg-${visibleMessageIndex}`}
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    className="text-sm md:text-xl font-medium leading-relaxed text-center"
+                                    exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                                    className="text-sm md:text-xl font-medium leading-relaxed text-center absolute w-full px-4 md:px-6 italic text-slate-700"
                                 >
-                                    {endMessage}
+                                    {endMessage[visibleMessageIndex]}
                                 </motion.div>
-                            )
-                        )}
+                            ) : (
+                                showEndMessage && endMessage && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        className="text-sm md:text-xl font-medium leading-relaxed text-center"
+                                    >
+                                        {endMessage}
+                                    </motion.div>
+                                )
+                            )}
 
-                        {!showEndMessage && (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="text-sm md:text-xl font-medium leading-relaxed text-center italic text-slate-600"
-                            >
-                                Hành trình học hỏi vẫn còn phía trước. Hãy sẵn sàng cho thử thách tiếp theo!
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
-
-                {/* Score Pill */}
-                <div className="flex items-center justify-center mb-6 md:mb-10 w-full max-w-[240px] md:max-w-xs mx-auto">
-                    <div className="bg-[#1e293b]/90 py-3 md:py-5 px-6 md:px-8 flex flex-1 items-center justify-center gap-2 md:gap-3 border-2 border-yellow-500/40 shadow-[0_0_20px_rgba(250,204,21,0.3)] rounded-full w-full">
-                        <motion.span
-                            key={displayScore}
-                            initial={{ y: -5, opacity: 0.8 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.1 }}
-                            className="text-3xl md:text-5xl font-black text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.6)]"
-                        >
-                            {displayScore.toLocaleString()}
-                        </motion.span>
-                        <span className="text-xl md:text-2xl font-bold text-yellow-200 mt-1">XP</span>
+                            {!showEndMessage && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="text-sm md:text-xl font-medium leading-relaxed text-center italic text-slate-600"
+                                >
+                                    Hành trình học hỏi vẫn còn phía trước. Hãy sẵn sàng cho thử thách tiếp theo!
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
-                </div>
 
-                {/* Buttons */}
-                <div className="flex flex-col sm:flex-row gap-3 md:gap-4 relative z-10 w-full max-w-lg mx-auto">
-                    <button
-                        onClick={handlePlayAgain}
-                        className="flex-1 bg-[#1e3a8a] hover:bg-[#2563eb] text-white font-bold py-3 md:py-4 rounded-full shadow-[0_4px_15px_rgba(30,58,138,0.4)] transition-all uppercase tracking-wide border border-[#3b82f6]/50"
-                    >
-                        Chơi lại
-                    </button>
-                    <button
-                        onClick={onLeaveGame}
-                        className="flex-1 bg-gradient-to-b from-[#fbbf24] to-[#f59e0b] hover:from-[#fcd34d] hover:to-[#fbbf24] text-[#451a03] font-black uppercase py-3 md:py-4 rounded-full shadow-[0_4px_15px_rgba(245,158,11,0.4)] transition-all tracking-wide border border-[#fde68a]"
-                    >
-                        Về Menu chính
-                    </button>
+                    {/* Score Pill */}
+                    <div className="flex items-center justify-center mb-6 md:mb-10 w-full max-w-[240px] md:max-w-xs mx-auto">
+                        <div className="bg-[#1e293b]/90 py-3 md:py-5 px-6 md:px-8 flex flex-1 items-center justify-center gap-2 md:gap-3 border-2 border-yellow-500/40 shadow-[0_0_20px_rgba(250,204,21,0.3)] rounded-full w-full">
+                            <motion.span
+                                key={displayScore}
+                                initial={{ y: -5, opacity: 0.8 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ duration: 0.1 }}
+                                className="text-3xl md:text-5xl font-black text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.6)]"
+                            >
+                                {displayScore.toLocaleString()}
+                            </motion.span>
+                            <span className="text-xl md:text-2xl font-bold text-yellow-200 mt-1">XP</span>
+                        </div>
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-3 md:gap-4 relative z-10 w-full max-w-lg mx-auto mt-auto">
+                        <button
+                            onClick={handlePlayAgain}
+                            className="flex-1 bg-[#1e3a8a] hover:bg-[#2563eb] text-white font-bold py-3 md:py-4 rounded-full shadow-[0_4px_15px_rgba(30,58,138,0.4)] transition-all uppercase tracking-wide border border-[#3b82f6]/50"
+                        >
+                            Chơi lại
+                        </button>
+                        <button
+                            onClick={onLeaveGame}
+                            className="flex-1 bg-gradient-to-b from-[#fbbf24] to-[#f59e0b] hover:from-[#fcd34d] hover:to-[#fbbf24] text-[#451a03] font-black uppercase py-3 md:py-4 rounded-full shadow-[0_4px_15px_rgba(245,158,11,0.4)] transition-all tracking-wide border border-[#fde68a]"
+                        >
+                            Về Menu chính
+                        </button>
+                    </div>
                 </div>
             </motion.div >
 
