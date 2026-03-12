@@ -160,7 +160,7 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
     const containerRef = useRef(null);
     const cwRef = useRef(0);
     const dragX = useMotionValue(0);
-    const cardDimsRef = useRef({ cardW: BASE_CARD_W, cardH: BASE_CARD_H, step: BASE_CARD_W + GAP });
+    const cardDimsRef = useRef({ cardW: BASE_CARD_W, cardH: BASE_CARD_H, step: Math.round(BASE_CARD_W * MAX_SC) + GAP });
 
     const [snapped, setSnapped] = useState(0);
     const [selectedGame, setSelectedGame] = useState(null);
@@ -170,7 +170,7 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
     const [pin, setPin] = useState('');
     const [pinFocused, setPinFocused] = useState(false);
     const [ready, setReady] = useState(false);
-    const [cardDims, setCardDims] = useState({ cardW: BASE_CARD_W, cardH: BASE_CARD_H, step: BASE_CARD_W + GAP });
+    const [cardDims, setCardDims] = useState({ cardW: BASE_CARD_W, cardH: BASE_CARD_H, step: Math.round(BASE_CARD_W * MAX_SC) + GAP });
     const [isLandscape, setIsLandscape] = useState(false);
     const profileRef = useRef(null);
 
@@ -189,7 +189,7 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
             const maxCardH = Math.min(BASE_CARD_H, Math.floor((usableH * 0.95) / MAX_SC));
             const cardH = maxCardH;
             const cardW = Math.round(cardH * CARD_RATIO);
-            const step = cardW + GAP;
+            const step = Math.round(cardW * MAX_SC) + GAP;
 
             cwRef.current = w;
             cardDimsRef.current = { cardW, cardH, step };

@@ -141,53 +141,54 @@ const MC_MESSAGES_AFTER_FINISH = [
     ]
 ];
 
-const HexagonBox = ({ children, className = "", onClick, disabled, isActive, isCorrect, isWrong, isHidden }) => {
-    let bg = 'rgba(15,23,42,0.82)';         // default: very dark navy, semi-transparent
-    let sideColor = '#1e40af';               // blue-700 for side wedges
-    let glowColor = 'rgba(59,130,246,0.5)';  // blue glow
-    let borderTop = 'rgba(99,179,237,0.35)';
+const CartoonBox = ({ children, className = "", onClick, disabled, isActive, isCorrect, isWrong, isHidden }) => {
+    // Outer = lighter "rim" gradient (the visible border/outline)
+    // Inner = darker content fill (the depth inside)
+    let outerBg = 'linear-gradient(180deg, #5b8cf8 0%, #2252c4 100%)';
+    let innerBg = 'linear-gradient(180deg, #1a3076 0%, #0d1a52 100%)';
+    let shadow  = '#091030';
 
     if (isActive) {
-        bg = 'rgba(146,64,14,0.9)';
-        sideColor = '#d97706';
-        glowColor = 'rgba(245,158,11,0.7)';
-        borderTop = 'rgba(253,230,138,0.5)';
+        outerBg = 'linear-gradient(180deg, #fbbf24 0%, #d97706 100%)';
+        innerBg = 'linear-gradient(180deg, #92400e 0%, #6b3200 100%)';
+        shadow  = '#4a1a00';
     }
     if (isCorrect) {
-        bg = 'rgba(20,83,45,0.9)';
-        sideColor = '#16a34a';
-        glowColor = 'rgba(34,197,94,0.7)';
-        borderTop = 'rgba(134,239,172,0.5)';
+        outerBg = 'linear-gradient(180deg, #4ade80 0%, #16a34a 100%)';
+        innerBg = 'linear-gradient(180deg, #14532d 0%, #0a2e18 100%)';
+        shadow  = '#052010';
     }
     if (isWrong) {
-        bg = 'rgba(127,29,29,0.9)';
-        sideColor = '#dc2626';
-        glowColor = 'rgba(239,68,68,0.7)';
-        borderTop = 'rgba(252,165,165,0.5)';
+        outerBg = 'linear-gradient(180deg, #f87171 0%, #dc2626 100%)';
+        innerBg = 'linear-gradient(180deg, #7f1d1d 0%, #5b0e0e 100%)';
+        shadow  = '#3a0505';
     }
+
+    // Sharp hexagon pointed on left + right
+    const clip = 'polygon(2% 0%, 98% 0%, 100% 50%, 98% 100%, 2% 100%, 0% 50%)';
+    const isInteractive = !disabled && !isHidden;
 
     return (
         <div
-            style={{ filter: `drop-shadow(0 0 8px ${glowColor})` }}
-            className={`w-full transition-all duration-500 ${disabled && !isActive && !isCorrect && !isWrong ? 'cursor-default' : 'cursor-pointer'} ${isHidden ? 'opacity-30 grayscale pointer-events-none' : ''}`}
+            className={`w-full transition-all duration-500 ${isHidden ? 'opacity-20 pointer-events-none' : ''}`}
+            style={{ filter: `drop-shadow(0 5px 0 ${shadow})` }}
         >
-            <button
-                onClick={onClick}
-                disabled={disabled || isHidden}
-                className={`w-full relative px-4 md:px-12 py-2 md:py-3 outline-none transition-all duration-300 ${className}`}
-                style={{
-                    clipPath: 'polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%)',
-                    WebkitClipPath: 'polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%)',
-                }}
+            {/* Outer rim — lighter gradient = the "border" */}
+            <div
+                className={`w-full transition-all duration-300 ${isInteractive ? 'cursor-pointer hover:brightness-110 active:translate-y-[2px]' : 'cursor-default'} ${className}`}
+                style={{ clipPath: clip, WebkitClipPath: clip, background: outerBg, padding: '3px 5px' }}
+                onClick={isInteractive ? onClick : undefined}
             >
-                {/* Main fill */}
-                <div className="absolute inset-0" style={{ background: bg, borderTop: `1px solid ${borderTop}`, borderBottom: `1px solid ${borderTop}`, zIndex: -1 }} />
-                {/* Left angled accent */}
-                <div className="absolute left-0 top-0 bottom-0 w-[5%]" style={{ background: sideColor, clipPath: 'polygon(0 50%, 100% 0, 100% 100%)', zIndex: -2 }} />
-                {/* Right angled accent */}
-                <div className="absolute right-0 top-0 bottom-0 w-[5%]" style={{ background: sideColor, clipPath: 'polygon(100% 50%, 0 0, 0 100%)', zIndex: -2 }} />
-                <div className="relative z-10 w-full flex items-center">{children}</div>
-            </button>
+                {/* Inner content — darker fill = the "depth" */}
+                <div
+                    className="w-full relative"
+                    style={{ clipPath: clip, WebkitClipPath: clip, background: innerBg, padding: '9px 28px 9px 20px' }}
+                >
+                    {/* Top shine overlay */}
+                    <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/10 pointer-events-none" />
+                    <div className="relative z-10 w-full flex items-center">{children}</div>
+                </div>
+            </div>
         </div>
     );
 };
@@ -196,12 +197,30 @@ const LifelineButton = ({ icon: Icon, text, isUsed, disabled, onClick, active })
     <button
         onClick={onClick}
         disabled={isUsed || disabled}
-        className={`relative w-12 h-10 md:w-14 md:h-12 rounded-full border border-blue-400/50 flex items-center justify-center transition-all ${(isUsed || disabled) ? 'opacity-30 grayscale cursor-not-allowed border-red-500' : active ? 'bg-amber-600 border-yellow-400 shadow-[0_0_15px_rgba(251,191,36,0.6)]' : 'bg-[#0f172a]/80 hover:bg-slate-800 hover:border-blue-300 text-white shadow-[0_0_10px_rgba(59,130,246,0.3)]'}`}
+        className={`relative flex items-center justify-center rounded-full transition-all
+            ${
+                isUsed
+                    ? 'opacity-30 grayscale cursor-not-allowed'
+                    : disabled
+                    ? 'opacity-50 cursor-not-allowed'
+                    : 'hover:brightness-110 active:translate-y-[2px] active:shadow-none cursor-pointer'
+            }`}
+        style={{
+            width: 48, height: 44,
+            background: isUsed
+                ? '#374151'
+                : active
+                ? 'linear-gradient(160deg,#f59e0b,#d97706)'
+                : 'linear-gradient(160deg,#1d4ed8,#1e40af)',
+            border: `3px solid ${isUsed ? '#6b7280' : active ? '#fde68a' : '#60a5fa'}`,
+            boxShadow: isUsed ? 'none' : active ? '0 4px 0 #92400e' : '0 4px 0 #1e3a8a',
+        }}
     >
-        <span className="bg-gradient-to-b from-white/10 to-transparent absolute inset-0 rounded-full"></span>
-        {Icon && <Icon size={18} className="relative z-10" />}
-        {text && <span className="relative z-10 font-bold text-sm md:text-base leading-none text-blue-100">{text}</span>}
-        {isUsed && <span className="absolute text-red-500 font-bold text-2xl select-none z-20">×</span>}
+        {/* Shine */}
+        <span className="absolute top-0 left-0 w-full h-1/2 rounded-t-full bg-white/20 pointer-events-none" />
+        {Icon && <Icon size={17} className="relative z-10 text-white drop-shadow" />}
+        {text && <span className="relative z-10 font-black text-xs md:text-sm leading-none text-white">{text}</span>}
+        {isUsed && <span className="absolute text-white/80 font-black text-xl select-none z-20">×</span>}
     </button>
 );
 
@@ -818,15 +837,15 @@ const PinnacleGame = ({ onLeaveGame }) => {
                 className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
                 style={{ backgroundImage: `url(${pinnacleBackground})` }}
             />
-            {/* Vignette: edges dark, center clear */}
+            {/* Subtle vignette — lighter so bg image shows through */}
             <div
                 className="absolute inset-0 z-0 pointer-events-none"
                 style={{
-                    background: 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 0%, rgba(2,6,23,0.55) 60%, rgba(2,6,23,0.92) 100%)',
+                    background: 'radial-gradient(ellipse 80% 70% at 50% 40%, transparent 0%, rgba(2,6,23,0.35) 60%, rgba(2,6,23,0.75) 100%)',
                 }}
             />
-            {/* Subtle bottom shadow so UI text stays readable */}
-            <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-t from-[#020617]/80 via-transparent to-[#020617]/40" />
+            {/* Bottom gradient for readability */}
+            <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-t from-[#020617]/70 via-transparent to-transparent" />
 
             <div className="w-full max-w-6xl flex-1 flex flex-col z-10 pt-4 pb-8 px-4 relative">
                 <AnimatePresence mode="wait">
@@ -926,13 +945,18 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                 initial={{ opacity: 0, y: -20 }}
                                 animate={introPhase >= 2 ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
                                 transition={{ duration: 0.5, type: 'spring' }}
-                                className="flex justify-between items-start mb-2 px-2 md:px-4 shrink-0 relative z-50"
+                                className="flex justify-between items-center mb-2 px-2 md:px-4 shrink-0 relative z-50"
                             >
-                                <button onClick={onLeaveGame} className="text-slate-300 hover:text-white transition-all flex items-center gap-1 bg-slate-900/50 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-slate-700/50 backdrop-blur-sm text-sm md:text-base">
-                                    <ArrowLeft size={16} /> Thoát
+                                {/* Exit Button — cartoon pill */}
+                                <button onClick={onLeaveGame}
+                                    className="flex items-center gap-1.5 font-black text-white text-sm px-3 py-2 rounded-full active:translate-y-0.5 transition-all"
+                                    style={{ background: 'linear-gradient(160deg,#1d4ed8,#1e40af)', border: '3px solid #60a5fa', boxShadow: '0 4px 0 #1e3a8a' }}
+                                >
+                                    <ArrowLeft size={15} strokeWidth={3} /> Thoát
                                 </button>
 
-                                <div className="flex gap-2 bg-slate-900/40 p-1 rounded-full backdrop-blur-sm border border-slate-700/30">
+                                {/* Lifelines — centered */}
+                                <div className="flex gap-2">
                                     <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={introPhase >= 2 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }} transition={{ delay: 0.1, duration: 0.4 }}>
                                         <LifelineButton text="50:50" isUsed={lifelines.fiftyFifty} disabled={isAnswerRevealed} onClick={useFiftyFifty} />
                                     </motion.div>
@@ -947,14 +971,18 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                     </motion.div>
                                 </div>
 
-                                <div ref={xpBadgeRef} className="flex items-center gap-2 bg-amber-500/15 border border-amber-500/40 px-3 py-1.5 rounded-full backdrop-blur-sm">
-                                    <Star size={14} fill="currentColor" className="text-amber-400 shrink-0" />
+                                {/* XP badge — cartoon pill */}
+                                <div ref={xpBadgeRef}
+                                    className="flex items-center gap-1.5 px-3 py-2 rounded-full"
+                                    style={{ background: 'linear-gradient(160deg,#92400e,#b45309)', border: '3px solid #f59e0b', boxShadow: '0 4px 0 #78350f' }}
+                                >
+                                    <Star size={13} fill="currentColor" className="text-yellow-200 shrink-0" />
                                     <motion.span
                                         key={displayScore}
-                                        initial={{ scale: 1.4, color: '#fbbf24' }}
-                                        animate={{ scale: 1, color: '#f59e0b' }}
-                                        transition={{ duration: 0.25, ease: 'easeOut' }}
-                                        className="font-black text-sm tracking-wide"
+                                        initial={{ scale: 1.4 }}
+                                        animate={{ scale: 1 }}
+                                        transition={{ duration: 0.25 }}
+                                        className="font-black text-sm text-yellow-100 tracking-wide"
                                     >
                                         {displayScore.toLocaleString()} XP
                                     </motion.span>
@@ -1222,7 +1250,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             <div className="flex-1 flex flex-col landscape:flex-row lg:flex-row w-full max-w-7xl mx-auto overflow-hidden gap-2 landscape:gap-4 lg:gap-8 pb-2 px-2 lg:px-4">
 
                                 {/* Left Side: Timer & Question Board */}
-                                <div className="flex-1 w-full order-2 landscape:order-1 lg:order-1 flex flex-col pt-2 pb-12 landscape:pb-2 lg:pb-8 h-[75vh] landscape:h-full lg:h-full justify-between items-center z-20 relative overflow-y-auto scrollbar-hide">
+                                <div className="flex-1 w-full order-2 landscape:order-1 lg:order-1 flex flex-col pt-2 pb-12 landscape:pb-2 lg:pb-8 h-[75vh] landscape:h-full lg:h-full justify-between items-center z-20 relative overflow-visible">
 
                                     {/* MC Character */}
                                     <motion.div
@@ -1231,7 +1259,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         transition={{ duration: 0.5, type: 'spring' }}
                                         className="absolute top-0 right-2 md:right-8 lg:right-12 flex flex-col items-end z-[100] mt-6 md:mt-8 pointer-events-none"
                                     >
-                                        <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 relative z-[101] pointer-events-auto group">
+                                        {/* MC Avatar */}
+                                    <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 relative z-[101] pointer-events-auto group">
                                             {/* Container background & clipped body */}
                                             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full border-[1.5px] border-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.5)] overflow-hidden transition-transform duration-300 group-hover:scale-105">
                                                 <img src={mcAvatar} alt="MC" className="absolute -bottom-[8%] left-1/2 -translate-x-1/2 translate-y-[5px] w-[115%] h-auto max-w-none object-bottom" />
@@ -1257,26 +1286,41 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                     className="absolute top-full right-0 mt-4 min-w-[260px] max-w-[calc(100vw-32px)] md:max-w-[400px] z-[100] flex flex-col items-end md:items-center"
                                                 >
                                                     {/* Custom Speech Bubble pointing UP towards right-aligned avatar */}
-                                                    <motion.div layout className="relative bg-white text-blue-900 text-sm md:text-base px-6 py-4 rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.6)] text-left md:text-center font-semibold leading-relaxed pointer-events-auto flex flex-col items-start md:items-center w-full">
-                                                        <div className="absolute -top-[14px] right-[18px] md:right-[26px] lg:right-[34px] w-0 h-0 border-x-[14px] border-x-transparent border-b-[16px] border-b-white pointer-events-none drop-shadow-sm"></div>
+                                                    {/* Cartoon Speech Bubble pointing UP-RIGHT toward avatar */}
+                                                    <motion.div layout className="relative text-sm md:text-base rounded-3xl text-left md:text-center font-semibold leading-relaxed pointer-events-auto flex flex-col items-start md:items-center w-full"
+                                                        style={{
+                                                            background: 'linear-gradient(180deg,#1e3a8a,#1e40af)',
+                                                            border: '3px solid #60a5fa',
+                                                            boxShadow: '0 6px 0 #1e3a8a, inset 0 1px 0 rgba(147,197,253,0.15)',
+                                                            padding: '16px 20px',
+                                                        }}
+                                                    >
+                                                        {/* Shine */}
+                                                        <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/8 rounded-t-3xl pointer-events-none" />
+                                                        {/* Tail pointing up */}
+                                                        <div className="absolute -top-[15px] right-[22px] md:right-[30px] w-0 h-0 pointer-events-none"
+                                                            style={{ borderLeft: '13px solid transparent', borderRight: '13px solid transparent', borderBottom: '16px solid #60a5fa' }} />
+                                                        <div className="absolute -top-[11px] right-[24px] md:right-[32px] w-0 h-0 pointer-events-none"
+                                                            style={{ borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderBottom: '13px solid #1e40af' }} />
 
                                                         {/* Text Content */}
-                                                        <motion.div layout className="w-full relative">
+                                                        <motion.div layout className="w-full relative z-10 text-slate-100">
                                                             {mcMessage.includes('**') ? (
-                                                                <span dangerouslySetInnerHTML={{ __html: mcMessage.replace(/\*\*(.*?)\*\*/g, '<span class="text-amber-600 font-bold">$1') }} />
+                                                                <span dangerouslySetInnerHTML={{ __html: mcMessage.replace(/\*\*(.*?)\*\*/g, '<span class="text-amber-300 font-bold">$1') }} />
                                                             ) : (
                                                                 <span>{mcMessage}</span>
                                                             )}
                                                         </motion.div>
 
-                                                        {/* Next Question / End Game Button inside Bubble */}
+                                                        {/* Next / End button */}
                                                         {answerStep === 'explained' && currentQuestionIndex < DUMMY_QUESTIONS.length - 1 && (
                                                             <button
                                                                 onClick={handleNextQuestion}
-                                                                className="mt-3 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-xl shadow-[0_4px_10px_rgba(37,99,235,0.4)] transition-all transform hover:scale-[1.02] active:scale-95 flex items-center gap-2 mx-auto"
+                                                                className="mt-3 font-black text-white text-sm px-5 py-2 rounded-full transition-all active:translate-y-0.5 flex items-center gap-2 mx-auto relative z-10"
+                                                                style={{ background: 'linear-gradient(160deg,#1d4ed8,#1e40af)', border: '3px solid #60a5fa', boxShadow: '0 4px 0 #1e3a8a' }}
                                                             >
                                                                 <span>{(!isSkipped && selectedOption !== DUMMY_QUESTIONS[currentQuestionIndex].answer) ? 'Kết thúc' : 'Tiếp tục'}</span>
-                                                                <ArrowLeft size={16} className="rotate-180" />
+                                                                <ArrowLeft size={14} className="rotate-180" />
                                                             </button>
                                                         )}
                                                     </motion.div>
@@ -1321,12 +1365,39 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                     transition={{ duration: 0.3, ease: "easeInOut", delay: introPhase >= 4 && currentQuestionIndex === 0 ? 0.2 : 0 }}
                                                     className="w-full flex flex-col gap-3 md:gap-4"
                                                 >
-                                                    {/* Question Box */}
-                                                    <HexagonBox className="min-h-[50px] md:min-h-[120px] flex items-center justify-center cursor-default">
-                                                        <h3 className="text-sm sm:text-base md:text-xl lg:text-3xl font-bold text-center leading-snug tracking-wide text-slate-100 drop-shadow-lg w-full px-1 md:px-6">
-                                                            {DUMMY_QUESTIONS[currentQuestionIndex].question}
-                                                        </h3>
-                                                    </HexagonBox>
+                                                    {/* Question Box — pointed hexagon cartoon card */}
+                                                    {(() => {
+                                                        const qClip = 'polygon(2% 0%,98% 0%,100% 50%,98% 100%,2% 100%,0% 50%)';
+                                                        return (
+                                                            /* Outer: golden amber rim — same style as reference */
+                                                            <div
+                                                                className="w-full"
+                                                                style={{
+                                                                    clipPath: qClip,
+                                                                    WebkitClipPath: qClip,
+                                                                    background: 'linear-gradient(180deg,#f5c842 0%,#d4960a 100%)',
+                                                                    filter: 'drop-shadow(0 6px 0 #7a4f00)',
+                                                                    padding: '4px 6px',
+                                                                }}
+                                                            >
+                                                                {/* Inner: dark content area */}
+                                                                <div
+                                                                    className="w-full flex items-center justify-center min-h-[52px] md:min-h-[112px] relative"
+                                                                    style={{
+                                                                        clipPath: qClip,
+                                                                        WebkitClipPath: qClip,
+                                                                        background: 'linear-gradient(180deg,#0e1e5a 0%,#090f36 100%)',
+                                                                        padding: '14px 50px',
+                                                                    }}
+                                                                >
+                                                                    <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/8 pointer-events-none" />
+                                                                    <h3 className="text-sm sm:text-base md:text-xl lg:text-2xl font-bold text-center leading-snug tracking-wide text-white drop-shadow-lg w-full relative z-10">
+                                                                        {DUMMY_QUESTIONS[currentQuestionIndex].question}
+                                                                    </h3>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })()}
 
                                                     {/* Options */}
                                                     <div className="relative grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-4 md:gap-y-4 md:gap-x-6">
@@ -1357,20 +1428,29 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                                     animate={introPhase >= 4 ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                                                                     transition={{ duration: 0.4, delay: (introPhase >= 4 && currentQuestionIndex === 0 ? 0.5 : 0) + idx * 0.15 }}
                                                                 >
-                                                                    <HexagonBox
+                                                                    <CartoonBox
                                                                         onClick={() => handleOptionSelect(idx)}
                                                                         disabled={isAnswerRevealed || isScanningFiftyFifty}
                                                                         isActive={isSel && !isAnswerRevealed}
                                                                         isCorrect={isCorrectChoice}
                                                                         isWrong={isWrongChoice}
                                                                         isHidden={isHidden}
-                                                                        className="text-left py-1.5 md:py-4 h-full"
+                                                                        className="text-left h-full"
                                                                     >
-                                                                        <div className="flex items-center gap-1.5 md:gap-4 w-full pr-1 md:pr-2">
-                                                                            <span className="text-amber-500 font-black text-base md:text-2xl drop-shadow-sm">{alphabet[idx]}:</span>
-                                                                            <span className="text-slate-200 text-xs sm:text-sm md:text-lg font-medium flex-1 break-words leading-tight">{option}</span>
+                                                                        <div className="flex items-center gap-2 md:gap-3 w-full">
+                                                                            {/* Letter badge */}
+                                                                            <span
+                                                                                className="font-black text-sm md:text-base shrink-0 w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center"
+                                                                                style={{
+                                                                                    background: (isSel && !isAnswerRevealed) ? '#fde68a' : isCorrectChoice ? '#bbf7d0' : isWrongChoice ? '#fca5a5' : '#f59e0b',
+                                                                                    color: '#1e3a8a',
+                                                                                    border: '2px solid rgba(255,255,255,0.4)',
+                                                                                    boxShadow: '0 2px 0 rgba(0,0,0,0.3)',
+                                                                                }}
+                                                                            >{alphabet[idx]}</span>
+                                                                            <span className="text-white text-xs sm:text-sm md:text-base font-semibold flex-1 break-words leading-tight">{option}</span>
                                                                         </div>
-                                                                    </HexagonBox>
+                                                                    </CartoonBox>
                                                                 </motion.div>
                                                             );
                                                         })}
@@ -1396,34 +1476,46 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                 const isPassed = idx < currentQuestionIndex;
                                                 const isMilestone = MILESTONES.includes(idx);
 
-                                                // Determine background, text styles per state
-                                                let bg = '#1E293B';          // default: dark slate
-                                                let textColor = '#94a3b8';   // slate-400
-                                                let shadow = '0 1px 4px rgba(0,0,0,0.4)';
+                                                // ── Two-layer colors: outer rim (lighter) + inner fill (darker) ──
+                                                let rimBg   = 'linear-gradient(180deg,#2c3e60,#1e293b)';
+                                                let fillBg  = 'linear-gradient(90deg,#0a0f1e,#111827,#0a0f1e)';
+                                                let textColor = '#94a3b8';
                                                 let opacity = 1;
+                                                let shine = false;
 
                                                 if (isMilestone && !isPassed && !isCurrent) {
-                                                    if (idx === 4) { bg = '#1e3a5f'; textColor = '#93c5fd'; shadow = '0 2px 8px rgba(59,130,246,0.3)'; }   // blue-900
-                                                    if (idx === 9) { bg = '#3b0764'; textColor = '#c4b5fd'; shadow = '0 2px 8px rgba(139,92,246,0.4)'; }   // purple-950
-                                                    if (idx === 14) { bg = '#78350f'; textColor = '#fde68a'; shadow = '0 2px 8px rgba(245,158,11,0.4)'; }   // amber-900
+                                                    if (idx === 4)  {
+                                                        rimBg  = 'linear-gradient(180deg,#3b82f6,#1d4ed8)';
+                                                        fillBg = 'linear-gradient(90deg,#0f2060,#1a3096,#0f2060)';
+                                                        textColor = '#bfdbfe'; shine = true;
+                                                    }
+                                                    if (idx === 9)  {
+                                                        rimBg  = 'linear-gradient(180deg,#a78bfa,#6d28d9)';
+                                                        fillBg = 'linear-gradient(90deg,#2e1065,#4c1d95,#2e1065)';
+                                                        textColor = '#ddd6fe'; shine = true;
+                                                    }
+                                                    if (idx === 14) {
+                                                        rimBg  = 'linear-gradient(180deg,#fbbf24,#d97706)';
+                                                        fillBg = 'linear-gradient(90deg,#3f1c00,#78350f,#3f1c00)';
+                                                        textColor = '#fef08a'; shine = true;
+                                                    }
                                                 }
 
                                                 if (isPassed) {
-                                                    bg = '#0f172a';
-                                                    textColor = '#f59e0b88';
-                                                    opacity = 0.5;
+                                                    rimBg   = 'linear-gradient(180deg,#1a2030,#0f172a)';
+                                                    fillBg  = 'linear-gradient(90deg,#060912,#0a0f1a,#060912)';
+                                                    textColor = '#f59e0b66';
+                                                    opacity = 0.45;
                                                 }
 
                                                 if (isCurrent) {
-                                                    bg = '#f59e0b';
-                                                    textColor = '#020617';
-                                                    shadow = '0 0 16px rgba(245,158,11,0.7)';
+                                                    rimBg  = 'linear-gradient(180deg,#fde68a,#f59e0b)';
+                                                    fillBg = 'linear-gradient(90deg,#92400e,#b45309,#92400e)';
+                                                    textColor = '#fef3c7'; shine = true;
                                                 }
 
-                                                // Top-down cascade animation delay based on (14 - idx)
-                                                // items map from 0 to 14 (1 implies bottom, 15 implies top). Actually index 14 is top reward.
-                                                // So delay = (14 - idx) * 0.08 s
                                                 const cascadeDelay = (14 - idx) * 0.08;
+                                                const hexClip = 'polygon(4% 0%, 96% 0%, 100% 50%, 96% 100%, 4% 100%, 0% 50%)';
 
                                                 return (
                                                     <motion.div
@@ -1432,23 +1524,35 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                         initial={{ opacity: 0, y: -20 }}
                                                         animate={introPhase >= 1 ? { opacity, y: 0 } : { opacity: 0, y: -20 }}
                                                         transition={{ duration: 0.3, delay: introPhase >= 1 ? cascadeDelay : 0 }}
-                                                        className="relative flex items-center justify-between px-5 transition-all duration-300"
-                                                        style={{
-                                                            clipPath: 'polygon(4% 0%, 96% 0%, 100% 50%, 96% 100%, 4% 100%, 0% 50%)',
-                                                            WebkitClipPath: 'polygon(4% 0%, 96% 0%, 100% 50%, 96% 100%, 4% 100%, 0% 50%)',
-                                                            background: bg,
-                                                            boxShadow: shadow,
-                                                            paddingTop: isMilestone ? '5px' : '3px',
-                                                            paddingBottom: isMilestone ? '5px' : '3px',
-                                                        }}
+                                                        style={{ filter: 'drop-shadow(0 3px 0 rgba(0,0,0,0.7))' }}
                                                     >
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="text-sm font-bold" style={{ color: textColor }}>{qNum}</span>
-                                                            {isMilestone && !isPassed && (
-                                                                <Flag size={11} className="shrink-0" style={{ color: isCurrent ? '#020617' : textColor }} fill="currentColor" />
-                                                            )}
+                                                        {/* Outer rim layer — lighter/brighter = the visible "gutter" */}
+                                                        <div style={{
+                                                            clipPath: hexClip, WebkitClipPath: hexClip,
+                                                            background: rimBg,
+                                                            padding: isMilestone ? '3px 4px' : '2px 3px',
+                                                        }}>
+                                                            {/* Inner content layer — darker = recessed depth */}
+                                                            <div
+                                                                className="relative flex items-center justify-between px-4 transition-all duration-300"
+                                                                style={{
+                                                                    clipPath: hexClip, WebkitClipPath: hexClip,
+                                                                    background: fillBg,
+                                                                    paddingTop: isMilestone ? '5px' : '3px',
+                                                                    paddingBottom: isMilestone ? '5px' : '3px',
+                                                                }}
+                                                            >
+                                                                {/* Top shine for highlighted rows */}
+                                                                {shine && <div className="absolute inset-0 h-1/2 bg-white/10 pointer-events-none" />}
+                                                                <div className="flex items-center gap-2 relative z-10">
+                                                                    <span className="text-sm font-bold" style={{ color: textColor }}>{qNum}</span>
+                                                                    {isMilestone && !isPassed && (
+                                                                        <Flag size={11} className="shrink-0" style={{ color: textColor }} fill="currentColor" />
+                                                                    )}
+                                                                </div>
+                                                                <span className={`text-sm relative z-10 ${isMilestone && !isCurrent ? 'font-bold' : 'font-semibold'}`} style={{ color: textColor }}>{reward.toLocaleString()}</span>
+                                                            </div>
                                                         </div>
-                                                        <span className={`text-sm ${isMilestone && !isCurrent ? 'font-bold' : 'font-semibold'}`} style={{ color: textColor }}>{reward.toLocaleString()}</span>
                                                     </motion.div>
                                                 );
                                             })}
@@ -1667,20 +1771,30 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                 key="finished"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-white/10 rounded-2xl md:rounded-3xl shadow-[0_0_50px_rgba(250,204,21,0.15)] text-center border-2 border-yellow-200/50 m-auto max-w-2xl w-full text-white backdrop-blur-xl relative z-10 lg:mt-32 mt-16 md:mt-20 max-h-[90vh] flex flex-col"
+                className="m-auto max-w-2xl w-full relative z-10 lg:mt-32 mt-16 md:mt-20 max-h-[90vh] flex flex-col rounded-3xl"
+                style={{
+                    background: 'linear-gradient(180deg,#1a307a,#0f1f5a)',
+                    border: '4px solid #3b82f6',
+                    boxShadow: '0 8px 0 #1e3a8a, 0 0 40px rgba(59,130,246,0.25)',
+                }}
             >
+                {/* Shine on outer card */}
+                <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/6 rounded-t-3xl pointer-events-none" />
 
                 {/* Trophy Badge overlapping top border */}
                 <motion.div
                     initial={{ scale: 0, y: 50 }}
                     animate={{ scale: 1, y: 0 }}
                     transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                    className="absolute -top-12 md:-top-16 left-1/2 -translate-x-1/2 w-24 h-28 md:w-32 md:h-36 bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] rounded-t-full rounded-b-xl flex items-center justify-center border-4 border-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.4)] z-20"
-                    style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}
+                    className="absolute -top-12 md:-top-16 left-1/2 -translate-x-1/2 w-24 h-28 md:w-32 md:h-36 flex items-center justify-center z-20"
+                    style={{
+                        clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+                        background: 'linear-gradient(180deg,#1d4ed8,#0f172a)',
+                        border: '4px solid #fbbf24',
+                        filter: 'drop-shadow(0 0 12px rgba(251,191,36,0.5))',
+                    }}
                 >
-                    <div className="absolute inset-1 border border-yellow-300/50" style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}></div>
                     <Trophy className="text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]" size={48} />
-                    {/* Stars around trophy */}
                     <Star className="absolute top-4 md:top-6 left-3 md:left-4 text-yellow-200 fill-current opacity-70" size={10} />
                     <Star className="absolute top-4 md:top-6 right-3 md:right-4 text-yellow-200 fill-current opacity-70" size={10} />
                     <Star className="absolute bottom-8 md:bottom-10 left-5 md:left-6 text-yellow-200 fill-current opacity-50" size={8} />
@@ -1688,11 +1802,22 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                 </motion.div>
 
                 <div className="p-4 sm:p-6 md:p-10 overflow-y-auto scrollbar-hide flex-1 w-full flex flex-col items-center">
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mt-8 md:mt-12 mb-4 md:mb-6 text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-wider relative z-10 w-full">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mt-8 md:mt-12 mb-4 md:mb-6 tracking-wider relative z-10 w-full text-center"
+                        style={{ color: '#fde68a', textShadow: '0 3px 0 #78350f, 0 1px 0 rgba(120,53,15,0.9)' }}
+                    >
                         TRÒ CHƠI KẾT THÚC!
                     </h2>
-                    {/* Central White Message Box container (MC's dialog) */}
-                    <div className="bg-white/95 text-slate-800 rounded-2xl md:rounded-3xl p-4 md:p-8 mb-6 md:mb-8 shadow-[0_10px_30px_rgba(0,0,0,0.3)] min-h-[80px] md:min-h-[120px] flex items-center justify-center relative border border-white/50 w-full">
+
+                    {/* Message box — cartoon dark card */}
+                    <div className="w-full mb-5 md:mb-7 rounded-2xl min-h-[80px] md:min-h-[110px] flex items-center justify-center relative overflow-hidden"
+                        style={{
+                            background: 'linear-gradient(180deg,#0a0f2e,#111840)',
+                            border: '3px solid #3b82f6',
+                            boxShadow: '0 5px 0 #1e3a8a, inset 0 1px 0 rgba(99,179,237,0.12)',
+                            padding: '16px 24px',
+                        }}
+                    >
+                        <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/5 pointer-events-none" />
                         <AnimatePresence mode="popLayout">
                             {showEndMessage && Array.isArray(endMessage) && endMessage[visibleMessageIndex] ? (
                                 <motion.div
@@ -1701,7 +1826,7 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
                                     transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                                    className="text-sm md:text-xl font-medium leading-relaxed text-center absolute w-full px-4 md:px-6 italic text-slate-700"
+                                    className="text-sm md:text-lg font-semibold leading-relaxed text-center w-full px-2 text-slate-100 relative z-10 italic"
                                 >
                                     {endMessage[visibleMessageIndex]}
                                 </motion.div>
@@ -1710,18 +1835,17 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                                     <motion.div
                                         initial={{ opacity: 0, scale: 0.95 }}
                                         animate={{ opacity: 1, scale: 1 }}
-                                        className="text-sm md:text-xl font-medium leading-relaxed text-center"
+                                        className="text-sm md:text-lg font-semibold leading-relaxed text-center text-slate-100 relative z-10"
                                     >
                                         {endMessage}
                                     </motion.div>
                                 )
                             )}
-
                             {!showEndMessage && (
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
-                                    className="text-sm md:text-xl font-medium leading-relaxed text-center italic text-slate-600"
+                                    className="text-sm md:text-lg font-medium leading-relaxed text-center italic text-slate-300 relative z-10"
                                 >
                                     Hành trình học hỏi vẫn còn phía trước. Hãy sẵn sàng cho thử thách tiếp theo!
                                 </motion.div>
@@ -1729,43 +1853,52 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                         </AnimatePresence>
                     </div>
 
-                    {/* Score Pill */}
-                    <div className="flex items-center justify-center mb-6 md:mb-10 w-full max-w-[240px] md:max-w-xs mx-auto">
-                        <div className="bg-[#1e293b]/90 py-3 md:py-5 px-6 md:px-8 flex flex-1 items-center justify-center gap-2 md:gap-3 border-2 border-yellow-500/40 shadow-[0_0_20px_rgba(250,204,21,0.3)] rounded-full w-full">
-                            <motion.span
-                                key={displayScore}
-                                initial={{ y: -5, opacity: 0.8 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ duration: 0.1 }}
-                                className="text-3xl md:text-5xl font-black text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.6)]"
+                    {/* Score Pill — two-layer cartoon */}
+                    <div className="flex items-center justify-center mb-6 md:mb-8 w-full max-w-[260px] md:max-w-xs mx-auto"
+                        style={{ filter: 'drop-shadow(0 5px 0 #78350f)' }}
+                    >
+                        {/* Outer amber rim */}
+                        <div className="w-full rounded-full" style={{ background: 'linear-gradient(180deg,#fbbf24,#d97706)', padding: '3px 5px' }}>
+                            {/* Inner dark fill */}
+                            <div className="flex flex-1 items-center justify-center gap-2 md:gap-3 rounded-full py-3 md:py-4"
+                                style={{ background: 'linear-gradient(180deg,#78350f,#451a03)' }}
                             >
-                                {displayScore.toLocaleString()}
-                            </motion.span>
-                            <span className="text-xl md:text-2xl font-bold text-yellow-200 mt-1">XP</span>
+                                <motion.span
+                                    key={displayScore}
+                                    initial={{ y: -5, opacity: 0.8 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ duration: 0.1 }}
+                                    className="text-3xl md:text-5xl font-black text-yellow-300 drop-shadow-[0_0_10px_rgba(250,204,21,0.6)]"
+                                >
+                                    {displayScore.toLocaleString()}
+                                </motion.span>
+                                <span className="text-xl md:text-2xl font-bold text-yellow-200 mt-1">XP</span>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Buttons */}
+                    {/* Buttons — cartoon pill style */}
                     <div className="flex flex-col sm:flex-row gap-3 md:gap-4 relative z-10 w-full max-w-lg mx-auto mt-auto">
                         <button
                             onClick={handlePlayAgain}
-                            className="flex-1 bg-[#1e3a8a] hover:bg-[#2563eb] text-white font-bold py-3 md:py-4 rounded-full shadow-[0_4px_15px_rgba(30,58,138,0.4)] transition-all uppercase tracking-wide border border-[#3b82f6]/50"
+                            className="flex-1 font-black text-white uppercase tracking-wide py-3 md:py-4 rounded-full transition-all active:translate-y-1 active:shadow-none"
+                            style={{ background: 'linear-gradient(160deg,#1d4ed8,#1e40af)', border: '3px solid #60a5fa', boxShadow: '0 5px 0 #1e3a8a' }}
                         >
                             Chơi lại
                         </button>
                         <button
                             onClick={onLeaveGame}
-                            className="flex-1 bg-gradient-to-b from-[#fbbf24] to-[#f59e0b] hover:from-[#fcd34d] hover:to-[#fbbf24] text-[#451a03] font-black uppercase py-3 md:py-4 rounded-full shadow-[0_4px_15px_rgba(245,158,11,0.4)] transition-all tracking-wide border border-[#fde68a]"
+                            className="flex-1 font-black uppercase tracking-wide py-3 md:py-4 rounded-full transition-all active:translate-y-1 active:shadow-none"
+                            style={{ background: 'linear-gradient(160deg,#fbbf24,#d97706)', border: '3px solid #fde68a', boxShadow: '0 5px 0 #78350f', color: '#451a03' }}
                         >
                             Về Menu chính
                         </button>
                     </div>
                 </div>
-            </motion.div >
+            </motion.div>
 
         </>
     );
 };
 
 export default PinnacleGame;
-
