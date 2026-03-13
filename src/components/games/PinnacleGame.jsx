@@ -4,6 +4,13 @@ import { Trophy, ArrowLeft, CheckCircle2, XCircle, Play, Phone, Users, Shield, R
 import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.png';
 import mcAvatar from '../../assets/pinnacle/MC.png';
 import pointUpSfx from '../../assets/games/SFX/point_up.wav';
+import fireworkSfx from '../../assets/games/SFX/sfx_firework_shot.wav';
+import sfxLaunch from '../../assets/games/SFX/sfx_launch_game_altp.mp3';
+import sfxClapShort from '../../assets/games/SFX/sfx_clap_short.mp3';
+import sfxCorrect from '../../assets/games/SFX/sfx_correct_answer.mp3';
+import sfxCheckpoint from '../../assets/games/SFX/sfx_checkpoint_altp.mp3';
+import sfxIncorrect from '../../assets/games/SFX/sfx_incorrect_answer_altp.mp3';
+import sfxClapEnd from '../../assets/games/SFX/sfx_clap_end.mp3';
 import resultBanner from '../../assets/common/result_banner.png';
 
 /* ─── Stage Spotlight overlay — 9 beams in 3 banks ─── */
@@ -25,10 +32,12 @@ const BEAMS = [
 ];
 
 const SWING_DURATION = 3.2; // seconds
+const WRONG_DURATION = 2.5; // seconds
 
-const SpotlightEffect = ({ flash, swing }) => {
+const SpotlightEffect = ({ flash, swing, wrong }) => {
     const [tick, setTick] = useState(0);
-    const [swingT, setSwingT] = useState(null); // unix ms when swing started, null = idle
+    const [swingT, setSwingT] = useState(null);
+    const [wrongT, setWrongT] = useState(null);
     const [flickerOn, setFlickerOn] = useState(false);
     const startRef = useRef(performance.now());
     const flickerRef = useRef(null);
@@ -61,6 +70,13 @@ const SpotlightEffect = ({ flash, swing }) => {
         flickerRef.current = setTimeout(() => setSwingT(null), SWING_DURATION * 1000);
     }, [swing]);
 
+    // Wrong answer — dim converging monochrome shake
+    useEffect(() => {
+        if (!wrong) return;
+        setWrongT(performance.now());
+        setTimeout(() => setWrongT(null), WRONG_DURATION * 1000);
+    }, [wrong]);
+
     const nowSec = (tick - startRef.current) / 1000;
 
     return (
@@ -81,8 +97,26 @@ const SpotlightEffect = ({ flash, swing }) => {
                     swingOpacityBoost = 1 + 0.5 * envelope * Math.abs(osc);
                 }
 
-                const angle = idleAngle + extraAngle;
-                const opacityBase = (0.55 + 0.28 * Math.sin((nowSec / (b.period * 0.6)) * Math.PI * 2 + b.phase * 1.3)) * swingOpacityBoost;
+                const isWrong = wrongT !== null;
+
+                // Wrong mode — beams converge and desaturate
+                let wrongAngleMod = 0;
+                let wrongOpacityMod = 1;
+                let colorTopOverride = null;
+                let colorMidOverride = null;
+                if (isWrong) {
+                    const wElapsed = (tick - wrongT) / 1000;
+                    const wProg = Math.min(wElapsed / WRONG_DURATION, 1);
+                    const wEnv = wProg < 0.1 ? wProg / 0.1 : wProg > 0.7 ? (1 - wProg) / 0.3 : 1;
+                    const shake = Math.sin(wElapsed * Math.PI * 2 * 4.5) * 6 * wEnv;
+                    wrongAngleMod = -b.baseAngle * 0.7 * wEnv + shake;
+                    wrongOpacityMod = 0.35 + 0.25 * (1 - wEnv);
+                    colorTopOverride = `rgba(180,200,220,${0.75 * wEnv})`;
+                    colorMidOverride = `rgba(150,170,190,${0.10 * wEnv})`;
+                }
+
+                const angle = idleAngle + extraAngle + wrongAngleMod;
+                const opacityBase = (0.55 + 0.28 * Math.sin((nowSec / (b.period * 0.6)) * Math.PI * 2 + b.phase * 1.3)) * swingOpacityBoost * wrongOpacityMod;
                 const opacity = flickerOn ? Math.min(1, opacityBase * 1.8) : opacityBase;
 
                 return (
@@ -94,13 +128,13 @@ const SpotlightEffect = ({ flash, swing }) => {
                             left: b.left,
                             width: (swingT !== null && flickerOn) ? '13%' : '9%',
                             height: '80%',
-                            background: `linear-gradient(180deg, ${b.colorTop} 0%, ${b.colorMid} 30%, transparent 100%)`,
+                            background: `linear-gradient(180deg, ${colorTopOverride || b.colorTop} 0%, ${colorMidOverride || b.colorMid} 30%, transparent 100%)`,
                             clipPath: 'polygon(49.5% 0%, 50.5% 0%, 100% 100%, 0% 100%)',
                             transformOrigin: '50% 0%',
                             transform: `translateX(-50%) rotate(${angle}deg)`,
                             opacity: Math.min(1, opacity),
                             mixBlendMode: 'screen',
-                            transition: 'width 0.06s',
+                            transition: wrongT !== null ? 'none' : 'width 0.06s',
                             willChange: 'transform, opacity',
                         }}
                     />
@@ -382,6 +416,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
     const [displayScore, setDisplayScore] = useState(0);  // animated display value
     const [spotlightFlash, setSpotlightFlash] = useState(0); // increments on correct answer → brief flicker
     const [spotlightSwing, setSpotlightSwing] = useState(0); // increments on milestone → 3s dramatic swing
+    const [spotlightWrong, setSpotlightWrong] = useState(0); // increments on wrong answer → dim converge shake
     const [gameConfettiKey, setGameConfettiKey] = useState(0);
     const [showGameConfetti, setShowGameConfetti] = useState(false);
 
@@ -422,25 +457,41 @@ const PinnacleGame = ({ onLeaveGame }) => {
         } catch (_) { }
     }, []);
 
+    // Generic fire-and-forget audio helper; returns duration via callback
+    const playAudio = useCallback((src, volume = 0.7, onDuration) => {
+        try {
+            const audio = new Audio(src);
+            audio.volume = volume;
+            if (onDuration) {
+                audio.addEventListener('loadedmetadata', () => onDuration(audio.duration * 1000));
+            }
+            audio.play().catch(e => console.log('Audio play failed', e));
+            return audio;
+        } catch (_) { return null; }
+    }, []);
+
     useEffect(() => {
         if (gameState === 'playing' && introPhase > 0 && introPhase < 4) {
             let phaseTimer;
             if (introPhase === 1) {
+                // Play launch SFX + spotlight swing for its duration
+                playAudio(sfxLaunch, 0.75, (durationMs) => {
+                    setSpotlightSwing(prev => prev + 1);
+                    // SWING_DURATION inside SpotlightEffect is fixed at 3.2s but we only trigger here;
+                    // the swing auto-expires after SWING_DURATION regardless
+                });
                 // Lifelines: start cascading after background
                 phaseTimer = setTimeout(() => {
-                    playActiveSound();
                     setIntroPhase(2);
                 }, 1500); // wait for ladder to finish cascading
             } else if (introPhase === 2) {
                 // MC
                 phaseTimer = setTimeout(() => {
-                    playActiveSound();
                     setIntroPhase(3);
                 }, 1000);
             } else if (introPhase === 3) {
                 // Question + Options: cascade options
                 phaseTimer = setTimeout(() => {
-                    playActiveSound();
                     setIntroPhase(4);
                 }, 800);
             }
@@ -591,11 +642,19 @@ const PinnacleGame = ({ onLeaveGame }) => {
         if (isCorrect) {
             const reward = REWARDS[currentQuestionIndex];
             setEncouragementMessage(getEncouragement(currentQuestionIndex));
-            setSpotlightFlash(prev => prev + 1); // brief flicker on every correct answer
+            setSpotlightFlash(prev => prev + 1); // brief flicker
+
+            // SFX: clap + correct tone together
+            playAudio(sfxClapShort, 0.6);
+            playAudio(sfxCorrect, 0.7);
 
             // Trigger confetti + dramatic spotlight swing at checkpoint milestones (Q5 = idx 4, Q10 = idx 9)
             if (currentQuestionIndex === 4 || currentQuestionIndex === 9) {
-                setSpotlightSwing(prev => prev + 1); // 3s dramatic swing
+                // Checkpoint SFX — swing lasts the duration of checkpoint audio
+                playAudio(sfxCheckpoint, 0.8, (durationMs) => {
+                    setSpotlightSwing(prev => prev + 1);
+                    // Spotlight component auto-expires after SWING_DURATION (3.2s)
+                });
                 setShowGameConfetti(false);
                 setTimeout(() => {
                     setGameConfettiKey(prev => prev + 1);
@@ -627,6 +686,13 @@ const PinnacleGame = ({ onLeaveGame }) => {
             // Delay score update to match first particle arrival (~1.36s)
             setTimeout(() => setScore(reward), 1360);
         } else {
+            // SFX: incorrect answer
+            playAudio(sfxIncorrect, 0.8);
+            // Spotlight: dim monochromatic converge shake
+            setSpotlightWrong(prev => prev + 1);
+            // Farewell clap after a delay
+            setTimeout(() => playAudio(sfxClapEnd, 0.65), 2500);
+
             // Trigger MC wrong logic
             const pool = MC_MESSAGES[currentQuestionIndex].wrong;
             setMcMessage(pool[Math.floor(Math.random() * pool.length)]);
@@ -1079,7 +1145,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                 )}
                             </AnimatePresence>
                             {/* Stage Spotlight — 9 beams, flickers on correct, swings on milestone */}
-                            <SpotlightEffect flash={spotlightFlash} swing={spotlightSwing} />
+                            <SpotlightEffect flash={spotlightFlash} swing={spotlightSwing} wrong={spotlightWrong} />
 
                             {/* Checkpoint Confetti — fires when player passes Q5 or Q10 */}
                             {showGameConfetti && <Confetti key={gameConfettiKey} questionIndex={4} />}
@@ -1759,6 +1825,13 @@ const Confetti = ({ questionIndex = 14 }) => {
 
         const fireBurst = (index) => {
             if (index >= sequence.length || !canvas) return;
+
+            // Play firework sound
+            try {
+                const audio = new Audio(fireworkSfx);
+                audio.volume = 0.4;
+                audio.play().catch(e => console.log('Audio play failed', e));
+            } catch (_) { }
 
             const xPos = canvas.width * sequence[index];
             const yPos = canvas.height; // Shoot from bottom
