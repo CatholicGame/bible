@@ -379,12 +379,12 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
             </AnimatePresence>
 
             {/* BODY */}
-            <div className={`relative z-10 flex-1 min-h-0 flex flex-col items-center ${isLandscape ? 'pt-1 pb-0 gap-1' : 'pt-5 pb-3 gap-3'}`}>
+            <motion.div layout className={`relative z-10 flex-1 min-h-0 flex flex-col items-center ${isLandscape ? 'pt-1 pb-0 gap-1' : 'pt-5 pb-3 gap-3'}`}>
 
                 {/* PIN / Modes */}
-                <AnimatePresence mode="wait">
+                <AnimatePresence mode="popLayout">
                     {!showModes ? (
-                        <motion.div key="pin" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                        <motion.div layout key="pin" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                             className="flex-shrink-0 w-full max-w-xs px-4 md:px-0">
                             <div className="flex items-center gap-2 rounded-2xl px-4 py-2.5" style={{
                                 background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(14px)',
@@ -409,7 +409,7 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
                             </div>
                         </motion.div>
                     ) : (
-                        <motion.div key="modes" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                        <motion.div layout key="modes" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                             className="flex-shrink-0 w-full max-w-sm px-4 flex flex-col gap-3">
                             <div className="flex items-center gap-2">
                                 <motion.button whileHover={{ x: -2 }} onClick={handleBack}
@@ -428,48 +428,49 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
                                 ].map(({ icon: Icon, label, desc, color, mode }) => {
                                     const colorStyles = {
                                         emerald: {
-                                            bg: 'bg-emerald-500/10 hover:bg-emerald-500/20',
-                                            border: 'border-emerald-500/30 hover:border-emerald-400/60',
-                                            iconBg: 'bg-gradient-to-br from-emerald-400 to-emerald-600',
-                                            shadow: 'hover:shadow-[0_0_20px_rgba(16,185,129,0.25)]',
-                                            glow: 'bg-emerald-500'
+                                            bg: 'bg-emerald-500',
+                                            border: 'border-2 border-emerald-700',
+                                            shadow: 'shadow-[0_4px_0_theme(colors.emerald.700)] active:shadow-none active:translate-y-[4px]',
+                                            iconBg: 'bg-emerald-300',
+                                            iconText: 'text-emerald-900',
+                                            text: 'text-white drop-shadow-[0_2px_0_theme(colors.emerald.700)]'
                                         },
                                         blue: {
-                                            bg: 'bg-blue-500/10 hover:bg-blue-500/20',
-                                            border: 'border-blue-500/30 hover:border-blue-400/60',
-                                            iconBg: 'bg-gradient-to-br from-blue-400 to-blue-600',
-                                            shadow: 'hover:shadow-[0_0_20px_rgba(59,130,246,0.25)]',
-                                            glow: 'bg-blue-500'
+                                            bg: 'bg-blue-500',
+                                            border: 'border-2 border-blue-700',
+                                            shadow: 'shadow-[0_4px_0_theme(colors.blue.700)] active:shadow-none active:translate-y-[4px]',
+                                            iconBg: 'bg-blue-300',
+                                            iconText: 'text-blue-900',
+                                            text: 'text-white drop-shadow-[0_2px_0_theme(colors.blue.700)]'
                                         },
                                         amber: {
-                                            bg: 'bg-amber-500/10 hover:bg-amber-500/20',
-                                            border: 'border-amber-500/30 hover:border-amber-400/60',
-                                            iconBg: 'bg-gradient-to-br from-amber-400 to-amber-600',
-                                            shadow: 'hover:shadow-[0_0_20px_rgba(245,158,11,0.25)]',
-                                            glow: 'bg-amber-500'
+                                            bg: 'bg-amber-500',
+                                            border: 'border-2 border-amber-700',
+                                            shadow: 'shadow-[0_4px_0_theme(colors.amber.700)] active:shadow-none active:translate-y-[4px]',
+                                            iconBg: 'bg-amber-300',
+                                            iconText: 'text-amber-900',
+                                            text: 'text-white drop-shadow-[0_2px_0_theme(colors.amber.700)]'
                                         }
                                     }[color];
 
                                     return (
                                         <motion.button key={mode}
-                                            whileHover={{ scale: 1.02, x: 4 }}
+                                            whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
                                             onClick={() => onCreateGame(selectedGame, mode)}
-                                            className={`relative overflow-hidden flex items-center gap-4 p-3.5 rounded-2xl w-full text-left backdrop-blur-md border transition-all duration-300 group ${colorStyles.bg} ${colorStyles.border} ${colorStyles.shadow}`}
+                                            className={`relative flex items-center gap-4 p-4 rounded-2xl w-full text-left transition-transform duration-200 group ${colorStyles.bg} ${colorStyles.border} ${colorStyles.shadow}`}
                                         >
-                                            <div className={`absolute top-1/2 right-4 -translate-y-1/2 w-24 h-24 ${colorStyles.glow} opacity-0 group-hover:opacity-20 blur-2xl rounded-full transition-opacity duration-500 pointer-events-none`}></div>
-
-                                            <div className={`w-11 h-11 rounded-xl ${colorStyles.iconBg} flex items-center justify-center shrink-0 shadow-inner overflow-hidden relative z-10`}>
-                                                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                                <Icon size={20} className="text-white drop-shadow-md" />
+                                            <div className={`w-12 h-12 rounded-xl ${colorStyles.iconBg} flex items-center justify-center shrink-0 border-2 border-black/20 relative z-10`}>
+                                                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+                                                <Icon size={22} strokeWidth={2.5} className={`${colorStyles.iconText}`} />
                                             </div>
 
                                             <div className="flex-1 flex flex-col z-10">
-                                                <span className="font-black text-white text-base tracking-wide drop-shadow-sm leading-tight">{label}</span>
-                                                <span className="text-white/60 text-[11px] font-medium mt-0.5">{desc}</span>
+                                                <span className={`font-black text-xl tracking-wide leading-tight ${colorStyles.text}`}>{label}</span>
+                                                <span className="text-white/90 text-[13px] font-bold mt-0.5 custom-stroke drop-shadow-md">{desc}</span>
                                             </div>
 
-                                            <ChevronRight size={18} className="text-white/20 group-hover:text-white/70 transition-colors z-10" />
+                                            <ChevronRight size={24} strokeWidth={3} className="text-white/50 group-hover:text-white transition-colors z-10 drop-shadow-md" />
                                         </motion.button>
                                     );
                                 })}
@@ -480,7 +481,7 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
 
                 {/* Divider */}
                 {!showModes && (
-                    <div className="flex-shrink-0 flex items-center gap-3 w-full max-w-lg px-6">
+                    <motion.div layout className="flex-shrink-0 flex items-center gap-3 w-full max-w-lg px-6">
                         <div className="flex-1 h-px bg-white/20" />
                         <span
                             className="text-white text-[10px] font-black tracking-[0.18em] uppercase px-3 py-1 rounded-full"
@@ -489,12 +490,12 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
                             Chọn game
                         </span>
                         <div className="flex-1 h-px bg-white/20" />
-                    </div>
+                    </motion.div>
                 )}
 
                 {/* CAROUSEL */}
                 {!showModes && (
-                    <div className="flex-1 min-h-0 w-full flex flex-col items-center justify-center gap-2">
+                    <motion.div layout className="flex-1 min-h-0 w-full flex flex-col items-center justify-center gap-2">
                         <div ref={containerRef} className="relative w-full flex-1 min-h-0 flex items-center overflow-hidden">
 
                             {/* ← */}
@@ -559,9 +560,9 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
                                     className="w-1.5 h-1.5 rounded-full bg-white" />
                             ))}
                         </div>
-                    </div>
+                    </motion.div>
                 )}
-            </div>
+            </motion.div>
         </div>
     );
 };

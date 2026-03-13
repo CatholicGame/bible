@@ -690,8 +690,14 @@ const PinnacleGame = ({ onLeaveGame }) => {
             playAudio(sfxIncorrect, 0.8);
             // Spotlight: dim monochromatic converge shake
             setSpotlightWrong(prev => prev + 1);
-            // Farewell clap after a delay
-            setTimeout(() => playAudio(sfxClapEnd, 0.65), 2500);
+            
+            // Farewell clap after a delay (2.5s)
+            setTimeout(() => {
+                playAudio(sfxClapEnd, 0.65, (durationMs) => {
+                    // Chuyển luôn sang màn kết thúc khi vỗ tay xong
+                    setTimeout(() => triggerEndGame(currentQuestionIndex), durationMs);
+                });
+            }, 2500);
 
             // Trigger MC wrong logic
             const pool = MC_MESSAGES[currentQuestionIndex].wrong;
@@ -702,13 +708,6 @@ const PinnacleGame = ({ onLeaveGame }) => {
             setTimeout(() => {
                 setShowMcBubble(false);
             }, 1800);
-
-            // Fully prepare explanation and button, then pop out the bubble
-            setTimeout(() => {
-                setMcMessage(DUMMY_QUESTIONS[currentQuestionIndex].explanation);
-                setAnswerStep('explained');
-                setShowMcBubble(true);
-            }, 2000);
 
             setTimeout(() => {
                 // Find last milestone reached logic
@@ -721,8 +720,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
                 }
                 setScore(earnedScore);
                 setAnswerStep('explained');
-                // Người dùng phải ấn 'Kết thúc' ở panel giải thích để save change state finished.
-            }, 2500); // Rút ngắn lại thành 1s để hiện explanation sớm thay vì 4s chìm
+                // Removed explanation bubble pop-up here since we auto-transition soon anyway.
+            }, 2500);
         }
     };
 
