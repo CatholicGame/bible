@@ -54,12 +54,50 @@ function useCardTransform(dragX, idx, cwRef, cardW, step) {
         const distPx = Math.abs(cardCenterX - cw / 2);
         return Math.max(1, Math.round(20 - distPx / step * 4));
     });
-    return { scale, zIndex };
+    const x = useTransform(dragX, (xv) => {
+        const cw = cwRef.current;
+        if (!cw) return 0;
+        
+        const rawIdx = (cw / 2 - cardW / 2 - xv) / step;
+        
+        const getScale = (i) => {
+            const cardCenterX = xv + i * step + cardW / 2;
+            const distPx = Math.abs(cardCenterX - cw / 2);
+            const t = Math.min(distPx / (step * SC_RANGE), 1);
+            return MAX_SC - (MAX_SC - MIN_SC) * t;
+        };
+        
+        const N = GAMES.length;
+        const widths = [];
+        for (let i = 0; i < N; i++) widths.push(cardW * getScale(i));
+        
+        const layouts = [0];
+        for (let i = 1; i < N; i++) {
+            layouts[i] = layouts[i-1] + widths[i-1]/2 + GAP + widths[i]/2;
+        }
+        
+        let cameraLayout = 0;
+        if (rawIdx <= 0) {
+            cameraLayout = layouts[0] + rawIdx * (widths[0] + GAP);
+        } else if (rawIdx >= N - 1) {
+            cameraLayout = layouts[N-1] + (rawIdx - (N-1)) * (widths[N-1] + GAP);
+        } else {
+            const floor = Math.floor(rawIdx);
+            const frac = rawIdx - floor;
+            cameraLayout = layouts[floor] + frac * (layouts[floor+1] - layouts[floor]);
+        }
+        
+        const targetScreenCenter = cw / 2 - cameraLayout + layouts[idx];
+        const currentScreenCenter = xv + idx * (cardW + GAP) + cardW / 2;
+        
+        return targetScreenCenter - currentScreenCenter;
+    });
+    return { scale, zIndex, x };
 }
 
 /* ─── Card ─── */
 const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, cardH, step }) => {
-    const { scale, zIndex } = useCardTransform(dragX, idx, cwRef, cardW, step);
+    const { scale, zIndex, x } = useCardTransform(dragX, idx, cwRef, cardW, step);
     const pointerDownX = useRef(0);
     const hasStats = stats && stats.plays > 0;
 
@@ -71,7 +109,7 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
     const borderRad   = Math.round(cardH * 0.065); // ~24px at 364, ~14px at small
 
     return (
-        <motion.div style={{ width: cardW, height: cardH, scale, zIndex, flexShrink: 0, position: 'relative' }}>
+        <motion.div style={{ width: cardW, height: cardH, scale, zIndex, x, flexShrink: 0, position: 'relative' }}>
             <motion.button
                 onPointerDown={(e) => { pointerDownX.current = e.clientX; }}
                 onPointerUp={(e) => {
@@ -276,7 +314,7 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
                     </div>
 
                     {/* User button */}
-                    <div ref={profileRef} className="relative flex-shrink-0">
+                    <div ref={profileRef} className="relative flex-shrink-0 ml-auto">
                         <motion.button whileTap={{ y: 2 }}
                             onClick={() => setProfileOpen(!profileOpen)}
                             className="flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
