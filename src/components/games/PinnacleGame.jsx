@@ -483,17 +483,17 @@ const PinnacleGame = ({ onLeaveGame }) => {
                 // Lifelines: start cascading after background
                 phaseTimer = setTimeout(() => {
                     setIntroPhase(2);
-                }, 1500); // wait for ladder to finish cascading
+                }, 500);
             } else if (introPhase === 2) {
                 // MC
                 phaseTimer = setTimeout(() => {
                     setIntroPhase(3);
-                }, 1000);
+                }, 350);
             } else if (introPhase === 3) {
-                // Question + Options: cascade options
+                // Question + Options
                 phaseTimer = setTimeout(() => {
                     setIntroPhase(4);
-                }, 800);
+                }, 250);
             }
             return () => clearTimeout(phaseTimer);
         }
