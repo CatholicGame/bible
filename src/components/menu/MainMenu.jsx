@@ -14,7 +14,7 @@ import imgSorting from '../../assets/games/thumb_secret_words.png';
 import imgGolgotha from '../../assets/games/thumb_golgotha.png';
 
 const GAMES = [
-    { id: 'millionaire', title: 'Ai là nhà thần học', subtitle: '', image: imgMillionaire, from: '#9333ea', to: '#4c1d95', isSoloOnly: true },
+    { id: 'millionaire', title: 'Nhà Thần Học?', subtitle: 'Ai Là', image: imgMillionaire, from: '#8b5cf6', to: '#5b21b6', isSoloOnly: true },
     { id: 'sorting', title: 'Giải ô chữ', subtitle: 'Sự Kiện', image: imgSorting, from: '#d97706', to: '#92400e', isSoloOnly: false },
     { id: 'golgotha', title: 'Đỉnh Golgotha', subtitle: 'Đường Lên', image: imgGolgotha, from: '#0ea5e9', to: '#0369a1', isSoloOnly: false },
 ];

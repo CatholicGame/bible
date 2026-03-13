@@ -4,6 +4,7 @@ import { Trophy, ArrowLeft, CheckCircle2, XCircle, Play, Phone, Users, Shield, R
 import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.png';
 import mcAvatar from '../../assets/pinnacle/MC.png';
 import pointUpSfx from '../../assets/games/SFX/point_up.wav';
+import resultBanner from '../../assets/common/result_banner.png';
 
 const DUMMY_QUESTIONS = [
     { question: "Tên vị Giáo hoàng đầu tiên của Giáo hội Công giáo là gì?", options: ["Thánh Phêrô", "Thánh Phaolô", "Thánh Anrê", "Thánh Giacôbê"], answer: 0, explanation: "Chúa Giêsu đã trao chìa khóa Nước Trời cho **Thánh Phêrô**, đặt ngài làm nền tảng đầu tiên của Giáo hội." },
@@ -856,7 +857,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             initial={{ opacity: 0, scale: 0.9, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 1.1, y: 30 }}
-                            className="bg-[#3b82f6] p-4 sm:p-5 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border-4 border-[#1e3a8a] shadow-[0_8px_0_rgba(30,58,138,1)] m-auto max-w-md w-full text-white relative z-10 max-h-[85vh] overflow-y-auto scrollbar-hide"
+                            className="bg-[#3b82f6] p-4 sm:p-5 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border-4 border-[#1e3a8a] shadow-[0_8px_0_rgba(30,58,138,1)] m-auto max-w-md w-full text-white relative z-10 my-auto max-h-[85vh] overflow-y-auto scrollbar-hide"
                         >
                             {/* Header row: back + trophy */}
                             <div className="flex justify-between items-center mb-1">
@@ -870,7 +871,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             </div>
 
                             {/* Title */}
-                            <h2 className="text-2xl sm:text-3xl font-black mb-4 tracking-widest text-center text-yellow-300 drop-shadow-[0_3px_0_rgba(180,83,9,1)] uppercase" style={{ WebkitTextStroke: '0.5px #78350f' }}>
+                            <h2 className="text-2xl sm:text-3xl font-black mb-4 tracking-widest text-center text-yellow-300 uppercase" 
+                                style={{ textShadow: '0 3px 0 #78350f, 1px 0 0 #78350f, -1px 0 0 #78350f, 0 1px 0 #78350f, 0 -1px 0 #78350f, 1px 1px 0 #78350f, -1px -1px 0 #78350f, 1px -1px 0 #78350f, -1px 1px 0 #78350f' }}>
                                 HƯỚNG DẪN
                             </h2>
 
@@ -1250,7 +1252,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             <div className="flex-1 flex flex-col landscape:flex-row lg:flex-row w-full max-w-7xl mx-auto overflow-hidden gap-2 landscape:gap-4 lg:gap-8 pb-2 px-2 lg:px-4">
 
                                 {/* Left Side: Timer & Question Board */}
-                                <div className="flex-1 w-full order-2 landscape:order-1 lg:order-1 flex flex-col pt-2 pb-12 landscape:pb-2 lg:pb-8 h-[75vh] landscape:h-full lg:h-full justify-between items-center z-20 relative overflow-visible">
+                                <div className="flex-1 w-full order-2 landscape:order-1 lg:order-1 flex flex-col pt-2 pb-0 landscape:pb-2 lg:pb-8 h-[75vh] landscape:h-full lg:h-full justify-between items-center z-20 relative overflow-visible mt-auto md:mt-0">
 
                                     {/* MC Character */}
                                     <motion.div
@@ -1771,53 +1773,27 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                 key="finished"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="m-auto max-w-2xl w-full relative z-10 lg:mt-32 mt-16 md:mt-20 max-h-[90vh] flex flex-col rounded-3xl"
-                style={{
-                    background: 'linear-gradient(180deg,#1a307a,#0f1f5a)',
-                    border: '4px solid #3b82f6',
-                    boxShadow: '0 8px 0 #1e3a8a, 0 0 40px rgba(59,130,246,0.25)',
-                }}
+                className="bg-[#3b82f6] p-4 sm:p-5 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border-4 border-[#1e3a8a] shadow-[0_8px_0_rgba(30,58,138,1)] m-auto my-auto max-w-2xl w-full relative z-10 max-h-[90vh] flex flex-col"
             >
-                {/* Shine on outer card */}
-                <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/6 rounded-t-3xl pointer-events-none" />
-
-                {/* Trophy Badge overlapping top border */}
+                {/* Trophy Banner overlapping top border */}
                 <motion.div
                     initial={{ scale: 0, y: 50 }}
                     animate={{ scale: 1, y: 0 }}
                     transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                    className="absolute -top-12 md:-top-16 left-1/2 -translate-x-1/2 w-24 h-28 md:w-32 md:h-36 flex items-center justify-center z-20"
-                    style={{
-                        clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-                        background: 'linear-gradient(180deg,#1d4ed8,#0f172a)',
-                        border: '4px solid #fbbf24',
-                        filter: 'drop-shadow(0 0 12px rgba(251,191,36,0.5))',
-                    }}
+                    className="absolute -top-20 md:-top-28 left-1/2 -translate-x-1/2 w-[320px] md:w-[420px] z-20 flex justify-center pointer-events-none drop-shadow-[0_4px_0_rgba(30,58,138,0.5)]"
                 >
-                    <Trophy className="text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]" size={48} />
-                    <Star className="absolute top-4 md:top-6 left-3 md:left-4 text-yellow-200 fill-current opacity-70" size={10} />
-                    <Star className="absolute top-4 md:top-6 right-3 md:right-4 text-yellow-200 fill-current opacity-70" size={10} />
-                    <Star className="absolute bottom-8 md:bottom-10 left-5 md:left-6 text-yellow-200 fill-current opacity-50" size={8} />
-                    <Star className="absolute bottom-8 md:bottom-10 right-5 md:right-6 text-yellow-200 fill-current opacity-50" size={8} />
+                    <img src={resultBanner} alt="Trophy" className="w-full h-auto object-contain" />
                 </motion.div>
 
-                <div className="p-4 sm:p-6 md:p-10 overflow-y-auto scrollbar-hide flex-1 w-full flex flex-col items-center">
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mt-8 md:mt-12 mb-4 md:mb-6 tracking-wider relative z-10 w-full text-center"
-                        style={{ color: '#fde68a', textShadow: '0 3px 0 #78350f, 0 1px 0 rgba(120,53,15,0.9)' }}
+                <div className="overflow-y-auto scrollbar-hide flex-1 w-full flex flex-col items-center pt-16 md:pt-20">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-6 md:mb-8 tracking-widest text-center text-yellow-300 uppercase relative z-10 w-full"
+                        style={{ textShadow: '0 4px 0 #78350f, 2px 0 0 #78350f, -2px 0 0 #78350f, 0 2px 0 #78350f, 0 -2px 0 #78350f, 1px 1px 0 #78350f, -1px -1px 0 #78350f, 1px -1px 0 #78350f, -1px 1px 0 #78350f' }}
                     >
                         TRÒ CHƠI KẾT THÚC!
                     </h2>
 
-                    {/* Message box — cartoon dark card */}
-                    <div className="w-full mb-5 md:mb-7 rounded-2xl min-h-[80px] md:min-h-[110px] flex items-center justify-center relative overflow-hidden"
-                        style={{
-                            background: 'linear-gradient(180deg,#0a0f2e,#111840)',
-                            border: '3px solid #3b82f6',
-                            boxShadow: '0 5px 0 #1e3a8a, inset 0 1px 0 rgba(99,179,237,0.12)',
-                            padding: '16px 24px',
-                        }}
-                    >
-                        <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/5 pointer-events-none" />
+                    {/* Message box — cartoon white card */}
+                    <div className="w-full max-w-lg mb-6 min-h-[90px] md:min-h-[110px] flex items-center justify-center relative bg-white p-4 sm:p-5 rounded-2xl border-4 border-blue-300 shadow-[inset_0_-4px_0_rgba(191,219,254,1),0_6px_0_rgba(30,58,138,0.5)] text-[#1e3a8a] font-bold leading-relaxed">
                         <AnimatePresence mode="popLayout">
                             {showEndMessage && Array.isArray(endMessage) && endMessage[visibleMessageIndex] ? (
                                 <motion.div
@@ -1826,7 +1802,7 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
                                     transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                                    className="text-sm md:text-lg font-semibold leading-relaxed text-center w-full px-2 text-slate-100 relative z-10 italic"
+                                    className="text-sm md:text-lg font-bold leading-relaxed text-center w-full px-2 italic"
                                 >
                                     {endMessage[visibleMessageIndex]}
                                 </motion.div>
@@ -1835,7 +1811,7 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                                     <motion.div
                                         initial={{ opacity: 0, scale: 0.95 }}
                                         animate={{ opacity: 1, scale: 1 }}
-                                        className="text-sm md:text-lg font-semibold leading-relaxed text-center text-slate-100 relative z-10"
+                                        className="text-sm md:text-lg font-bold leading-relaxed text-center w-full px-2"
                                     >
                                         {endMessage}
                                     </motion.div>
@@ -1845,7 +1821,7 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
-                                    className="text-sm md:text-lg font-medium leading-relaxed text-center italic text-slate-300 relative z-10"
+                                    className="text-sm md:text-lg font-medium leading-relaxed text-center italic text-[#1e3a8a]/70 w-full px-2"
                                 >
                                     Hành trình học hỏi vẫn còn phía trước. Hãy sẵn sàng cho thử thách tiếp theo!
                                 </motion.div>
@@ -1854,44 +1830,35 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                     </div>
 
                     {/* Score Pill — two-layer cartoon */}
-                    <div className="flex items-center justify-center mb-6 md:mb-8 w-full max-w-[260px] md:max-w-xs mx-auto"
-                        style={{ filter: 'drop-shadow(0 5px 0 #78350f)' }}
-                    >
-                        {/* Outer amber rim */}
-                        <div className="w-full rounded-full" style={{ background: 'linear-gradient(180deg,#fbbf24,#d97706)', padding: '3px 5px' }}>
-                            {/* Inner dark fill */}
-                            <div className="flex flex-1 items-center justify-center gap-2 md:gap-3 rounded-full py-3 md:py-4"
-                                style={{ background: 'linear-gradient(180deg,#78350f,#451a03)' }}
-                            >
-                                <motion.span
-                                    key={displayScore}
-                                    initial={{ y: -5, opacity: 0.8 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    transition={{ duration: 0.1 }}
-                                    className="text-3xl md:text-5xl font-black text-yellow-300 drop-shadow-[0_0_10px_rgba(250,204,21,0.6)]"
-                                >
-                                    {displayScore.toLocaleString()}
-                                </motion.span>
-                                <span className="text-xl md:text-2xl font-bold text-yellow-200 mt-1">XP</span>
-                            </div>
-                        </div>
+                    <div className="flex items-center justify-center mb-8 w-full max-w-[200px] md:max-w-[240px] mx-auto bg-yellow-400 text-[#1e3a8a] rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.2)] py-2 md:py-3 relative overflow-hidden group">
+                        <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
+                        <motion.span
+                            key={displayScore}
+                            initial={{ y: -5, opacity: 0.8 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.1 }}
+                            className="text-3xl md:text-4xl font-black relative z-10"
+                        >
+                            {displayScore.toLocaleString()}
+                        </motion.span>
+                        <span className="text-xl md:text-2xl font-black mt-1 ml-2 relative z-10">XP</span>
                     </div>
 
                     {/* Buttons — cartoon pill style */}
-                    <div className="flex flex-col sm:flex-row gap-3 md:gap-4 relative z-10 w-full max-w-lg mx-auto mt-auto">
+                    <div className="flex flex-col sm:flex-row gap-4 relative z-10 w-full max-w-md mx-auto mt-2 pb-4">
                         <button
                             onClick={handlePlayAgain}
-                            className="flex-1 font-black text-white uppercase tracking-wide py-3 md:py-4 rounded-full transition-all active:translate-y-1 active:shadow-none"
-                            style={{ background: 'linear-gradient(160deg,#1d4ed8,#1e40af)', border: '3px solid #60a5fa', boxShadow: '0 5px 0 #1e3a8a' }}
+                            className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-black uppercase tracking-widest text-base md:text-lg py-3 rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(29,78,216,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
                         >
-                            Chơi lại
+                            <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full"></div>
+                            <span className="relative z-10 group-hover:scale-105 transition-transform">Chơi lại</span>
                         </button>
                         <button
                             onClick={onLeaveGame}
-                            className="flex-1 font-black uppercase tracking-wide py-3 md:py-4 rounded-full transition-all active:translate-y-1 active:shadow-none"
-                            style={{ background: 'linear-gradient(160deg,#fbbf24,#d97706)', border: '3px solid #fde68a', boxShadow: '0 5px 0 #78350f', color: '#451a03' }}
+                            className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-widest text-base md:text-lg py-3 rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.3)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
                         >
-                            Về Menu chính
+                            <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
+                            <span className="relative z-10 group-hover:scale-105 transition-transform">Về Menu</span>
                         </button>
                     </div>
                 </div>

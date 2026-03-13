@@ -38,9 +38,10 @@ const LandingScreen = () => {
 
             {/* ── Cartoon background decorations ── */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-blue-400/30" />
-                <div className="absolute -bottom-16 -right-16 w-56 h-56 rounded-full bg-blue-400/20" />
-                <div className="absolute top-1/4 right-10 w-20 h-20 rounded-full bg-yellow-400/20" />
+                <div className="absolute top-0 w-full h-full bg-cover bg-center opacity-30 mix-blend-overlay" style={{ backgroundImage: "url('/src/assets/common/common_background.png')" }} />
+                <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-blue-300/30 blur-2xl flex items-center justify-center shadow-[inset_0_-8px_0_rgba(191,219,254,0.3)]" />
+                <div className="absolute -bottom-16 -right-16 w-56 h-56 rounded-full bg-blue-400/20 blur-xl" />
+                <div className="absolute top-1/4 right-10 w-24 h-24 rounded-full bg-yellow-400/20 blur-2xl" />
                 <div className="absolute bottom-1/3 left-8 w-16 h-16 rounded-full bg-white/10" />
                 <div
                     className="absolute inset-0 opacity-[0.06]"
@@ -73,9 +74,9 @@ const LandingScreen = () => {
                         </motion.div>
                     </div>
 
-                    <h1 className="text-3xl font-black tracking-tight text-white" style={{ textShadow: '0 3px 0 #1e3a8a' }}>
+                    <h1 className="text-3xl sm:text-4xl font-black tracking-widest text-center text-white drop-shadow-[0_4px_0_rgba(30,58,138,1)] uppercase" style={{ WebkitTextStroke: '1px #1e3a8a' }}>
                         Catholic{' '}
-                        <span className="text-yellow-300" style={{ textShadow: '0 3px 0 #b45309' }}>
+                        <span className="text-yellow-300 drop-shadow-[0_4px_0_rgba(180,83,9,1)]" style={{ WebkitTextStroke: '1px #78350f' }}>
                             Quiz!
                         </span>
                     </h1>
@@ -88,15 +89,16 @@ const LandingScreen = () => {
                 <motion.div variants={fadeUp} className="w-full">
                     <form onSubmit={handleJoin} className="flex flex-col gap-4">
 
-                        {/* Cartoon card wrapper */}
+                        {/* Cartoon card wrapper — deep blue card style */}
                         <div
-                            className="bg-white rounded-2xl p-4"
-                            style={{ border: '4px solid #1e3a8a', boxShadow: '0 6px 0 #1e3a8a' }}
+                            className="bg-[#3b82f6] p-4 sm:p-5 rounded-[1.5rem] md:rounded-[2rem] border-4 border-[#1e3a8a] shadow-[0_8px_0_rgba(30,58,138,1)] relative z-10 w-full"
                         >
+                            <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/6 rounded-t-3xl pointer-events-none" />
+
                             {/* Label */}
-                            <div className="flex items-center gap-2 text-blue-800 text-xs font-black tracking-widest uppercase mb-3">
-                                <KeyRound size={14} strokeWidth={3} />
-                                <span>Nhập Game PIN</span>
+                            <div className="flex items-center justify-center gap-2 text-yellow-300 text-sm font-black tracking-widest uppercase mb-4 drop-shadow-[0_2px_0_rgba(180,83,9,1)]">
+                                <KeyRound size={16} strokeWidth={3} className="text-yellow-300 drop-shadow-[0_2px_0_rgba(180,83,9,1)]" />
+                                <span style={{ WebkitTextStroke: '0.5px #78350f' }}>NHẬP GAME PIN</span>
                             </div>
 
                             {/* PIN boxes */}
@@ -108,16 +110,15 @@ const LandingScreen = () => {
                                 {boxes.map((char, i) => (
                                     <div
                                         key={i}
-                                        className="flex-1 h-12 rounded-xl flex items-center justify-center text-xl font-black transition-all duration-200"
+                                        className="flex-1 h-12 md:h-14 rounded-xl flex items-center justify-center text-xl md:text-2xl font-black transition-all duration-200"
                                         style={{
-                                            border: char
-                                                ? '2px solid #f59e0b'
-                                                : (focused && i === pin.length ? '2px solid #3b82f6' : '2px solid #cbd5e1'),
-                                            background: char ? '#fef3c7' : (focused && i === pin.length ? '#eff6ff' : '#f1f5f9'),
-                                            color: char ? '#b45309' : '#94a3b8',
+                                            border: '3px solid #1e3a8a',
+                                            background: char ? '#fbbf24' : (focused && i === pin.length ? '#fef3c7' : '#ffffff'),
+                                            color: char ? '#1e3a8a' : '#94a3b8',
                                             boxShadow: char
-                                                ? '0 3px 0 rgba(180,83,9,0.4)'
-                                                : (focused && i === pin.length ? '0 3px 0 rgba(59,130,246,0.3)' : '0 2px 0 rgba(148,163,184,0.3)'),
+                                                ? 'inset 0 -3px 0 rgba(180,83,9,0.3), 0 4px 0 rgba(30,58,138,1)'
+                                                : (focused && i === pin.length ? 'inset 0 -3px 0 rgba(191,219,254,1), 0 4px 0 rgba(30,58,138,1)' : 'inset 0 -3px 0 rgba(226,232,240,1), 0 4px 0 rgba(30,58,138,0.5)'),
+                                            transform: char ? 'translateY(-2px)' : 'none',
                                         }}
                                     >
                                         {char || (i === pin.length && focused ? (
@@ -149,20 +150,7 @@ const LandingScreen = () => {
                         <motion.button
                             type="submit"
                             disabled={!ready}
-                            whileTap={ready ? { y: 4 } : {}}
-                            className="w-full py-4 rounded-full flex items-center justify-center gap-2 text-base font-black uppercase tracking-widest transition-all duration-200 relative overflow-hidden"
-                            style={ready ? {
-                                background: '#facc15',
-                                color: '#1e3a8a',
-                                border: '4px solid #1e3a8a',
-                                boxShadow: '0 6px 0 #1e3a8a',
-                            } : {
-                                background: '#cbd5e1',
-                                color: '#94a3b8',
-                                border: '4px solid #94a3b8',
-                                boxShadow: '0 4px 0 #94a3b8',
-                                cursor: 'not-allowed',
-                            }}
+                            className="w-full bg-yellow-400 disabled:bg-slate-300 disabled:opacity-70 disabled:hover:bg-slate-300 hover:bg-yellow-300 text-[#1e3a8a] disabled:text-slate-500 font-black uppercase tracking-widest text-lg py-4 rounded-full border-4 border-[#1e3a8a] disabled:border-slate-500 shadow-[0_6px_0_rgba(30,58,138,1)] disabled:shadow-[0_4px_0_rgba(100,116,139,1)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center gap-2 relative overflow-hidden group hover:scale-[1.02] mt-2"
                         >
                             {ready && <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none" />}
                             <AnimatePresence mode="wait">
