@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import {
-    Users, User, Play, ArrowLeft, Trophy, Shield,
-    LogOut, Map, ChevronRight, ArrowRight, Hash, ChevronLeft,
+    Users, User, ArrowLeft, Trophy, Shield,
+    LogOut, Map, ChevronRight, ChevronLeft,
 } from 'lucide-react';
 import { getRankByScore } from '../../utils/ranks';
+import { useUserStore } from '../../store/userStore';
 import RankRoadmap from '../profile/RankRoadmap';
 import bgImage from '../../assets/common/common_background.png';
 
@@ -15,7 +16,7 @@ import imgGolgotha from '../../assets/games/thumb_golgotha.png';
 
 const GAMES = [
     { id: 'millionaire', title: 'Nhà Thần Học?', subtitle: 'Ai Là', image: imgMillionaire, from: '#8b5cf6', to: '#5b21b6', isSoloOnly: true },
-    { id: 'sorting', title: 'Giải ô chữ', subtitle: 'Sự Kiện', image: imgSorting, from: '#d97706', to: '#92400e', isSoloOnly: false },
+    { id: 'crossword', title: 'Giải ô chữ', subtitle: 'Ô Chữ', image: imgSorting, from: '#d97706', to: '#92400e', isSoloOnly: false },
     { id: 'golgotha', title: 'Đỉnh Golgotha', subtitle: 'Đường Lên', image: imgGolgotha, from: '#0ea5e9', to: '#0369a1', isSoloOnly: false },
 ];
 
@@ -103,7 +104,7 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
 
     // Scale font/spacing proportionally so cards look right at any size
     const titleSize   = Math.round(cardH * 0.082);
-    const badgeSize   = Math.round(cardH * 0.030);
+    const badgeSize   = Math.round(cardH * 0.039);
     const bottomOff   = Math.round(cardH * 0.088);
     const badgeOff    = Math.round(cardH * 0.300);
     const borderRad   = Math.round(cardH * 0.065); // ~24px at 364, ~14px at small
@@ -160,24 +161,30 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
                     </span>
                 </div>
 
-                {/* Stats badges: XP + plays */}
+                {/* Stats badges: XP + Coins + plays */}
                 <motion.div
                     initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="absolute left-0 right-0 flex justify-center gap-1.5 pointer-events-none select-none"
+                    className="absolute left-0 right-0 flex justify-center gap-1 pointer-events-none select-none"
                     style={{ bottom: badgeOff }}
                 >
                     <span
-                        className="flex items-center gap-0.5 font-black text-yellow-200 px-2 py-0.5 rounded-full"
+                        className="flex items-center gap-0.5 font-black text-yellow-200 px-1.5 py-0.5 rounded-full"
                         style={{ fontSize: badgeSize, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,220,50,0.25)' }}
                     >
-                        ⚡ {(stats?.xp || 0).toLocaleString()} XP
+                        🏆 {(stats?.xp || 0).toLocaleString()}
                     </span>
                     <span
-                        className="flex items-center gap-0.5 font-black text-white/70 px-2 py-0.5 rounded-full"
+                        className="flex items-center gap-0.5 font-black text-yellow-100 px-1.5 py-0.5 rounded-full"
+                        style={{ fontSize: badgeSize, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,200,50,0.2)' }}
+                    >
+                        🪙 {(stats?.coins || 0).toLocaleString()}
+                    </span>
+                    <span
+                        className="flex items-center gap-0.5 font-black text-white/70 px-1.5 py-0.5 rounded-full"
                         style={{ fontSize: badgeSize, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.15)' }}
                     >
-                        🎮 {stats?.plays || 0} lần
+                        🎮 {stats?.plays || 0}
                     </span>
                 </motion.div>
 
@@ -194,23 +201,25 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
 };
 
 /* ══ MainMenu ══ */
-const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName }) => {
+const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName, onOpenProfile, onLogout }) => {
     const containerRef = useRef(null);
     const cwRef = useRef(0);
     const dragX = useMotionValue(0);
     const cardDimsRef = useRef({ cardW: BASE_CARD_W, cardH: BASE_CARD_H, step: Math.round(BASE_CARD_W * MAX_SC) + GAP });
 
     const [snapped, setSnapped] = useState(0);
-    const [selectedGame, setSelectedGame] = useState(null);
-    const [showModes, setShowModes] = useState(false);
+    const [selectedGame, setSelectedGame] = useState(returnToGame || null);
+    // modeView: 'home' | 'p2p'
+    const [modeView, setModeView] = useState('home');
+    const [showModes, setShowModes] = useState(!!returnToGame);
     const [profileOpen, setProfileOpen] = useState(false);
     const [showRoadmap, setShowRoadmap] = useState(false);
-    const [pin, setPin] = useState('');
-    const [pinFocused, setPinFocused] = useState(false);
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [ready, setReady] = useState(false);
     const [cardDims, setCardDims] = useState({ cardW: BASE_CARD_W, cardH: BASE_CARD_H, step: Math.round(BASE_CARD_W * MAX_SC) + GAP });
     const [isLandscape, setIsLandscape] = useState(false);
-    const profileRef = useRef(null);
+
+    const { coins } = useUserStore();
 
     /* Measure → set cwRef + card dims based on available height, then centre card-0 */
     useEffect(() => {
@@ -262,18 +271,23 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
         navigateTo(Math.round(rawIdx + vBias));
     }, [dragX, navigateTo]);
 
-    useEffect(() => {
-        const h = (e) => { if (profileRef.current && !profileRef.current.contains(e.target)) setProfileOpen(false); };
-        document.addEventListener('mousedown', h);
-        return () => document.removeEventListener('mousedown', h);
-    }, []);
+
 
     const handleSelect = (id) => {
         const g = GAMES.find(g => g.id === id);
         if (g?.isSoloOnly) onCreateGame(id, 'solo');
-        else { setSelectedGame(id); setShowModes(true); }
+        else { setSelectedGame(id); setShowModes(true); setModeView('home'); }
     };
-    const handleBack = () => { setShowModes(false); setTimeout(() => setSelectedGame(null), 300); };
+    const handleBack = () => {
+        if (modeView === 'p2p') { setModeView('home'); }
+        else { setShowModes(false); onClearReturn?.(); setTimeout(() => setSelectedGame(null), 300); }
+    };
+    const handleModeSelect = (mode) => {
+        if (mode === 'host') onCreateGame(selectedGame, 'p2p_private');
+        else if (mode === 'auto_match') onCreateGame(selectedGame, 'p2p_public');
+        else if (mode === 'join_pin') onJoinRoom('');
+        else onCreateGame(selectedGame, mode);
+    };
 
     const rankName = user ? getRankByScore(user.score || 0) : 'Người Tìm Hiểu';
 
@@ -313,10 +327,10 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
                         <span className="text-blue-200/70 text-xs font-bold italic">Học hỏi Lời Chúa qua trò chơi</span>
                     </div>
 
-                    {/* User button */}
-                    <div ref={profileRef} className="relative flex-shrink-0 ml-auto">
+                    {/* User button — opens quick profile menu */}
+                    <div className="relative flex-shrink-0 ml-auto">
                         <motion.button whileTap={{ y: 2 }}
-                            onClick={() => setProfileOpen(!profileOpen)}
+                            onClick={() => setShowProfileMenu(v => !v)}
                             className="flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
                             style={{ border: '2px solid rgba(255,255,255,0.5)', boxShadow: '0 3px 0 rgba(30,58,138,0.6)' }}>
                             <div className="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center font-black text-amber-800 text-xs flex-shrink-0"
@@ -325,40 +339,84 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
                             </div>
                             <div className="flex flex-col text-left">
                                 <span className="font-black text-white text-xs leading-none">{user.name}</span>
-                                <span className="text-yellow-300 text-[9px] flex items-center gap-0.5 mt-0.5 font-bold">
-                                    <Trophy size={8} /> {(user.score || 0).toLocaleString()} XP
+                                <span className="flex items-center gap-1.5 mt-0.5">
+                                    <span className="text-yellow-300 text-[9px] flex items-center gap-0.5 font-bold">
+                                        🏆 {(user.score || 0).toLocaleString()}
+                                    </span>
+                                    <span className="text-yellow-200/60 text-[9px] flex items-center gap-0.5 font-bold">
+                                        🪙 {(coins || 0).toLocaleString()}
+                                    </span>
                                 </span>
                             </div>
-                            <ChevronRight size={11} className={`text-white/60 transition-transform ${profileOpen ? 'rotate-90' : ''}`} />
+                            <ChevronRight size={11} className={`text-white/60 transition-transform ${showProfileMenu ? 'rotate-90' : ''}`} />
                         </motion.button>
 
+                        {/* Profile Quick Menu Dropdown */}
                         <AnimatePresence>
-                            {profileOpen && (
-                                <motion.div initial={{ opacity: 0, y: -6, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
-                                    className="absolute top-full mt-2 right-0 w-52 z-50 rounded-2xl overflow-hidden"
-                                    style={{ background: '#1e3a8a', border: '3px solid #1e40af', boxShadow: '0 6px 0 rgba(30,58,138,0.8)' }}>
-                                    <div className="p-2.5 border-b border-white/10">
-                                        {user.isGuest
-                                            ? <span className="flex items-center gap-1.5 text-xs font-bold text-orange-300 bg-orange-400/20 px-2.5 py-1.5 rounded-lg"><User size={10} /> Khách</span>
-                                            : <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-300 bg-emerald-400/20 px-2.5 py-1.5 rounded-lg"><Shield size={10} /> Đã bảo vệ</span>}
-                                    </div>
-                                    <div className="p-1.5 space-y-0.5">
-                                        {user.isGuest && (
-                                            <button onClick={onLinkAccount} className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-white/80 hover:bg-white/10 rounded-xl text-left">
-                                                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="" className="w-3.5 h-3.5" /> Liên kết Google
+                            {showProfileMenu && (
+                                <>
+                                    {/* Backdrop */}
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        className="fixed inset-0 z-[90]"
+                                        onClick={() => setShowProfileMenu(false)}
+                                    />
+                                    {/* Dropdown */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                                        transition={{ duration: 0.15 }}
+                                        className="absolute right-0 top-full mt-2 z-[100] w-56 rounded-2xl overflow-hidden"
+                                        style={{ background: 'linear-gradient(180deg,#1e3a8a,#1e40af)', border: '3px solid #60a5fa', boxShadow: '0 8px 24px rgba(0,0,0,0.5), 0 4px 0 #1e3a8a' }}
+                                    >
+                                        {/* Quick stats */}
+                                        <div className="px-4 py-3 border-b border-blue-500/30">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <div className="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center font-black text-amber-800 text-sm"
+                                                    style={{ border: '2px solid #b45309' }}>
+                                                    {(user.name || 'K')[0].toUpperCase()}
+                                                </div>
+                                                <div>
+                                                    <p className="font-black text-white text-sm leading-none">{user.name}</p>
+                                                    <p className="text-blue-200/70 text-[10px] font-bold mt-0.5">{getRankByScore(user.score || 0)?.title || 'Người Tìm Hiểu'}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-3">
+                                                <span className="text-yellow-300 text-xs font-bold flex items-center gap-1">🏆 {(user.score || 0).toLocaleString()} XP</span>
+                                                <span className="text-yellow-200/80 text-xs font-bold flex items-center gap-1">🪙 {(coins || 0).toLocaleString()}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Menu items */}
+                                        <div className="py-1">
+                                            <button
+                                                onClick={() => { setShowProfileMenu(false); onOpenProfile(); }}
+                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-white/90 hover:bg-white/10 transition-colors text-left"
+                                            >
+                                                <User size={16} className="text-blue-300 shrink-0" />
+                                                <span className="font-bold text-sm">Xem chi tiết</span>
                                             </button>
-                                        )}
-                                        <button onClick={() => setShowRoadmap(true)} className="w-full flex items-center justify-between px-3 py-2 text-xs font-bold text-yellow-300 hover:bg-yellow-400/10 rounded-xl text-left group">
-                                            <span className="flex items-center gap-2"><Map size={12} /> Hành trình vươn đỉnh</span>
-                                            <ChevronRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
-                                        </button>
-                                        {!user.isGuest && (
-                                            <button onClick={() => window.location.reload()} className="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold text-red-400 hover:bg-red-400/10 rounded-xl text-left">
-                                                Đăng xuất <LogOut size={11} />
+                                            <button
+                                                onClick={() => { setShowProfileMenu(false); setShowRoadmap(true); }}
+                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-white/90 hover:bg-white/10 transition-colors text-left"
+                                            >
+                                                <Map size={16} className="text-green-300 shrink-0" />
+                                                <span className="font-bold text-sm">Xem Roadmap</span>
                                             </button>
-                                        )}
-                                    </div>
-                                </motion.div>
+                                            <div className="border-t border-blue-500/30 my-1" />
+                                            <button
+                                                onClick={() => { setShowProfileMenu(false); if (onLogout) onLogout(); }}
+                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-red-300 hover:bg-red-500/10 transition-colors text-left"
+                                            >
+                                                <LogOut size={16} className="shrink-0" />
+                                                <span className="font-bold text-sm">Đăng xuất</span>
+                                            </button>
+                                        </div>
+                                    </motion.div>
+                                </>
                             )}
                         </AnimatePresence>
                     </div>
@@ -384,32 +442,26 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
                 {/* PIN / Modes */}
                 <AnimatePresence mode="popLayout">
                     {!showModes ? (
+                        /* ── Khi chưa chọn game ── */
                         <motion.div layout key="pin" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                             className="flex-shrink-0 w-full max-w-xs px-4 md:px-0">
-                            <div className="flex items-center gap-2 rounded-2xl px-4 py-2.5" style={{
-                                background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(14px)',
-                                border: pinFocused ? '1.5px solid rgba(251,191,36,0.7)' : '1.5px solid rgba(255,255,255,0.15)',
-                                boxShadow: pinFocused ? '0 0 24px rgba(245,158,11,0.3)' : '0 4px 20px rgba(0,0,0,0.4)',
-                                transition: 'border-color .25s,box-shadow .25s',
-                            }}>
-                                <Hash size={13} className="text-white/35 shrink-0" />
-                                <input type="text" value={pin}
-                                    onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                                    onFocus={() => setPinFocused(true)} onBlur={() => setPinFocused(false)}
-                                    placeholder="Nhập PIN phòng..." maxLength={6}
-                                    className="flex-1 bg-transparent text-white placeholder-white/25 font-bold tracking-[0.2em] text-sm outline-none" />
-                                <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                                    onClick={() => pin.length >= 4 && onJoinRoom(pin)} disabled={pin.length < 4}
-                                    className="w-7 h-7 rounded-xl flex items-center justify-center flex-shrink-0"
-                                    style={pin.length >= 4
-                                        ? { background: 'linear-gradient(135deg,#fbbf24,#d97706)', boxShadow: '0 2px 12px rgba(217,119,6,0.5)' }
-                                        : { background: 'rgba(255,255,255,0.08)', opacity: 0.35 }}>
-                                    <ArrowRight size={13} className="text-white" />
-                                </motion.button>
-                            </div>
+                            <motion.button
+                                whileTap={{ scale: 0.96 }}
+                                onClick={() => onJoinRoom('')}
+                                className="w-full flex items-center gap-3 px-4 py-2.5 rounded-2xl"
+                                style={{
+                                    background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(14px)',
+                                    border: '1.5px solid rgba(255,255,255,0.15)',
+                                    boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+                                }}>
+                                <span className="text-white/40 shrink-0 text-xs">#</span>
+                                <span className="flex-1 text-white/40 font-bold tracking-[0.15em] text-sm text-left">Nhập PIN phòng bạn bè...</span>
+                                <span className="text-white/30 text-xs">→</span>
+                            </motion.button>
                         </motion.div>
-                    ) : (
-                        <motion.div layout key="modes" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                    ) : modeView === 'home' ? (
+                        /* ── TẦNG 1: Solo vs P2P ── */
+                        <motion.div layout key="modes-home" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
                             className="flex-shrink-0 w-full max-w-sm px-4 flex flex-col gap-3">
                             <div className="flex items-center gap-2">
                                 <motion.button whileHover={{ x: -2 }} onClick={handleBack}
@@ -418,63 +470,105 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
                                 </motion.button>
                                 <span className="font-black text-white text-base drop-shadow">{GAMES.find(g => g.id === selectedGame)?.title}</span>
                             </div>
-                            <div className="flex flex-col gap-3 w-full">
-                                {[
-                                    { icon: User, label: 'Chơi Đơn', desc: 'Tích lũy XP & rèn luyện', color: 'emerald', mode: 'solo' },
-                                    ...(!GAMES.find(g => g.id === selectedGame)?.isSoloOnly ? [
-                                        { icon: Users, label: 'Tạo Phòng', desc: 'Làm chủ phòng, thiết lập luật', color: 'blue', mode: 'host' },
-                                        { icon: Play, label: 'Tìm Trận', desc: 'Ghép ngẫu nhiên online', color: 'amber', mode: 'p2p_public' },
-                                    ] : [])
-                                ].map(({ icon: Icon, label, desc, color, mode }) => {
-                                    const colorStyles = {
-                                        emerald: {
-                                            bg: 'bg-emerald-500',
-                                            border: 'border-2 border-emerald-700',
-                                            shadow: 'shadow-[0_4px_0_theme(colors.emerald.700)] active:shadow-none active:translate-y-[4px]',
-                                            iconBg: 'bg-emerald-300',
-                                            iconText: 'text-emerald-900',
-                                            text: 'text-white drop-shadow-[0_2px_0_theme(colors.emerald.700)]'
-                                        },
-                                        blue: {
-                                            bg: 'bg-blue-500',
-                                            border: 'border-2 border-blue-700',
-                                            shadow: 'shadow-[0_4px_0_theme(colors.blue.700)] active:shadow-none active:translate-y-[4px]',
-                                            iconBg: 'bg-blue-300',
-                                            iconText: 'text-blue-900',
-                                            text: 'text-white drop-shadow-[0_2px_0_theme(colors.blue.700)]'
-                                        },
-                                        amber: {
-                                            bg: 'bg-amber-500',
-                                            border: 'border-2 border-amber-700',
-                                            shadow: 'shadow-[0_4px_0_theme(colors.amber.700)] active:shadow-none active:translate-y-[4px]',
-                                            iconBg: 'bg-amber-300',
-                                            iconText: 'text-amber-900',
-                                            text: 'text-white drop-shadow-[0_2px_0_theme(colors.amber.700)]'
-                                        }
-                                    }[color];
+                            <div className="flex flex-col gap-3">
+                                {/* SOLO */}
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 3 }}
+                                    onClick={() => handleModeSelect('solo')}
+                                    className="relative flex items-center gap-4 p-4 rounded-2xl w-full text-left group overflow-hidden"
+                                    style={{ background: '#10b981', border: '2px solid #065f46', boxShadow: '0 5px 0 #065f46' }}>
+                                    <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <div className="w-14 h-14 rounded-xl bg-emerald-300 flex items-center justify-center shrink-0 border-2 border-black/20">
+                                        <User size={26} strokeWidth={2.5} className="text-emerald-900" />
+                                    </div>
+                                    <div className="flex-1 z-10">
+                                        <p className="font-black text-2xl text-white" style={{ textShadow: '0 2px 0 #065f46' }}>Chơi Đơn</p>
+                                        <p className="text-emerald-100 text-sm font-semibold mt-0.5">Tích lũy XP &amp; rèn luyện kỹ năng</p>
+                                    </div>
+                                    <ChevronRight size={26} strokeWidth={3} className="text-white/60 group-hover:text-white z-10" />
+                                </motion.button>
 
-                                    return (
-                                        <motion.button key={mode}
-                                            whileHover={{ scale: 1.02 }}
-                                            whileTap={{ scale: 0.98 }}
-                                            onClick={() => onCreateGame(selectedGame, mode)}
-                                            className={`relative flex items-center gap-4 p-4 rounded-2xl w-full text-left transition-transform duration-200 group ${colorStyles.bg} ${colorStyles.border} ${colorStyles.shadow}`}
-                                        >
-                                            <div className={`w-12 h-12 rounded-xl ${colorStyles.iconBg} flex items-center justify-center shrink-0 border-2 border-black/20 relative z-10`}>
-                                                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
-                                                <Icon size={22} strokeWidth={2.5} className={`${colorStyles.iconText}`} />
-                                            </div>
-
-                                            <div className="flex-1 flex flex-col z-10">
-                                                <span className={`font-black text-xl tracking-wide leading-tight ${colorStyles.text}`}>{label}</span>
-                                                <span className="text-white/90 text-[13px] font-bold mt-0.5 custom-stroke drop-shadow-md">{desc}</span>
-                                            </div>
-
-                                            <ChevronRight size={24} strokeWidth={3} className="text-white/50 group-hover:text-white transition-colors z-10 drop-shadow-md" />
-                                        </motion.button>
-                                    );
-                                })}
+                                {/* P2P */}
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 3 }}
+                                    onClick={() => setModeView('p2p')}
+                                    className="relative flex items-center gap-4 p-4 rounded-2xl w-full text-left group overflow-hidden"
+                                    style={{ background: '#2563eb', border: '2px solid #1e3a8a', boxShadow: '0 5px 0 #1e3a8a' }}>
+                                    <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <div className="w-14 h-14 rounded-xl bg-blue-300 flex items-center justify-center shrink-0 border-2 border-black/20">
+                                        <Users size={26} strokeWidth={2.5} className="text-blue-900" />
+                                    </div>
+                                    <div className="flex-1 z-10">
+                                        <p className="font-black text-2xl text-white" style={{ textShadow: '0 2px 0 #1e3a8a' }}>Đấu Online</p>
+                                        <p className="text-blue-100 text-sm font-semibold mt-0.5">Thi đấu với người chơi khác</p>
+                                    </div>
+                                    <ChevronRight size={26} strokeWidth={3} className="text-white/60 group-hover:text-white z-10" />
+                                </motion.button>
                             </div>
+                        </motion.div>
+                    ) : (
+                        /* ── TẦNG 2: P2P Sub-menu ── */
+                        <motion.div layout key="modes-p2p" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }}
+                            className="flex-shrink-0 w-full max-w-sm px-4 flex flex-col gap-2.5">
+                            <div className="flex items-center gap-2">
+                                <motion.button whileHover={{ x: -2 }} onClick={handleBack}
+                                    className="flex items-center gap-1 text-xs font-semibold text-white/70 hover:text-white bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-white/10">
+                                    <ArrowLeft size={12} /> Quay lại
+                                </motion.button>
+                                <span className="font-black text-white/80 text-sm">Đấu Online · {GAMES.find(g => g.id === selectedGame)?.title}</span>
+                            </div>
+
+                            {/* AUTO MATCH */}
+                            <motion.button
+                                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 2 }}
+                                onClick={() => handleModeSelect('auto_match')}
+                                className="relative flex items-center gap-3 px-4 py-3.5 rounded-2xl w-full text-left group overflow-hidden"
+                                style={{ background: '#d97706', border: '2px solid #92400e', boxShadow: '0 4px 0 #92400e' }}>
+                                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className="w-11 h-11 rounded-xl bg-amber-300 flex items-center justify-center shrink-0 border-2 border-black/20 text-xl">🎯</div>
+                                <div className="flex-1 z-10">
+                                    <p className="font-black text-lg text-white" style={{ textShadow: '0 2px 0 #92400e' }}>Auto Match</p>
+                                    <p className="text-amber-100 text-xs font-semibold">Tự động tìm đối thủ · Bot nếu không có ai</p>
+                                </div>
+                                <ChevronRight size={20} strokeWidth={3} className="text-white/60 group-hover:text-white z-10" />
+                            </motion.button>
+
+                            {/* DIVIDER */}
+                            <div className="flex items-center gap-2 px-1">
+                                <div className="flex-1 h-px bg-white/15" />
+                                <span className="text-white/30 text-[10px] font-black tracking-widest uppercase">hoặc</span>
+                                <div className="flex-1 h-px bg-white/15" />
+                            </div>
+
+                            {/* JOIN WITH PIN */}
+                            <motion.button
+                                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 2 }}
+                                onClick={() => handleModeSelect('join_pin')}
+                                className="relative flex items-center gap-3 px-4 py-3.5 rounded-2xl w-full text-left group overflow-hidden"
+                                style={{ background: 'rgba(255,255,255,0.08)', border: '2px solid rgba(255,255,255,0.2)', boxShadow: '0 3px 0 rgba(0,0,0,0.3)', backdropFilter: 'blur(12px)' }}>
+                                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center shrink-0 border-2 border-white/20 text-xl">🔑</div>
+                                <div className="flex-1 z-10">
+                                    <p className="font-black text-lg text-white">Join With PIN</p>
+                                    <p className="text-white/50 text-xs font-semibold">Nhập mã PIN 6 số để vào phòng bạn bè</p>
+                                </div>
+                                <ChevronRight size={20} strokeWidth={3} className="text-white/30 group-hover:text-white/70 z-10" />
+                            </motion.button>
+
+                            {/* CREATE ROOM */}
+                            <motion.button
+                                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 2 }}
+                                onClick={() => handleModeSelect('host')}
+                                className="relative flex items-center gap-3 px-4 py-3.5 rounded-2xl w-full text-left group overflow-hidden"
+                                style={{ background: 'rgba(255,255,255,0.08)', border: '2px solid rgba(255,255,255,0.2)', boxShadow: '0 3px 0 rgba(0,0,0,0.3)', backdropFilter: 'blur(12px)' }}>
+                                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center shrink-0 border-2 border-white/20 text-xl">🏠</div>
+                                <div className="flex-1 z-10">
+                                    <p className="font-black text-lg text-white">Create Room</p>
+                                    <p className="text-white/50 text-xs font-semibold">Tạo phòng riêng · Chia sẻ PIN cho bạn bè</p>
+                                </div>
+                                <ChevronRight size={20} strokeWidth={3} className="text-white/30 group-hover:text-white/70 z-10" />
+                            </motion.button>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -563,6 +657,7 @@ const MainMenu = ({ user, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName 
                     </motion.div>
                 )}
             </motion.div>
+
         </div>
     );
 };

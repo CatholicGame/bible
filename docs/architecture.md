@@ -15,24 +15,33 @@
  ├── /assets           # Images, SVGs, audio effects
  ├── /components
  │    ├── /common      # Buttons, Inputs, Modal, Spinners
- │    ├── /lobby       # Public Lobby UI & Matchmaking Status
- │    ├── /host        # Host views: Dashboard, PIN projector
- │    ├── /player      # Player views: PIN Entry
+ │    ├── /menu        # CreateRoom, JoinRoom, WaitingRoom screens
  │    └── /games       # 🌟 Mini-Game Modules (The Platform Engine)
- │         ├── /quiz          # 4-option Quiz Game Logic & UI
- │         ├── /true_false    # True/False Binary Game
- │         ├── /sorting       # Chronological Sorting Game
- │         └── GameEngine.jsx # Router that lazy-loads the correct game based on room.gameType
+ │         ├── /quiz          # Quiz: QuizGame.jsx, QuizSolo.jsx, QuizP2P.jsx
+ │         ├── /crossword     # Crossword: CrosswordGame.jsx, ...Solo, ...P2P
+ │         ├── /sorting       # Sorting: SortingGame.jsx, ...Solo, ...P2P
+ │         └── GameEngine.jsx # Router lazy-load game theo (gameType, mode)
  ├── /config           # Firebase config, SheetDB endpoints
- ├── /hooks            # Custom React hooks (useFirebaseSync, useMatchmaking)
- ├── /store            # Zustand global stores (gameStore.js, userStore.js)
- ├── /utils            # Score calculators, time formatters, sound players
+ ├── /hooks            # Custom hooks:
+ │    ├── useRoom.js         # Tạo/join/rời phòng
+ │    ├── useGameSync.js     # Sync progress P2P real-time
+ │    └── usePresence.js     # Online/offline detection
+ ├── /store            # Zustand stores:
+ │    ├── gameStore.js       # Game state (progress, status)
+ │    ├── roomStore.js       # Room state (roomId, role, opponent)
+ │    └── userStore.js       # User profile, global_score
+ ├── /utils            # Score calculators, xpCalculator.js, sound players
  ├── App.jsx           # Main routing entry point
  └── index.css         # Tailwind directives and generic globals
 /docs
  ├── PROJECT_RULES.md
- ├── database_schema.md
- └── architecture.md
+ ├── architecture.md          # (file này)
+ ├── database_schema.md       # Firebase DB schema chi tiết
+ └── /multi_frameworks        # 🌟 Cơ chế multiplayer & game templates
+      ├── multiplayer_framework.md  # Cơ chế Solo/2P, hooks, security rules
+      ├── screen_flow.md            # Luồng màn hình từng mode
+      ├── game_template.md          # Template tái sử dụng cho game mới
+      └── matchmaking_and_bot.md    # Auto matchmaking & Bot system
 ```
 
 ## Security Rules

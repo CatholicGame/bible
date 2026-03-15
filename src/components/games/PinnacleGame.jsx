@@ -163,8 +163,12 @@ const DUMMY_QUESTIONS = [
     { question: "Vị ngôn sứ nào đã bị ném vào hang sư tử nhưng không bị ăn thịt?", options: ["Isaia", "Môse", "Đanien", "Giêrêmia"], answer: 2, explanation: "Dù bị ném vào hang sư tử vì giữ vững đức tin dâng lời cầu nguyện với Chúa, ngôn sứ **Đanien** vẫn được Thiên Thần bảo vệ bình an vô sự." }
 ];
 
-// Balanced points so ranking correctly requires dedication (Max 5,000 XP per 15-question run).
-const REWARDS = [10, 20, 30, 40, 50, 100, 150, 200, 300, 500, 800, 1200, 2000, 3000, 5000];
+// Coins earned per question level (cumulative, max 1000 coins at Q15).
+const REWARDS = [5, 10, 20, 30, 50, 75, 100, 140, 190, 250, 350, 450, 600, 800, 1000];
+
+// XP per question = question number (Q1=1, Q2=2, ... Q15=15, total 120 XP)
+const XP_REWARDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+const XP_CUMULATIVE = XP_REWARDS.map((_, i) => XP_REWARDS.slice(0, i + 1).reduce((a, b) => a + b, 0));
 
 // Safe Milestone indices (0-indexed, so 4 is Question 5, 9 is Question 10)
 const MILESTONES = [4, 9, 14];
@@ -413,7 +417,9 @@ const PinnacleGame = ({ onLeaveGame }) => {
 
     // XP Particle animation
     const [xpParticles, setXpParticles] = useState([]);
-    const [displayScore, setDisplayScore] = useState(0);  // animated display value
+    const [displayScore, setDisplayScore] = useState(0);  // animated coin display
+    const [xpScore, setXpScore] = useState(0);             // current XP earned
+    const [displayXpScore, setDisplayXpScore] = useState(0); // animated XP display
     const [spotlightFlash, setSpotlightFlash] = useState(0); // increments on correct answer → brief flicker
     const [spotlightSwing, setSpotlightSwing] = useState(0); // increments on milestone → 3s dramatic swing
     const [spotlightWrong, setSpotlightWrong] = useState(0); // increments on wrong answer → dim converge shake
@@ -441,10 +447,14 @@ const PinnacleGame = ({ onLeaveGame }) => {
         if (gameState === 'playing' && introPhase === 4 && !isAnswerRevealed && !isSwapping) {
             const pool = MC_MESSAGES[currentQuestionIndex].start;
             const msg = pool[Math.floor(Math.random() * pool.length)];
-            setMcMessage(msg);
-            setShowMcBubble(true);
-            const timer = setTimeout(() => setShowMcBubble(false), 4000); // 4 secs display
-            return () => clearTimeout(timer);
+            // For Q1: wait for question + options to fully animate in before MC speaks
+            const mcDelay = currentQuestionIndex === 0 ? 1500 : 0;
+            const showTimer = setTimeout(() => {
+                setMcMessage(msg);
+                setShowMcBubble(true);
+            }, mcDelay);
+            const hideTimer = setTimeout(() => setShowMcBubble(false), mcDelay + 4000);
+            return () => { clearTimeout(showTimer); clearTimeout(hideTimer); };
         }
     }, [currentQuestionIndex, gameState, introPhase, isAnswerRevealed, isSwapping]);
 
@@ -535,6 +545,22 @@ const PinnacleGame = ({ onLeaveGame }) => {
         }, interval);
         return () => clearInterval(id);
     }, [score]);
+
+    // Count up displayXpScore toward xpScore
+    useEffect(() => {
+        if (xpScore <= displayXpScore) return;
+        const diff = xpScore - displayXpScore;
+        const steps = Math.min(diff, 20);
+        const stepValue = Math.ceil(diff / steps);
+        const interval = 400 / steps;
+        let current = displayXpScore;
+        const id = setInterval(() => {
+            current = Math.min(current + stepValue, xpScore);
+            setDisplayXpScore(current);
+            if (current >= xpScore) clearInterval(id);
+        }, interval);
+        return () => clearInterval(id);
+    }, [xpScore]);
 
     const getEncouragement = (index) => {
         let text, colorClass;
@@ -684,7 +710,10 @@ const PinnacleGame = ({ onLeaveGame }) => {
             spawnXPParticles(currentQuestionIndex);
 
             // Delay score update to match first particle arrival (~1.36s)
-            setTimeout(() => setScore(reward), 1360);
+            setTimeout(() => {
+                setScore(reward);
+                setXpScore(XP_CUMULATIVE[currentQuestionIndex]);
+            }, 1360);
         } else {
             // SFX: incorrect answer
             playAudio(sfxIncorrect, 0.8);
@@ -775,6 +804,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
         setCurrentQuestionIndex(0);
         setScore(0);
         setDisplayScore(0);
+        setXpScore(0);
+        setDisplayXpScore(0);
         setXpParticles([]);
         resetTurnState();
 
@@ -1031,7 +1062,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                         ease: ['easeOut', 'easeIn', 'easeIn'],
                     }}
                 >
-                    <Star size={p.size} fill="#f59e0b" className="text-amber-400 drop-shadow-[0_0_8px_rgba(245,158,11,1)]" />
+                    <span style={{ fontSize: p.size, filter: 'drop-shadow(0 0 6px rgba(245,158,11,0.9))' }}>🪙</span>
                 </motion.div>
             ))}
             {/* Background Image */}
@@ -1080,7 +1111,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             {/* Rules card */}
                             <div className="space-y-3 mb-5 text-blue-950 bg-white p-4 sm:p-5 rounded-xl border-3 border-blue-300 shadow-[inset_0_-4px_0_rgba(191,219,254,1),0_5px_0_rgba(30,58,138,0.5)] text-sm sm:text-base font-bold leading-relaxed">
                                 <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">1</span> <span className="pt-0.5">Bạn sẽ trải qua 15 câu hỏi liên tiếp từ dễ đến khó.</span></div>
-                                <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">2</span> <span className="pt-0.5">Vượt qua mỗi câu hỏi, bạn sẽ tích lũy được điểm XP vô cùng giá trị.</span></div>
+                                <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">2</span> <span className="pt-0.5">Vượt qua mỗi câu hỏi, bạn sẽ tích lũy được 🪙 Coins. Cuối trận sẽ nhận thêm 🏆 XP.</span></div>
                                 <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">3</span> <span className="pt-0.5">Cột mốc an toàn: Câu 5 và Câu 10. Trả lời sai sau cột mốc sẽ giữ được điểm của cột mốc đó.</span></div>
                                 <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">4</span> <span className="pt-0.5">Bạn có 4 quyền trợ giúp để sử dụng một lần duy nhất.</span></div>
                             </div>
@@ -1164,8 +1195,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                     <ArrowLeft size={15} strokeWidth={3} /> Thoát
                                 </button>
 
-                                {/* Lifelines — centered */}
-                                <div className="flex gap-2">
+                                {/* Lifelines — visible only in landscape */}
+                                <div className="hidden landscape:flex lg:flex gap-2">
                                     <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={introPhase >= 2 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }} transition={{ delay: 0.1, duration: 0.4 }}>
                                         <LifelineButton text="50:50" isUsed={lifelines.fiftyFifty} disabled={isAnswerRevealed} onClick={useFiftyFifty} />
                                     </motion.div>
@@ -1180,21 +1211,40 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                     </motion.div>
                                 </div>
 
-                                {/* XP badge — cartoon pill */}
-                                <div ref={xpBadgeRef}
-                                    className="flex items-center gap-1.5 px-3 py-2 rounded-full"
-                                    style={{ background: 'linear-gradient(160deg,#92400e,#b45309)', border: '3px solid #f59e0b', boxShadow: '0 4px 0 #78350f' }}
-                                >
-                                    <Star size={13} fill="currentColor" className="text-yellow-200 shrink-0" />
-                                    <motion.span
-                                        key={displayScore}
-                                        initial={{ scale: 1.4 }}
-                                        animate={{ scale: 1 }}
-                                        transition={{ duration: 0.25 }}
-                                        className="font-black text-sm text-yellow-100 tracking-wide"
+                                {/* Coin + XP badges group */}
+                                <div className="flex items-center gap-1.5">
+                                    {/* Coins badge */}
+                                    <div ref={xpBadgeRef}
+                                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-full"
+                                        style={{ background: 'linear-gradient(160deg,#92400e,#b45309)', border: '2.5px solid #f59e0b', boxShadow: '0 3px 0 #78350f' }}
                                     >
-                                        {displayScore.toLocaleString()} XP
-                                    </motion.span>
+                                        <span className="text-xs shrink-0">🪙</span>
+                                        <motion.span
+                                            key={displayScore}
+                                            initial={{ scale: 1.3 }}
+                                            animate={{ scale: 1 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="font-black text-xs text-yellow-100 tracking-wide"
+                                        >
+                                            {displayScore.toLocaleString()}
+                                        </motion.span>
+                                    </div>
+                                    {/* XP badge */}
+                                    <div
+                                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-full"
+                                        style={{ background: 'linear-gradient(160deg,#78350f,#92400e)', border: '2.5px solid #d97706', boxShadow: '0 3px 0 #451a03' }}
+                                    >
+                                        <span className="text-xs shrink-0">🏆</span>
+                                        <motion.span
+                                            key={displayXpScore}
+                                            initial={{ scale: 1.3 }}
+                                            animate={{ scale: 1 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="font-black text-xs text-amber-100 tracking-wide"
+                                        >
+                                            {displayXpScore.toLocaleString()}
+                                        </motion.span>
+                                    </div>
                                 </div>
                             </motion.div>
 
@@ -1459,7 +1509,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             <div className="flex-1 flex flex-col landscape:flex-row lg:flex-row w-full max-w-7xl mx-auto overflow-hidden gap-2 landscape:gap-4 lg:gap-8 pb-2 px-2 lg:px-4">
 
                                 {/* Left Side: Timer & Question Board */}
-                                <div className="flex-1 w-full order-2 landscape:order-1 lg:order-1 flex flex-col pt-2 pb-0 landscape:pb-2 lg:pb-8 h-[75vh] landscape:h-full lg:h-full justify-between items-center z-20 relative overflow-visible mt-auto md:mt-0">
+                                <div className="flex-1 w-full order-3 landscape:order-1 lg:order-1 flex flex-col pt-2 pb-0 landscape:pb-2 lg:pb-8 h-[75vh] landscape:h-full lg:h-full justify-between items-center z-20 relative overflow-visible mt-auto md:mt-0">
 
                                     {/* MC Character */}
                                     <motion.div
@@ -1764,7 +1814,10 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                                         <Flag size={11} className="shrink-0" style={{ color: textColor }} fill="currentColor" />
                                                                     )}
                                                                 </div>
-                                                                <span className={`text-sm relative z-10 ${isMilestone && !isCurrent ? 'font-bold' : 'font-semibold'}`} style={{ color: textColor }}>{reward.toLocaleString()}</span>
+                                                                <div className="flex items-center gap-2 relative z-10">
+                                                                    <span className={`text-xs ${isMilestone && !isCurrent ? 'font-bold' : 'font-semibold'}`} style={{ color: textColor }}>🏆{XP_CUMULATIVE[idx]}</span>
+                                                                    <span className={`text-sm ${isMilestone && !isCurrent ? 'font-bold' : 'font-semibold'}`} style={{ color: textColor }}>🪙{reward.toLocaleString()}</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </motion.div>
@@ -1773,12 +1826,25 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         </div>
                                     </div>
                                 </motion.div>
+
+                                {/* Portrait-only lifelines row — between ladder and question */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={introPhase >= 2 ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                                    transition={{ duration: 0.4 }}
+                                    className="flex landscape:hidden lg:hidden justify-center gap-3 py-1.5 order-2 shrink-0"
+                                >
+                                    <LifelineButton text="50:50" isUsed={lifelines.fiftyFifty} disabled={isAnswerRevealed} onClick={useFiftyFifty} />
+                                    <LifelineButton icon={Phone} isUsed={lifelines.phone} disabled={isAnswerRevealed} onClick={usePhone} />
+                                    <LifelineButton icon={Users} isUsed={lifelines.audience} disabled={isAnswerRevealed} onClick={useAudience} />
+                                    <LifelineButton icon={RefreshCcw} isUsed={lifelines.swap} disabled={isAnswerRevealed} onClick={useSwap} />
+                                </motion.div>
                             </div>
                         </motion.div>
                     )}
 
                     {gameState === 'finished' && (
-                        <EndGameScreen score={score} handlePlayAgain={handlePlayAgain} onLeaveGame={onLeaveGame} currentQuestionIndex={currentQuestionIndex} endMessage={endMessage} showEndMessage={showEndMessage} />
+                        <EndGameScreen score={score} handlePlayAgain={handlePlayAgain} onLeaveGame={onLeaveGame} currentQuestionIndex={currentQuestionIndex} endMessage={endMessage} showEndMessage={showEndMessage} selectedOption={selectedOption} questions={DUMMY_QUESTIONS} />
                     )}
                 </AnimatePresence>
             </div>
@@ -1906,13 +1972,21 @@ const Confetti = ({ questionIndex = 14 }) => {
     return <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1000 }} />;
 };
 
-const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionIndex, endMessage, showEndMessage }) => {
+const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionIndex, endMessage, showEndMessage, selectedOption, questions }) => {
     const [displayScore, setDisplayScore] = useState(0);
+    const [displayXP, setDisplayXP] = useState(0);
     const lastSoundTime = useRef(0);
     const [confettiKey, setConfettiKey] = useState(0);
     const [showConfetti, setShowConfetti] = useState(score >= 500);
     const [testIndex, setTestIndex] = useState(currentQuestionIndex);
     const [visibleMessageIndex, setVisibleMessageIndex] = useState(0);
+
+    // Calculate XP based on per-question table (Q1=1, Q2=2, ... Q15=15)
+    const lastAnswerCorrect = questions && selectedOption !== null && selectedOption === questions[currentQuestionIndex]?.answer;
+    const correctCount = lastAnswerCorrect ? currentQuestionIndex + 1 : currentQuestionIndex;
+    const totalXP = correctCount > 0 ? XP_CUMULATIVE[correctCount - 1] : 0;
+    const isPerfect = correctCount >= 15;
+    const totalCoins = score + (isPerfect ? 30 : 10); // perfect bonus 30, else 10 for completing
 
     // Xử lý hiệu ứng hiển thị tuần tự các câu hội thoại
     useEffect(() => {
@@ -1985,6 +2059,23 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
         return () => clearTimeout(timer);
     }, [displayScore, score, playCoinSound]);
 
+    // Count up XP display — fast animation
+    useEffect(() => {
+        let timer;
+        const xpDelay = setTimeout(() => {
+            if (displayXP < totalXP) {
+                const step = Math.max(1, Math.ceil(totalXP / 15));
+                timer = setInterval(() => {
+                    setDisplayXP(prev => {
+                        const next = Math.min(prev + step, totalXP);
+                        return next;
+                    });
+                }, 30);
+            }
+        }, 800); // short delay after coins
+        return () => { clearTimeout(xpDelay); clearInterval(timer); };
+    }, [displayXP, totalXP]);
+
     return (
         <>
             {showConfetti && <Confetti key={confettiKey} questionIndex={testIndex} />}
@@ -2048,19 +2139,37 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                         </AnimatePresence>
                     </div>
 
-                    {/* Score Pill — two-layer cartoon */}
-                    <div className="flex items-center justify-center mb-8 w-full max-w-[200px] md:max-w-[240px] mx-auto bg-yellow-400 text-[#1e3a8a] rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.2)] py-2 md:py-3 relative overflow-hidden group">
-                        <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
-                        <motion.span
-                            key={displayScore}
-                            initial={{ y: -5, opacity: 0.8 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.1 }}
-                            className="text-3xl md:text-4xl font-black relative z-10"
-                        >
-                            {displayScore.toLocaleString()}
-                        </motion.span>
-                        <span className="text-xl md:text-2xl font-black mt-1 ml-2 relative z-10">XP</span>
+                    {/* Score Pills — Coins + XP */}
+                    <div className="flex items-center justify-center gap-4 mb-8 w-full max-w-md mx-auto">
+                        {/* Coins pill */}
+                        <div className="flex items-center justify-center bg-yellow-400 text-[#1e3a8a] rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.2)] py-2 px-6 relative overflow-hidden">
+                            <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
+                            <span className="text-xl md:text-2xl relative z-10 mr-1.5">🪙</span>
+                            <motion.span
+                                key={displayScore}
+                                initial={{ y: -5, opacity: 0.8 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ duration: 0.1 }}
+                                className="text-2xl md:text-3xl font-black relative z-10"
+                            >
+                                {displayScore.toLocaleString()}
+                            </motion.span>
+                        </div>
+                        {/* XP pill */}
+                        <div className="flex items-center justify-center bg-amber-500 text-white rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(120,53,15,0.3)] py-2 px-6 relative overflow-hidden">
+                            <div className="absolute inset-0 w-full h-1/2 bg-white/25 pointer-events-none rounded-t-full"></div>
+                            <span className="text-xl md:text-2xl relative z-10 mr-1.5">🏆</span>
+                            <motion.span
+                                key={displayXP}
+                                initial={{ y: -5, opacity: 0.8 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ duration: 0.1 }}
+                                className="text-2xl md:text-3xl font-black relative z-10"
+                            >
+                                {displayXP.toLocaleString()}
+                            </motion.span>
+                            <span className="text-base md:text-lg font-black ml-1.5 relative z-10">XP</span>
+                        </div>
                     </div>
 
                     {/* Fake Stats — only shown when player reaches Q10+ */}

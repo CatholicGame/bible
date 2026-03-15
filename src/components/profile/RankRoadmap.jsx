@@ -267,7 +267,7 @@ const RankRoadmap = ({ currentScore, onBack }) => {
                                                 backdropFilter: 'blur(4px)',
                                                 whiteSpace: 'nowrap',
                                             }}>
-                                            {tier.minXP.toLocaleString()} XP
+                                            🏆 {tier.minXP.toLocaleString()} XP
                                         </span>
                                     </div>
                                 </div>
