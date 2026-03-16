@@ -1062,7 +1062,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                         ease: ['easeOut', 'easeIn', 'easeIn'],
                     }}
                 >
-                    <span style={{ fontSize: p.size, filter: 'drop-shadow(0 0 6px rgba(245,158,11,0.9))' }}>🪙</span>
+                    <span style={{ fontSize: p.size, filter: 'drop-shadow(0 0 6px rgba(245,158,11,0.9))' }}>💰</span>
                 </motion.div>
             ))}
             {/* Background Image */}
@@ -1111,7 +1111,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             {/* Rules card */}
                             <div className="space-y-3 mb-5 text-blue-950 bg-white p-4 sm:p-5 rounded-xl border-3 border-blue-300 shadow-[inset_0_-4px_0_rgba(191,219,254,1),0_5px_0_rgba(30,58,138,0.5)] text-sm sm:text-base font-bold leading-relaxed">
                                 <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">1</span> <span className="pt-0.5">Bạn sẽ trải qua 15 câu hỏi liên tiếp từ dễ đến khó.</span></div>
-                                <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">2</span> <span className="pt-0.5">Vượt qua mỗi câu hỏi, bạn sẽ tích lũy được 🪙 Coins. Cuối trận sẽ nhận thêm 🏆 XP.</span></div>
+                                <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">2</span> <span className="pt-0.5">Vượt qua mỗi câu hỏi, bạn sẽ tích lũy được 💰 Coins. Cuối trận sẽ nhận thêm 🏆 XP.</span></div>
                                 <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">3</span> <span className="pt-0.5">Cột mốc an toàn: Câu 5 và Câu 10. Trả lời sai sau cột mốc sẽ giữ được điểm của cột mốc đó.</span></div>
                                 <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">4</span> <span className="pt-0.5">Bạn có 4 quyền trợ giúp để sử dụng một lần duy nhất.</span></div>
                             </div>
@@ -1218,7 +1218,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         className="flex items-center gap-1 px-2.5 py-1.5 rounded-full"
                                         style={{ background: 'linear-gradient(160deg,#92400e,#b45309)', border: '2.5px solid #f59e0b', boxShadow: '0 3px 0 #78350f' }}
                                     >
-                                        <span className="text-xs shrink-0">🪙</span>
+                                        <span className="text-xs shrink-0">💰</span>
                                         <motion.span
                                             key={displayScore}
                                             initial={{ scale: 1.3 }}
@@ -1816,7 +1816,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                                 </div>
                                                                 <div className="flex items-center gap-2 relative z-10">
                                                                     <span className={`text-xs ${isMilestone && !isCurrent ? 'font-bold' : 'font-semibold'}`} style={{ color: textColor }}>🏆{XP_CUMULATIVE[idx]}</span>
-                                                                    <span className={`text-sm ${isMilestone && !isCurrent ? 'font-bold' : 'font-semibold'}`} style={{ color: textColor }}>🪙{reward.toLocaleString()}</span>
+                                                                    <span className={`text-sm ${isMilestone && !isCurrent ? 'font-bold' : 'font-semibold'}`} style={{ color: textColor }}>💰{reward.toLocaleString()}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -2144,7 +2144,7 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                         {/* Coins pill */}
                         <div className="flex items-center justify-center bg-yellow-400 text-[#1e3a8a] rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.2)] py-2 px-6 relative overflow-hidden">
                             <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
-                            <span className="text-xl md:text-2xl relative z-10 mr-1.5">🪙</span>
+                            <span className="text-xl md:text-2xl relative z-10 mr-1.5">💰</span>
                             <motion.span
                                 key={displayScore}
                                 initial={{ y: -5, opacity: 0.8 }}

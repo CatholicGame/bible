@@ -60,7 +60,7 @@ export const XP_REWARDS = {
 };
 
 // ══════════════════════════════════════════════
-//  🪙 COINS REWARDS — Tiền tệ lên/xuống cho P2P bet
+//  💰 COINS REWARDS — Tiền tệ lên/xuống cho P2P bet
 // ══════════════════════════════════════════════
 
 export const COINS_REWARDS = {
@@ -172,8 +172,8 @@ export const getRankLevel = (score) => {
  * Validate bet: cả 2 người chơi phải đủ coins
  */
 export const validateBet = (betCoins, player1Coins, player2Coins) => {
-    if (player1Coins < betCoins) return { valid: false, reason: 'Bạn không đủ 🪙 để đặt mức cược này' };
-    if (player2Coins < betCoins) return { valid: false, reason: 'Đối thủ không đủ 🪙 để đặt mức cược này' };
+    if (player1Coins < betCoins) return { valid: false, reason: 'Bạn không đủ 💰 để đặt mức cược này' };
+    if (player2Coins < betCoins) return { valid: false, reason: 'Đối thủ không đủ 💰 để đặt mức cược này' };
     return { valid: true };
 };
 

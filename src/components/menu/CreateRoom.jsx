@@ -270,7 +270,7 @@ const CreateRoom = ({ gameName, gameType = 'quiz', onBack, onRoomCreated }) => {
                                     <p className="text-slate-500 text-xs font-black uppercase tracking-widest mb-2 flex items-center gap-1.5">
                                         <span className="w-5 h-5 rounded-full bg-amber-500 text-white text-[10px] font-black flex items-center justify-center flex-shrink-0">3</span>
                                         Cược Coin
-                                        <span className="ml-auto text-[10px] font-bold text-amber-600 normal-case tracking-normal">🪙 {(userCoins || 0).toLocaleString()} có sẵn</span>
+                                        <span className="ml-auto text-[10px] font-bold text-amber-600 normal-case tracking-normal">💰 {(userCoins || 0).toLocaleString()} có sẵn</span>
                                     </p>
 
                                     {/* Preset bet chips — swipeable */}
@@ -295,7 +295,7 @@ const CreateRoom = ({ gameName, gameType = 'quiz', onBack, onRoomCreated }) => {
                                                         color: selected && canAfford ? '#78350f' : '#334155',
                                                     }}
                                                 >
-                                                    🪙 {amount.toLocaleString()}
+                                                    💰 {amount.toLocaleString()}
                                                 </button>
                                             );
                                         })}
@@ -305,7 +305,7 @@ const CreateRoom = ({ gameName, gameType = 'quiz', onBack, onRoomCreated }) => {
                                     <div className="flex items-center gap-2">
                                         <div className={`flex-1 flex items-center gap-2 px-3 py-2 rounded-xl transition-all ${isCustom ? 'ring-2 ring-amber-400' : ''}`}
                                             style={{ background: '#f1f5f9', border: '2px solid #e2e8f0' }}>
-                                            <span className="text-sm">🪙</span>
+                                            <span className="text-sm">💰</span>
                                             <input
                                                 type="text"
                                                 inputMode="numeric"
@@ -325,7 +325,7 @@ const CreateRoom = ({ gameName, gameType = 'quiz', onBack, onRoomCreated }) => {
                                     style={{ background: '#f8fafc', border: '2px solid #e2e8f0' }}>
                                     <Users size={16} className="text-blue-400 flex-shrink-0" />
                                     <div className="flex-1 text-xs text-slate-600 font-semibold leading-snug">
-                                        Phòng <strong className="text-blue-600">{ROOM_TYPES.find(r => r.id === roomType)?.label}</strong> — <strong className="text-blue-600">2 người</strong> · {gameType} · <strong className="text-amber-600">🪙 {betCoins.toLocaleString()}</strong>
+                                        Phòng <strong className="text-blue-600">{ROOM_TYPES.find(r => r.id === roomType)?.label}</strong> — <strong className="text-blue-600">2 người</strong> · {gameType} · <strong className="text-amber-600">💰 {betCoins.toLocaleString()}</strong>
                                     </div>
                                 </div>
                             </motion.div>

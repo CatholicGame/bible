@@ -897,9 +897,13 @@ const CrosswordGame = ({
             </div>
             {/* Coin section */}
             <div className="flex items-start gap-2">
-              <span className="w-7 h-7 rounded-lg flex items-center justify-center text-sm shrink-0 mt-0.5"
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
                 style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', boxShadow: '0 2px 0 #92400e' }}>
-                🪙
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" fill="#fef3c7" stroke="#92400e" strokeWidth="1"/>
+                  <circle cx="8" cy="8" r="5" fill="#fbbf24"/>
+                  <text x="8" y="11.5" textAnchor="middle" fontSize="7" fontWeight="900" fill="#78350f">$</text>
+                </svg>
               </span>
               <div className="text-xs md:text-sm space-y-0.5">
                 <p><span className="text-amber-300 font-black">Coin</span></p>
@@ -915,7 +919,7 @@ const CrosswordGame = ({
               </span>
               <div className="text-xs md:text-sm space-y-0.5">
                 <p><span className="text-cyan-300 font-black">Gợi Ý (Solo)</span></p>
-                <p className="text-white/70 font-semibold">Mở 1 chữ: 20 🪙 · Mở cả từ: 50 🪙</p>
+                <p className="text-white/70 font-semibold">Mở 1 chữ: 20 💰 · Mở cả từ: 50 💰</p>
               </div>
             </div>
           </div>
@@ -1030,7 +1034,7 @@ const CrosswordGame = ({
             {/* Coin Breakdown */}
             {earnedCoins && (
               <div className="border-t border-white/10 pt-3 mt-1">
-                <p className="text-amber-300 text-xs font-black uppercase tracking-widest mb-2">🪙 Coin Nhận Được</p>
+                <p className="text-amber-300 text-xs font-black uppercase tracking-widest mb-2">💰 Coin Nhận Được</p>
                 <div className="space-y-1 text-xs">
                   <div className="flex justify-between">
                     <span className="text-white/50 font-semibold">Từ đúng ({solvedWords.size} × 5)</span>
@@ -1083,7 +1087,7 @@ const CrosswordGame = ({
                   style={{ background: 'linear-gradient(180deg, #f59e0b, #d97706)', border: '3px solid #b45309', boxShadow: '0 5px 0 #92400e' }}>
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <span className="relative z-10 flex items-center justify-center gap-2">
-                    🔄 Chơi Lại <span className="text-xs font-bold opacity-70">(+2🪙/từ)</span>
+                    🔄 Chơi Lại <span className="text-xs font-bold opacity-70">(+2💰/từ)</span>
                   </span>
                 </motion.button>
                 <motion.button
@@ -1305,7 +1309,7 @@ const CrosswordGame = ({
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Eye size={13} className="relative z-10" />
                   <span className="relative z-10">Mở 1 chữ</span>
-                  <span className="relative z-10 text-amber-300 text-[10px] font-bold ml-auto">20🪙</span>
+                  <span className="relative z-10 text-amber-300 text-[10px] font-bold ml-auto">20💰</span>
                 </motion.button>
                 <motion.button whileTap={{ scale: 0.93, y: 2 }}
                   onClick={handleRevealWord}
@@ -1314,7 +1318,7 @@ const CrosswordGame = ({
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Lightbulb size={13} className="relative z-10" />
                   <span className="relative z-10">Mở cả từ</span>
-                  <span className="relative z-10 text-white/80 text-[10px] font-bold ml-auto">50🪙</span>
+                  <span className="relative z-10 text-white/80 text-[10px] font-bold ml-auto">50💰</span>
                 </motion.button>
               </div>
             )}
@@ -1376,7 +1380,7 @@ const CrosswordGame = ({
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Eye size={13} className="relative z-10" />
                   <span className="relative z-10">Mở 1 chữ</span>
-                  <span className="relative z-10 text-amber-300 text-[10px] font-bold">20🪙</span>
+                  <span className="relative z-10 text-amber-300 text-[10px] font-bold">20💰</span>
                 </motion.button>
                 <motion.button whileTap={{ scale: 0.93, y: 2 }}
                   onClick={handleRevealWord}
@@ -1385,7 +1389,7 @@ const CrosswordGame = ({
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Lightbulb size={13} className="relative z-10" />
                   <span className="relative z-10">Mở cả từ</span>
-                  <span className="relative z-10 text-white/80 text-[10px] font-bold">50🪙</span>
+                  <span className="relative z-10 text-white/80 text-[10px] font-bold">50💰</span>
                 </motion.button>
               </div>
             )}

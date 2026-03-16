@@ -178,7 +178,7 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
                         className="flex items-center gap-0.5 font-black text-yellow-100 px-1.5 py-0.5 rounded-full"
                         style={{ fontSize: badgeSize, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,200,50,0.2)' }}
                     >
-                        🪙 {(stats?.coins || 0).toLocaleString()}
+                        💰 {(stats?.coins || 0).toLocaleString()}
                     </span>
                     <span
                         className="flex items-center gap-0.5 font-black text-white/70 px-1.5 py-0.5 rounded-full"
@@ -344,7 +344,7 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                                         🏆 {(user.score || 0).toLocaleString()}
                                     </span>
                                     <span className="text-yellow-200/60 text-[9px] flex items-center gap-0.5 font-bold">
-                                        🪙 {(coins || 0).toLocaleString()}
+                                        💰 {(coins || 0).toLocaleString()}
                                     </span>
                                 </span>
                             </div>
@@ -386,7 +386,7 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                                             </div>
                                             <div className="flex gap-3">
                                                 <span className="text-yellow-300 text-xs font-bold flex items-center gap-1">🏆 {(user.score || 0).toLocaleString()} XP</span>
-                                                <span className="text-yellow-200/80 text-xs font-bold flex items-center gap-1">🪙 {(coins || 0).toLocaleString()}</span>
+                                                <span className="text-yellow-200/80 text-xs font-bold flex items-center gap-1">💰 {(coins || 0).toLocaleString()}</span>
                                             </div>
                                         </div>
 
