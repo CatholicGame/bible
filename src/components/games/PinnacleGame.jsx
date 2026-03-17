@@ -2118,12 +2118,12 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                     animate={{ scale: 1, y: 0 }}
                     transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.15 }}
                     style={{
-                        width: 'clamp(182px, 36vw, 286px)',
+                        width: 'clamp(236px, 47vw, 372px)',
                         height: 'auto',
                         flexShrink: 0,
                         position: 'relative',
                         zIndex: 10,
-                        marginBottom: 'clamp(-34px, -7.5vw, -56px)',
+                        marginBottom: 'clamp(-44px, -10vw, -73px)',
                         filter: 'drop-shadow(0 6px 10px rgba(30,58,138,0.7))',
                         pointerEvents: 'none',
                     }}
@@ -2137,14 +2137,15 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                     borderRadius: 24,
                     width: '100%',
                     flex: '0 0 auto',
-                    maxHeight: 'calc(100dvh - 20px - clamp(40px, 7vw, 70px))',
+                    minHeight: 'min(400px, calc(100dvh - 180px))',
+                    maxHeight: 'calc(100dvh - 20px - clamp(60px, 11vw, 110px))',
 
                     display: 'flex',
                     flexDirection: 'column',
                     overflow: 'hidden',
                 }}>
                     <div className="overflow-y-auto scrollbar-hide flex-1 flex flex-col items-center"
-                        style={{ padding: 'clamp(36px, 7vw, 60px) 20px 20px', justifyContent: 'space-between' }}
+                        style={{ padding: 'clamp(47px, 9vw, 78px) 16px 16px' }}
                     >
 
                     <h2 className="text-xl sm:text-2xl md:text-4xl landscape:text-xl font-black mb-4 landscape:mb-2 md:mb-8 tracking-widest text-center text-yellow-300 uppercase relative z-10 w-full"
@@ -2153,7 +2154,7 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                     </h2>
 
                     {/* Message box — cartoon white card */}
-                    <div className="w-full max-w-lg mb-4 landscape:mb-2 md:mb-6 min-h-[70px] landscape:min-h-[40px] md:min-h-[110px] flex items-center justify-center relative bg-white p-3 landscape:p-2 sm:p-5 rounded-2xl border-4 border-blue-300 shadow-[inset_0_-4px_0_rgba(191,219,254,1),0_6px_0_rgba(30,58,138,0.5)] text-[#1e3a8a] font-bold leading-relaxed">
+                    <div className="flex-1 w-full max-w-lg mb-4 landscape:mb-2 md:mb-6 min-h-[70px] landscape:min-h-[40px] md:min-h-[110px] flex items-center justify-center relative bg-white p-3 landscape:p-2 sm:p-5 rounded-2xl border-4 border-blue-300 shadow-[inset_0_-4px_0_rgba(191,219,254,1),0_6px_0_rgba(30,58,138,0.5)] text-[#1e3a8a] font-bold leading-relaxed">
                         <AnimatePresence mode="popLayout">
                             {showEndMessage && Array.isArray(endMessage) && endMessage[visibleMessageIndex] ? (
                                 <motion.div
@@ -2285,14 +2286,14 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                     <div className="flex flex-row gap-3 landscape:gap-2 md:gap-4 relative z-10 w-full max-w-md mx-auto mt-2 landscape:mt-1 pb-4 landscape:pb-2">
                         <button
                             onClick={handlePlayAgain}
-                            className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-black uppercase tracking-widest text-sm landscape:text-xs md:text-lg py-4 landscape:py-3 md:py-5 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(29,78,216,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
+                            className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-black uppercase tracking-widest text-lg landscape:text-base md:text-xl py-5 landscape:py-4 md:py-6 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(29,78,216,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
                         >
                             <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full"></div>
                             <span className="relative z-10 group-hover:scale-105 transition-transform">Chơi lại</span>
                         </button>
                         <button
                             onClick={onLeaveGame}
-                            className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-widest text-sm landscape:text-xs md:text-lg py-4 landscape:py-3 md:py-5 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.3)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
+                            className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-widest text-lg landscape:text-base md:text-xl py-5 landscape:py-4 md:py-6 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.3)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
                         >
                             <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
                             <span className="relative z-10 group-hover:scale-105 transition-transform">Về Menu</span>
