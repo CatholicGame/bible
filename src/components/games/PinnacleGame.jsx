@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, ArrowLeft, CheckCircle2, XCircle, Play, Phone, Users, Shield, RefreshCcw, Flag, Star, UserCircle2 } from 'lucide-react';
 import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.png';
@@ -2078,29 +2079,76 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
         return () => { clearTimeout(xpDelay); clearInterval(timer); };
     }, [displayXP, totalXP]);
 
-    return (
+    return createPortal(
         <>
             {showConfetti && <Confetti key={confettiKey} questionIndex={testIndex} />}
-            <motion.div
-                key="finished"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="bg-[#3b82f6] p-4 sm:p-5 md:p-8 landscape:p-3 rounded-[1.5rem] md:rounded-[2rem] border-4 border-[#1e3a8a] shadow-[0_8px_0_rgba(30,58,138,1)] m-auto my-auto max-w-lg md:max-w-2xl w-full relative z-10 max-h-[92vh] landscape:max-h-[96vh] flex flex-col overflow-hidden"
-            >
-                {/* Trophy Banner overlapping top border */}
-                <motion.div
-                    initial={{ scale: 0, y: 50 }}
-                    animate={{ scale: 1, y: 0 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                    className="absolute -top-10 landscape:-top-7 md:-top-28 left-1/2 -translate-x-1/2 w-[200px] landscape:w-[140px] md:w-[420px] z-20 flex justify-center pointer-events-none drop-shadow-[0_4px_0_rgba(30,58,138,0.5)]"
-                >
-                    <img src={resultBanner} alt="Trophy" className="w-full h-auto object-contain" />
-                </motion.div>
 
-                <div className="overflow-y-auto scrollbar-hide flex-1 w-full flex flex-col items-center pt-10 landscape:pt-6 md:pt-20">
-                    <h2 className="text-xl sm:text-2xl md:text-4xl landscape:text-lg font-black mb-4 landscape:mb-2 md:mb-8 tracking-widest text-center text-yellow-300 uppercase relative z-10 w-full"
-                        style={{ textShadow: '0 4px 0 #78350f, 2px 0 0 #78350f, -2px 0 0 #78350f, 0 2px 0 #78350f, 0 -2px 0 #78350f, 1px 1px 0 #78350f, -1px -1px 0 #78350f, 1px -1px 0 #78350f, -1px 1px 0 #78350f' }}
+            {/* Backdrop */}
+            <div style={{
+                position: 'fixed', inset: 0, zIndex: 9998,
+                background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+            }} />
+
+            {/* Positioning wrapper — plain div so translate(-50%,-50%) isn't fighting framer transforms */}
+            <div style={{
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 9999,
+                width: 'min(560px, calc(100vw - 20px))',
+                maxHeight: 'calc(100dvh - 20px)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                overflow: 'visible',
+            }}>
+                {/* Animation wrapper — framer-motion only does scale/opacity here */}
+                <motion.div
+                    initial={{ scale: 0.85, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: 'spring', stiffness: 220, damping: 22 }}
+                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}
+                >
+                {/* Trophy banner — above the card in flex flow, negative margin overlaps card top */}
+                <motion.img
+                    src={resultBanner}
+                    alt="Trophy"
+                    initial={{ scale: 0, y: 30 }}
+                    animate={{ scale: 1, y: 0 }}
+                    transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.15 }}
+                    style={{
+                        width: 'clamp(182px, 36vw, 286px)',
+                        height: 'auto',
+                        flexShrink: 0,
+                        position: 'relative',
+                        zIndex: 10,
+                        marginBottom: 'clamp(-34px, -7.5vw, -56px)',
+                        filter: 'drop-shadow(0 6px 10px rgba(30,58,138,0.7))',
+                        pointerEvents: 'none',
+                    }}
+                />
+
+                {/* Blue card — overflow:hidden, extra padding-top for the banner overlap */}
+                <div style={{
+                    background: '#3b82f6',
+                    border: '4px solid #1e3a8a',
+                    boxShadow: '0 8px 0 rgba(30,58,138,1)',
+                    borderRadius: 24,
+                    width: '100%',
+                    flex: '0 0 auto',
+                    maxHeight: 'calc(100dvh - 20px - clamp(40px, 7vw, 70px))',
+
+                    display: 'flex',
+                    flexDirection: 'column',
+                    overflow: 'hidden',
+                }}>
+                    <div className="overflow-y-auto scrollbar-hide flex-1 flex flex-col items-center"
+                        style={{ padding: 'clamp(36px, 7vw, 60px) 20px 20px', justifyContent: 'space-between' }}
                     >
+
+                    <h2 className="text-xl sm:text-2xl md:text-4xl landscape:text-xl font-black mb-4 landscape:mb-2 md:mb-8 tracking-widest text-center text-yellow-300 uppercase relative z-10 w-full"
+                        style={{ textShadow: '0 4px 0 #78350f, 2px 0 0 #78350f, -2px 0 0 #78350f, 0 2px 0 #78350f, 0 -2px 0 #78350f, 1px 1px 0 #78350f, -1px -1px 0 #78350f, 1px -1px 0 #78350f, -1px 1px 0 #78350f' }}>
                         TRÒ CHƠI KẾT THÚC!
                     </h2>
 
@@ -2237,23 +2285,26 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                     <div className="flex flex-row gap-3 landscape:gap-2 md:gap-4 relative z-10 w-full max-w-md mx-auto mt-2 landscape:mt-1 pb-4 landscape:pb-2">
                         <button
                             onClick={handlePlayAgain}
-                            className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-black uppercase tracking-widest text-sm landscape:text-xs md:text-lg py-2.5 landscape:py-2 md:py-3 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(29,78,216,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
+                            className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-black uppercase tracking-widest text-sm landscape:text-xs md:text-lg py-4 landscape:py-3 md:py-5 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(29,78,216,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
                         >
                             <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full"></div>
                             <span className="relative z-10 group-hover:scale-105 transition-transform">Chơi lại</span>
                         </button>
                         <button
                             onClick={onLeaveGame}
-                            className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-widest text-sm landscape:text-xs md:text-lg py-2.5 landscape:py-2 md:py-3 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.3)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
+                            className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-widest text-sm landscape:text-xs md:text-lg py-4 landscape:py-3 md:py-5 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.3)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
                         >
                             <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
                             <span className="relative z-10 group-hover:scale-105 transition-transform">Về Menu</span>
                         </button>
                     </div>
-                </div>
-            </motion.div>
+                    </div>{/* end scroll */}
+                </div>{/* end blue card */}
+                </motion.div>{/* end animation wrapper */}
+            </div>{/* end positioning wrapper */}
 
-        </>
+        </>,
+        document.body
     );
 };
 

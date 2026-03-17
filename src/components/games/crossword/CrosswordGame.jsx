@@ -1129,11 +1129,12 @@ const CrosswordGame = ({
       {/* Dark overlay */}
       <div className="absolute inset-0 pointer-events-none z-0" style={{ background: 'rgba(10,15,30,0.70)' }} />
 
-      {/* Hidden input for physical keyboard + IME */}
+      {/* Hidden input for physical keyboard + IME — inputMode="none" prevents native mobile keyboard */}
       <input
         ref={hiddenInputRef}
         onInput={onHiddenInput}
         onKeyDown={onHiddenKeyDown}
+        inputMode="none"
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
