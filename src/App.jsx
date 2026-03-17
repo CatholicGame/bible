@@ -17,6 +17,17 @@ import { useRoomStore } from './store/roomStore';
 import { auth, db } from './config/firebase';
 import { getRankByScore } from './utils/ranks';
 
+// ── Fullscreen helpers ──
+const enterFullscreen = () => {
+  const el = document.documentElement;
+  const rfs = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+  if (rfs) rfs.call(el).catch(() => {});
+};
+const exitFullscreen = () => {
+  const efs = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+  if (efs && document.fullscreenElement) efs.call(document).catch(() => {});
+};
+
 // Global Background Animation Nodes
 const BackgroundAnimations = () => (
   <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
@@ -160,6 +171,23 @@ function App() {
     try { return JSON.parse(localStorage.getItem('guestSession') || 'null'); } catch { return null; }
   })();
 
+  // ── Auto fullscreen khi vào game ──
+  useEffect(() => {
+    if (currentView === 'playing') {
+      enterFullscreen();
+    } else {
+      exitFullscreen();
+    }
+  }, [currentView]);
+
+  // ── Exit app ──
+  const handleExit = () => {
+    if (window.confirm('Bạn có muốn thoát ứng dụng?')) {
+      exitFullscreen();
+      window.close();
+    }
+  };
+
   return (
     <div className="relative h-screen w-full overflow-hidden bg-[#020617]">
       <BackgroundAnimations />
@@ -192,6 +220,7 @@ function App() {
               onUpdateName={handleUpdateName}
               onOpenProfile={() => setCurrentView('profile')}
               onLogout={handleLogout}
+              onExit={handleExit}
             />
           </motion.div>
         )}

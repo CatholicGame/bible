@@ -2,12 +2,14 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import {
     Users, User, ArrowLeft, Trophy, Shield,
-    LogOut, Map, ChevronRight, ChevronLeft,
+    LogOut, Map, ChevronRight, ChevronLeft, Power,
 } from 'lucide-react';
 import { getRankByScore } from '../../utils/ranks';
 import { useUserStore } from '../../store/userStore';
 import RankRoadmap from '../profile/RankRoadmap';
 import bgImage from '../../assets/common/common_background.png';
+import iconCoin from '../../assets/common/coin.png';
+import iconTrophy from '../../assets/common/trophy.png';
 
 // Game thumbnail imports
 import imgMillionaire from '../../assets/games/millionaire.png';
@@ -172,13 +174,13 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
                         className="flex items-center gap-0.5 font-black text-yellow-200 px-1.5 py-0.5 rounded-full"
                         style={{ fontSize: badgeSize, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,220,50,0.25)' }}
                     >
-                        🏆 {(stats?.xp || 0).toLocaleString()}
+                        <img src={iconTrophy} alt="XP" className="w-3.5 h-3.5 object-contain" /> {(stats?.xp || 0).toLocaleString()}
                     </span>
                     <span
                         className="flex items-center gap-0.5 font-black text-yellow-100 px-1.5 py-0.5 rounded-full"
                         style={{ fontSize: badgeSize, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,200,50,0.2)' }}
                     >
-                        💰 {(stats?.coins || 0).toLocaleString()}
+                        <img src={iconCoin} alt="Coins" className="w-3.5 h-3.5 object-contain" /> {(stats?.coins || 0).toLocaleString()}
                     </span>
                     <span
                         className="flex items-center gap-0.5 font-black text-white/70 px-1.5 py-0.5 rounded-full"
@@ -201,7 +203,7 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
 };
 
 /* ══ MainMenu ══ */
-const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName, onOpenProfile, onLogout }) => {
+const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName, onOpenProfile, onLogout, onExit }) => {
     const containerRef = useRef(null);
     const cwRef = useRef(0);
     const dragX = useMotionValue(0);
@@ -311,6 +313,19 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                 <div className="relative z-20 flex-shrink-0 flex items-center h-14 px-4 md:px-6 gap-3"
                     style={{ background: '#2563eb', borderBottom: '4px solid #1e3a8a' }}>
 
+                    {/* Exit button */}
+                    {onExit && (
+                        <motion.button
+                            whileTap={{ scale: 0.9, y: 2 }}
+                            onClick={onExit}
+                            className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 hover:bg-red-500/30 transition-colors"
+                            style={{ background: 'rgba(239,68,68,0.2)', border: '2px solid rgba(239,68,68,0.5)', boxShadow: '0 2px 0 rgba(127,29,29,0.6)' }}
+                            title="Thoát"
+                        >
+                            <Power size={16} strokeWidth={3} className="text-red-300" />
+                        </motion.button>
+                    )}
+
                     {/* Logo */}
                     <div className="flex items-center gap-2 flex-shrink-0">
                         <div className="w-7 h-7 rounded-lg bg-yellow-400 flex items-center justify-center text-sm relative overflow-hidden flex-shrink-0"
@@ -341,10 +356,10 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                                 <span className="font-black text-white text-xs leading-none">{user.name}</span>
                                 <span className="flex items-center gap-1.5 mt-0.5">
                                     <span className="text-yellow-300 text-[9px] flex items-center gap-0.5 font-bold">
-                                        🏆 {(user.score || 0).toLocaleString()}
+                                        <img src={iconTrophy} alt="XP" className="w-3 h-3 object-contain" /> {(user.score || 0).toLocaleString()}
                                     </span>
                                     <span className="text-yellow-200/60 text-[9px] flex items-center gap-0.5 font-bold">
-                                        💰 {(coins || 0).toLocaleString()}
+                                        <img src={iconCoin} alt="Coins" className="w-3 h-3 object-contain" /> {(coins || 0).toLocaleString()}
                                     </span>
                                 </span>
                             </div>
@@ -385,8 +400,8 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                                                 </div>
                                             </div>
                                             <div className="flex gap-3">
-                                                <span className="text-yellow-300 text-xs font-bold flex items-center gap-1">🏆 {(user.score || 0).toLocaleString()} XP</span>
-                                                <span className="text-yellow-200/80 text-xs font-bold flex items-center gap-1">💰 {(coins || 0).toLocaleString()}</span>
+                                                <span className="text-yellow-300 text-xs font-bold flex items-center gap-1"><img src={iconTrophy} alt="XP" className="w-4 h-4 object-contain" /> {(user.score || 0).toLocaleString()} XP</span>
+                                                <span className="text-yellow-200/80 text-xs font-bold flex items-center gap-1"><img src={iconCoin} alt="Coins" className="w-4 h-4 object-contain" /> {(coins || 0).toLocaleString()}</span>
                                             </div>
                                         </div>
 
@@ -508,7 +523,7 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                         </motion.div>
                     ) : (
                         /* ── TẦNG 2: P2P Sub-menu ── */
-                        <motion.div layout key="modes-p2p" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }}
+                        <motion.div layout key="modes-p2p" initial={{ x: 24 }} animate={{ x: 0 }} exit={{ x: -24 }}
                             className="flex-shrink-0 w-full max-w-sm px-4 flex flex-col gap-2.5">
                             <div className="flex items-center gap-2">
                                 <motion.button whileHover={{ x: -2 }} onClick={handleBack}
@@ -520,6 +535,9 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
 
                             {/* AUTO MATCH */}
                             <motion.button
+                                initial={{ opacity: 0, x: 40 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.35, delay: 0, ease: [0.25, 0.46, 0.45, 0.94] }}
                                 whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 2 }}
                                 onClick={() => handleModeSelect('auto_match')}
                                 className="relative flex items-center gap-3 px-4 py-3.5 rounded-2xl w-full text-left group overflow-hidden"
@@ -534,14 +552,21 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                             </motion.button>
 
                             {/* DIVIDER */}
-                            <div className="flex items-center gap-2 px-1">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.3, delay: 0.15 }}
+                                className="flex items-center gap-2 px-1">
                                 <div className="flex-1 h-px bg-white/15" />
                                 <span className="text-white/30 text-[10px] font-black tracking-widest uppercase">hoặc</span>
                                 <div className="flex-1 h-px bg-white/15" />
-                            </div>
+                            </motion.div>
 
                             {/* JOIN WITH PIN */}
                             <motion.button
+                                initial={{ opacity: 0, x: 40 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.35, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
                                 whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 2 }}
                                 onClick={() => handleModeSelect('join_pin')}
                                 className="relative flex items-center gap-3 px-4 py-3.5 rounded-2xl w-full text-left group overflow-hidden"
@@ -557,6 +582,9 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
 
                             {/* CREATE ROOM */}
                             <motion.button
+                                initial={{ opacity: 0, x: 40 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.35, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
                                 whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 2 }}
                                 onClick={() => handleModeSelect('host')}
                                 className="relative flex items-center gap-3 px-4 py-3.5 rounded-2xl w-full text-left group overflow-hidden"

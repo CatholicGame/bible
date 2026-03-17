@@ -12,6 +12,8 @@ import sfxCheckpoint from '../../assets/games/SFX/sfx_checkpoint_altp.mp3';
 import sfxIncorrect from '../../assets/games/SFX/sfx_incorrect_answer_altp.mp3';
 import sfxClapEnd from '../../assets/games/SFX/sfx_clap_end.mp3';
 import resultBanner from '../../assets/common/result_banner.png';
+import iconCoin from '../../assets/common/coin.png';
+import iconTrophy from '../../assets/common/trophy.png';
 
 /* ─── Stage Spotlight overlay — 9 beams in 3 banks ─── */
 // group: 'left' beams lean right toward center, 'right' leans left, 'center' near vertical
@@ -1062,7 +1064,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                         ease: ['easeOut', 'easeIn', 'easeIn'],
                     }}
                 >
-                    <span style={{ fontSize: p.size, filter: 'drop-shadow(0 0 6px rgba(245,158,11,0.9))' }}>💰</span>
+                    <img src={iconCoin} alt="coin" style={{ width: p.size, height: p.size, filter: 'drop-shadow(0 0 6px rgba(245,158,11,0.9))' }} />
                 </motion.div>
             ))}
             {/* Background Image */}
@@ -1080,7 +1082,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
             {/* Bottom gradient for readability */}
             <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-t from-[#020617]/70 via-transparent to-transparent" />
 
-            <div className="w-full max-w-6xl flex-1 flex flex-col z-10 pt-4 pb-8 px-4 relative">
+            <div className="w-full max-w-6xl flex-1 flex flex-col z-10 pt-2 pb-2 landscape:pt-1 landscape:pb-1 lg:pt-4 lg:pb-8 px-2 lg:px-4 relative">
                 <AnimatePresence mode="wait">
 
                     {gameState === 'rules' && (
@@ -1111,7 +1113,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             {/* Rules card */}
                             <div className="space-y-3 mb-5 text-blue-950 bg-white p-4 sm:p-5 rounded-xl border-3 border-blue-300 shadow-[inset_0_-4px_0_rgba(191,219,254,1),0_5px_0_rgba(30,58,138,0.5)] text-sm sm:text-base font-bold leading-relaxed">
                                 <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">1</span> <span className="pt-0.5">Bạn sẽ trải qua 15 câu hỏi liên tiếp từ dễ đến khó.</span></div>
-                                <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">2</span> <span className="pt-0.5">Vượt qua mỗi câu hỏi, bạn sẽ tích lũy được 💰 Coins. Cuối trận sẽ nhận thêm 🏆 XP.</span></div>
+                                <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">2</span> <span className="pt-0.5 flex items-center gap-1 flex-wrap">Vượt qua mỗi câu hỏi, bạn sẽ tích lũy được <img src={iconCoin} alt="Coins" className="w-4 h-4 inline-block" /> Coins. Cuối trận sẽ nhận thêm <img src={iconTrophy} alt="XP" className="w-4 h-4 inline-block" /> XP.</span></div>
                                 <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">3</span> <span className="pt-0.5">Cột mốc an toàn: Câu 5 và Câu 10. Trả lời sai sau cột mốc sẽ giữ được điểm của cột mốc đó.</span></div>
                                 <div className="flex gap-3 items-start"><span className="text-white bg-blue-500 rounded-full w-7 h-7 text-xs flex items-center justify-center shrink-0 border-2 border-blue-700 shadow-[0_2px_0_rgba(29,78,216,1)] font-black">4</span> <span className="pt-0.5">Bạn có 4 quyền trợ giúp để sử dụng một lần duy nhất.</span></div>
                             </div>
@@ -1148,14 +1150,14 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                             initial={{ scale: 0.9, y: 20 }}
                                             animate={{ scale: 1, y: 0 }}
                                             exit={{ scale: 0.9, y: 20 }}
-                                            className="bg-blue-950 border-2 border-amber-500 rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-[0_0_40px_rgba(245,158,11,0.2)] text-center text-white relative overflow-hidden"
+                                            className="bg-blue-950 border-2 border-amber-500 rounded-3xl p-5 landscape:p-3 md:p-8 max-w-sm w-full shadow-[0_0_40px_rgba(245,158,11,0.2)] text-center text-white relative overflow-y-auto max-h-[95vh]"
                                         >
                                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-600 via-amber-400 to-amber-600"></div>
-                                            <div className="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-amber-500/50">
+                                            <div className="w-16 h-16 landscape:w-12 landscape:h-12 md:w-20 md:h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-3 landscape:mb-2 md:mb-4 border border-amber-500/50">
                                                 <Users size={40} className="text-amber-400" />
                                             </div>
-                                            <h3 className="text-2xl font-black mb-2 text-amber-400 uppercase tracking-wide">Trợ giúp 50:50</h3>
-                                            <p className="text-blue-200 mb-8 font-medium">Bạn có muốn loại bỏ 2 phương án sai không?</p>
+                                            <h3 className="text-xl landscape:text-lg md:text-2xl font-black mb-1 landscape:mb-1 md:mb-2 text-amber-400 uppercase tracking-wide">Trợ giúp 50:50</h3>
+                                            <p className="text-blue-200 mb-5 landscape:mb-3 md:mb-8 font-medium text-sm landscape:text-xs md:text-base">Bạn có muốn loại bỏ 2 phương án sai không?</p>
                                             <div className="flex gap-3">
                                                 <button
                                                     onClick={() => setConfirmFiftyFifty(false)}
@@ -1218,7 +1220,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         className="flex items-center gap-1 px-2.5 py-1.5 rounded-full"
                                         style={{ background: 'linear-gradient(160deg,#92400e,#b45309)', border: '2.5px solid #f59e0b', boxShadow: '0 3px 0 #78350f' }}
                                     >
-                                        <span className="text-xs shrink-0">💰</span>
+                                        <img src={iconCoin} alt="Coins" className="w-4 h-4 shrink-0" />
                                         <motion.span
                                             key={displayScore}
                                             initial={{ scale: 1.3 }}
@@ -1234,7 +1236,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         className="flex items-center gap-1 px-2.5 py-1.5 rounded-full"
                                         style={{ background: 'linear-gradient(160deg,#78350f,#92400e)', border: '2.5px solid #d97706', boxShadow: '0 3px 0 #451a03' }}
                                     >
-                                        <span className="text-xs shrink-0">🏆</span>
+                                        <img src={iconTrophy} alt="XP" className="w-4 h-4 shrink-0" />
                                         <motion.span
                                             key={displayXpScore}
                                             initial={{ scale: 1.3 }}
@@ -1261,14 +1263,14 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                             initial={{ scale: 0.9, y: 20 }}
                                             animate={{ scale: 1, y: 0 }}
                                             exit={{ scale: 0.9, y: 20 }}
-                                            className="bg-blue-950 border-2 border-emerald-500 rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-[0_0_40px_rgba(16,185,129,0.2)] text-center text-white relative overflow-hidden"
+                                            className="bg-blue-950 border-2 border-emerald-500 rounded-3xl p-5 landscape:p-3 md:p-8 max-w-sm w-full shadow-[0_0_40px_rgba(16,185,129,0.2)] text-center text-white relative overflow-y-auto max-h-[95vh]"
                                         >
                                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-600 via-emerald-400 to-emerald-600"></div>
-                                            <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/50">
+                                            <div className="w-16 h-16 landscape:w-12 landscape:h-12 md:w-20 md:h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-3 landscape:mb-2 md:mb-4 border border-emerald-500/50">
                                                 <Phone size={40} className="text-emerald-400" />
                                             </div>
-                                            <h3 className="text-2xl font-black mb-2 text-emerald-400 uppercase tracking-wide">Gọi điện thoại</h3>
-                                            <p className="text-blue-200 mb-8 font-medium">Bạn muốn gọi điện nhờ người thân trợ giúp?</p>
+                                            <h3 className="text-xl landscape:text-lg md:text-2xl font-black mb-1 landscape:mb-1 md:mb-2 text-emerald-400 uppercase tracking-wide">Gọi điện thoại</h3>
+                                            <p className="text-blue-200 mb-5 landscape:mb-3 md:mb-8 font-medium text-sm landscape:text-xs md:text-base">Bạn muốn gọi điện nhờ người thân trợ giúp?</p>
                                             <div className="flex gap-3">
                                                 <button
                                                     onClick={() => setConfirmPhone(false)}
@@ -1301,7 +1303,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                             initial={{ scale: 0.9, y: 20 }}
                                             animate={{ scale: 1, y: 0 }}
                                             exit={{ scale: 0.9, y: 20 }}
-                                            className="bg-slate-900 border-2 border-emerald-500 rounded-3xl p-6 md:p-8 max-w-md w-full shadow-[0_0_40px_rgba(16,185,129,0.3)] text-white relative overflow-hidden"
+                                            className="bg-slate-900 border-2 border-emerald-500 rounded-3xl p-4 landscape:p-3 md:p-8 max-w-md w-full shadow-[0_0_40px_rgba(16,185,129,0.3)] text-white relative overflow-y-auto max-h-[95vh]"
                                         >
                                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-600 via-emerald-400 to-emerald-600"></div>
 
@@ -1369,14 +1371,14 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                             initial={{ scale: 0.9, y: 20 }}
                                             animate={{ scale: 1, y: 0 }}
                                             exit={{ scale: 0.9, y: 20 }}
-                                            className="bg-blue-950 border-2 border-indigo-500 rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-[0_0_40px_rgba(99,102,241,0.2)] text-center text-white relative overflow-hidden"
+                                            className="bg-blue-950 border-2 border-indigo-500 rounded-3xl p-5 landscape:p-3 md:p-8 max-w-sm w-full shadow-[0_0_40px_rgba(99,102,241,0.2)] text-center text-white relative overflow-y-auto max-h-[95vh]"
                                         >
                                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-600 via-indigo-400 to-indigo-600"></div>
-                                            <div className="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-indigo-500/50">
+                                            <div className="w-16 h-16 landscape:w-12 landscape:h-12 md:w-20 md:h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-3 landscape:mb-2 md:mb-4 border border-indigo-500/50">
                                                 <Users size={40} className="text-indigo-400" />
                                             </div>
-                                            <h3 className="text-2xl font-black mb-2 text-indigo-400 uppercase tracking-wide">Hỏi ý kiến khán giả</h3>
-                                            <p className="text-blue-200 mb-8 font-medium">Bạn muốn lấy ý kiến từ khán giả trong trường quay?</p>
+                                            <h3 className="text-xl landscape:text-lg md:text-2xl font-black mb-1 landscape:mb-1 md:mb-2 text-indigo-400 uppercase tracking-wide">Hỏi ý kiến khán giả</h3>
+                                            <p className="text-blue-200 mb-5 landscape:mb-3 md:mb-8 font-medium text-sm landscape:text-xs md:text-base">Bạn muốn lấy ý kiến từ khán giả trong trường quay?</p>
                                             <div className="flex gap-3">
                                                 <button
                                                     onClick={() => setConfirmAudience(false)}
@@ -1409,7 +1411,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                             initial={{ scale: 0.9, y: 20 }}
                                             animate={{ scale: 1, y: 0 }}
                                             exit={{ scale: 0.9, y: 20 }}
-                                            className="bg-blue-950/90 border-2 border-indigo-500 rounded-3xl p-6 md:p-8 max-w-md w-full shadow-[0_0_40px_rgba(99,102,241,0.3)] text-white relative overflow-hidden"
+                                            className="bg-blue-950/90 border-2 border-indigo-500 rounded-3xl p-4 landscape:p-3 md:p-8 max-w-md w-full shadow-[0_0_40px_rgba(99,102,241,0.3)] text-white relative overflow-y-auto max-h-[95vh]"
                                         >
                                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-600 via-indigo-400 to-indigo-600"></div>
 
@@ -1478,14 +1480,14 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                             initial={{ scale: 0.9, y: 20 }}
                                             animate={{ scale: 1, y: 0 }}
                                             exit={{ scale: 0.9, y: 20 }}
-                                            className="bg-blue-950 border-2 border-sky-500 rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-[0_0_40px_rgba(14,165,233,0.2)] text-center text-white relative overflow-hidden"
+                                            className="bg-blue-950 border-2 border-sky-500 rounded-3xl p-5 landscape:p-3 md:p-8 max-w-sm w-full shadow-[0_0_40px_rgba(14,165,233,0.2)] text-center text-white relative overflow-y-auto max-h-[95vh]"
                                         >
                                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-600 via-sky-400 to-sky-600"></div>
-                                            <div className="w-20 h-20 bg-sky-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-sky-500/50">
+                                            <div className="w-16 h-16 landscape:w-12 landscape:h-12 md:w-20 md:h-20 bg-sky-500/10 rounded-full flex items-center justify-center mx-auto mb-3 landscape:mb-2 md:mb-4 border border-sky-500/50">
                                                 <RefreshCcw size={40} className="text-sky-400" />
                                             </div>
-                                            <h3 className="text-2xl font-black mb-2 text-sky-400 uppercase tracking-wide">Đổi câu hỏi</h3>
-                                            <p className="text-blue-200 mb-8 font-medium">Bạn có chắc muốn bỏ qua câu hỏi này? Bạn sẽ không được quay lại câu hỏi này.</p>
+                                            <h3 className="text-xl landscape:text-lg md:text-2xl font-black mb-1 landscape:mb-1 md:mb-2 text-sky-400 uppercase tracking-wide">Đổi câu hỏi</h3>
+                                            <p className="text-blue-200 mb-5 landscape:mb-3 md:mb-8 font-medium text-sm landscape:text-xs md:text-base">Bạn có chắc muốn bỏ qua câu hỏi này? Bạn sẽ không được quay lại câu hỏi này.</p>
                                             <div className="flex gap-3">
                                                 <button
                                                     onClick={() => setConfirmSwap(false)}
@@ -1506,10 +1508,10 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             </AnimatePresence>
 
                             {/* Main Game Area */}
-                            <div className="flex-1 flex flex-col landscape:flex-row lg:flex-row w-full max-w-7xl mx-auto overflow-hidden gap-2 landscape:gap-4 lg:gap-8 pb-2 px-2 lg:px-4">
+                            <div className="flex-1 flex flex-col landscape:flex-row lg:flex-row w-full max-w-7xl mx-auto overflow-y-auto overflow-x-hidden gap-2 landscape:gap-3 lg:gap-8 pb-2 px-1 lg:px-4">
 
                                 {/* Left Side: Timer & Question Board */}
-                                <div className="flex-1 w-full order-3 landscape:order-1 lg:order-1 flex flex-col pt-2 pb-0 landscape:pb-2 lg:pb-8 h-[75vh] landscape:h-full lg:h-full justify-between items-center z-20 relative overflow-visible mt-auto md:mt-0">
+                                <div className="flex-1 w-full order-3 landscape:order-1 lg:order-1 flex flex-col pt-1 pb-0 landscape:pb-1 lg:pb-8 min-h-0 landscape:h-full lg:h-full justify-between items-center z-20 relative overflow-y-auto overflow-x-visible mt-auto md:mt-0">
 
                                     {/* MC Character */}
                                     <motion.div
@@ -1597,14 +1599,14 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         initial={{ opacity: 0, scale: 0.5 }}
                                         animate={introPhase >= 4 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
                                         transition={{ duration: 0.5, type: 'spring' }}
-                                        className="w-full flex flex-col items-center justify-center shrink-0 relative mt-[23px] md:mt-[15px]"
+                                        className="w-full flex flex-col items-center justify-center shrink-0 relative mt-2 landscape:mt-1 md:mt-[15px]"
                                     >
-                                        <div className="relative w-20 h-20 md:w-28 md:h-28 rounded-full border-4 border-slate-700/50 flex flex-col items-center justify-center bg-[#020617]/80 shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-sm">
+                                        <div className="relative w-16 h-16 landscape:w-12 landscape:h-12 md:w-20 md:h-20 lg:w-28 lg:h-28 rounded-full border-4 landscape:border-3 border-slate-700/50 flex flex-col items-center justify-center bg-[#020617]/80 shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-sm">
                                             <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full transform -rotate-90">
                                                 <circle cx="50" cy="50" r="46" className="stroke-slate-700/30" strokeWidth="6" fill="transparent" />
                                                 <circle cx="50" cy="50" r="46" className={`${timeLeft <= 10 ? 'stroke-red-500' : 'stroke-amber-500'} transition-all duration-1000 ease-linear`} strokeWidth="6" fill="transparent" strokeDasharray="289" strokeDashoffset={289 - (timeLeft / 30) * 289} />
                                             </svg>
-                                            <span className={`text-3xl md:text-4xl font-black ${timeLeft <= 10 ? 'text-red-500 animate-pulse' : 'text-slate-100'}`}>{timeLeft}</span>
+                                            <span className={`text-2xl landscape:text-lg md:text-3xl lg:text-4xl font-black ${timeLeft <= 10 ? 'text-red-500 animate-pulse' : 'text-slate-100'}`}>{timeLeft}</span>
                                         </div>
 
 
@@ -1645,12 +1647,12 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                             >
                                                                 {/* Inner: dark content area */}
                                                                 <div
-                                                                    className="w-full flex items-center justify-center min-h-[52px] md:min-h-[112px] relative"
+                                                                    className="w-full flex items-center justify-center min-h-[44px] landscape:min-h-[36px] md:min-h-[112px] relative"
                                                                     style={{
                                                                         clipPath: qClip,
                                                                         WebkitClipPath: qClip,
                                                                         background: 'linear-gradient(180deg,#0e1e5a 0%,#090f36 100%)',
-                                                                        padding: '14px 50px',
+                                                                        padding: '10px 24px',
                                                                     }}
                                                                 >
                                                                     <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/8 pointer-events-none" />
@@ -1663,7 +1665,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                     })()}
 
                                                     {/* Options */}
-                                                    <div className="relative grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-4 md:gap-y-4 md:gap-x-6">
+                                                    <div className="relative grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-3 landscape:gap-y-1.5 landscape:gap-x-2 md:gap-y-4 md:gap-x-6">
                                                         <AnimatePresence>
                                                             {isScanningFiftyFifty && (
                                                                 <motion.div
@@ -1815,8 +1817,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                                     )}
                                                                 </div>
                                                                 <div className="flex items-center gap-2 relative z-10">
-                                                                    <span className={`text-xs ${isMilestone && !isCurrent ? 'font-bold' : 'font-semibold'}`} style={{ color: textColor }}>🏆{XP_CUMULATIVE[idx]}</span>
-                                                                    <span className={`text-sm ${isMilestone && !isCurrent ? 'font-bold' : 'font-semibold'}`} style={{ color: textColor }}>💰{reward.toLocaleString()}</span>
+                                                                    <span className={`text-xs ${isMilestone && !isCurrent ? 'font-bold' : 'font-semibold'} flex items-center gap-0.5`} style={{ color: textColor }}><img src={iconTrophy} alt="XP" className="w-3 h-3" />{XP_CUMULATIVE[idx]}</span>
+                                                                    <span className={`text-sm ${isMilestone && !isCurrent ? 'font-bold' : 'font-semibold'} flex items-center gap-0.5`} style={{ color: textColor }}><img src={iconCoin} alt="Coins" className="w-3.5 h-3.5" />{reward.toLocaleString()}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -2083,27 +2085,27 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                 key="finished"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-[#3b82f6] p-4 sm:p-5 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border-4 border-[#1e3a8a] shadow-[0_8px_0_rgba(30,58,138,1)] m-auto my-auto max-w-2xl w-full relative z-10 max-h-[90vh] flex flex-col"
+                className="bg-[#3b82f6] p-4 sm:p-5 md:p-8 landscape:p-3 rounded-[1.5rem] md:rounded-[2rem] border-4 border-[#1e3a8a] shadow-[0_8px_0_rgba(30,58,138,1)] m-auto my-auto max-w-lg md:max-w-2xl w-full relative z-10 max-h-[92vh] landscape:max-h-[96vh] flex flex-col overflow-hidden"
             >
                 {/* Trophy Banner overlapping top border */}
                 <motion.div
                     initial={{ scale: 0, y: 50 }}
                     animate={{ scale: 1, y: 0 }}
                     transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                    className="absolute -top-12 md:-top-28 left-1/2 -translate-x-1/2 w-[260px] md:w-[420px] z-20 flex justify-center pointer-events-none drop-shadow-[0_4px_0_rgba(30,58,138,0.5)]"
+                    className="absolute -top-10 landscape:-top-7 md:-top-28 left-1/2 -translate-x-1/2 w-[200px] landscape:w-[140px] md:w-[420px] z-20 flex justify-center pointer-events-none drop-shadow-[0_4px_0_rgba(30,58,138,0.5)]"
                 >
                     <img src={resultBanner} alt="Trophy" className="w-full h-auto object-contain" />
                 </motion.div>
 
-                <div className="overflow-y-auto scrollbar-hide flex-1 w-full flex flex-col items-center pt-14 md:pt-20">
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-6 md:mb-8 tracking-widest text-center text-yellow-300 uppercase relative z-10 w-full"
+                <div className="overflow-y-auto scrollbar-hide flex-1 w-full flex flex-col items-center pt-10 landscape:pt-6 md:pt-20">
+                    <h2 className="text-xl sm:text-2xl md:text-4xl landscape:text-lg font-black mb-4 landscape:mb-2 md:mb-8 tracking-widest text-center text-yellow-300 uppercase relative z-10 w-full"
                         style={{ textShadow: '0 4px 0 #78350f, 2px 0 0 #78350f, -2px 0 0 #78350f, 0 2px 0 #78350f, 0 -2px 0 #78350f, 1px 1px 0 #78350f, -1px -1px 0 #78350f, 1px -1px 0 #78350f, -1px 1px 0 #78350f' }}
                     >
                         TRÒ CHƠI KẾT THÚC!
                     </h2>
 
                     {/* Message box — cartoon white card */}
-                    <div className="w-full max-w-lg mb-6 min-h-[90px] md:min-h-[110px] flex items-center justify-center relative bg-white p-4 sm:p-5 rounded-2xl border-4 border-blue-300 shadow-[inset_0_-4px_0_rgba(191,219,254,1),0_6px_0_rgba(30,58,138,0.5)] text-[#1e3a8a] font-bold leading-relaxed">
+                    <div className="w-full max-w-lg mb-4 landscape:mb-2 md:mb-6 min-h-[70px] landscape:min-h-[40px] md:min-h-[110px] flex items-center justify-center relative bg-white p-3 landscape:p-2 sm:p-5 rounded-2xl border-4 border-blue-300 shadow-[inset_0_-4px_0_rgba(191,219,254,1),0_6px_0_rgba(30,58,138,0.5)] text-[#1e3a8a] font-bold leading-relaxed">
                         <AnimatePresence mode="popLayout">
                             {showEndMessage && Array.isArray(endMessage) && endMessage[visibleMessageIndex] ? (
                                 <motion.div
@@ -2140,31 +2142,31 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                     </div>
 
                     {/* Score Pills — Coins + XP */}
-                    <div className="flex items-center justify-center gap-4 mb-8 w-full max-w-md mx-auto">
+                    <div className="flex items-center justify-center gap-3 landscape:gap-2 md:gap-4 mb-5 landscape:mb-2 md:mb-8 w-full max-w-md mx-auto">
                         {/* Coins pill */}
-                        <div className="flex items-center justify-center bg-yellow-400 text-[#1e3a8a] rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.2)] py-2 px-6 relative overflow-hidden">
+                        <div className="flex items-center justify-center bg-yellow-400 text-[#1e3a8a] rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.2)] py-1.5 landscape:py-1 md:py-2 px-4 landscape:px-3 md:px-6 relative overflow-hidden">
                             <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
-                            <span className="text-xl md:text-2xl relative z-10 mr-1.5">💰</span>
+                            <img src={iconCoin} alt="Coins" className="w-6 h-6 md:w-7 md:h-7 relative z-10 mr-1.5" />
                             <motion.span
                                 key={displayScore}
                                 initial={{ y: -5, opacity: 0.8 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ duration: 0.1 }}
-                                className="text-2xl md:text-3xl font-black relative z-10"
+                                className="text-xl landscape:text-base md:text-3xl font-black relative z-10"
                             >
                                 {displayScore.toLocaleString()}
                             </motion.span>
                         </div>
                         {/* XP pill */}
-                        <div className="flex items-center justify-center bg-amber-500 text-white rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(120,53,15,0.3)] py-2 px-6 relative overflow-hidden">
+                        <div className="flex items-center justify-center bg-amber-500 text-white rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(120,53,15,0.3)] py-1.5 landscape:py-1 md:py-2 px-4 landscape:px-3 md:px-6 relative overflow-hidden">
                             <div className="absolute inset-0 w-full h-1/2 bg-white/25 pointer-events-none rounded-t-full"></div>
-                            <span className="text-xl md:text-2xl relative z-10 mr-1.5">🏆</span>
+                            <img src={iconTrophy} alt="XP" className="w-6 h-6 md:w-7 md:h-7 relative z-10 mr-1.5" />
                             <motion.span
                                 key={displayXP}
                                 initial={{ y: -5, opacity: 0.8 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ duration: 0.1 }}
-                                className="text-2xl md:text-3xl font-black relative z-10"
+                                className="text-xl landscape:text-base md:text-3xl font-black relative z-10"
                             >
                                 {displayXP.toLocaleString()}
                             </motion.span>
@@ -2232,17 +2234,17 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                     })()}
 
                     {/* Buttons — cartoon pill style */}
-                    <div className="flex flex-col sm:flex-row gap-4 relative z-10 w-full max-w-md mx-auto mt-2 pb-4">
+                    <div className="flex flex-row gap-3 landscape:gap-2 md:gap-4 relative z-10 w-full max-w-md mx-auto mt-2 landscape:mt-1 pb-4 landscape:pb-2">
                         <button
                             onClick={handlePlayAgain}
-                            className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-black uppercase tracking-widest text-base md:text-lg py-3 rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(29,78,216,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
+                            className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-black uppercase tracking-widest text-sm landscape:text-xs md:text-lg py-2.5 landscape:py-2 md:py-3 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(29,78,216,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
                         >
                             <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full"></div>
                             <span className="relative z-10 group-hover:scale-105 transition-transform">Chơi lại</span>
                         </button>
                         <button
                             onClick={onLeaveGame}
-                            className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-widest text-base md:text-lg py-3 rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.3)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
+                            className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-widest text-sm landscape:text-xs md:text-lg py-2.5 landscape:py-2 md:py-3 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.3)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
                         >
                             <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
                             <span className="relative z-10 group-hover:scale-105 transition-transform">Về Menu</span>
