@@ -138,6 +138,7 @@ function App() {
 
   // Tạo phòng → chuyển sang create_room modal
   const handleCreateGame = (gameId, mode) => {
+    enterFullscreen();
     setActiveGameType(gameId);
     setActiveMode(mode);
     if (mode === 'solo') {
@@ -185,12 +186,10 @@ function App() {
     try { return JSON.parse(localStorage.getItem('guestSession') || 'null'); } catch { return null; }
   })();
 
-  // ── Auto fullscreen khi vào game ──
+  // ── Auto fullscreen khi vào các view chức năng ──
   useEffect(() => {
-    if (currentView === 'playing') {
+    if (currentView !== 'menu' && currentView !== 'login') {
       enterFullscreen();
-    } else {
-      exitFullscreen();
     }
   }, [currentView]);
 
@@ -227,12 +226,19 @@ function App() {
             <MainMenu
               user={user}
               returnToGame={activeGameType}
-              onClearReturn={() => setActiveGameType(null)}
-              onJoinRoom={(pin) => { setInitialPin(pin || ''); setCurrentView('join_room'); }}
-              onCreateGame={handleCreateGame}
+              returnToMode={activeMode}
+              onClearReturn={() => { setActiveGameType(null); setActiveMode(null); }}
+              onJoinRoom={(pin, gameId) => { 
+                enterFullscreen(); 
+                setInitialPin(pin || ''); 
+                if (gameId) setActiveGameType(gameId);
+                setActiveMode('join_pin');
+                setCurrentView('join_room'); 
+              }}
+              onCreateGame={(gameId, mode) => handleCreateGame(gameId, mode)}
               onLinkAccount={handleLinkAccount}
               onUpdateName={handleUpdateName}
-              onOpenProfile={() => setCurrentView('profile')}
+              onOpenProfile={() => { enterFullscreen(); setCurrentView('profile'); }}
               onLogout={handleLogout}
               onExit={handleExit}
             />
@@ -273,7 +279,7 @@ function App() {
             <CreateRoom
               gameName={activeGameType}
               gameType={activeGameType}
-              onBack={() => { setActiveGameType(null); setCurrentView('menu'); }}
+              onBack={() => setCurrentView('menu')}
               onRoomCreated={handleRoomCreated}
             />
           </motion.div>
@@ -286,7 +292,7 @@ function App() {
             className="w-full h-full z-10 relative">
             <JoinRoom
               initialPin={initialPin}
-              onBack={() => { setActiveGameType(null); setCurrentView('menu'); }}
+              onBack={() => setCurrentView('menu')}
               onJoined={handleJoined}
             />
           </motion.div>

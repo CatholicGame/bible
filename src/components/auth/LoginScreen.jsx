@@ -2,12 +2,21 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LogIn, UserCircle, Facebook, ArrowRight } from 'lucide-react';
 
+const enterFullscreen = () => {
+    try {
+        if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+        }
+    } catch (err) { /* ignore */ }
+};
+
 const LoginScreen = ({ onLogin }) => {
     const [showGuestInput, setShowGuestInput] = useState(false);
     const [guestName, setGuestName] = useState('');
 
     const handleGuestSubmit = (e) => {
         e.preventDefault();
+        enterFullscreen();
         onLogin('guest', guestName.trim() || `Khách ${Math.floor(Math.random() * 10000)}`);
     };
 
@@ -53,7 +62,7 @@ const LoginScreen = ({ onLogin }) => {
 
                     {/* Google */}
                     <button
-                        onClick={() => onLogin('google')}
+                        onClick={() => { enterFullscreen(); onLogin('google'); }}
                         className="flex items-center justify-center gap-3 w-full bg-white border-2 border-gray-200 hover:bg-gray-50 text-gray-700 font-bold py-3.5 rounded-xl transition-all shadow-sm hover:shadow active:scale-95"
                     >
                         <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
@@ -62,7 +71,7 @@ const LoginScreen = ({ onLogin }) => {
 
                     {/* Facebook */}
                     <button
-                        onClick={() => onLogin('facebook')}
+                        onClick={() => { enterFullscreen(); onLogin('facebook'); }}
                         className="flex items-center justify-center gap-3 w-full bg-[#1877F2] hover:bg-[#166FE5] text-white font-bold py-3.5 rounded-xl transition-all shadow-sm active:scale-95"
                     >
                         <Facebook fill="currentColor" size={20} />

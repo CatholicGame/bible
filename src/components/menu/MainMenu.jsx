@@ -203,7 +203,7 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
 };
 
 /* ══ MainMenu ══ */
-const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName, onOpenProfile, onLogout, onExit }) => {
+const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom, onCreateGame, onLinkAccount, onUpdateName, onOpenProfile, onLogout, onExit }) => {
     const containerRef = useRef(null);
     const cwRef = useRef(0);
     const dragX = useMotionValue(0);
@@ -212,7 +212,9 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
     const [snapped, setSnapped] = useState(0);
     const [selectedGame, setSelectedGame] = useState(returnToGame || null);
     // modeView: 'home' | 'p2p'
-    const [modeView, setModeView] = useState('home');
+    const [modeView, setModeView] = useState(
+        returnToMode && (returnToMode.startsWith('p2p') || returnToMode === 'join_pin' || returnToMode === 'host') ? 'p2p' : 'home'
+    );
     const [showModes, setShowModes] = useState(!!returnToGame);
     const [profileOpen, setProfileOpen] = useState(false);
     const [showRoadmap, setShowRoadmap] = useState(false);
@@ -275,7 +277,17 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
 
 
 
+    /* ── Fullscreen Helper ── */
+    const enterFullscreen = () => {
+        try {
+            if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            }
+        } catch (err) { /* ignore */ }
+    };
+
     const handleSelect = (id) => {
+        enterFullscreen();
         const g = GAMES.find(g => g.id === id);
         if (g?.isSoloOnly) onCreateGame(id, 'solo');
         else { setSelectedGame(id); setShowModes(true); setModeView('home'); }
@@ -287,7 +299,7 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
     const handleModeSelect = (mode) => {
         if (mode === 'host') onCreateGame(selectedGame, 'p2p_private');
         else if (mode === 'auto_match') onCreateGame(selectedGame, 'p2p_public');
-        else if (mode === 'join_pin') onJoinRoom('');
+        else if (mode === 'join_pin') onJoinRoom('', selectedGame);
         else onCreateGame(selectedGame, mode);
     };
 
@@ -424,14 +436,14 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                                         {/* Menu items */}
                                         <div className="py-1">
                                             <button
-                                                onClick={() => { setShowProfileMenu(false); onOpenProfile(); }}
+                                                onClick={() => { enterFullscreen(); setShowProfileMenu(false); onOpenProfile(); }}
                                                 className="w-full flex items-center gap-3 px-4 py-2.5 text-white/90 hover:bg-white/10 transition-colors text-left"
                                             >
                                                 <User size={16} className="text-blue-300 shrink-0" />
                                                 <span className="font-bold text-sm">Xem chi tiết</span>
                                             </button>
                                             <button
-                                                onClick={() => { setShowProfileMenu(false); setShowRoadmap(true); }}
+                                                onClick={() => { enterFullscreen(); setShowProfileMenu(false); setShowRoadmap(true); }}
                                                 className="w-full flex items-center gap-3 px-4 py-2.5 text-white/90 hover:bg-white/10 transition-colors text-left"
                                             >
                                                 <Map size={16} className="text-green-300 shrink-0" />
@@ -478,7 +490,7 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                             className="flex-shrink-0 w-full max-w-xs px-4 md:px-0">
                             <motion.button
                                 whileTap={{ scale: 0.96 }}
-                                onClick={() => onJoinRoom('')}
+                                onClick={() => onJoinRoom('', null)}
                                 className="w-full flex items-center gap-3 px-4 py-2.5 rounded-2xl"
                                 style={{
                                     background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(14px)',
@@ -505,7 +517,7 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                                 {/* SOLO */}
                                 <motion.button
                                     whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 3 }}
-                                    onClick={() => handleModeSelect('solo')}
+                                    onClick={() => { enterFullscreen(); handleModeSelect('solo'); }}
                                     className="relative flex items-center gap-4 p-4 rounded-2xl w-full text-left group overflow-hidden"
                                     style={{ background: '#10b981', border: '2px solid #065f46', boxShadow: '0 5px 0 #065f46' }}>
                                     <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -522,7 +534,7 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                                 {/* P2P */}
                                 <motion.button
                                     whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 3 }}
-                                    onClick={() => setModeView('p2p')}
+                                    onClick={() => { enterFullscreen(); setModeView('p2p'); }}
                                     className="relative flex items-center gap-4 p-4 rounded-2xl w-full text-left group overflow-hidden"
                                     style={{ background: '#2563eb', border: '2px solid #1e3a8a', boxShadow: '0 5px 0 #1e3a8a' }}>
                                     <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -555,7 +567,7 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.35, delay: 0, ease: [0.25, 0.46, 0.45, 0.94] }}
                                 whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 2 }}
-                                onClick={() => handleModeSelect('auto_match')}
+                                onClick={() => { enterFullscreen(); handleModeSelect('auto_match'); }}
                                 className="relative flex items-center gap-3 px-4 py-3.5 rounded-2xl w-full text-left group overflow-hidden"
                                 style={{ background: '#d97706', border: '2px solid #92400e', boxShadow: '0 4px 0 #92400e' }}>
                                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -584,7 +596,7 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.35, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
                                 whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 2 }}
-                                onClick={() => handleModeSelect('join_pin')}
+                                onClick={() => { enterFullscreen(); handleModeSelect('join_pin'); }}
                                 className="relative flex items-center gap-3 px-4 py-3.5 rounded-2xl w-full text-left group overflow-hidden"
                                 style={{ background: 'rgba(255,255,255,0.08)', border: '2px solid rgba(255,255,255,0.2)', boxShadow: '0 3px 0 rgba(0,0,0,0.3)', backdropFilter: 'blur(12px)' }}>
                                 <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -602,7 +614,7 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.35, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
                                 whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 2 }}
-                                onClick={() => handleModeSelect('host')}
+                                onClick={() => { enterFullscreen(); handleModeSelect('host'); }}
                                 className="relative flex items-center gap-3 px-4 py-3.5 rounded-2xl w-full text-left group overflow-hidden"
                                 style={{ background: 'rgba(255,255,255,0.08)', border: '2px solid rgba(255,255,255,0.2)', boxShadow: '0 3px 0 rgba(0,0,0,0.3)', backdropFilter: 'blur(12px)' }}>
                                 <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
