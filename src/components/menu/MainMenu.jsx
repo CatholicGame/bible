@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import {
     Users, User, ArrowLeft, Trophy, Shield,
-    LogOut, Map, ChevronRight, ChevronLeft, Power,
+    LogOut, Map, ChevronRight, ChevronLeft, Power, Maximize
 } from 'lucide-react';
 import { getRankByScore } from '../../utils/ranks';
 import { useUserStore } from '../../store/userStore';
@@ -342,8 +342,24 @@ const MainMenu = ({ user, returnToGame, onClearReturn, onJoinRoom, onCreateGame,
                         <span className="text-blue-200/70 text-xs font-bold italic">Học hỏi Lời Chúa qua trò chơi</span>
                     </div>
 
+                    {/* Fullscreen button */}
+                    <motion.button whileTap={{ scale: 0.9, y: 2 }}
+                        onClick={() => {
+                            if (!document.fullscreenElement) {
+                                document.documentElement.requestFullscreen().catch(() => {});
+                            } else {
+                                document.exitFullscreen().catch(() => {});
+                            }
+                        }}
+                        className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 transition-colors ml-auto mr-[-4px]"
+                        style={{ border: '2px solid rgba(255,255,255,0.5)', boxShadow: '0 3px 0 rgba(30,58,138,0.6)' }}
+                        title="Toàn màn hình"
+                    >
+                        <Maximize size={18} strokeWidth={2.5} className="text-white" />
+                    </motion.button>
+
                     {/* User button — opens quick profile menu */}
-                    <div className="relative flex-shrink-0 ml-auto">
+                    <div className="relative flex-shrink-0">
                         <motion.button whileTap={{ y: 2 }}
                             onClick={() => setShowProfileMenu(v => !v)}
                             className="flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
