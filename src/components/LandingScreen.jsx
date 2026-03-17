@@ -20,10 +20,20 @@ const LandingScreen = () => {
 
     const ready = pin.length >= 4 && !isJoining;
 
-    const handleJoin = (e) => {
+    const handleJoin = async (e) => {
         e.preventDefault();
         if (!ready) return;
         setIsJoining(true);
+        
+        // Request fullscreen on web interaction
+        try {
+            if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
+                await document.documentElement.requestFullscreen();
+            }
+        } catch (err) {
+            console.log("Fullscreen request failed:", err);
+        }
+
         setTimeout(() => {
             setIsJoining(false);
             alert('Kết nối phòng thành công: ' + pin);

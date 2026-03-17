@@ -219,10 +219,11 @@ const RankRoadmap = ({ currentScore, onBack }) => {
                                             animate={{ y: [0, -6, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                                             className="absolute whitespace-nowrap text-sm font-black text-white rounded-full px-4 py-1.5"
                                             style={{
-                                                bottom: '100%', marginBottom: 12,
+                                                bottom: '100%', marginBottom: 6,
                                                 background: 'linear-gradient(135deg,#d97706,#b45309)',
                                                 border: '2px solid rgba(255,255,255,0.8)',
                                                 boxShadow: '0 6px 12px rgba(0,0,0,0.5)',
+                                                fontSize: 'clamp(10px, 3vw, 13px)',
                                             }}>
                                             📍 Bạn đang ở đây
                                         </motion.div>
@@ -239,9 +240,9 @@ const RankRoadmap = ({ currentScore, onBack }) => {
                                             src={isUnlocked ? imgActive : imgInactive} 
                                             alt={tier.name} 
                                             style={{ 
-                                                // Responsive: 22vw ≈ 88px on 400px screen, capped at 96px on larger screens 
-                                                width: 'min(22vw, 96px)', 
-                                                height: 'min(22vw, 96px)', 
+                                                // Responsive: 15vw ≈ 60px on 400px screen, capped at 68px on larger screens 
+                                                width: 'min(15vw, 68px)', 
+                                                height: 'min(15vw, 68px)', 
                                                 display: 'block', 
                                                 objectFit: 'contain' 
                                             }}
@@ -250,10 +251,10 @@ const RankRoadmap = ({ currentScore, onBack }) => {
 
                                     {/* Labels below nodes */}
                                     <div className="absolute flex flex-col items-center pointer-events-none"
-                                        style={{ top: 'min(22vw, 96px)', left: '50%', transform: 'translateX(-50%)', width: 'min(36vw, 160px)' }}>
+                                        style={{ top: 'min(15vw, 68px)', left: '50%', transform: 'translateX(-50%)', width: 'min(28vw, 130px)' }}>
                                         <span className="font-black text-center uppercase tracking-wide whitespace-nowrap"
                                             style={{
-                                                fontSize: 'clamp(9px, 2.4vw, 12px)',
+                                                fontSize: 'clamp(8.5px, 2vw, 10.5px)',
                                                 color: isCurrent ? '#fde68a' : isUnlocked ? '#86efac' : '#cbd5e1',
                                                 textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,1)',
                                             }}>
@@ -261,7 +262,7 @@ const RankRoadmap = ({ currentScore, onBack }) => {
                                         </span>
                                         <span className="font-bold mt-0.5 px-1.5 py-0.5 rounded-md"
                                             style={{ 
-                                                fontSize: 'clamp(8px, 2vw, 11px)',
+                                                fontSize: 'clamp(7.5px, 1.8vw, 9px)',
                                                 background: 'rgba(0,0,0,0.75)', 
                                                 color: 'rgba(255,255,255,0.9)', 
                                                 backdropFilter: 'blur(4px)',
