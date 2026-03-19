@@ -433,25 +433,33 @@ const PinnacleGame = ({ onLeaveGame }) => {
     // Auto-scroll the focused reward row on smaller screens
     useEffect(() => {
         if (gameState === 'playing' && introPhase >= 1 && currentRowRef.current) {
-            // Wait for cascade animation to finish (max delay ~1.12s + 0.3s duration)
             const delay = introPhase === 1 ? 1500 : 600;
             const timer = setTimeout(() => {
-                const container = ladderScrollRef.current;
                 const row = currentRowRef.current;
-                if (!container || !row) return;
+                const container = ladderScrollRef.current;
+                if (!row || !container) return;
 
-                // Use visual positions (works with flex-col-reverse)
-                const containerRect = container.getBoundingClientRect();
-                const rowRect = row.getBoundingClientRect();
+                // Save outer scroll positions so scrollIntoView doesn't move them
+                const mainScroller = container.closest('[class*="overflow-y-auto"]')?.parentElement;
+                const savedScrolls = [];
+                let el = container.parentElement;
+                while (el) {
+                    savedScrolls.push({ el, top: el.scrollTop, left: el.scrollLeft });
+                    el = el.parentElement;
+                }
 
-                // Check if the row is already fully visible
-                const isVisible = rowRect.top >= containerRect.top && rowRect.bottom <= containerRect.bottom;
-                if (isVisible) return;
+                // Let the browser figure out the exact scroll position
+                row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-                // Scroll so the current row appears near the top of the container with a small offset
-                const rowVisualOffset = rowRect.top - containerRect.top + container.scrollTop;
-                const targetScroll = rowVisualOffset - 8; // 8px padding from top
-                container.scrollTo({ top: Math.max(0, targetScroll), behavior: 'smooth' });
+                // Restore outer scroll positions (prevent page jump)
+                requestAnimationFrame(() => {
+                    savedScrolls.forEach(({ el, top, left }) => {
+                        if (el !== container) {
+                            el.scrollTop = top;
+                            el.scrollLeft = left;
+                        }
+                    });
+                });
             }, delay);
             return () => clearTimeout(timer);
         }
