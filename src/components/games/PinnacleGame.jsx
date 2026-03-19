@@ -1044,7 +1044,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
     };
 
     return (
-        <div className="w-full h-full relative flex flex-col items-center z-10 bg-[#020617] overflow-hidden font-sans text-slate-100">
+        <div className="w-full min-h-full h-full relative flex flex-col items-center z-10 bg-[#020617] overflow-y-auto overflow-x-hidden font-sans text-slate-100">
             {/* XP Comet Particles */}
             {xpParticles.map((p) => (
                 <motion.div
@@ -1083,7 +1083,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
             {/* Bottom gradient for readability */}
             <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-t from-[#020617]/70 via-transparent to-transparent" />
 
-            <div className="w-full max-w-6xl flex-1 flex flex-col z-10 pt-2 pb-2 landscape:pt-1 landscape:pb-1 lg:pt-4 lg:pb-8 px-2 lg:px-4 relative">
+            <div className="w-full max-w-6xl flex-1 flex flex-col z-10 pt-2 pb-2 landscape:pt-1 landscape:pb-1 lg:pt-4 lg:pb-8 px-2 lg:px-4 relative min-h-0">
                 <AnimatePresence mode="wait">
 
                     {gameState === 'rules' && (
@@ -1092,7 +1092,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             initial={{ opacity: 0, scale: 0.9, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 1.1, y: 30 }}
-                            className="bg-[#3b82f6] p-4 sm:p-5 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border-4 border-[#1e3a8a] shadow-[0_8px_0_rgba(30,58,138,1)] m-auto max-w-md w-full text-white relative z-10 my-auto max-h-[85vh] overflow-y-auto scrollbar-hide"
+                            className="bg-[#3b82f6] p-4 sm:p-5 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border-4 border-[#1e3a8a] shadow-[0_8px_0_rgba(30,58,138,1)] m-auto max-w-md w-full text-white relative z-10 my-auto max-h-[85dvh] overflow-y-auto scrollbar-hide"
                         >
                             {/* Header row: back + trophy */}
                             <div className="flex justify-between items-center mb-1">
@@ -1136,7 +1136,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="w-full flex-1 flex flex-col h-full relative"
+                            className="w-full flex-1 flex flex-col min-h-0 relative"
                         >
                             {/* 50:50 Confirmation Popup */}
                             <AnimatePresence>
@@ -1509,10 +1509,10 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             </AnimatePresence>
 
                             {/* Main Game Area */}
-                            <div className="flex-1 flex flex-col landscape:flex-row lg:flex-row w-full max-w-7xl mx-auto overflow-y-auto overflow-x-hidden gap-2 landscape:gap-3 lg:gap-8 pb-2 px-1 lg:px-4">
+                            <div className="flex-1 flex flex-col landscape:flex-row lg:flex-row w-full max-w-7xl mx-auto overflow-y-auto overflow-x-hidden gap-2 landscape:gap-3 lg:gap-8 pb-2 px-1 lg:px-4 min-h-0">
 
                                 {/* Left Side: Timer & Question Board */}
-                                <div className="flex-1 w-full order-3 landscape:order-1 lg:order-1 flex flex-col pt-1 pb-0 landscape:pb-1 lg:pb-8 min-h-0 landscape:h-full lg:h-full justify-between items-center z-20 relative overflow-y-auto overflow-x-visible mt-auto md:mt-0">
+                                <div className="flex-1 w-full order-3 landscape:order-1 lg:order-1 flex flex-col pt-1 pb-0 landscape:pb-1 lg:pb-8 min-h-0 landscape:min-h-0 lg:min-h-0 justify-between items-center z-20 relative overflow-y-auto overflow-x-visible mt-auto md:mt-0">
 
                                     {/* MC Character */}
                                     <motion.div
@@ -1732,7 +1732,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                     initial={{ opacity: 0, x: 50 }}
                                     animate={introPhase >= 1 ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
                                     transition={{ duration: 0.5, type: 'spring' }}
-                                    className="w-full landscape:w-64 lg:w-72 flex flex-col shrink-0 order-1 landscape:order-2 lg:order-2 h-[20vh] landscape:min-h-[100%] lg:min-h-[20vh] landscape:h-full lg:h-full lg:max-h-full landscape:border-l lg:border-l landscape:border-slate-700/50 lg:border-slate-700/50 landscape:pl-4 lg:pl-4 overflow-hidden"
+                                    className="w-full landscape:w-64 lg:w-72 flex flex-col shrink-0 order-1 landscape:order-2 lg:order-2 h-[20vh] landscape:h-full lg:h-full lg:max-h-full landscape:border-l lg:border-l landscape:border-slate-700/50 lg:border-slate-700/50 landscape:pl-4 lg:pl-4 overflow-hidden"
                                 >
                                     <div className="flex-1 flex flex-col h-full overflow-y-auto scrollbar-hide scroll-smooth pb-4 justify-between">
                                         <div className="flex flex-col-reverse gap-1 justify-end min-h-max">
