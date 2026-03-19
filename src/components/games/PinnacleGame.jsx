@@ -438,13 +438,20 @@ const PinnacleGame = ({ onLeaveGame }) => {
             const timer = setTimeout(() => {
                 const container = ladderScrollRef.current;
                 const row = currentRowRef.current;
-                if (container && row) {
-                    const containerRect = container.getBoundingClientRect();
-                    const rowRect = row.getBoundingClientRect();
-                    // Scroll so the current row is centered in the container
-                    const scrollOffset = row.offsetTop - container.offsetTop - (containerRect.height / 2) + (rowRect.height / 2);
-                    container.scrollTo({ top: scrollOffset, behavior: 'smooth' });
-                }
+                if (!container || !row) return;
+
+                // Use visual positions (works with flex-col-reverse)
+                const containerRect = container.getBoundingClientRect();
+                const rowRect = row.getBoundingClientRect();
+
+                // Check if the row is already fully visible
+                const isVisible = rowRect.top >= containerRect.top && rowRect.bottom <= containerRect.bottom;
+                if (isVisible) return;
+
+                // Scroll so the current row appears near the top of the container with a small offset
+                const rowVisualOffset = rowRect.top - containerRect.top + container.scrollTop;
+                const targetScroll = rowVisualOffset - 8; // 8px padding from top
+                container.scrollTo({ top: Math.max(0, targetScroll), behavior: 'smooth' });
             }, delay);
             return () => clearTimeout(timer);
         }
