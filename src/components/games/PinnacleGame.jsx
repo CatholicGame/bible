@@ -409,6 +409,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
     // Refs for XP animation start and end points
     const currentRowRef = useRef(null);
     const xpBadgeRef = useRef(null);
+    const ladderScrollRef = useRef(null);
 
     // Lifelines state
     const [lifelines, setLifelines] = useState({
@@ -432,10 +433,20 @@ const PinnacleGame = ({ onLeaveGame }) => {
     // Auto-scroll the focused reward row on smaller screens
     useEffect(() => {
         if (gameState === 'playing' && introPhase >= 1 && currentRowRef.current) {
-            // Delay slightly to give time for cascade animation layout
-            setTimeout(() => {
-                currentRowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 500);
+            // Wait for cascade animation to finish (max delay ~1.12s + 0.3s duration)
+            const delay = introPhase === 1 ? 1500 : 600;
+            const timer = setTimeout(() => {
+                const container = ladderScrollRef.current;
+                const row = currentRowRef.current;
+                if (container && row) {
+                    const containerRect = container.getBoundingClientRect();
+                    const rowRect = row.getBoundingClientRect();
+                    // Scroll so the current row is centered in the container
+                    const scrollOffset = row.offsetTop - container.offsetTop - (containerRect.height / 2) + (rowRect.height / 2);
+                    container.scrollTo({ top: scrollOffset, behavior: 'smooth' });
+                }
+            }, delay);
+            return () => clearTimeout(timer);
         }
     }, [currentQuestionIndex, introPhase, gameState]);
 
@@ -1734,7 +1745,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                     transition={{ duration: 0.5, type: 'spring' }}
                                     className="w-full landscape:w-64 lg:w-72 flex flex-col shrink-0 order-1 landscape:order-2 lg:order-2 h-[20vh] landscape:h-full lg:h-full lg:max-h-full landscape:border-l lg:border-l landscape:border-slate-700/50 lg:border-slate-700/50 landscape:pl-4 lg:pl-4 overflow-hidden"
                                 >
-                                    <div className="flex-1 flex flex-col h-full overflow-y-auto scrollbar-hide scroll-smooth pb-4 justify-between">
+                                    <div ref={ladderScrollRef} className="flex-1 flex flex-col h-full overflow-y-auto scrollbar-hide scroll-smooth pb-4 justify-between">
                                         <div className="flex flex-col-reverse gap-1 justify-end min-h-max">
                                             {REWARDS.map((reward, idx) => {
                                                 const qNum = idx + 1;

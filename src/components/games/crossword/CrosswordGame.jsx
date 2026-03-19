@@ -109,9 +109,9 @@ function buildGridMap(puzzle) {
    ══════════════════════════════════════════════════════════════ */
 
 const VIET_KEYS = [
-  ['A','Ă','Â','B','C','D','Đ','E','Ê','G'],
-  ['H','I','K','L','M','N','O','Ô','Ơ','P'],
-  ['Q','R','S','T','U','Ư','V','X','Y','⌫'],
+  ['Q','W','E','R','T','Y','U','I','O','P'],
+  ['A','S','D','F','G','H','J','K','L'],
+  ['Z','X','C','V','B','N','M','⌫'],
 ];
 
 const VirtualKeyboard = ({ onKey, onBackspace, compact = false }) => (
@@ -533,7 +533,7 @@ const CrosswordGame = ({
     const val = e.target.value;
     if (val) {
       const lastChar = val.slice(-1).toUpperCase();
-      if (/^[A-ZĂÂĐÊÔƠƯÀÁẢÃẠẮẰẲẴẶẤẦẨẪẬÈÉẺẼẸẾỀỂỄỆÌÍỈĨỊÒÓỎÕỌỐỒỔỖỘỚỜỞỠỢÙÚỦŨỤỨỪỬỮỰỲÝỶỸỴ]$/.test(lastChar)) {
+      if (/^[A-Z]$/.test(lastChar)) {
         lastInputTimeRef.current = Date.now();
         handleLetterInputRef.current(lastChar);
       }
