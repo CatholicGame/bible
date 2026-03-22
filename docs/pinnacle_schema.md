@@ -2,6 +2,46 @@
 
 > Game dạng "Ai Là Triệu Phú" với 15 câu hỏi trắc nghiệm Công giáo, thang phần thưởng leo dần, 3 mốc an toàn (Q5, Q10, Q15) và 4 quyền trợ giúp.
 
+> **Cập nhật lần cuối:** 2026-03-23
+
+---
+
+## 0. File Statistics
+
+| Metric | Value |
+|--------|-------|
+| **File** | `src/components/games/PinnacleGame.jsx` |
+| **Lines** | ~2,540 |
+| **Sub-components** | `SpotlightEffect`, `CartoonBox`, `LifelineButton`, `LobbyScreen`, `PinnacleGame` |
+| **External components** | `PinnacleLeaderboard` (riêng file) |
+| **State manager** | Zustand (`playfabStore.js`, `userStore.js`) |
+| **Backend** | PlayFab (auth, leaderboard, statistics, user data) |
+
+### Imports
+
+```javascript
+// React
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// Icons (lucide-react)
+import { Trophy, ArrowLeft, ChevronLeft, CheckCircle2, XCircle, Play, Phone,
+         Users, Shield, RefreshCcw, Flag, Star, UserCircle2 } from 'lucide-react';
+
+// Stores
+import { usePlayFabStore } from '../../store/playfabStore';
+import { useUserStore } from '../../store/userStore';
+import { getRankByScore, getRankLevel } from '../../utils/ranks';
+
+// Assets
+import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.png';
+import mcAvatar from '../../assets/pinnacle/MC.png';
+import resultBanner from '../../assets/common/result_banner.png';
+import iconCoin from '../../assets/common/coin.png';
+import iconTrophy from '../../assets/common/trophy.png';
+```
+
 ---
 
 ## 1. Content Source (Google Sheets → SheetDB)
@@ -164,7 +204,8 @@ State trong `PinnacleGame.jsx` component:
 
 ```javascript
 {
-  gameState: "rules" | "playing" | "finished",
+  gameState: "lobby" | "rules" | "playing" | "finished" | "leaderboard",
+  leaderboardSource: "lobby" | "finished",  // where to return from leaderboard
   introPhase: 0-4,             // Animation phases: 0→start, 1→ladder, 2→lifelines, 3→MC, 4→question
   currentQuestionIndex: 0-14,  // 0-indexed
   score: 0,                    // Coins earned (hiện tại)
@@ -174,6 +215,7 @@ State trong `PinnacleGame.jsx` component:
   answerStep: "thinking" | "explained",
   timeLeft: 30,                // Countdown timer (giây)
   explanationTimeLeft: 15,     // Giây đếm ngược ở bước giải thích
+  isSkipped: false,            // true khi user skip đọc giải thích
 
   // Lifelines
   lifelines: {
@@ -209,12 +251,14 @@ State trong `PinnacleGame.jsx` component:
   spotlightSwing: 0,
   spotlightWrong: 0,
   showGameConfetti: false,
+  gameConfettiKey: 0,
   xpParticles: [],
 
   // MC (Người dẫn chương trình)
   mcMessage: "",
   showMcBubble: false,
   endMessage: null,
+  showEndMessage: true,
 
   // Display (animated counters)
   displayScore: 0,
@@ -292,27 +336,28 @@ idle → confirmSwap=true → user confirms → isSwapping=true (animation)
 ## 5. Game State Machine
 
 ```
-┌─────────┐     handleStartGame()     ┌──────────┐
-│  rules  │ ──────────────────────────→│ playing  │
-│  (Màn   │                           │          │
-│  luật)  │                           │ introPhase: 1→2→3→4
-└─────────┘                           │          │
-                                      │ Trả lời  │
-                                      │ câu hỏi  │
-                                      │   ↕      │
-                                      │ Lifeline │
-                                      └────┬─────┘
-                                           │
-                              ┌────────────┼────────────┐
-                              ↓            ↓            ↓
-                         Đúng (Q<15)  Sai / Hết giờ  Đúng Q15
-                              │            │            │
-                              ↓            ↓            ↓
-                       Next Question   ┌──────────┐  ┌──────────┐
-                         (reset        │ finished │  │ finished │
-                          state)       │ (score = │  │ (score = │
-                                       │ milestone)│  │ 1000 🪙) │
-                                       └──────────┘  └──────────┘
+                              onPlay()         handleStartGame()
+┌─────────┐              ┌─────────┐              ┌──────────┐
+│  lobby  │─────────────→│  rules  │─────────────→│ playing  │
+│  (Chọn  │  onShow      │  (Màn   │              │          │
+│  mode)  │  Leaderboard │  luật)  │              │ introPhase: 1→2→3→4
+└────┬────┘      │       └─────────┘              │          │
+     │           ↓                                │ Trả lời  │
+     │    ┌─────────────┐                         │ câu hỏi  │
+     │    │ leaderboard │←─── onShowLeaderboard ──│   ↕      │
+     │    │ (BXH)       │     (from finished)     │ Lifeline │
+     │    └──────┬──────┘                         └────┬─────┘
+     │           │ onBack                              │
+     │           ↓                        ┌────────────┼────────────┐
+     │     leaderboardSource              ↓            ↓            ↓
+     │     ("lobby"/"finished")      Đúng (Q<15)  Sai / Hết giờ  Đúng Q15
+     │                                    │            │            │
+     │                                    ↓            ↓            ↓
+     │                             Next Question   ┌──────────┐  ┌──────────┐
+     │                               (reset        │ finished │  │ finished │
+     │                                state)       │ (score = │  │ (score = │
+     └──── onLeaveGame ──→ exit                    │ milestone)│  │ 1000 🪙) │
+                                                   └──────────┘  └──────────┘
 ```
 
 ### Luồng trả lời 1 câu
@@ -383,48 +428,89 @@ idle → confirmSwap=true → user confirms → isSwapping=true (animation)
 
 ## 8. Kết Quả & Lưu Trữ
 
-### Khi game kết thúc (`status: "finished"`)
+### Composite Score (PlayFab Leaderboard)
 
-```json
-{
-  "result": {
-    "uid": "uid_abc",
-    "finalLevel": 10,              // Câu cuối trả lời đúng (1-indexed)
-    "coinsEarned": 250,            // Theo milestone
-    "xpEarned": 55,                // XP tích lũy đến câu cuối đúng
-    "lifelinesUsed": ["fiftyFifty", "audience"],
-    "timeTotalSec": 185,           // Tổng thời gian chơi
-    "isReplay": false              // true nếu chơi lại cùng bộ câu hỏi
-  }
+Điểm xếp hạng được tính theo công thức **composite** — chỉ level cao mới có điểm đáng kể:
+
+```javascript
+function calcPinnaclePoints(levelIndex, isQ15Complete) {
+  if (isQ15Complete) return 1_000_000;  // 15/15 perfect
+  if (levelIndex >= 13) return 1_000;   // đến Q14 hoặc Q15 nhưng sai
+  if (levelIndex >= 12) return 1;       // đến Q13
+  return 0;                             // dưới Q13 → 0 điểm xếp hạng
 }
 ```
 
-### Cập nhật `users/{uid}` trên Firebase
+| Kết quả | Composite Points |
+|---------|------------------|
+| Hoàn thành Q15 (15/15) | **1,000,000** |
+| Đến Q14 hoặc Q15 (sai) | **1,000** |
+| Đến Q13 | **1** |
+| Dưới Q13 | **0** |
+
+### PlayFab Statistics (4 bảng xếp hạng)
 
 ```javascript
-// Sau mỗi trận
-update(ref(db, `users/${uid}`), {
-  global_score: currentGlobalScore + xpEarned,
-  coins: currentCoins + coinsEarned         // Solo: cộng, P2P: ± bet
-});
-
-// Stats
-update(ref(db, `users/${uid}/stats/solo`), {
-  plays: increment(1),
-  perfects: finalLevel === 15 ? increment(1) : increment(0),
-  totalCorrect: increment(finalLevel),
-  totalQuestions: increment(15)
-});
+const PINNACLE_STATS = {
+  daily:   'PinnacleScore_Daily',
+  weekly:  'PinnacleScore_Weekly',
+  monthly: 'PinnacleScore_Monthly',
+  allTime: 'PinnacleScore_AllTime',
+};
 ```
+
+Sau mỗi trận, gọi `savePinnacleCompositeScore(levelIndex, isQ15Complete)` → cập nhật cả 4 statistics cùng lúc:
+
+```javascript
+await updateStatisticsV2([
+  { Name: PINNACLE_STATS.daily,   Value: points },
+  { Name: PINNACLE_STATS.weekly,  Value: points },
+  { Name: PINNACLE_STATS.monthly, Value: points },
+  { Name: PINNACLE_STATS.allTime, Value: points },
+]);
+```
+
+### Leaderboard Tabs
+
+| Tab | Stat Name | Reset |
+|-----|-----------|-------|
+| Hôm nay | `PinnacleScore_Daily` | Mỗi ngày |
+| Tuần | `PinnacleScore_Weekly` | Mỗi tuần |
+| Tháng | `PinnacleScore_Monthly` | Mỗi tháng |
+| Mọi thời đại | `PinnacleScore_AllTime` | Không reset |
 
 ---
 
-## 9. Chơi Lại & Chơi Mới
+## 9. Lobby Screen
 
-| Hành động | Câu hỏi | XP | Coins |
-|-----------|---------|-----|-------|
-| **Chơi Lại** (Replay) | Cùng bộ 15 câu | **0 XP** | Coins theo milestone (giảm 50%) |
-| **Chơi Mới** (New Game) | Random bộ mới | **Full XP** | **Full Coins** |
+`LobbyScreen` là màn hình đầu tiên khi mở game, hiển thị trước khi vào luật chơi.
+
+### Props
+
+| Prop | Type | Mô tả |
+|------|------|--------|
+| `onPlay` | `() => void` | Chuyển sang `rules` |
+| `onShowLeaderboard` | `() => void` | Chuyển sang `leaderboard` |
+| `onLeaveGame` | `() => void` | Thoát về trang chính |
+| `nickname` | `string` | Tên người chơi |
+| `giaoxu` | `string` | Giáo xứ (hiển thị nếu có) |
+| `tinhthanh` | `string` | Tỉnh thành |
+
+### Nội dung hiển thị
+
+1. **Game title card** — tên game + mô tả
+2. **2 CTA buttons** — "Chơi ngay" (vàng) + "Xếp hạng" (tím)
+3. **Player info card** — avatar, nickname, rank, XP, số câu đã học, giáo xứ
+4. **Back button** — "Về trang chính" (rounded pill button + ChevronLeft icon)
+
+---
+
+## 10. Chơi Lại (handlePlayAgain)
+
+- Gọi `loadNewGame()` để rút 15 câu mới
+- Reset toàn bộ state: score, xpScore, lifelines, timer, MC, particles...
+- Tự động enter fullscreen (nếu trình duyệt cho phép)
+- Chuyển `gameState` → `playing` + `introPhase` → `1`
 
 ---
 
@@ -462,15 +548,27 @@ Khi `mode: "p2p"`, Room mở rộng thêm:
 
 ---
 
-## 11. SFX Assets
+## 12. SFX & Image Assets
 
-| File | Sự kiện |
-|------|---------|
-| `point_up.wav` | UI interaction (intro) |
-| `sfx_launch_game_altp.mp3` | Bắt đầu trận |
-| `sfx_clap_short.mp3` | Trả lời đúng |
-| `sfx_correct_answer.mp3` | Trả lời đúng (tone) |
-| `sfx_checkpoint_altp.mp3` | Qua mốc an toàn |
-| `sfx_incorrect_answer_altp.mp3` | Trả lời sai |
-| `sfx_clap_end.mp3` | Kết thúc game (vỗ tay tiễn) |
-| `sfx_firework_shot.wav` | Confetti |
+### SFX
+
+| File | Import Name | Sự kiện |
+|------|-------------|--------|
+| `point_up.wav` | `pointUpSfx` | UI interaction (intro phases) |
+| `sfx_launch_game_altp.mp3` | `sfxLaunch` | Bắt đầu trận + spotlight swing |
+| `sfx_clap_short.mp3` | `sfxClapShort` | Trả lời đúng (vỗ tay) |
+| `sfx_correct_answer.mp3` | `sfxCorrect` | Trả lời đúng (tone) |
+| `sfx_checkpoint_altp.mp3` | `sfxCheckpoint` | Qua mốc an toàn Q5/Q10 |
+| `sfx_incorrect_answer_altp.mp3` | `sfxIncorrect` | Trả lời sai |
+| `sfx_clap_end.mp3` | `sfxClapEnd` | Kết thúc game (vỗ tay tiễn + delay chuyển cảnh) |
+| `sfx_firework_shot.wav` | `fireworkSfx` | Confetti burst |
+
+### Images
+
+| File | Import Name | Dùng ở |
+|------|-------------|--------|
+| `altp_bg_02.png` | `pinnacleBackground` | Background toàn game |
+| `MC.png` | `mcAvatar` | Avatar MC (người dẫn chương trình) |
+| `result_banner.png` | `resultBanner` | Banner màn kết quả |
+| `coin.png` | `iconCoin` | Icon coin ở kết quả |
+| `trophy.png` | `iconTrophy` | Icon trophy ở kết quả |
