@@ -14,6 +14,7 @@ import JoinRoom from './components/menu/JoinRoom';
 import WaitingRoom from './components/menu/WaitingRoom';
 import { useUserStore } from './store/userStore';
 import { useRoomStore } from './store/roomStore';
+import { usePlayFabStore } from './store/playfabStore';
 import { auth, db } from './config/firebase';
 import { getRankByScore } from './utils/ranks';
 
@@ -66,6 +67,7 @@ function App() {
 
   const { setUser } = useUserStore();
   const { resetRoom } = useRoomStore();
+  const playfabLogin = usePlayFabStore(state => state.login);
 
   // ── Firebase Anonymous Auth (chạy background, chỉ cập nhật UID) ──
   useEffect(() => {
@@ -79,6 +81,8 @@ function App() {
           set(ref(db, `users/${user.uid}/nickname`), nickname);
         } catch { /* ignore */ }
       }
+      // PlayFab login (song song với Firebase, dùng device ID)
+      playfabLogin().catch(console.error);
     }).catch(console.error);
 
     // Global interaction listener for fullscreen (runs once on first click/touch)
@@ -99,12 +103,20 @@ function App() {
   // ── Handlers ──
   const handleLogin = async (method, customName = null) => {
     const uid = auth.currentUser?.uid;
-    const nickname = method === 'guest'
-      ? (customName || 'Khách Vô Danh')
-      : (method === 'facebook' ? 'Người chơi Facebook' : 'Người chơi Google');
 
-    const baseScore = method === 'guest' ? 0 : (method === 'facebook' ? 12500 : 45000);
-    const mockUser = { isGuest: method === 'guest', name: nickname, score: baseScore, rank: getRankByScore(baseScore), gameStats: {} };
+    let nickname;
+    if (method === 'guest') {
+      nickname = customName || 'Khách Vô Danh';
+    } else if (method === 'google') {
+      // Nickname comes from PlayFab store (set during Google login) or from LoginScreen
+      nickname = customName || usePlayFabStore.getState().nickname || 'Người chơi Google';
+    } else if (method === 'email') {
+      nickname = usePlayFabStore.getState().nickname || 'Người chơi';
+    } else {
+      nickname = customName || 'Người chơi';
+    }
+
+    const mockUser = { isGuest: method === 'guest', name: nickname, score: 0, rank: getRankByScore(0), gameStats: {}, authMethod: method };
 
     localStorage.setItem('guestSession', JSON.stringify(mockUser));
     setUser({ uid, nickname });
@@ -119,7 +131,7 @@ function App() {
       await update(ref(db, `users/${uid}`), updates);
     } else {
       // User mới → set đầy đủ với 500 coins ban đầu
-      await set(ref(db, `users/${uid}`), { nickname, global_score: baseScore, coins: 500 });
+      await set(ref(db, `users/${uid}`), { nickname, global_score: 0, coins: 500 });
     }
     setCurrentView('menu');
   };

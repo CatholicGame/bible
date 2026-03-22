@@ -6,8 +6,11 @@
 - **Animations:** Framer Motion
 - **State Management:** Zustand (Global State)
 - **Routing:** React Router v7
-- **Database (Live Game logic):** Firebase (Realtime Database, Anonymous Auth, Cloud Functions)
-- **Repository (Question Banks):** Google Sheets -> SheetDB API
+- **Backend (ALL Data):** PlayFab (Title ID: 15C4E5) — Auth, Player Data, Stats, Coins, Leaderboard, Room history
+- **Realtime Sync (Ephemeral):** Firebase Realtime DB — CHỈ dùng cho live P2P sync + Analytics
+- **Question Banks:** 15 Level JSON files (1500 câu, bundled trong app)
+
+> ⚡ **Nguyên tắc:** PlayFab = lưu TẤT CẢ data. Firebase = chỉ realtime sync + analytics.
 
 ## Directory Structure
 ```text
@@ -21,7 +24,7 @@
  │         ├── /crossword     # Crossword: CrosswordGame.jsx, ...Solo, ...P2P
  │         ├── /sorting       # Sorting: SortingGame.jsx, ...Solo, ...P2P
  │         └── GameEngine.jsx # Router lazy-load game theo (gameType, mode)
- ├── /config           # Firebase config, SheetDB endpoints
+ ├── /config           # Firebase config, PlayFab config
  ├── /hooks            # Custom hooks:
  │    ├── useRoom.js         # Tạo/join/rời phòng
  │    ├── useGameSync.js     # Sync progress P2P real-time
@@ -29,31 +32,31 @@
  ├── /store            # Zustand stores:
  │    ├── gameStore.js       # Game state (progress, status)
  │    ├── roomStore.js       # Room state (roomId, role, opponent)
- │    └── userStore.js       # User profile, global_score
- ├── /utils            # Score calculators, xpCalculator.js, sound players
+ │    ├── userStore.js       # User profile, global_score
+ │    └── playfabStore.js    # PlayFab auth + player data + answered questions
+ ├── /utils            # Score calculators, questionManager.js, sound players
  ├── App.jsx           # Main routing entry point
  └── index.css         # Tailwind directives and generic globals
 /docs
  ├── PROJECT_RULES.md
  ├── architecture.md          # (file này)
- ├── database_schema.md       # Firebase DB schema chi tiết
- └── /multi_frameworks        # 🌟 Cơ chế multiplayer & game templates
-      ├── multiplayer_framework.md  # Cơ chế Solo/2P, hooks, security rules
-      ├── screen_flow.md            # Luồng màn hình từng mode
-      ├── game_template.md          # Template tái sử dụng cho game mới
-      └── matchmaking_and_bot.md    # Auto matchmaking & Bot system
+ ├── playfab_integration.md   # 🌟 PlayFab schema + migration plan
+ ├── database_schema.md       # Firebase DB schema (realtime ephemeral only)
+ └── /multi_frameworks        # Cơ chế multiplayer & game templates
+      ├── multiplayer_framework.md
+      ├── screen_flow.md
+      ├── game_template.md
+      └── matchmaking_and_bot.md
 ```
 
 ## Security Rules
-- **Authentication:** All users (Hosts and Players) are authenticated anonymously (`signInAnonymously`) upon app load.
-- **Firebase Security Rules:**
-  - `matchmaking`: Users can only read/write their own UID node.
-  - `rooms`: 
-    - Players can *read* room data containing their PIN.
-    - Players can *write* to `rooms/{pin}/players/{uid}` and `rooms/{pin}/currentAnswers/{uid}` ONLY if they are authenticated and providing valid data formats.
-    - Hosts (creator of the room) have full read/write access to their `rooms/{pin}` node.
-    - `users`: Users can only read/write their own `global_score` and profile.
+- **Authentication:** PlayFab Custom ID (guest), Email/Password, Google Sign-In. Firebase Anonymous Auth chỉ dùng để xác thực realtime rooms.
+- **Firebase Security Rules** (chỉ áp dụng cho ephemeral realtime data):
+  - `rooms`: Live P2P game state, answers, matchmaking → xóa sau khi game kết thúc.
+  - Không lưu user data lâu dài trên Firebase.
 
 ## Global Progression System (Hệ thống Xếp Hạng Chung)
-- Bất kể người chơi tham gia Mini-game nào (Trắc nghiệm, Đỉnh Cao Hiểu Biết, hay Sắp Xếp) và chơi ở chế độ nào (Solo/P2P), điểm số (XP) kiếm được sau mỗi ván đều được cộng dồn vào `users/{uid}/global_score` trên Firebase.
-- Trên Frontend, `userStore.js` (Zustand) sẽ lắng nghe điểm số này và tự động ánh xạ thành `Rank` (Danh hiệu) (VD: Tân Tòng -> Chiên Con -> Môn Đệ -> Tông Đồ) để hiển thị ở góc màn hình.
+- XP từ tất cả Mini-game (Solo/P2P) được lưu vào **PlayFab Statistics** (`GlobalXP`).
+- Rank được tính từ XP trên `playfabStore.js` (Zustand) → hiển thị trên UI.
+- Leaderboard xếp hạng toàn server qua **PlayFab Leaderboards**.
+- Chi tiết: xem `playfab_integration.md`

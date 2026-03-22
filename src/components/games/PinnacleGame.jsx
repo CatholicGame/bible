@@ -1,7 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import PinnacleLeaderboard from './PinnacleLeaderboard';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, ArrowLeft, CheckCircle2, XCircle, Play, Phone, Users, Shield, RefreshCcw, Flag, Star, UserCircle2 } from 'lucide-react';
+import { Trophy, ArrowLeft, ChevronLeft, CheckCircle2, XCircle, Play, Phone, Users, Shield, RefreshCcw, Flag, Star, UserCircle2 } from 'lucide-react';
+import { usePlayFabStore } from '../../store/playfabStore';
+import { useUserStore } from '../../store/userStore';
+import { getRankByScore, getRankLevel } from '../../utils/ranks';
 import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.png';
 import mcAvatar from '../../assets/pinnacle/MC.png';
 import pointUpSfx from '../../assets/games/SFX/point_up.wav';
@@ -148,23 +152,6 @@ const SpotlightEffect = ({ flash, swing, wrong }) => {
 };
 
 
-const DUMMY_QUESTIONS = [
-    { question: "Tên vị Giáo hoàng đầu tiên của Giáo hội Công giáo là gì?", options: ["Thánh Phêrô", "Thánh Phaolô", "Thánh Anrê", "Thánh Giacôbê"], answer: 0, explanation: "Chúa Giêsu đã trao chìa khóa Nước Trời cho **Thánh Phêrô**, đặt ngài làm nền tảng đầu tiên của Giáo hội." },
-    { question: "Kinh Thánh Công giáo có bao nhiêu cuốn?", options: ["66", "73", "46", "27"], answer: 1, explanation: "Kinh Thánh Công giáo gồm **73 cuốn**, chia làm 46 cuốn Cựu Ước và 27 cuốn Tân Ước. Khác với Tin Lành chỉ công nhận 66 cuốn." },
-    { question: "Truyền thống Kinh Mân Côi cổ điển (trước thời ĐGH Gioan Phaolô II) bao gồm bao nhiêu mầu nhiệm chính?", options: ["2", "3", "4", "5"], answer: 1, explanation: "Trước khi có Mầu nhiệm Sự Sáng, Kinh Mân Côi truyền thống chỉ gồm **3 mầu nhiệm** chính: Sự Vui, Sự Thương và Sự Mừng." },
-    { question: "Trong Kinh Lạy Cha, câu tiếp theo của 'Xin tha nợ chúng con' là gì?", options: ["Như chúng con cũng tha", "Kẻ có nợ chúng con", "Xin chớ để chúng con", "Nhưng cứu chúng con cho khỏi"], answer: 0, explanation: "Câu đầy đủ là: 'Xin tha nợ chúng con, **như chúng con cũng tha** kẻ có nợ chúng con'." },
-    { question: "Vị thánh nào được mệnh danh là 'Tiến sĩ Hội Thánh' và viết tác phẩm 'Tổng luận Thần học'?", options: ["Thánh Augustinô", "Thánh Tôma Aquinô", "Thánh Phanxicô Đen", "Thánh Bênađô"], answer: 1, explanation: "**Thánh Tôma Aquinô** là nhà thần học vĩ đại, tác giả của bộ 'Tổng luận Thần học' (Summa Theologica) đồ sộ và uyên bác." },
-    { question: "Nơi Chúa Giêsu được sinh ra tên là gì?", options: ["Nazareth", "Jerusalem", "Bethlehem", "Galilee"], answer: 2, explanation: "Chúa Giêsu hạ sinh ra tại máng cỏ ở vùng **Bethlehem**, ứng nghiệm lời các ngôn sứ thời Cựu Ước." },
-    { question: "Bí tích nào đánh dấu sự trưởng thành trong đời sống Kitô hữu?", options: ["Rửa Tội", "Thánh Thể", "Thêm Sức", "Hoà Giải"], answer: 2, explanation: "Bí tích **Thêm Sức** ban rẫy Chúa Thánh Thần, giúp người tín hữu trưởng thành và củng cố đức tin vững vàng hơn." },
-    { question: "Ai là người đã làm phép thánh tẩy cho Chúa Giêsu?", options: ["Thánh Phêrô", "Gioan Tẩy Giả", "Thánh Giuse", "Thánh Giacôbê"], answer: 1, explanation: "**Thánh Gioan Tẩy Giả** là người đi trước dọn đường, cũng là người đã làm phép rửa cho Chúa Giêsu tại sông Giođan." },
-    { question: "Núi nơi Chúa Giêsu chịu đóng đinh mọc lên có tên là gì?", options: ["Golgotha", "Tabor", "Sinai", "Moriah"], answer: 0, explanation: "Đồi Núi Sọ, hay còn gọi là đồi **Golgotha**, là nơi Chúa Giêsu chịu đóng đinh thánh giá." },
-    { question: "Mùa Chay kéo dài bao nhiêu ngày?", options: ["30 ngày", "40 ngày", "50 ngày", "100 ngày"], answer: 1, explanation: "Mùa Chay kéo dài trong **40 ngày**, tưởng nhớ 40 đêm ngày Chúa Giêsu ăn chay cầu nguyện trong hoang địa." },
-    { question: "Thiên Thần nào đã báo tin cho Đức Maria?", options: ["Michael", "Raphael", "Gabriel", "Uriel"], answer: 2, explanation: "Tổng Lãnh Thiên Thần **Gabriel** là sứ giả được Chúa sai đến báo tin vui cho Đức Maria." },
-    { question: "Người môn đệ nào đã chối Chúa 3 lần trong cuộc thương khó?", options: ["Gioan", "Giuđa Iscariot", "Tôma", "Phêrô"], answer: 3, explanation: "Vì sợ hãi, **Thánh Phêrô** đã chối Chúa 3 lần trước khi gà gáy, đúng như lời Chúa Giêsu đã tiên báo." },
-    { question: "Đức Mẹ hiện ra ở Fatima (Bồ Đào Nha) vào năm nào?", options: ["1858", "1917", "1933", "1981"], answer: 1, explanation: "Đức Mẹ đã hiện ra với 3 trẻ chăn chiên tại Fatima, Bồ Đào Nha vào năm **1917** cùng 3 mệnh lệnh thiêng liêng." },
-    { question: "Lễ Chúa Giáng Sinh được Giáo hội Công giáo cử hành trọng thể vào ngày nào?", options: ["24/12", "25/12", "1/1", "6/1"], answer: 1, explanation: "Ngoại trừ đêm canh thức 24/12, Lễ Giáng Sinh chính thức và trọng thể nhất diễn ra vào ngày **25/12** hằng năm." },
-    { question: "Vị ngôn sứ nào đã bị ném vào hang sư tử nhưng không bị ăn thịt?", options: ["Isaia", "Môse", "Đanien", "Giêrêmia"], answer: 2, explanation: "Dù bị ném vào hang sư tử vì giữ vững đức tin dâng lời cầu nguyện với Chúa, ngôn sứ **Đanien** vẫn được Thiên Thần bảo vệ bình an vô sự." }
-];
 
 // Coins earned per question level (cumulative, max 1000 coins at Q15).
 const REWARDS = [5, 10, 20, 30, 50, 75, 100, 140, 190, 250, 350, 450, 600, 800, 1000];
@@ -371,8 +358,107 @@ const LifelineButton = ({ icon: Icon, text, isUsed, disabled, onClick, active })
     </button>
 );
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Lobby Screen — shown first when player opens PinnacleGame
+// ─────────────────────────────────────────────────────────────────────────────
+const LobbyScreen = ({ onPlay, onShowLeaderboard, onLeaveGame, nickname, giaoxu, tinhthanh }) => {
+    const { globalScore, coins } = useUserStore();
+    const answeredQuestions = usePlayFabStore(s => s.answeredQuestions);
+    const rankName = getRankByScore(globalScore || 0);
+    const rankLevel = getRankLevel(globalScore || 0);
+
+    return (
+        <motion.div
+            key="lobby"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -24 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+            className="m-auto max-w-sm w-full flex flex-col gap-3 my-auto"
+        >
+            {/* Game title card */}
+            <div className="bg-[#1e3a8a]/80 backdrop-blur-sm rounded-2xl border-2 border-blue-400/40 p-5 text-center shadow-xl">
+                <div className="text-4xl mb-1">🎓</div>
+                <h1 className="text-2xl font-black text-yellow-300 uppercase tracking-widest mb-0.5"
+                    style={{ textShadow: '0 3px 0 #78350f' }}>
+                    Nhà Thần Học
+                </h1>
+                <p className="text-blue-200 text-xs font-semibold">Thử thách 15 câu hỏi về Kinh Thánh</p>
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex gap-2">
+                <button
+                    onClick={onPlay}
+                    className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-wider text-base py-4 rounded-2xl border-4 border-[#1e3a8a] shadow-[0_5px_0_rgba(30,58,138,1)] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 relative overflow-hidden group"
+                >
+                    <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-xl" />
+                    <Play fill="currentColor" size={18} className="relative z-10" />
+                    <span className="relative z-10">Chơi ngay</span>
+                </button>
+                <button
+                    onClick={onShowLeaderboard}
+                    className="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-wider text-base py-4 rounded-2xl border-4 border-purple-900 shadow-[0_5px_0_rgba(88,28,135,1)] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 relative overflow-hidden group"
+                >
+                    <div className="absolute top-0 left-0 w-full h-1/2 bg-white/15 pointer-events-none rounded-t-xl" />
+                    <Trophy size={18} className="relative z-10" />
+                    <span className="relative z-10">Xếp hạng</span>
+                </button>
+            </div>
+
+            {/* Player info card */}
+            <div className="bg-[#1e40af]/70 backdrop-blur-sm rounded-2xl border-2 border-blue-400/30 p-3.5 shadow-lg flex items-center gap-3">
+                <div className="relative shrink-0">
+                    <div className="w-11 h-11 rounded-full bg-blue-500 flex items-center justify-center font-black text-white text-base border-2 border-blue-300">
+                        {nickname?.[0]?.toUpperCase() || '?'}
+                    </div>
+                    <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-blue-600 border-2 border-[#1e3a8a] flex items-center justify-center text-[9px] font-black text-white">
+                        {rankLevel}
+                    </div>
+                </div>
+                <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                        <p className="text-white font-black text-sm leading-tight truncate">{nickname || 'Người chơi'}</p>
+                        <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-yellow-400/20 text-yellow-300 border border-yellow-400/30 shrink-0">{rankName}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="text-[11px] text-blue-200 font-semibold">🏆 {(globalScore || 0).toLocaleString()} XP</span>
+                        <span className="text-blue-400/60 text-[10px]">·</span>
+                        <span className="text-[11px] text-blue-200 font-semibold">📚 {answeredQuestions?.length || 0} câu đã học</span>
+                        {giaoxu && <><span className="text-blue-400/60 text-[10px]">·</span><span className="text-[11px] text-blue-200 font-semibold truncate">⛪ {giaoxu}</span></>}
+                    </div>
+                </div>
+            </div>
+
+            {/* Back to menu */}
+            <button onClick={onLeaveGame}
+                className="mx-auto flex items-center gap-2 px-4 py-2 rounded-full text-white/80 hover:text-white font-bold text-xs transition-all active:translate-y-0.5"
+                style={{
+                    background: 'rgba(30,58,138,0.6)',
+                    border: '2px solid rgba(96,165,250,0.3)',
+                    boxShadow: '0 2px 0 rgba(15,23,42,0.5)',
+                }}>
+                <ChevronLeft size={16} strokeWidth={3} />
+                Về trang chính
+            </button>
+        </motion.div>
+    );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 const PinnacleGame = ({ onLeaveGame }) => {
-    const [gameState, setGameState] = useState('rules'); // 'rules', 'playing', 'finished'
+    // PlayFab store — câu hỏi động từ 1500 câu
+    const {
+        currentQuestions, loadNewGame, markAnswered, saveAnsweredQuestions,
+        savePinnacleCompositeScore,
+        pinnacleLeaderboard, pinnaclePlayerRank, pinnacleLeaderboardLoading,
+        pinnacleActiveTab, loadPinnacleLeaderboard,
+        hallOfFame, hallOfFameLoading, loadHallOfFame,
+        nickname, giaoxu, tinhthanh, saveProfile,
+    } = usePlayFabStore();
+    const [gameState, setGameState] = useState('lobby'); // 'lobby', 'rules', 'playing', 'finished', 'leaderboard'
+    const [leaderboardSource, setLeaderboardSource] = useState('lobby'); // where to go back to from leaderboard
     const [introPhase, setIntroPhase] = useState(4); // 0=start, 1=ladder, 2=lifelines, 3=MC, 4=question/timer
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
@@ -638,6 +724,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
     }, []);
 
     const handleStartGame = () => {
+        loadNewGame(); // Rút 15 câu hỏi mới từ pool
         setGameState('playing');
         setTimeLeft(30);
         playActiveSound();
@@ -680,8 +767,15 @@ const PinnacleGame = ({ onLeaveGame }) => {
 
     const handleTimeUp = () => {
         setIsAnswerRevealed(true);
+        let milestoneScore = 0;
+        for (let i = MILESTONES.length - 1; i >= 0; i--) {
+            if (currentQuestionIndex > MILESTONES[i]) {
+                milestoneScore = REWARDS[MILESTONES[i]];
+                break;
+            }
+        }
         setTimeout(() => {
-            setGameState('finished');
+            triggerEndGame(currentQuestionIndex, false);
         }, 3000);
     };
 
@@ -691,10 +785,12 @@ const PinnacleGame = ({ onLeaveGame }) => {
         setSelectedOption(index);
         setIsAnswerRevealed(true);
 
-        const currentQuestion = DUMMY_QUESTIONS[currentQuestionIndex];
+        const currentQuestion = currentQuestions[currentQuestionIndex];
         const isCorrect = index === currentQuestion.answer;
 
         if (isCorrect) {
+            // Đánh dấu câu hỏi đã trả lời đúng
+            if (currentQuestion.id) markAnswered(currentQuestion.id);
             const reward = REWARDS[currentQuestionIndex];
             setEncouragementMessage(getEncouragement(currentQuestionIndex));
             setSpotlightFlash(prev => prev + 1); // brief flicker
@@ -730,7 +826,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
 
             // Fully prepare explanation and button, then pop out the bubble
             setTimeout(() => {
-                setMcMessage(DUMMY_QUESTIONS[currentQuestionIndex].explanation);
+                setMcMessage(currentQuestions[currentQuestionIndex].explanation);
                 setAnswerStep('explained');
                 setEncouragementMessage(null); // Gỡ chữ Tuyệt vời
                 setShowMcBubble(true);
@@ -748,12 +844,20 @@ const PinnacleGame = ({ onLeaveGame }) => {
             playAudio(sfxIncorrect, 0.8);
             // Spotlight: dim monochromatic converge shake
             setSpotlightWrong(prev => prev + 1);
+
+            // Compute milestone score now (captured in closure for async callbacks)
+            let earnedMilestoneCoins = 0;
+            for (let i = MILESTONES.length - 1; i >= 0; i--) {
+                if (currentQuestionIndex > MILESTONES[i]) {
+                    earnedMilestoneCoins = REWARDS[MILESTONES[i]];
+                    break;
+                }
+            }
             
             // Farewell clap after a delay (2.5s)
             setTimeout(() => {
                 playAudio(sfxClapEnd, 0.65, (durationMs) => {
-                    // Chuyển luôn sang màn kết thúc khi vỗ tay xong
-                    setTimeout(() => triggerEndGame(currentQuestionIndex), durationMs);
+            setTimeout(() => { saveAnsweredQuestions(); triggerEndGame(currentQuestionIndex, false); }, durationMs);
                 });
             }, 2500);
 
@@ -762,34 +866,23 @@ const PinnacleGame = ({ onLeaveGame }) => {
             setMcMessage(pool[Math.floor(Math.random() * pool.length)]);
             setShowMcBubble(true);
 
-            // Hide the reaction bubble shortly before the explanation
-            setTimeout(() => {
-                setShowMcBubble(false);
-            }, 1800);
+            setTimeout(() => { setShowMcBubble(false); }, 1800);
 
             setTimeout(() => {
-                // Find last milestone reached logic
-                let earnedScore = 0;
-                for (let i = MILESTONES.length - 1; i >= 0; i--) {
-                    if (currentQuestionIndex > MILESTONES[i]) {
-                        earnedScore = REWARDS[MILESTONES[i]];
-                        break;
-                    }
-                }
-                setScore(earnedScore);
+                setScore(earnedMilestoneCoins);
                 setAnswerStep('explained');
-                // Removed explanation bubble pop-up here since we auto-transition soon anyway.
             }, 2500);
         }
     };
 
-    const triggerEndGame = (levelIndex) => {
+    const triggerEndGame = (levelIndex, isQ15Complete = false) => {
         setGameState('finished');
         if (MC_MESSAGES_AFTER_FINISH[levelIndex]) {
             setEndMessage(MC_MESSAGES_AFTER_FINISH[levelIndex]);
             setShowEndMessage(true);
-            setTimeout(() => setShowEndMessage(false), 8000); // Tăng thời gian hiển thị lên 8s
+            setTimeout(() => setShowEndMessage(false), 8000);
         }
+        savePinnacleCompositeScore(levelIndex, isQ15Complete);
     };
 
     const handleNextQuestion = () => {
@@ -799,10 +892,10 @@ const PinnacleGame = ({ onLeaveGame }) => {
         setShowMcBubble(false); // Hide MC bubble when moving to next question
 
         setTimeout(() => {
-            const isCorrect = selectedOption === DUMMY_QUESTIONS[currentQuestionIndex].answer;
+            const isCorrect = selectedOption === currentQuestions[currentQuestionIndex].answer;
 
             if (isCorrect || isSkipped) {
-                if (currentQuestionIndex < DUMMY_QUESTIONS.length - 1) {
+                if (currentQuestionIndex < currentQuestions.length - 1) {
                     setIsSwapping(true); // mượn lại hiệu ứng chuyển câu
                     setTimeout(() => {
                         setCurrentQuestionIndex(prev => prev + 1);
@@ -810,10 +903,11 @@ const PinnacleGame = ({ onLeaveGame }) => {
                         setIsSwapping(false);
                     }, 500);
                 } else {
-                    triggerEndGame(currentQuestionIndex);
+                    // Q15 correct — perfect game!
+                    triggerEndGame(currentQuestionIndex, true);
                 }
             } else {
-                triggerEndGame(currentQuestionIndex);
+                triggerEndGame(currentQuestionIndex, false);
             }
         }, 400); // Wait 400ms for the explanation panel to exit completely
     };
@@ -829,6 +923,13 @@ const PinnacleGame = ({ onLeaveGame }) => {
     };
 
     const handlePlayAgain = () => {
+        // Enter fullscreen on replay
+        try {
+            const el = document.documentElement;
+            const rfs = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+            if (rfs && !document.fullscreenElement) rfs.call(el).catch(() => {});
+        } catch (_) {}
+        loadNewGame(); // Rút 15 câu hỏi mới
         setGameState('playing');
         setCurrentQuestionIndex(0);
         setScore(0);
@@ -873,7 +974,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
         setLifelines(prev => ({ ...prev, fiftyFifty: true }));
         setIsScanningFiftyFifty(true);
 
-        const currentAns = DUMMY_QUESTIONS[currentQuestionIndex].answer;
+        const currentAns = currentQuestions[currentQuestionIndex].answer;
         let incorrectOptions = [0, 1, 2, 3].filter(idx => idx !== currentAns);
         // shuffle and pick 2
         incorrectOptions.sort(() => 0.5 - Math.random());
@@ -929,7 +1030,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
         playMurmurSound();
 
         setTimeout(() => {
-            const currentAns = DUMMY_QUESTIONS[currentQuestionIndex].answer;
+            const currentAns = currentQuestions[currentQuestionIndex].answer;
             const difficulty = currentQuestionIndex;
             let pCorrect = 0;
 
@@ -989,7 +1090,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
             setPhoneState('answering');
             setPhoneTimeLeft(30);
 
-            const currentAns = DUMMY_QUESTIONS[currentQuestionIndex].answer;
+            const currentAns = currentQuestions[currentQuestionIndex].answer;
             const alphabet = ["A", "B", "C", "D"];
             let suggestedAns = currentAns;
 
@@ -1059,7 +1160,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
 
         // Chờ 1s cho kịp lật đáp án xong show mục giải thích
         setTimeout(() => {
-            setMcMessage(DUMMY_QUESTIONS[currentQuestionIndex].explanation);
+            setMcMessage(currentQuestions[currentQuestionIndex].explanation);
             setAnswerStep('explained');
             setShowMcBubble(true);
         }, 1000);
@@ -1112,6 +1213,19 @@ const PinnacleGame = ({ onLeaveGame }) => {
             <div className="w-full max-w-6xl flex-1 flex flex-col z-10 pt-2 pb-2 landscape:pt-1 landscape:pb-1 lg:pt-4 lg:pb-8 px-2 lg:px-4 relative min-h-0">
                 <AnimatePresence mode="wait">
 
+                    {/* ── LOBBY SCREEN ── */}
+                    {gameState === 'lobby' && (
+                        <LobbyScreen
+                            onPlay={() => setGameState('rules')}
+                            onShowLeaderboard={() => setGameState('leaderboard')}
+                            onLeaveGame={onLeaveGame}
+                            nickname={nickname}
+                            giaoxu={giaoxu}
+                            tinhthanh={tinhthanh}
+                            saveProfile={saveProfile}
+                        />
+                    )}
+
                     {gameState === 'rules' && (
                         <motion.div
                             key="rules"
@@ -1122,7 +1236,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                         >
                             {/* Header row: back + trophy */}
                             <div className="flex justify-between items-center mb-1">
-                                <button onClick={onLeaveGame} className="text-white hover:text-yellow-400 transition-colors p-1.5 rounded-full bg-blue-700 border-3 border-[#1e3a8a] shadow-[0_3px_0_rgba(30,58,138,1)] active:translate-y-0.5 active:shadow-[0_0px_0_rgba(30,58,138,1)]">
+                                <button onClick={() => setGameState('lobby')} className="text-white hover:text-yellow-400 transition-colors p-1.5 rounded-full bg-blue-700 border-3 border-[#1e3a8a] shadow-[0_3px_0_rgba(30,58,138,1)] active:translate-y-0.5 active:shadow-[0_0px_0_rgba(30,58,138,1)]">
                                     <ArrowLeft size={20} strokeWidth={3} />
                                 </button>
                                 <div className="w-12 h-12 border-3 border-[#1e3a8a] bg-yellow-400 rounded-full flex items-center justify-center shadow-[0_3px_0_rgba(180,83,9,1)] overflow-hidden relative">
@@ -1535,10 +1649,10 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             </AnimatePresence>
 
                             {/* Main Game Area */}
-                            <div className="flex-1 flex flex-col landscape:flex-row lg:flex-row w-full max-w-7xl mx-auto overflow-y-auto overflow-x-hidden gap-2 landscape:gap-3 lg:gap-8 pb-2 px-1 lg:px-4 min-h-0">
+                            <div className="flex-1 flex flex-col landscape:flex-row lg:flex-row w-full max-w-7xl mx-auto overflow-y-auto landscape:overflow-hidden lg:overflow-hidden overflow-x-hidden gap-2 landscape:gap-3 lg:gap-8 pb-2 px-1 lg:px-4 min-h-0">
 
                                 {/* Left Side: Timer & Question Board */}
-                                <div className="flex-1 w-full order-3 landscape:order-1 lg:order-1 flex flex-col pt-1 pb-0 landscape:pb-1 lg:pb-8 min-h-0 landscape:min-h-0 lg:min-h-0 justify-between items-center z-20 relative overflow-y-auto overflow-x-visible mt-auto md:mt-0">
+                                <div className="flex-1 w-full order-3 landscape:order-1 lg:order-1 flex flex-col pt-1 pb-0 landscape:pb-1 lg:pb-8 min-h-0 landscape:min-h-0 lg:min-h-0 justify-between items-center z-20 relative overflow-y-auto landscape:overflow-hidden lg:overflow-hidden overflow-x-visible mt-auto md:mt-0">
 
                                     {/* MC Character */}
                                     <motion.div
@@ -1601,7 +1715,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                         </motion.div>
 
                                                         {/* Next / End button */}
-                                                        {answerStep === 'explained' && currentQuestionIndex < DUMMY_QUESTIONS.length - 1 && (
+                                                        {answerStep === 'explained' && currentQuestionIndex < currentQuestions.length - 1 && (
                                                             <button
                                                                 onClick={handleNextQuestion}
                                                                 className="mt-3 font-black text-white text-sm px-6 py-2.5 rounded-full transition-all active:translate-y-1 flex items-center gap-2 mx-auto relative z-10 hover:brightness-110"
@@ -1611,7 +1725,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                                     boxShadow: '0 5px 0 #0369a1, 0 0 18px rgba(14,165,233,0.55)',
                                                                 }}
                                                             >
-                                                                <span>{(!isSkipped && selectedOption !== DUMMY_QUESTIONS[currentQuestionIndex].answer) ? 'Kết thúc' : 'Tiếp tục'}</span>
+                                                                <span>{(!isSkipped && selectedOption !== currentQuestions[currentQuestionIndex].answer) ? 'Kết thúc' : 'Tiếp tục'}</span>
                                                                 <ArrowLeft size={14} className="rotate-180" />
                                                             </button>
                                                         )}
@@ -1628,15 +1742,71 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         transition={{ duration: 0.5, type: 'spring' }}
                                         className="w-full flex flex-col items-center justify-center shrink-0 relative mt-2 landscape:mt-1 md:mt-[15px]"
                                     >
-                                        <div className="relative w-16 h-16 landscape:w-12 landscape:h-12 md:w-20 md:h-20 lg:w-28 lg:h-28 rounded-full border-4 landscape:border-3 border-slate-700/50 flex flex-col items-center justify-center bg-[#020617]/80 shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-sm">
-                                            <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full transform -rotate-90">
-                                                <circle cx="50" cy="50" r="46" className="stroke-slate-700/30" strokeWidth="6" fill="transparent" />
-                                                <circle cx="50" cy="50" r="46" className={`${timeLeft <= 10 ? 'stroke-red-500' : 'stroke-amber-500'} transition-all duration-1000 ease-linear`} strokeWidth="6" fill="transparent" strokeDasharray="289" strokeDashoffset={289 - (timeLeft / 30) * 289} />
+                                        {/* Neon timer — outer wrapper handles circular glow via filter:drop-shadow */}
+                                        <motion.div
+                                            animate={timeLeft <= 10 ? {
+                                                filter: [
+                                                    'drop-shadow(0 0 8px rgba(236,72,153,0.7)) drop-shadow(0 0 22px rgba(236,72,153,0.35))',
+                                                    'drop-shadow(0 0 20px rgba(236,72,153,1)) drop-shadow(0 0 50px rgba(236,72,153,0.55))',
+                                                    'drop-shadow(0 0 8px rgba(236,72,153,0.7)) drop-shadow(0 0 22px rgba(236,72,153,0.35))',
+                                                ],
+                                                scale: [1, 1.04, 1],
+                                            } : {
+                                                filter: 'drop-shadow(0 0 10px rgba(34,211,238,0.55)) drop-shadow(0 0 28px rgba(34,211,238,0.25))',
+                                                scale: 1,
+                                            }}
+                                            transition={{ duration: 0.75, repeat: Infinity, ease: 'easeInOut' }}
+                                            className="relative w-40 h-40 landscape:w-28 landscape:h-28 md:w-48 md:h-48 lg:w-56 lg:h-56 rounded-full overflow-hidden"
+                                            style={{
+                                                background: 'radial-gradient(circle at 40% 30%, rgba(14,30,80,0.95) 0%, #020617 70%)',
+                                                border: timeLeft <= 10
+                                                    ? '2px solid rgba(236,72,153,0.5)'
+                                                    : '2px solid rgba(34,211,238,0.3)',
+                                            }}
+                                        >
+                                            {/* SVG arc — NO filter on elements, glow comes from outer container */}
+                                            <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full transform -rotate-90" overflow="visible">
+                                                {/* Track */}
+                                                <circle cx="50" cy="50" r="44"
+                                                    stroke="rgba(255,255,255,0.07)" strokeWidth="6" fill="transparent" />
+                                                {/* Glow duplicate (wider, more transparent) */}
+                                                <circle cx="50" cy="50" r="44"
+                                                    stroke={timeLeft <= 10 ? 'rgba(236,72,153,0.4)' : 'rgba(34,211,238,0.3)'}
+                                                    strokeWidth="14" fill="transparent"
+                                                    strokeDasharray="276"
+                                                    strokeDashoffset={276 - (timeLeft / 30) * 276}
+                                                    strokeLinecap="round"
+                                                    style={{ transition: 'stroke 0.5s, stroke-dashoffset 1s linear' }}
+                                                />
+                                                {/* Main progress arc */}
+                                                <circle cx="50" cy="50" r="44"
+                                                    stroke={timeLeft <= 10 ? '#ec4899' : '#22d3ee'}
+                                                    strokeWidth="6" fill="transparent"
+                                                    strokeLinecap="round"
+                                                    strokeDasharray="276"
+                                                    strokeDashoffset={276 - (timeLeft / 30) * 276}
+                                                    style={{ transition: 'stroke 0.5s, stroke-dashoffset 1s linear' }}
+                                                />
                                             </svg>
-                                            <span className={`text-2xl landscape:text-lg md:text-3xl lg:text-4xl font-black ${timeLeft <= 10 ? 'text-red-500 animate-pulse' : 'text-slate-100'}`}>{timeLeft}</span>
-                                        </div>
-
-
+                                            {/* Timer content */}
+                                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                                <span
+                                                    className="text-5xl landscape:text-4xl md:text-6xl lg:text-7xl font-black leading-none tracking-tight"
+                                                    style={{
+                                                        color: timeLeft <= 10 ? '#f9a8d4' : '#e0f9ff',
+                                                        textShadow: timeLeft <= 10
+                                                            ? '0 0 12px #ec4899, 0 0 28px rgba(236,72,153,0.7)'
+                                                            : '0 0 10px #22d3ee, 0 0 24px rgba(34,211,238,0.5)',
+                                                    }}
+                                                >
+                                                    {timeLeft}
+                                                </span>
+                                                <span
+                                                    className="text-[10px] landscape:text-[9px] md:text-xs font-bold tracking-[0.2em] uppercase mt-1"
+                                                    style={{ color: timeLeft <= 10 ? 'rgba(236,72,153,0.6)' : 'rgba(34,211,238,0.5)' }}
+                                                >giây</span>
+                                            </div>
+                                        </motion.div>
                                     </motion.div>
 
                                     {/* Question & Options Area */}
@@ -1684,7 +1854,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                                 >
                                                                     <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/8 pointer-events-none" />
                                                                     <h3 className="text-sm sm:text-base md:text-xl lg:text-2xl font-bold text-center leading-snug tracking-wide text-white drop-shadow-lg w-full relative z-10">
-                                                                        {DUMMY_QUESTIONS[currentQuestionIndex].question}
+                                                                        {currentQuestions[currentQuestionIndex]?.question}
                                                                     </h3>
                                                                 </div>
                                                             </div>
@@ -1705,12 +1875,12 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                             )}
                                                         </AnimatePresence>
 
-                                                        {DUMMY_QUESTIONS[currentQuestionIndex].options.map((option, idx) => {
+                                                        {currentQuestions[currentQuestionIndex]?.options.map((option, idx) => {
                                                             const alphabet = ["A", "B", "C", "D"];
                                                             const isHidden = hiddenOptions.includes(idx);
 
                                                             let isSel = selectedOption === idx;
-                                                            let isCorrectChoice = isAnswerRevealed && idx === DUMMY_QUESTIONS[currentQuestionIndex].answer;
+                                                            let isCorrectChoice = isAnswerRevealed && idx === currentQuestions[currentQuestionIndex].answer;
                                                             let isWrongChoice = isAnswerRevealed && isSel && !isCorrectChoice;
 
                                                             return (
@@ -1760,7 +1930,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                     transition={{ duration: 0.5, type: 'spring' }}
                                     className="w-full landscape:w-64 lg:w-72 flex flex-col shrink-0 order-1 landscape:order-2 lg:order-2 h-[20vh] landscape:h-full lg:h-full lg:max-h-full landscape:border-l lg:border-l landscape:border-slate-700/50 lg:border-slate-700/50 landscape:pl-4 lg:pl-4 overflow-hidden"
                                 >
-                                    <div ref={ladderScrollRef} className="flex-1 flex flex-col h-full overflow-y-auto scrollbar-hide scroll-smooth pb-4 justify-between">
+                                    <div ref={ladderScrollRef} className="flex-1 flex flex-col h-full overflow-y-auto landscape:overflow-hidden lg:overflow-hidden scrollbar-hide scroll-smooth pb-4 justify-between">
                                         <div className="flex flex-col-reverse gap-1 justify-end min-h-max">
                                             {REWARDS.map((reward, idx) => {
                                                 const qNum = idx + 1;
@@ -1873,7 +2043,29 @@ const PinnacleGame = ({ onLeaveGame }) => {
                     )}
 
                     {gameState === 'finished' && (
-                        <EndGameScreen score={score} handlePlayAgain={handlePlayAgain} onLeaveGame={onLeaveGame} currentQuestionIndex={currentQuestionIndex} endMessage={endMessage} showEndMessage={showEndMessage} selectedOption={selectedOption} questions={DUMMY_QUESTIONS} />
+                        <EndGameScreen
+                            score={score}
+                            handlePlayAgain={handlePlayAgain}
+                            onLeaveGame={onLeaveGame}
+                            onShowLeaderboard={() => { setLeaderboardSource('finished'); setGameState('leaderboard'); }}
+                            currentQuestionIndex={currentQuestionIndex}
+                            endMessage={endMessage}
+                            showEndMessage={showEndMessage}
+                            selectedOption={selectedOption}
+                            questions={currentQuestions}
+                        />
+                    )}
+                    {gameState === 'leaderboard' && (
+                        <motion.div
+                            key="leaderboard"
+                            initial={{ opacity: 0, x: 60 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -60 }}
+                            transition={{ duration: 0.3 }}
+                            className="absolute inset-0 z-20"
+                        >
+                            <PinnacleLeaderboard onBack={() => setGameState(leaderboardSource)} />
+                        </motion.div>
                     )}
                 </AnimatePresence>
             </div>
@@ -2001,7 +2193,7 @@ const Confetti = ({ questionIndex = 14 }) => {
     return <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1000 }} />;
 };
 
-const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionIndex, endMessage, showEndMessage, selectedOption, questions }) => {
+const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, onShowLeaderboard, currentQuestionIndex, endMessage, showEndMessage, selectedOption, questions }) => {
     const [displayScore, setDisplayScore] = useState(0);
     const [displayXP, setDisplayXP] = useState(0);
     const lastSoundTime = useRef(0);
@@ -2308,21 +2500,30 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                         );
                     })()}
 
-                    {/* Buttons — cartoon pill style */}
-                    <div className="flex flex-row gap-3 landscape:gap-2 md:gap-4 relative z-10 w-full max-w-md mx-auto mt-2 landscape:mt-1 pb-4 landscape:pb-2">
+                    {/* Buttons */}
+                    <div className="flex flex-col gap-2 relative z-10 w-full max-w-md mx-auto mt-2 landscape:mt-1 pb-4 landscape:pb-2">
+                        <div className="flex flex-row gap-2">
+                            <button
+                                onClick={handlePlayAgain}
+                                className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-black uppercase tracking-widest text-base landscape:text-sm py-4 landscape:py-3 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(29,78,216,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
+                            >
+                                <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full"></div>
+                                <span className="relative z-10 group-hover:scale-105 transition-transform">Chơi lại</span>
+                            </button>
+                            <button
+                                onClick={onLeaveGame}
+                                className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-widest text-base landscape:text-sm py-4 landscape:py-3 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.3)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
+                            >
+                                <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
+                                <span className="relative z-10 group-hover:scale-105 transition-transform">Về Menu</span>
+                            </button>
+                        </div>
                         <button
-                            onClick={handlePlayAgain}
-                            className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-black uppercase tracking-widest text-lg landscape:text-base md:text-xl py-5 landscape:py-4 md:py-6 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(29,78,216,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
+                            onClick={onShowLeaderboard}
+                            className="w-full bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-widest text-base landscape:text-sm py-3 landscape:py-2 rounded-full border-4 landscape:border-3 border-purple-900 shadow-[0_5px_0_rgba(88,28,135,1),inset_0_-4px_0_rgba(109,40,217,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(88,28,135,1)] transition-all flex justify-center items-center gap-2 relative overflow-hidden group"
                         >
-                            <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full"></div>
-                            <span className="relative z-10 group-hover:scale-105 transition-transform">Chơi lại</span>
-                        </button>
-                        <button
-                            onClick={onLeaveGame}
-                            className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-widest text-lg landscape:text-base md:text-xl py-5 landscape:py-4 md:py-6 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.3)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
-                        >
-                            <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
-                            <span className="relative z-10 group-hover:scale-105 transition-transform">Về Menu</span>
+                            <div className="absolute top-0 left-0 w-full h-1/2 bg-white/15 pointer-events-none rounded-t-full"></div>
+                            <span className="relative z-10 group-hover:scale-105 transition-transform">🏆 Xem Xếp Hạng</span>
                         </button>
                     </div>
                     </div>{/* end scroll */}

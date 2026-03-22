@@ -6,6 +6,8 @@ import {
 } from 'lucide-react';
 import { getRankByScore } from '../../utils/ranks';
 import { useUserStore } from '../../store/userStore';
+import { usePlayFabStore } from '../../store/playfabStore';
+import UserAvatar from '../common/UserAvatar';
 import RankRoadmap from '../profile/RankRoadmap';
 import bgImage from '../../assets/common/common_background.png';
 import iconCoin from '../../assets/common/coin.png';
@@ -224,6 +226,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
     const [isLandscape, setIsLandscape] = useState(false);
 
     const { coins } = useUserStore();
+    const avatarUrl = usePlayFabStore(state => state.avatarUrl);
 
     /* Measure → set cwRef + card dims based on available height, then centre card-0 */
     useEffect(() => {
@@ -376,10 +379,12 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                             onClick={() => setShowProfileMenu(v => !v)}
                             className="flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
                             style={{ border: '2px solid rgba(255,255,255,0.5)', boxShadow: '0 3px 0 rgba(30,58,138,0.6)' }}>
-                            <div className="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center font-black text-amber-800 text-xs flex-shrink-0"
-                                style={{ border: '2px solid #b45309' }}>
-                                {(user.name || 'K')[0].toUpperCase()}
-                            </div>
+                            <UserAvatar
+                                name={user.name || 'K'}
+                                photoURL={avatarUrl}
+                                size={24}
+                                style={{ border: '2px solid #b45309', flexShrink: 0 }}
+                            />
                             <div className="flex flex-col text-left">
                                 <span className="font-black text-white text-xs leading-none">{user.name}</span>
                                 <span className="flex items-center gap-1.5 mt-0.5">
@@ -418,10 +423,12 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                         {/* Quick stats */}
                                         <div className="px-4 py-3 border-b border-blue-500/30">
                                             <div className="flex items-center gap-2 mb-2">
-                                                <div className="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center font-black text-amber-800 text-sm"
-                                                    style={{ border: '2px solid #b45309' }}>
-                                                    {(user.name || 'K')[0].toUpperCase()}
-                                                </div>
+                                                <UserAvatar
+                                                    name={user.name || 'K'}
+                                                    photoURL={avatarUrl}
+                                                    size={32}
+                                                    style={{ border: '2px solid #b45309', flexShrink: 0 }}
+                                                />
                                                 <div>
                                                     <p className="font-black text-white text-sm leading-none">{user.name}</p>
                                                     <p className="text-blue-200/70 text-[10px] font-bold mt-0.5">{getRankByScore(user.score || 0)?.title || 'Người Tìm Hiểu'}</p>

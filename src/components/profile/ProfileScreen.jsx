@@ -2,9 +2,11 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
     ChevronLeft, Trophy, Star, Award, Swords,
-    User, Shield, Map, ChevronRight, TrendingUp, Crown,
+    User, Shield, Map, ChevronRight, TrendingUp, Crown, Pen,
 } from 'lucide-react';
 import { useUserStore } from '../../store/userStore';
+import { usePlayFabStore } from '../../store/playfabStore';
+import UserAvatar from '../common/UserAvatar';
 import {
     RANK_TIERS, getRankByScore, getRankLevel,
     getNextRank, getProgressToNextRank, formatNumber,
@@ -52,7 +54,17 @@ const popIn = {
 };
 
 const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
-    const { globalScore, coins, stats } = useUserStore();
+    const globalScore = useUserStore(state => state.globalScore);
+    const coins = useUserStore(state => state.coins);
+    const stats = useUserStore(state => state.stats);
+    const avatarUrl = usePlayFabStore(state => state.avatarUrl);
+    const giaoxu = usePlayFabStore(state => state.giaoxu);
+    const hat = usePlayFabStore(state => state.hat);
+    const giaophan = usePlayFabStore(state => state.giaophan);
+    const tinhthanh = usePlayFabStore(state => state.tinhthanh);
+    const saveProfile = usePlayFabStore(state => state.saveProfile);
+    const saveDisplayName = usePlayFabStore(state => state.saveDisplayName);
+    const nickname = usePlayFabStore(state => state.nickname);
     const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
 
     useEffect(() => {
@@ -75,19 +87,20 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
     const avgCorrect = solo.plays > 0 ? (solo.totalCorrect / solo.plays).toFixed(1) : '0';
     const winRate = p2p.plays > 0 ? Math.round((p2p.wins / p2p.plays) * 100) : 0;
 
-    const displayName = user?.name || 'Khách';
+    const displayName = nickname || user?.name || 'Khách';
     const initial = displayName[0]?.toUpperCase() || 'K';
 
     /* ════ Shared sub-components ════ */
     const AvatarSection = () => (
         <div className={`flex ${isLandscape ? 'flex-row items-center gap-4' : 'flex-col items-center gap-2'}`}>
             <div className="relative flex-shrink-0">
-                <div className={`${isLandscape ? 'w-14 h-14 text-xl' : 'w-20 h-20 text-3xl'} rounded-full bg-yellow-400 flex items-center justify-center font-black text-amber-800 relative overflow-hidden`}
-                    style={{ border: '4px solid #b45309', boxShadow: '0 6px 0 #92400e, 0 10px 24px rgba(0,0,0,0.5)' }}>
-                    <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none" />
-                    <span className="relative z-10">{initial}</span>
-                </div>
-                <div className={`absolute -bottom-1 -right-1 ${isLandscape ? 'w-6 h-6 text-[9px]' : 'w-8 h-8 text-xs'} rounded-full bg-blue-600 flex items-center justify-center font-black text-white`}
+                <UserAvatar
+                    name={displayName}
+                    photoURL={avatarUrl}
+                    size={isLandscape ? 56 : 80}
+                    ring={true}
+                />
+                <div className={`absolute -bottom-1 -right-1 ${isLandscape ? 'w-6 h-6 text-[9px]' : 'w-8 h-8 text-xs'} rounded-full bg-blue-600 flex items-center justify-center font-black text-white z-10`}
                     style={{ border: '3px solid #0f172a', boxShadow: '0 2px 0 #000' }}>
                     {rankLevel}
                 </div>
@@ -268,6 +281,127 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
         </div>
     );
 
+    const PersonalInfo = () => {
+        const [editName, setEditName] = useState(nickname || displayName || '');
+        const [editGiaoxu, setEditGiaoxu] = useState(giaoxu || '');
+        const [editHat, setEditHat] = useState(hat || '');
+        const [editGiaophan, setEditGiaophan] = useState(giaophan || '');
+        const [editTinhthanh, setEditTinhthanh] = useState(tinhthanh || '');
+        const [saving, setSaving] = useState(false);
+        const [saved, setSaved] = useState(false);
+
+        const nameDirty = editName.trim() !== '' && editName.trim() !== (nickname || displayName || '');
+        const infoDirty = editGiaoxu.trim() !== (giaoxu || '') || editHat.trim() !== (hat || '') || editGiaophan.trim() !== (giaophan || '') || editTinhthanh.trim() !== (tinhthanh || '');
+        const isDirty = nameDirty || infoDirty;
+
+        const handleSave = async () => {
+            setSaving(true);
+            // Save display name if changed
+            if (nameDirty && saveDisplayName) {
+                await saveDisplayName(editName.trim());
+            }
+            // Save church info if changed
+            if (infoDirty) {
+                await saveProfile({
+                    giaoxu: editGiaoxu.trim(),
+                    hat: editHat.trim(),
+                    giaophan: editGiaophan.trim(),
+                    tinhthanh: editTinhthanh.trim(),
+                });
+            }
+            setSaving(false);
+            setSaved(true);
+            setTimeout(() => setSaved(false), 2000);
+        };
+
+        return (
+            <div className="rounded-xl p-3 flex flex-col gap-2.5"
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1.5px solid rgba(255,255,255,0.1)' }}>
+                <span className="text-[10px] font-black text-white/60 tracking-widest uppercase flex items-center gap-1.5">
+                    <Pen size={10} /> Chỉnh sửa thông tin
+                </span>
+
+                {/* Display Name */}
+                <div className="flex flex-col gap-1">
+                    <label className="text-[9px] font-bold text-white/40 uppercase tracking-wider">Tên hiển thị</label>
+                    <input
+                        type="text"
+                        placeholder="Nhập tên của bạn..."
+                        value={editName}
+                        onChange={e => setEditName(e.target.value)}
+                        className="w-full bg-white/8 border border-white/15 rounded-lg px-3 py-2 text-white text-xs placeholder-white/30 focus:outline-none focus:border-yellow-400/50 transition-colors font-bold"
+                        maxLength={25}
+                    />
+                </div>
+
+                {/* Giáo xứ */}
+                <div className="flex flex-col gap-1">
+                    <label className="text-[9px] font-bold text-white/40 uppercase tracking-wider">⛪ Giáo xứ</label>
+                    <input
+                        type="text"
+                        placeholder="Giáo xứ của bạn..."
+                        value={editGiaoxu}
+                        onChange={e => setEditGiaoxu(e.target.value)}
+                        className="w-full bg-white/8 border border-white/15 rounded-lg px-3 py-2 text-white text-xs placeholder-white/30 focus:outline-none focus:border-yellow-400/50 transition-colors font-medium"
+                        maxLength={50}
+                    />
+                </div>
+
+                {/* Hạt */}
+                <div className="flex flex-col gap-1">
+                    <label className="text-[9px] font-bold text-white/40 uppercase tracking-wider">✠ Hạt (Giáo hạt)</label>
+                    <input
+                        type="text"
+                        placeholder="Giáo hạt của bạn..."
+                        value={editHat}
+                        onChange={e => setEditHat(e.target.value)}
+                        className="w-full bg-white/8 border border-white/15 rounded-lg px-3 py-2 text-white text-xs placeholder-white/30 focus:outline-none focus:border-yellow-400/50 transition-colors font-medium"
+                        maxLength={50}
+                    />
+                </div>
+
+                {/* Giáo phận */}
+                <div className="flex flex-col gap-1">
+                    <label className="text-[9px] font-bold text-white/40 uppercase tracking-wider">✡ Giáo phận</label>
+                    <input
+                        type="text"
+                        placeholder="Giáo phận của bạn..."
+                        value={editGiaophan}
+                        onChange={e => setEditGiaophan(e.target.value)}
+                        className="w-full bg-white/8 border border-white/15 rounded-lg px-3 py-2 text-white text-xs placeholder-white/30 focus:outline-none focus:border-yellow-400/50 transition-colors font-medium"
+                        maxLength={50}
+                    />
+                </div>
+
+                {/* Tỉnh thành */}
+                <div className="flex flex-col gap-1">
+                    <label className="text-[9px] font-bold text-white/40 uppercase tracking-wider">📍 Tỉnh / Thành phố</label>
+                    <input
+                        type="text"
+                        placeholder="Tỉnh / Thành phố..."
+                        value={editTinhthanh}
+                        onChange={e => setEditTinhthanh(e.target.value)}
+                        className="w-full bg-white/8 border border-white/15 rounded-lg px-3 py-2 text-white text-xs placeholder-white/30 focus:outline-none focus:border-yellow-400/50 transition-colors font-medium"
+                        maxLength={50}
+                    />
+                </div>
+
+                <button
+                    onClick={handleSave}
+                    disabled={!isDirty || saving}
+                    className={`w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide transition-all ${
+                        saved ? 'bg-green-500/80 text-white' :
+                        isDirty ? 'bg-yellow-400 text-[#1e3a8a] hover:bg-yellow-300 shadow-lg shadow-yellow-400/20' :
+                        'bg-white/5 text-white/30 cursor-not-allowed'
+                    }`}
+                    style={isDirty && !saved ? { boxShadow: '0 3px 0 #b45309' } : {}}
+                >
+                    {saved ? '✓ Đã lưu!' : saving ? 'Đang lưu...' : 'Lưu thay đổi'}
+                </button>
+            </div>
+        );
+    };
+
     /* ════ PORTRAIT LAYOUT ════ */
     const PortraitLayout = () => (
         <div className="flex-1 overflow-y-auto overflow-x-hidden">
@@ -277,14 +411,15 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                 <motion.div custom={2} variants={fadeUp} initial="hidden" animate="visible"><RankProgress /></motion.div>
                 <motion.div custom={3} variants={fadeUp} initial="hidden" animate="visible"><StatsSection /></motion.div>
                 <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible"><QuickActions /></motion.div>
+                <motion.div custom={5} variants={fadeUp} initial="hidden" animate="visible"><PersonalInfo /></motion.div>
             </div>
         </div>
     );
 
     /* ════ LANDSCAPE LAYOUT — row-based grid ════ */
     const LandscapeLayout = () => (
-        <div className="flex-1 min-h-0 overflow-hidden">
-            <div className="w-full h-full max-w-5xl mx-auto px-5 py-2 flex flex-col gap-2">
+        <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+            <div className="w-full max-w-5xl mx-auto px-5 py-2 pb-6 flex flex-col gap-2">
 
                 {/* ═══ ROW 1: Avatar + Assets ═══ */}
                 <motion.div custom={0} variants={fadeUp} initial="hidden" animate="visible"
@@ -294,12 +429,13 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                     <div className="flex-shrink-0 flex flex-col items-center justify-center gap-1.5 rounded-xl px-6 py-3"
                         style={{ background: 'rgba(255,255,255,0.04)', border: '1.5px solid rgba(255,255,255,0.08)', minWidth: 180 }}>
                         <motion.div custom={0} variants={popIn} initial="hidden" animate="visible" className="relative">
-                            <div className="w-16 h-16 rounded-full bg-yellow-400 flex items-center justify-center font-black text-2xl text-amber-800 relative overflow-hidden"
-                                style={{ border: '4px solid #b45309', boxShadow: '0 4px 0 #92400e, 0 6px 16px rgba(0,0,0,0.5)' }}>
-                                <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none" />
-                                <span className="relative z-10">{initial}</span>
-                            </div>
-                            <div className="absolute -bottom-0.5 -right-0.5 w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center font-black text-[10px] text-white"
+                            <UserAvatar
+                                name={displayName}
+                                photoURL={avatarUrl}
+                                size={64}
+                                ring={true}
+                            />
+                            <div className="absolute -bottom-0.5 -right-0.5 w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center font-black text-[10px] text-white z-10"
                                 style={{ border: '2.5px solid #0f172a', boxShadow: '0 1px 0 #000' }}>
                                 {rankLevel}
                             </div>
@@ -460,6 +596,11 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                         <ChevronRight size={14} className="text-white/20 group-hover:text-white/60" />
                     </motion.button>
                 </motion.div>
+
+                {/* ═══ ROW 5: Personal Info ═══ */}
+                <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible">
+                    <PersonalInfo />
+                </motion.div>
             </div>
         </div>
     );
@@ -484,8 +625,8 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
             </div>
 
             {/* ── Header ── */}
-            <div className="flex-shrink-0 flex items-center justify-between px-4 py-2 z-20 relative"
-                style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="flex-shrink-0 flex items-center justify-between px-4 py-2 pt-[env(safe-area-inset-top,12px)] z-20 relative rounded-b-2xl"
+                style={{ background: 'rgba(255,255,255,0.06)', borderBottom: '2px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
                 <motion.button whileTap={{ y: 2 }} onClick={onBack}
                     className="w-8 h-8 flex items-center justify-center rounded-full text-white/70 hover:text-white"
                     style={{ background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,255,255,0.1)' }}>
