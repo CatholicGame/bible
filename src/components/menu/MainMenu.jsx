@@ -127,23 +127,18 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
                 style={{
                     borderRadius: borderRad,
                     padding: Math.round(cardH * 0.055),
-                    background: `linear-gradient(160deg,${game.from}ee,${game.to})`,
+                    background: `linear-gradient(145deg, ${game.from}28, rgba(255,255,255,0.92))`,
+                    border: `3px solid ${game.from}55`,
                     boxShadow: isSnapped
-                        ? `inset 0 1px 0 rgba(255,255,255,0.28),
-                           inset 0 -3px 0 rgba(0,0,0,0.4),
-                           0 ${step < 200 ? 3 : 7}px 0 rgba(0,0,0,0.75),
-                           0 ${step < 200 ? 6 : 12}px 24px ${game.from}88`
-                        : `inset 0 1px 0 rgba(255,255,255,0.18),
-                           inset 0 -3px 0 rgba(0,0,0,0.3),
-                           0 ${step < 200 ? 2 : 5}px 0 rgba(0,0,0,0.7),
-                           0 ${step < 200 ? 4 : 8}px 16px rgba(0,0,0,0.55)`,
+                        ? `0 ${step < 200 ? 4 : 8}px 0 ${game.from}55, 0 ${step < 200 ? 6 : 12}px 24px ${game.from}33`
+                        : `0 ${step < 200 ? 2 : 5}px 0 ${game.from}44, 0 ${step < 200 ? 4 : 8}px 16px rgba(0,80,120,0.18)`,
                     userSelect: 'none',
                     cursor: 'grab',
                 }}
             >
-                <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/10 pointer-events-none" />
-                {/* Top highlight stripe */}
-                <div className="absolute top-0 left-0 right-0 h-px bg-white/30 rounded-t-3xl pointer-events-none" />
+                <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none" style={{ background: game.from + '18' }} />
+                {/* Top color stripe */}
+                <div className="absolute top-0 left-0 right-0 h-1.5 rounded-t-3xl pointer-events-none" style={{ background: `linear-gradient(90deg,${game.from},${game.to})` }} />
                 {/* 3D Image Thumbnail */}
                 <div className="absolute inset-x-0 top-[8%] bottom-[30%] flex justify-center pointer-events-none drop-shadow-2xl px-[5px]">
                     <img
@@ -156,12 +151,12 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
                 {/* Subtitle / Title at bottom */}
                 <div className="absolute left-0 right-0 text-center select-none pointer-events-none overflow-hidden"
                     style={{ bottom: bottomOff }}>
-                    <span className="block font-black tracking-[0.1em] text-white/60 uppercase mb-0.5"
-                        style={{ fontSize: badgeSize }}>
+                    <span className="block font-black tracking-[0.1em] uppercase mb-0.5"
+                        style={{ fontSize: badgeSize, color: '#7fb3cc' }}>
                         {game.subtitle}
                     </span>
-                    <span className="block font-black leading-tight text-white drop-shadow-md px-1 truncate"
-                        style={{ fontSize: titleSize }}>
+                    <span className="block font-black leading-tight px-1 truncate"
+                        style={{ fontSize: titleSize, color: '#1e3a5f' }}>
                         {game.title}
                     </span>
                 </div>
@@ -174,20 +169,20 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
                     style={{ bottom: badgeOff }}
                 >
                     <span
-                        className="flex items-center gap-0.5 font-black text-yellow-200 px-1.5 py-0.5 rounded-full"
-                        style={{ fontSize: badgeSize, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,220,50,0.25)' }}
+                        className="flex items-center gap-0.5 font-black px-1.5 py-0.5 rounded-full"
+                        style={{ fontSize: badgeSize, background: 'rgba(255,255,255,0.85)', border: '1px solid rgba(0,150,200,0.2)', color: '#f59e0b' }}
                     >
                         <img src={iconTrophy} alt="XP" className="w-3.5 h-3.5 object-contain" /> {(stats?.xp || 0).toLocaleString()}
                     </span>
                     <span
-                        className="flex items-center gap-0.5 font-black text-yellow-100 px-1.5 py-0.5 rounded-full"
-                        style={{ fontSize: badgeSize, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,200,50,0.2)' }}
+                        className="flex items-center gap-0.5 font-black px-1.5 py-0.5 rounded-full"
+                        style={{ fontSize: badgeSize, background: 'rgba(255,255,255,0.85)', border: '1px solid rgba(0,150,200,0.2)', color: '#06d6a0' }}
                     >
                         <img src={iconCoin} alt="Coins" className="w-3.5 h-3.5 object-contain" /> {(stats?.coins || 0).toLocaleString()}
                     </span>
                     <span
-                        className="flex items-center gap-0.5 font-black text-white/70 px-1.5 py-0.5 rounded-full"
-                        style={{ fontSize: badgeSize, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.15)' }}
+                        className="flex items-center gap-0.5 font-black px-1.5 py-0.5 rounded-full"
+                        style={{ fontSize: badgeSize, background: 'rgba(255,255,255,0.85)', border: '1px solid rgba(0,150,200,0.2)', color: '#4a7fa5' }}
                     >
                         🎮 {stats?.plays || 0}
                     </span>
@@ -195,8 +190,8 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
 
                 {isSnapped && (
                     <motion.span initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }}
-                        className="absolute top-3 right-3 font-black text-white/80 bg-white/25 px-2.5 py-0.5 rounded-full uppercase tracking-widest"
-                        style={{ fontSize: badgeSize, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 0 rgba(0,0,0,0.2)' }}>
+                        className="absolute top-3 right-3 font-black text-white px-2.5 py-0.5 rounded-full uppercase tracking-widest"
+                        style={{ fontSize: badgeSize, background: game.from, boxShadow: `0 2px 0 ${game.to}` }}>
                         Chơi
                     </motion.span>
                 )}
@@ -322,13 +317,13 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
             <div className="absolute inset-0 z-0">
                 <img src={bgImage} alt="" className="w-full h-full object-cover object-center" />
                 <div className="absolute inset-0"
-                    style={{ background: 'linear-gradient(to bottom,rgba(0,0,0,0.62)0%,rgba(0,0,0,0.04)42%,rgba(0,0,0,0.6)100%)' }} />
+                    style={{ background: 'linear-gradient(to bottom,rgba(0,80,120,0.38) 0%,rgba(0,180,216,0.04) 45%,rgba(0,80,120,0.32) 100%)' }} />
             </div>
 
             {/* HEADER */}
             {user && (
                 <div className="relative z-20 flex-shrink-0 flex items-center h-14 px-4 md:px-6 gap-3"
-                    style={{ background: '#2563eb', borderBottom: '4px solid #1e3a8a' }}>
+                    style={{ background: 'rgba(255,255,255,0.88)', borderBottom: '3px solid rgba(0,180,216,0.22)', backdropFilter: 'blur(16px)' }}>
 
                     {/* Exit button */}
                     {onExit && (
@@ -350,13 +345,13 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                             <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none" />
                             <span className="relative z-10">✝️</span>
                         </div>
-                        <span className="font-black text-base text-white hidden sm:block" style={{ textShadow: '0 2px 0 #1e3a8a' }}>
-                            Catholic <span className="text-yellow-300" style={{ textShadow: '0 2px 0 #b45309' }}>Quiz!</span>
+                        <span className="font-black text-base hidden sm:block" style={{ color: '#1e3a5f' }}>
+                            Catholic <span style={{ color: '#1b9aaa' }}>Quiz!</span>
                         </span>
                     </div>
 
                     <div className="flex-1 text-center hidden md:block">
-                        <span className="text-blue-200/70 text-xs font-bold italic">Học hỏi Lời Chúa qua trò chơi</span>
+                        <span className="text-xs font-bold italic" style={{ color: '#4a7fa5' }}>Học hỏi Lời Chúa qua trò chơi</span>
                     </div>
 
                     {/* Fullscreen button */}
@@ -368,19 +363,19 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                 document.exitFullscreen().catch(() => {});
                             }
                         }}
-                        className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 transition-colors ml-auto mr-[-4px]"
-                        style={{ border: '2px solid rgba(255,255,255,0.5)', boxShadow: '0 3px 0 rgba(30,58,138,0.6)' }}
+                        className="flex items-center justify-center w-10 h-10 rounded-full transition-colors ml-auto mr-[-4px]"
+                        style={{ background: 'rgba(0,180,216,0.12)', border: '2px solid rgba(0,180,216,0.28)', boxShadow: '0 2px 0 rgba(0,100,150,0.15)' }}
                         title="Toàn màn hình"
                     >
-                        <Maximize size={18} strokeWidth={2.5} className="text-white" />
+                        <Maximize size={18} strokeWidth={2.5} style={{ color: '#1b9aaa' }} />
                     </motion.button>
 
                     {/* User button — opens quick profile menu */}
                     <div className="relative flex-shrink-0">
                         <motion.button whileTap={{ y: 2 }}
                             onClick={() => setShowProfileMenu(v => !v)}
-                            className="flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
-                            style={{ border: '2px solid rgba(255,255,255,0.5)', boxShadow: '0 3px 0 rgba(30,58,138,0.6)' }}>
+                            className="flex items-center gap-2 px-2.5 py-1.5 rounded-full transition-colors"
+                            style={{ background: 'rgba(0,180,216,0.1)', border: '2px solid rgba(0,180,216,0.28)', boxShadow: '0 2px 0 rgba(0,100,150,0.15)' }}>
                             <UserAvatar
                                 name={user.name || 'K'}
                                 photoURL={avatarUrl}
@@ -388,17 +383,17 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                 style={{ border: '2px solid #b45309', flexShrink: 0 }}
                             />
                             <div className="flex flex-col text-left">
-                                <span className="font-black text-white text-xs leading-none">{user.name}</span>
+                                <span className="font-black text-xs leading-none" style={{ color: '#1e3a5f' }}>{user.name}</span>
                                 <span className="flex items-center gap-1.5 mt-0.5">
-                                    <span className="text-yellow-300 text-[9px] flex items-center gap-0.5 font-bold">
+                                    <span className="text-[9px] flex items-center gap-0.5 font-bold" style={{ color: '#f59e0b' }}>
                                         <img src={iconTrophy} alt="XP" className="w-3 h-3 object-contain" /> {(user.score || 0).toLocaleString()}
                                     </span>
-                                    <span className="text-yellow-200/60 text-[9px] flex items-center gap-0.5 font-bold">
+                                    <span className="text-[9px] flex items-center gap-0.5 font-bold" style={{ color: '#06d6a0' }}>
                                         <img src={iconCoin} alt="Coins" className="w-3 h-3 object-contain" /> {(coins || 0).toLocaleString()}
                                     </span>
                                 </span>
                             </div>
-                            <ChevronRight size={11} className={`text-white/60 transition-transform ${showProfileMenu ? 'rotate-90' : ''}`} />
+                            <ChevronRight size={11} className={`transition-transform ${showProfileMenu ? 'rotate-90' : ''}`} style={{ color: '#4a7fa5' }} />
                         </motion.button>
 
                         {/* Profile Quick Menu Dropdown */}
@@ -420,10 +415,10 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                         exit={{ opacity: 0, y: -8, scale: 0.95 }}
                                         transition={{ duration: 0.15 }}
                                         className="absolute right-0 top-full mt-2 z-[100] w-56 rounded-2xl overflow-hidden"
-                                        style={{ background: 'linear-gradient(180deg,#1e3a8a,#1e40af)', border: '3px solid #60a5fa', boxShadow: '0 8px 24px rgba(0,0,0,0.5), 0 4px 0 #1e3a8a' }}
+                                        style={{ background: 'rgba(255,255,255,0.96)', border: '2px solid rgba(0,180,216,0.25)', boxShadow: '0 8px 24px rgba(0,80,120,0.2)', backdropFilter: 'blur(12px)' }}
                                     >
                                         {/* Quick stats */}
-                                        <div className="px-4 py-3 border-b border-blue-500/30">
+                                        <div className="px-4 py-3" style={{ borderBottom: '1.5px solid rgba(0,180,216,0.15)' }}>
                                             <div className="flex items-center gap-2 mb-2">
                                                 <UserAvatar
                                                     name={user.name || 'K'}
@@ -432,13 +427,13 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                                     style={{ border: '2px solid #b45309', flexShrink: 0 }}
                                                 />
                                                 <div>
-                                                    <p className="font-black text-white text-sm leading-none">{user.name}</p>
-                                                    <p className="text-blue-200/70 text-[10px] font-bold mt-0.5">{getRankByScore(user.score || 0)?.title || 'Người Tìm Hiểu'}</p>
+                                                    <p className="font-black text-sm leading-none" style={{ color: '#1e3a5f' }}>{user.name}</p>
+                                                    <p className="text-[10px] font-bold mt-0.5" style={{ color: '#4a7fa5' }}>{getRankByScore(user.score || 0)?.title || 'Người Tìm Hiểu'}</p>
                                                 </div>
                                             </div>
                                             <div className="flex gap-3">
-                                                <span className="text-yellow-300 text-xs font-bold flex items-center gap-1"><img src={iconTrophy} alt="XP" className="w-4 h-4 object-contain" /> {(user.score || 0).toLocaleString()} XP</span>
-                                                <span className="text-yellow-200/80 text-xs font-bold flex items-center gap-1"><img src={iconCoin} alt="Coins" className="w-4 h-4 object-contain" /> {(coins || 0).toLocaleString()}</span>
+                                                <span className="text-xs font-bold flex items-center gap-1" style={{ color: '#f59e0b' }}><img src={iconTrophy} alt="XP" className="w-4 h-4 object-contain" /> {(user.score || 0).toLocaleString()} XP</span>
+                                                <span className="text-xs font-bold flex items-center gap-1" style={{ color: '#06d6a0' }}><img src={iconCoin} alt="Coins" className="w-4 h-4 object-contain" /> {(coins || 0).toLocaleString()}</span>
                                             </div>
                                         </div>
 
@@ -446,29 +441,32 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                         <div className="py-1">
                                             <button
                                                 onClick={() => { enterFullscreen(); setShowProfileMenu(false); onOpenProfile(); }}
-                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-white/90 hover:bg-white/10 transition-colors text-left"
+                                                className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-sky-50 transition-colors text-left"
+                                                style={{ color: '#1e3a5f' }}
                                             >
-                                                <User size={16} className="text-blue-300 shrink-0" />
+                                                <User size={16} className="text-sky-500 shrink-0" />
                                                 <span className="font-bold text-sm">Xem chi tiết</span>
                                             </button>
                                             <button
                                                 onClick={() => { enterFullscreen(); setShowProfileMenu(false); setShowRoadmap(true); }}
-                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-white/90 hover:bg-white/10 transition-colors text-left"
+                                                className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-sky-50 transition-colors text-left"
+                                                style={{ color: '#1e3a5f' }}
                                             >
-                                                <Map size={16} className="text-green-300 shrink-0" />
+                                                <Map size={16} className="text-emerald-500 shrink-0" />
                                                 <span className="font-bold text-sm">Xem Roadmap</span>
                                             </button>
                                             <button
                                                 onClick={() => { setShowProfileMenu(false); setShowSettings(true); }}
-                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-white/90 hover:bg-white/10 transition-colors text-left"
+                                                className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-sky-50 transition-colors text-left"
+                                                style={{ color: '#1e3a5f' }}
                                             >
                                                 <span className="text-base">⚙️</span>
                                                 <span className="font-bold text-sm">Cài đặt</span>
                                             </button>
-                                            <div className="border-t border-blue-500/30 my-1" />
+                                            <div className="my-1" style={{ height: 1.5, background: 'rgba(0,180,216,0.15)' }} />
                                             <button
                                                 onClick={() => { setShowProfileMenu(false); if (onLogout) onLogout(); }}
-                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-red-300 hover:bg-red-500/10 transition-colors text-left"
+                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-red-500 hover:bg-red-50 transition-colors text-left"
                                             >
                                                 <LogOut size={16} className="shrink-0" />
                                                 <span className="font-bold text-sm">Đăng xuất</span>
@@ -514,13 +512,13 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                 onClick={() => onJoinRoom('', null)}
                                 className="w-full flex items-center gap-3 px-4 py-2.5 rounded-2xl"
                                 style={{
-                                    background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(14px)',
-                                    border: '1.5px solid rgba(255,255,255,0.15)',
-                                    boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
-                                }}>
-                                <span className="text-white/40 shrink-0 text-xs">#</span>
-                                <span className="flex-1 text-white/40 font-bold tracking-[0.15em] text-sm text-left">Nhập PIN phòng bạn bè...</span>
-                                <span className="text-white/30 text-xs">→</span>
+                            background: 'rgba(255,255,255,0.82)', backdropFilter: 'blur(14px)',
+                            border: '1.5px solid rgba(0,180,216,0.25)',
+                            boxShadow: '0 4px 12px rgba(0,100,150,0.12)',
+                        }}>
+                                <span className="shrink-0 text-xs" style={{ color: '#7fb3cc' }}>#</span>
+                                <span className="flex-1 font-bold tracking-[0.15em] text-sm text-left" style={{ color: '#7fb3cc' }}>Nhập PIN phòng bạn bè...</span>
+                                <span className="text-xs" style={{ color: '#7fb3cc' }}>→</span>
                             </motion.button>
                         </motion.div>
                     ) : modeView === 'home' ? (
@@ -529,10 +527,11 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                             className="flex-shrink-0 w-full max-w-sm px-4 flex flex-col gap-3">
                             <div className="flex items-center gap-2">
                                 <motion.button whileHover={{ x: -2 }} onClick={handleBack}
-                                    className="flex items-center gap-1 text-xs font-semibold text-white/70 hover:text-white bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-white/10">
+                                    className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-xl"
+                                    style={{ background: 'rgba(255,255,255,0.8)', color: '#1e3a5f', border: '1px solid rgba(0,180,216,0.2)' }}>
                                     <ArrowLeft size={12} /> Quay lại
                                 </motion.button>
-                                <span className="font-black text-white text-base drop-shadow">{GAMES.find(g => g.id === selectedGame)?.title}</span>
+                                <span className="font-black text-base" style={{ color: '#1e3a5f' }}>{GAMES.find(g => g.id === selectedGame)?.title}</span>
                             </div>
                             <div className="flex flex-col gap-3">
                                 {/* SOLO */}
@@ -653,14 +652,14 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                 {/* Divider */}
                 {!showModes && (
                     <motion.div layout className="flex-shrink-0 flex items-center gap-3 w-full max-w-lg px-6">
-                        <div className="flex-1 h-px bg-white/20" />
+                        <div className="flex-1 h-px bg-sky-200/60" />
                         <span
-                            className="text-white text-[10px] font-black tracking-[0.18em] uppercase px-3 py-1 rounded-full"
-                            style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.15)' }}
+                            className="text-[10px] font-black tracking-[0.18em] uppercase px-3 py-1 rounded-full"
+                            style={{ background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(0,180,216,0.2)', color: '#1e3a5f' }}
                         >
                             Chọn game
                         </span>
-                        <div className="flex-1 h-px bg-white/20" />
+                        <div className="flex-1 h-px bg-sky-200/60" />
                     </motion.div>
                 )}
 
@@ -673,8 +672,8 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                             <motion.button whileHover={{ scale: 1.12, x: -2 }} whileTap={{ scale: 0.9 }}
                                 onClick={() => navigateTo(snapped - 1)} disabled={snapped === 0}
                                 className="absolute left-3 md:left-5 z-20 w-9 h-9 rounded-full flex items-center justify-center"
-                                style={{ background: 'rgba(0,0,0,0.48)', border: '1px solid rgba(255,255,255,0.15)', opacity: snapped === 0 ? 0.18 : 0.85 }}>
-                                <ChevronLeft size={18} className="text-white" />
+                                style={{ background: 'rgba(255,255,255,0.75)', border: '1.5px solid rgba(0,180,216,0.3)', backdropFilter: 'blur(8px)', opacity: snapped === 0 ? 0.3 : 1 }}>
+                                <ChevronLeft size={18} style={{ color: '#1b9aaa' }} />
                             </motion.button>
 
                             {/* Draggable strip — no paddingLeft, dragX itself offsets */}
@@ -717,8 +716,8 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                             <motion.button whileHover={{ scale: 1.12, x: 2 }} whileTap={{ scale: 0.9 }}
                                 onClick={() => navigateTo(snapped + 1)} disabled={snapped === GAMES.length - 1}
                                 className="absolute right-3 md:right-5 z-20 w-9 h-9 rounded-full flex items-center justify-center"
-                                style={{ background: 'rgba(0,0,0,0.48)', border: '1px solid rgba(255,255,255,0.15)', opacity: snapped === GAMES.length - 1 ? 0.18 : 0.85 }}>
-                                <ChevronRight size={18} className="text-white" />
+                                style={{ background: 'rgba(255,255,255,0.75)', border: '1.5px solid rgba(0,180,216,0.3)', backdropFilter: 'blur(8px)', opacity: snapped === GAMES.length - 1 ? 0.3 : 1 }}>
+                                <ChevronRight size={18} style={{ color: '#1b9aaa' }} />
                             </motion.button>
                         </div>
 
@@ -728,7 +727,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                 <motion.button key={i} onClick={() => navigateTo(i)}
                                     animate={{ scale: i === snapped ? 1.6 : 1, opacity: i === snapped ? 1 : 0.28 }}
                                     transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-                                    className="w-1.5 h-1.5 rounded-full bg-white" />
+                                    className="w-1.5 h-1.5 rounded-full" style={{ background: '#1b9aaa' }} />
                             ))}
                         </div>
                     </motion.div>
