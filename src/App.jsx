@@ -88,20 +88,6 @@ function App() {
       // PlayFab login (song song với Firebase, dùng device ID)
       playfabLogin().catch(console.error);
     }).catch(console.error);
-
-    // Global interaction listener for fullscreen (runs once on first click/touch)
-    const handleFirstInteraction = () => {
-      enterFullscreen();
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('touchstart', handleFirstInteraction);
-    };
-    document.addEventListener('click', handleFirstInteraction);
-    document.addEventListener('touchstart', handleFirstInteraction);
-    
-    return () => {
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('touchstart', handleFirstInteraction);
-    };
   }, []);
 
   // ── Handlers ──

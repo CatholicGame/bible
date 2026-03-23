@@ -3,13 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { LogIn, UserCircle, ArrowRight, Mail, Eye, EyeOff, ArrowLeft, Loader2 } from 'lucide-react';
 import { usePlayFabStore } from '../../store/playfabStore';
 
-const enterFullscreen = () => {
-    try {
-        if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(() => {});
-        }
-    } catch (err) { /* ignore */ }
-};
+
 
 const LoginScreen = ({ onLogin }) => {
     const [showGuestInput, setShowGuestInput] = useState(false);
@@ -49,7 +43,7 @@ const LoginScreen = ({ onLogin }) => {
 
     const handleGuestSubmit = (e) => {
         e.preventDefault();
-        enterFullscreen();
+
         onLogin('guest', guestName.trim() || `Khách ${Math.floor(Math.random() * 10000)}`);
     };
 
@@ -86,7 +80,7 @@ const LoginScreen = ({ onLogin }) => {
                     localStorage.removeItem('saved_email');
                 }
             }
-            enterFullscreen();
+
             onLogin('email');
         } else {
             // Map PlayFab error messages to Vietnamese
@@ -281,7 +275,7 @@ const LoginScreen = ({ onLogin }) => {
                                     const result = await pfLoginWithGoogle();
                                     setGoogleLoading(false);
                                     if (result.success) {
-                                        enterFullscreen();
+
                                         onLogin('google', result.nickname);
                                     } else {
                                         setGoogleError(result.error || 'Đăng nhập Google thất bại');
