@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import coinImg from '../../assets/common/coin.png';
+import trophyImg from '../../assets/common/trophy.png';
 import { motion } from 'framer-motion';
 import {
     ChevronLeft, Trophy, Star, Award, Swords,
@@ -140,7 +142,7 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                     boxShadow: '0 4px 0 #78350f, inset 0 1px 0 rgba(255,255,255,0.3)',
                 }}>
                 <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/15 pointer-events-none" />
-                <span className="text-2xl relative z-10 drop-shadow-md" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}>🏆</span>
+                <img src={trophyImg} alt="trophy" className="w-8 h-8 relative z-10 drop-shadow-md object-contain" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }} />
                 <span className="font-black text-2xl text-white relative z-10 drop-shadow-md"><AnimatedNumber value={score} /></span>
                 <span className="text-yellow-100 text-[9px] font-bold tracking-wider uppercase relative z-10">XP</span>
             </div>
@@ -151,7 +153,7 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                     boxShadow: '0 4px 0 #713f12, inset 0 1px 0 rgba(255,255,255,0.3)',
                 }}>
                 <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/15 pointer-events-none" />
-                <span className="text-2xl relative z-10 drop-shadow-md" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}>💰</span>
+                <img src={coinImg} alt="coin" className="w-8 h-8 relative z-10 drop-shadow-md object-contain" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }} />
                 <span className="font-black text-2xl text-white relative z-10 drop-shadow-md"><AnimatedNumber value={userCoins} /></span>
                 <span className="text-yellow-100 text-[9px] font-bold tracking-wider uppercase relative z-10">Coins</span>
             </div>
@@ -470,7 +472,7 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                                 className="rounded-xl px-5 py-2.5 flex flex-col items-center relative overflow-hidden"
                                 style={{ background: 'linear-gradient(145deg, #f59e0b, #d97706)', border: '2.5px solid #92400e', boxShadow: '0 3px 0 #78350f', minWidth: 100 }}>
                                 <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/15 pointer-events-none" />
-                                <span className="text-2xl relative z-10" style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.4))' }}>🏆</span>
+                                <img src={trophyImg} alt="trophy" className="w-9 h-9 relative z-10 object-contain" style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.4))' }} />
                                 <span className="font-black text-3xl text-white relative z-10"><AnimatedNumber value={score} /></span>
                                 <span className="text-yellow-100 text-[10px] font-bold tracking-wider uppercase relative z-10">XP</span>
                             </motion.div>
@@ -479,7 +481,7 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                                 className="rounded-xl px-5 py-2.5 flex flex-col items-center relative overflow-hidden"
                                 style={{ background: 'linear-gradient(145deg, #eab308, #ca8a04)', border: '2.5px solid #854d0e', boxShadow: '0 3px 0 #713f12', minWidth: 100 }}>
                                 <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/15 pointer-events-none" />
-                                <span className="text-2xl relative z-10" style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.4))' }}>💰</span>
+                                <img src={coinImg} alt="coin" className="w-9 h-9 relative z-10 object-contain" style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.4))' }} />
                                 <span className="font-black text-3xl text-white relative z-10"><AnimatedNumber value={userCoins} /></span>
                                 <span className="text-yellow-100 text-[10px] font-bold tracking-wider uppercase relative z-10">Coins</span>
                             </motion.div>
