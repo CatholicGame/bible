@@ -291,6 +291,38 @@ Không chỉ hỏi tên và ngày lễ — hãy khai thác các **điểm nổi 
 - Pietà (Michelangelo): Đức Mẹ bồng Chúa sau khi tháo đinh — tình mẫu tử đau thương
 - Bữa Tiệc Ly (Da Vinci): khắc họa khoảnh khắc "Ai đó phản bội Thầy"
 
+### ✨ Phép Lạ Nổi Tiếng Được Giáo Hội Công Nhận
+
+> Nguồn câu hỏi **đặc sắc** — vừa kỳ diệu, vừa củng cố đức tin, vừa có thể xác minh khoa học
+
+| Phép lạ | Nội dung | Năm / Nơi |
+|---|---|---|
+| **Phép lạ Thánh Thể Lanciano** | Bánh biến thành mô tim người, rượu thành máu nhóm AB | TK 8, Ý |
+| **Phép lạ Mặt Trời Fatima** | 70,000 người chứng kiến mặt trời xoay và lao xuống | 1917, Bồ Đào Nha |
+| **Tấm khăn liệm Turin** | In hình người bị đóng đinh — phân tích khoa học chưa giải thích được | Torino, Ý |
+| **Hình Đức Mẹ Guadalupe** | Hình in trên vải thô (tilma) vẫn nguyên vẹn sau 500 năm | 1531, Mexico |
+| **Nước Lourdes** | Hàng trăm ca chữa lành được y khoa xác nhận bất giải thích | 1858, Pháp |
+| **Xác không tan của các thánh** | Padre Pio, Bernadette, Gioan Vianney... xác vẫn nguyên vẹn | Nhiều nơi |
+| **Giải tội siêu nhiên** | Gioan Vianney, Padre Pio đọc biết tội người chưa xưng | TK 19-20 |
+| **Thánh Giuse thành Cupertino** | Bay lên không trung khi cầu nguyện — nhiều nhân chứng xác nhận | TK 17, Ý |
+
+### ⛪ Nơi An Nghỉ Của Các Thánh Tông Đồ & Thánh Nhân Lớn
+
+> Biết **nơi an nghỉ** giúp hiểu lịch sử GH và truyền thống hành hương
+
+| Thánh nhân | Nơi an nghỉ | Điểm đặc biệt |
+|---|---|---|
+| **Thánh Phêrô** | Đền thờ Thánh Phêrô, Vatican | Mộ nằm ngay dưới bàn thờ chính |
+| **Thánh Phaolô** | Đền thờ Thánh Phaolô Ngoại Thành, Roma | Một trong 4 Đại Vương cung Thánh đường |
+| **Thánh Giacôbê (T. lớn)** | Santiago de Compostela, Tây Ban Nha | Điểm đến hành hương Camino |
+| **Thánh Gioan** | Ephesus (Thổ Nhĩ Kỳ) | Tông Đồ duy nhất không tử đạo |
+| **Thánh Tôma** | Mylapore, Chennai, Ấn Độ | Truyền thống truyền giáo đến Ấn Độ |
+| **Thánh Matthêô** | Salerno, Ý | Hoán cải từ người thu thuế |
+| **Thánh Anrê** | Patras, Hy Lạp (hoặc Scotland) | Bị đóng đinh chữ X (Thập giá Thánh Anrê) |
+| **Thánh Bernadette** | Nevers, Pháp | Xác không tan — giống khi còn sống |
+| **Padre Pio** | San Giovanni Rotondo, Ý | Hàng triệu người hành hương mỗi năm |
+| **Thánh Têrêsa Lisieux** | Lisieux, Pháp | Một trong những thánh được kính nhớ nhiều nhất |
+
 ### 🔬 Nhà Khoa Học Công Giáo — Đức Tin & Khoa Học Không Mâu Thuẫn
 
 > Một nguồn câu hỏi rất **thú vị và ít được khai thác** — phá vỡ định kiến "khoa học chống lại đức tin"
@@ -374,6 +406,13 @@ Dựa trên ma trận phân bố (mục 3), xác định % mỗi chủ đề c�
   "category": "[kinh_thanh | phung_vu | giao_ly | giao_hoi | lich_su | thanh_nhan | doi_song | dia_ly | nghe_thuat]"
 }
 ```
+
+**Nguyên tắc viết `explanation` hiệu quả:**
+- Độ dài: **tối đa ~300 ký tự** — đủ để thêm thông tin thú vị
+- Luôn **in đậm đáp án đúng**
+- Cộng thêm **1-2 thông tin hữu ích liên quan** giúp người chơi học được điều gì đó mới
+- Ví dụ tốt: `"**Santiago de Compostela** là nơi an nghỉ của Thánh Giacôbê. Truyền thống hành hương Camino 1000 năm — hàng triệu người đi bộ mỗi năm để gặp gỡ Chúa qua đường dài."`
+- Ví dụ kém: `"Santiago là ở Tây Ban Nha."` ← không giúp người chơi học thêm gì
 
 ### Bước 3 — Kiểm tra độ khó
 
