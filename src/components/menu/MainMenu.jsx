@@ -9,6 +9,7 @@ import { useUserStore } from '../../store/userStore';
 import { usePlayFabStore } from '../../store/playfabStore';
 import UserAvatar from '../common/UserAvatar';
 import RankRoadmap from '../profile/RankRoadmap';
+import SettingsModal from '../common/SettingsModal';
 import bgImage from '../../assets/common/common_background.png';
 import iconCoin from '../../assets/common/coin.png';
 import iconTrophy from '../../assets/common/trophy.png';
@@ -221,6 +222,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
     const [profileOpen, setProfileOpen] = useState(false);
     const [showRoadmap, setShowRoadmap] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
     const [ready, setReady] = useState(false);
     const [cardDims, setCardDims] = useState({ cardW: BASE_CARD_W, cardH: BASE_CARD_H, step: Math.round(BASE_CARD_W * MAX_SC) + GAP });
     const [isLandscape, setIsLandscape] = useState(false);
@@ -456,6 +458,13 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                                 <Map size={16} className="text-green-300 shrink-0" />
                                                 <span className="font-bold text-sm">Xem Roadmap</span>
                                             </button>
+                                            <button
+                                                onClick={() => { setShowProfileMenu(false); setShowSettings(true); }}
+                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-white/90 hover:bg-white/10 transition-colors text-left"
+                                            >
+                                                <span className="text-base">⚙️</span>
+                                                <span className="font-bold text-sm">Cài đặt</span>
+                                            </button>
                                             <div className="border-t border-blue-500/30 my-1" />
                                             <button
                                                 onClick={() => { setShowProfileMenu(false); if (onLogout) onLogout(); }}
@@ -472,6 +481,11 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                     </div>
                 </div>
             )}
+
+            {/* Settings Modal */}
+            <AnimatePresence>
+                {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
+            </AnimatePresence>
 
             {/* Roadmap */}
             <AnimatePresence>

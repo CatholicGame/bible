@@ -55,6 +55,22 @@ const popIn = {
     }),
 };
 
+/* ── Design tokens ── */
+const C = {
+    bg: 'linear-gradient(160deg, #caf0f8 0%, #ade8f4 50%, #90e0ef 100%)',
+    card: 'rgba(255,255,255,0.82)',
+    cardBorder: 'rgba(0,180,216,0.22)',
+    cardBorderSolid: '#b2e8f7',
+    xpCard: { bg: 'linear-gradient(145deg, #ffd166, #f4a261)', border: '#e9952a', shadow: '#c77a1a' },
+    coinCard: { bg: 'linear-gradient(145deg, #06d6a0, #1b9aaa)', border: '#0e7490', shadow: '#0c6478' },
+    soloCard: { bg: 'linear-gradient(155deg, #06d6a0, #1b9aaa)', border: '#0e7490', shadow: '#0c5f73' },
+    p2pCard: { bg: 'linear-gradient(155deg, #9b5de5, #7b2d8b)', border: '#6b21a8', shadow: '#4a1772' },
+    textPrimary: '#1e3a5f',
+    textSecondary: '#4a7fa5',
+    textMuted: '#7fb3cc',
+    rankBadge: { bg: 'linear-gradient(135deg, #ffd166, #f4a261)', color: '#7c2d12', border: '#e9952a', shadow: '#c77a1a' },
+};
+
 const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
     const globalScore = useUserStore(state => state.globalScore);
     const coins = useUserStore(state => state.coins);
@@ -102,29 +118,29 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                     size={isLandscape ? 56 : 80}
                     ring={true}
                 />
-                <div className={`absolute -bottom-1 -right-1 ${isLandscape ? 'w-6 h-6 text-[9px]' : 'w-8 h-8 text-xs'} rounded-full bg-blue-600 flex items-center justify-center font-black text-white z-10`}
-                    style={{ border: '3px solid #0f172a', boxShadow: '0 2px 0 #000' }}>
+                <div className={`absolute -bottom-1 -right-1 ${isLandscape ? 'w-6 h-6 text-[9px]' : 'w-8 h-8 text-xs'} rounded-full bg-[#06d6a0] flex items-center justify-center font-black text-white z-10`}
+                    style={{ border: '3px solid #e0f7fa', boxShadow: '0 2px 0 #0e7490' }}>
                     {rankLevel}
                 </div>
             </div>
             <div className={isLandscape ? 'text-left' : 'text-center'}>
-                <h2 className={`font-black ${isLandscape ? 'text-lg' : 'text-xl'} text-white drop-shadow-md`}>{displayName}</h2>
+                <h2 className={`font-black ${isLandscape ? 'text-lg' : 'text-xl'} drop-shadow-sm`} style={{ color: C.textPrimary }}>{displayName}</h2>
                 <div className={`flex items-center gap-2 ${isLandscape ? '' : 'justify-center'} mt-1`}>
                     <span className="flex items-center gap-1 text-[10px] font-black px-2.5 py-0.5 rounded-full"
                         style={{
-                            background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
-                            color: '#78350f',
-                            border: '2px solid #b45309',
-                            boxShadow: '0 2px 0 #92400e',
+                            background: C.rankBadge.bg,
+                            color: C.rankBadge.color,
+                            border: `2px solid ${C.rankBadge.border}`,
+                            boxShadow: `0 2px 0 ${C.rankBadge.shadow}`,
                         }}>
                         <Crown size={10} /> {rankName}
                     </span>
                     {user?.isGuest ? (
-                        <span className="flex items-center gap-1 text-[9px] font-bold text-orange-300 bg-orange-400/20 px-2 py-0.5 rounded-full border border-orange-400/30">
+                        <span className="flex items-center gap-1 text-[9px] font-bold text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full border border-orange-200">
                             <User size={8} /> Khách
                         </span>
                     ) : (
-                        <span className="flex items-center gap-1 text-[9px] font-bold text-emerald-300 bg-emerald-400/20 px-2 py-0.5 rounded-full border border-emerald-400/30">
+                        <span className="flex items-center gap-1 text-[9px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200">
                             <Shield size={8} /> Đã bảo vệ
                         </span>
                     )}
@@ -135,27 +151,29 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
 
     const CurrencyCards = () => (
         <div className="grid grid-cols-2 gap-2.5">
+            {/* XP */}
             <div className="rounded-2xl p-3 flex flex-col items-center gap-0.5 relative overflow-hidden"
                 style={{
-                    background: 'linear-gradient(145deg, #f59e0b, #d97706)',
-                    border: '3px solid #92400e',
-                    boxShadow: '0 4px 0 #78350f, inset 0 1px 0 rgba(255,255,255,0.3)',
+                    background: C.xpCard.bg,
+                    border: `3px solid ${C.xpCard.border}`,
+                    boxShadow: `0 4px 0 ${C.xpCard.shadow}, inset 0 1px 0 rgba(255,255,255,0.4)`,
                 }}>
-                <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/15 pointer-events-none" />
-                <img src={trophyImg} alt="trophy" className="w-8 h-8 relative z-10 drop-shadow-md object-contain" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }} />
+                <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/20 pointer-events-none" />
+                <img src={trophyImg} alt="trophy" className="w-8 h-8 relative z-10 object-contain" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.25))' }} />
                 <span className="font-black text-2xl text-white relative z-10 drop-shadow-md"><AnimatedNumber value={score} /></span>
-                <span className="text-yellow-100 text-[9px] font-bold tracking-wider uppercase relative z-10">XP</span>
+                <span className="text-amber-900/70 text-[9px] font-bold tracking-wider uppercase relative z-10">XP</span>
             </div>
+            {/* Coins */}
             <div className="rounded-2xl p-3 flex flex-col items-center gap-0.5 relative overflow-hidden"
                 style={{
-                    background: 'linear-gradient(145deg, #eab308, #ca8a04)',
-                    border: '3px solid #854d0e',
-                    boxShadow: '0 4px 0 #713f12, inset 0 1px 0 rgba(255,255,255,0.3)',
+                    background: C.coinCard.bg,
+                    border: `3px solid ${C.coinCard.border}`,
+                    boxShadow: `0 4px 0 ${C.coinCard.shadow}, inset 0 1px 0 rgba(255,255,255,0.3)`,
                 }}>
-                <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/15 pointer-events-none" />
-                <img src={coinImg} alt="coin" className="w-8 h-8 relative z-10 drop-shadow-md object-contain" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }} />
+                <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/20 pointer-events-none" />
+                <img src={coinImg} alt="coin" className="w-8 h-8 relative z-10 drop-shadow-md object-contain" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.25))' }} />
                 <span className="font-black text-2xl text-white relative z-10 drop-shadow-md"><AnimatedNumber value={userCoins} /></span>
-                <span className="text-yellow-100 text-[9px] font-bold tracking-wider uppercase relative z-10">Coins</span>
+                <span className="text-teal-900/60 text-[9px] font-bold tracking-wider uppercase relative z-10">Coins</span>
             </div>
         </div>
     );
@@ -163,39 +181,40 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
     const RankProgress = () => (
         <div className="rounded-xl p-3 relative overflow-hidden"
             style={{
-                background: 'rgba(0,0,0,0.35)',
-                border: '2px solid rgba(255,255,255,0.08)',
+                background: C.card,
+                border: `2px solid ${C.cardBorder}`,
+                boxShadow: '0 2px 8px rgba(0,150,200,0.1)',
             }}>
             <div className="flex items-center justify-between mb-2">
-                <span className="flex items-center gap-1.5 text-[10px] font-black text-yellow-300 tracking-wider uppercase">
+                <span className="flex items-center gap-1.5 text-[10px] font-black tracking-wider uppercase" style={{ color: '#f4a261' }}>
                     <TrendingUp size={11} /> Tiến trình
                 </span>
                 {nextRank && (
-                    <span className="text-[9px] font-bold text-white/40">
+                    <span className="text-[9px] font-bold" style={{ color: C.textMuted }}>
                         Còn {formatNumber(xpToNext)} 🏆 XP
                     </span>
                 )}
             </div>
             <div className="w-full h-4 rounded-full relative overflow-hidden"
-                style={{ background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,255,255,0.08)' }}>
+                style={{ background: 'rgba(0,0,0,0.08)', border: '1.5px solid rgba(0,150,200,0.15)' }}>
                 <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
                     transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                     className="h-full rounded-full relative"
-                    style={{ background: 'linear-gradient(90deg, #f59e0b, #fbbf24)', boxShadow: '0 0 10px rgba(251,191,36,0.4)' }}>
-                    <div className="absolute inset-0 h-1/2 bg-white/25 rounded-full" />
+                    style={{ background: 'linear-gradient(90deg, #f4a261, #ffd166)', boxShadow: '0 0 10px rgba(244,162,97,0.5)' }}>
+                    <div className="absolute inset-0 h-1/2 bg-white/30 rounded-full" />
                 </motion.div>
-                <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black text-white drop-shadow-md">
+                <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black drop-shadow-md" style={{ color: C.textPrimary }}>
                     <AnimatedPercent value={progress} />%
                 </span>
             </div>
             <div className="flex justify-between mt-1.5">
-                <span className="text-[9px] font-bold text-white/50">Lv.{rankLevel} · {rankName}</span>
+                <span className="text-[9px] font-bold" style={{ color: C.textSecondary }}>Lv.{rankLevel} · {rankName}</span>
                 {nextRank ? (
-                    <span className="text-[9px] font-bold text-yellow-300/60">→ Lv.{nextRank.level} · {nextRank.name}</span>
+                    <span className="text-[9px] font-bold text-amber-500">→ Lv.{nextRank.level} · {nextRank.name}</span>
                 ) : (
-                    <span className="text-[9px] font-bold text-yellow-300">🏆 MAX RANK!</span>
+                    <span className="text-[9px] font-bold text-amber-500">🏆 MAX RANK!</span>
                 )}
             </div>
         </div>
@@ -204,21 +223,21 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
     const StatsSection = () => (
         <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 px-0.5">
-                <Award size={13} className="text-yellow-400" />
-                <span className="font-black text-xs text-white/80 tracking-wider uppercase">Thống Kê</span>
-                <span className="text-[9px] font-bold text-white/30 ml-auto">Tổng: {totalGames} trận</span>
+                <Award size={13} className="text-amber-400" />
+                <span className="font-black text-xs tracking-wider uppercase" style={{ color: C.textPrimary }}>Thống Kê</span>
+                <span className="text-[9px] font-bold ml-auto" style={{ color: C.textMuted }}>Tổng: {totalGames} trận</span>
             </div>
             <div className="grid grid-cols-2 gap-2.5">
                 {/* Solo */}
                 <div className="rounded-xl p-3 flex flex-col gap-2 relative overflow-hidden"
                     style={{
-                        background: 'linear-gradient(155deg, #059669, #047857)',
-                        border: '2.5px solid #064e3b',
-                        boxShadow: '0 4px 0 #022c22',
+                        background: C.soloCard.bg,
+                        border: `2.5px solid ${C.soloCard.border}`,
+                        boxShadow: `0 4px 0 ${C.soloCard.shadow}`,
                     }}>
-                    <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/10 pointer-events-none" />
+                    <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/15 pointer-events-none" />
                     <div className="flex items-center gap-1.5 relative z-10">
-                        <User size={11} strokeWidth={3} className="text-emerald-200" />
+                        <User size={11} strokeWidth={3} className="text-white" />
                         <span className="font-black text-[10px] text-white tracking-wider uppercase">Solo</span>
                     </div>
                     <div className="space-y-1 relative z-10">
@@ -230,13 +249,13 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                 {/* P2P */}
                 <div className="rounded-xl p-3 flex flex-col gap-2 relative overflow-hidden"
                     style={{
-                        background: 'linear-gradient(155deg, #7c3aed, #6d28d9)',
-                        border: '2.5px solid #4c1d95',
-                        boxShadow: '0 4px 0 #3b0764',
+                        background: C.p2pCard.bg,
+                        border: `2.5px solid ${C.p2pCard.border}`,
+                        boxShadow: `0 4px 0 ${C.p2pCard.shadow}`,
                     }}>
-                    <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/10 pointer-events-none" />
+                    <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/15 pointer-events-none" />
                     <div className="flex items-center gap-1.5 relative z-10">
-                        <Swords size={11} strokeWidth={3} className="text-purple-200" />
+                        <Swords size={11} strokeWidth={3} className="text-white" />
                         <span className="font-black text-[10px] text-white tracking-wider uppercase">P2P</span>
                     </div>
                     <div className="space-y-1 relative z-10">
@@ -254,31 +273,39 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
         <div className={`flex ${isLandscape ? 'flex-row' : 'flex-col'} gap-2`}>
             <motion.button whileTap={{ scale: 0.97, y: 2 }} onClick={onOpenRoadmap}
                 className="flex-1 flex items-center justify-between px-3.5 py-2.5 rounded-xl group"
-                style={{ background: 'rgba(255,255,255,0.05)', border: '1.5px solid rgba(255,255,255,0.1)', boxShadow: '0 2px 0 rgba(0,0,0,0.15)' }}>
+                style={{
+                    background: C.card,
+                    border: `1.5px solid ${C.cardBorder}`,
+                    boxShadow: '0 3px 0 rgba(0,150,200,0.15)',
+                }}>
                 <span className="flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center border border-amber-400/20">
-                        <Map size={14} className="text-amber-300" />
+                    <span className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center border border-amber-200">
+                        <Map size={14} className="text-amber-500" />
                     </span>
                     <span className="flex flex-col text-left">
-                        <span className="font-black text-xs text-white">Hành trình vươn đỉnh</span>
-                        <span className="text-[9px] text-white/30 font-semibold">Xem bản đồ Rank</span>
+                        <span className="font-black text-xs" style={{ color: C.textPrimary }}>Hành trình vươn đỉnh</span>
+                        <span className="text-[9px] font-semibold" style={{ color: C.textMuted }}>Xem bản đồ Rank</span>
                     </span>
                 </span>
-                <ChevronRight size={14} className="text-white/20 group-hover:text-white/60" />
+                <ChevronRight size={14} className="text-sky-300 group-hover:text-sky-500 transition-colors" />
             </motion.button>
             <motion.button whileTap={{ scale: 0.97, y: 2 }}
                 className="flex-1 flex items-center justify-between px-3.5 py-2.5 rounded-xl group"
-                style={{ background: 'rgba(255,255,255,0.05)', border: '1.5px solid rgba(255,255,255,0.1)', boxShadow: '0 2px 0 rgba(0,0,0,0.15)' }}>
+                style={{
+                    background: C.card,
+                    border: `1.5px solid ${C.cardBorder}`,
+                    boxShadow: '0 3px 0 rgba(0,150,200,0.15)',
+                }}>
                 <span className="flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center border border-purple-400/20">
-                        <Trophy size={14} className="text-purple-300" />
+                    <span className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center border border-purple-200">
+                        <Trophy size={14} className="text-purple-500" />
                     </span>
                     <span className="flex flex-col text-left">
-                        <span className="font-black text-xs text-white">Bảng Xếp Hạng</span>
-                        <span className="text-[9px] text-white/30 font-semibold">Coming soon</span>
+                        <span className="font-black text-xs" style={{ color: C.textPrimary }}>Bảng Xếp Hạng</span>
+                        <span className="text-[9px] font-semibold" style={{ color: C.textMuted }}>Coming soon</span>
                     </span>
                 </span>
-                <ChevronRight size={14} className="text-white/20 group-hover:text-white/60" />
+                <ChevronRight size={14} className="text-sky-300 group-hover:text-sky-500 transition-colors" />
             </motion.button>
         </div>
     );
@@ -298,11 +325,9 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
 
         const handleSave = async () => {
             setSaving(true);
-            // Save display name if changed
             if (nameDirty && saveDisplayName) {
                 await saveDisplayName(editName.trim());
             }
-            // Save church info if changed
             if (infoDirty) {
                 await saveProfile({
                     giaoxu: editGiaoxu.trim(),
@@ -318,72 +343,95 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
 
         return (
             <div className="rounded-xl p-3 flex flex-col gap-2.5"
-                style={{ background: 'rgba(255,255,255,0.05)', border: '1.5px solid rgba(255,255,255,0.1)' }}>
-                <span className="text-[10px] font-black text-white/60 tracking-widest uppercase flex items-center gap-1.5">
+                style={{
+                    background: C.card,
+                    border: `1.5px solid ${C.cardBorder}`,
+                    boxShadow: '0 2px 8px rgba(0,150,200,0.08)',
+                }}>
+                <span className="text-[10px] font-black tracking-widest uppercase flex items-center gap-1.5" style={{ color: '#1b9aaa' }}>
                     <Pen size={10} /> Chỉnh sửa thông tin
                 </span>
 
                 {/* Display Name */}
                 <div className="flex flex-col gap-1">
-                    <label className="text-[9px] font-bold text-white/40 uppercase tracking-wider">Tên hiển thị</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider" style={{ color: C.textSecondary }}>Tên hiển thị</label>
                     <input
                         type="text"
                         placeholder="Nhập tên của bạn..."
                         value={editName}
                         onChange={e => setEditName(e.target.value)}
-                        className="w-full bg-white/8 border border-white/15 rounded-lg px-3 py-2 text-white text-xs placeholder-white/30 focus:outline-none focus:border-yellow-400/50 transition-colors font-bold"
+                        className="w-full rounded-lg px-3 py-2 text-xs placeholder-slate-300 focus:outline-none transition-colors font-bold"
+                        style={{
+                            background: '#f0f9ff',
+                            border: '1.5px solid #bae6fd',
+                            color: C.textPrimary,
+                        }}
+                        onFocus={e => e.target.style.borderColor = '#06d6a0'}
+                        onBlur={e => e.target.style.borderColor = '#bae6fd'}
                         maxLength={25}
                     />
                 </div>
 
                 {/* Giáo xứ */}
                 <div className="flex flex-col gap-1">
-                    <label className="text-[9px] font-bold text-white/40 uppercase tracking-wider">⛪ Giáo xứ</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider" style={{ color: C.textSecondary }}>⛪ Giáo xứ</label>
                     <input
                         type="text"
                         placeholder="Giáo xứ của bạn..."
                         value={editGiaoxu}
                         onChange={e => setEditGiaoxu(e.target.value)}
-                        className="w-full bg-white/8 border border-white/15 rounded-lg px-3 py-2 text-white text-xs placeholder-white/30 focus:outline-none focus:border-yellow-400/50 transition-colors font-medium"
+                        className="w-full rounded-lg px-3 py-2 text-xs placeholder-slate-300 focus:outline-none transition-colors font-medium"
+                        style={{ background: '#f0f9ff', border: '1.5px solid #bae6fd', color: C.textPrimary }}
+                        onFocus={e => e.target.style.borderColor = '#06d6a0'}
+                        onBlur={e => e.target.style.borderColor = '#bae6fd'}
                         maxLength={50}
                     />
                 </div>
 
                 {/* Hạt */}
                 <div className="flex flex-col gap-1">
-                    <label className="text-[9px] font-bold text-white/40 uppercase tracking-wider">✠ Hạt (Giáo hạt)</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider" style={{ color: C.textSecondary }}>✠ Hạt (Giáo hạt)</label>
                     <input
                         type="text"
                         placeholder="Giáo hạt của bạn..."
                         value={editHat}
                         onChange={e => setEditHat(e.target.value)}
-                        className="w-full bg-white/8 border border-white/15 rounded-lg px-3 py-2 text-white text-xs placeholder-white/30 focus:outline-none focus:border-yellow-400/50 transition-colors font-medium"
+                        className="w-full rounded-lg px-3 py-2 text-xs placeholder-slate-300 focus:outline-none transition-colors font-medium"
+                        style={{ background: '#f0f9ff', border: '1.5px solid #bae6fd', color: C.textPrimary }}
+                        onFocus={e => e.target.style.borderColor = '#06d6a0'}
+                        onBlur={e => e.target.style.borderColor = '#bae6fd'}
                         maxLength={50}
                     />
                 </div>
 
                 {/* Giáo phận */}
                 <div className="flex flex-col gap-1">
-                    <label className="text-[9px] font-bold text-white/40 uppercase tracking-wider">✡ Giáo phận</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider" style={{ color: C.textSecondary }}>✡ Giáo phận</label>
                     <input
                         type="text"
                         placeholder="Giáo phận của bạn..."
                         value={editGiaophan}
                         onChange={e => setEditGiaophan(e.target.value)}
-                        className="w-full bg-white/8 border border-white/15 rounded-lg px-3 py-2 text-white text-xs placeholder-white/30 focus:outline-none focus:border-yellow-400/50 transition-colors font-medium"
+                        className="w-full rounded-lg px-3 py-2 text-xs placeholder-slate-300 focus:outline-none transition-colors font-medium"
+                        style={{ background: '#f0f9ff', border: '1.5px solid #bae6fd', color: C.textPrimary }}
+                        onFocus={e => e.target.style.borderColor = '#06d6a0'}
+                        onBlur={e => e.target.style.borderColor = '#bae6fd'}
                         maxLength={50}
                     />
                 </div>
 
                 {/* Tỉnh thành */}
                 <div className="flex flex-col gap-1">
-                    <label className="text-[9px] font-bold text-white/40 uppercase tracking-wider">📍 Tỉnh / Thành phố</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider" style={{ color: C.textSecondary }}>📍 Tỉnh / Thành phố</label>
                     <input
                         type="text"
                         placeholder="Tỉnh / Thành phố..."
                         value={editTinhthanh}
                         onChange={e => setEditTinhthanh(e.target.value)}
-                        className="w-full bg-white/8 border border-white/15 rounded-lg px-3 py-2 text-white text-xs placeholder-white/30 focus:outline-none focus:border-yellow-400/50 transition-colors font-medium"
+                        className="w-full rounded-lg px-3 py-2 text-xs placeholder-slate-300 focus:outline-none transition-colors font-medium"
+                        style={{ background: '#f0f9ff', border: '1.5px solid #bae6fd', color: C.textPrimary }}
+                        onFocus={e => e.target.style.borderColor = '#06d6a0'}
+                        onBlur={e => e.target.style.borderColor = '#bae6fd'}
                         maxLength={50}
                     />
                 </div>
@@ -391,12 +439,14 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                 <button
                     onClick={handleSave}
                     disabled={!isDirty || saving}
-                    className={`w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide transition-all ${
-                        saved ? 'bg-green-500/80 text-white' :
-                        isDirty ? 'bg-yellow-400 text-[#1e3a8a] hover:bg-yellow-300 shadow-lg shadow-yellow-400/20' :
-                        'bg-white/5 text-white/30 cursor-not-allowed'
-                    }`}
-                    style={isDirty && !saved ? { boxShadow: '0 3px 0 #b45309' } : {}}
+                    className={`w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide transition-all`}
+                    style={
+                        saved
+                            ? { background: '#22c55e', color: '#fff', boxShadow: '0 3px 0 #16a34a' }
+                            : isDirty
+                                ? { background: 'linear-gradient(180deg, #06d6a0, #1b9aaa)', color: '#fff', boxShadow: '0 3px 0 #0e7490' }
+                                : { background: '#e0f2f1', color: '#94a3b8', cursor: 'not-allowed' }
+                    }
                 >
                     {saved ? '✓ Đã lưu!' : saving ? 'Đang lưu...' : 'Lưu thay đổi'}
                 </button>
@@ -429,7 +479,7 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
 
                     {/* Left: Avatar + Name */}
                     <div className="flex-shrink-0 flex flex-col items-center justify-center gap-1.5 rounded-xl px-6 py-3"
-                        style={{ background: 'rgba(255,255,255,0.04)', border: '1.5px solid rgba(255,255,255,0.08)', minWidth: 180 }}>
+                        style={{ background: C.card, border: `1.5px solid ${C.cardBorder}`, boxShadow: '0 2px 8px rgba(0,150,200,0.1)', minWidth: 180 }}>
                         <motion.div custom={0} variants={popIn} initial="hidden" animate="visible" className="relative">
                             <UserAvatar
                                 name={displayName}
@@ -437,23 +487,23 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                                 size={64}
                                 ring={true}
                             />
-                            <div className="absolute -bottom-0.5 -right-0.5 w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center font-black text-[10px] text-white z-10"
-                                style={{ border: '2.5px solid #0f172a', boxShadow: '0 1px 0 #000' }}>
+                            <div className="absolute -bottom-0.5 -right-0.5 w-7 h-7 rounded-full bg-[#06d6a0] flex items-center justify-center font-black text-[10px] text-white z-10"
+                                style={{ border: '2.5px solid #e0f7fa', boxShadow: '0 1px 0 #0e7490' }}>
                                 {rankLevel}
                             </div>
                         </motion.div>
-                        <h2 className="font-black text-xl text-white leading-tight">{displayName}</h2>
+                        <h2 className="font-black text-xl leading-tight" style={{ color: C.textPrimary }}>{displayName}</h2>
                         <div className="flex items-center gap-1.5 flex-wrap justify-center">
                             <span className="flex items-center gap-1 text-xs font-black px-3 py-1 rounded-full"
-                                style={{ background: 'linear-gradient(135deg, #fbbf24, #f59e0b)', color: '#78350f', border: '2px solid #b45309', boxShadow: '0 2px 0 #92400e' }}>
+                                style={{ background: C.rankBadge.bg, color: C.rankBadge.color, border: `2px solid ${C.rankBadge.border}`, boxShadow: `0 2px 0 ${C.rankBadge.shadow}` }}>
                                 <Crown size={11} /> {rankName}
                             </span>
                             {user?.isGuest ? (
-                                <span className="flex items-center gap-0.5 text-[8px] font-bold text-orange-300 bg-orange-400/20 px-1.5 py-0.5 rounded-full border border-orange-400/30">
+                                <span className="flex items-center gap-0.5 text-[8px] font-bold text-orange-600 bg-orange-100 px-1.5 py-0.5 rounded-full border border-orange-200">
                                     <User size={7} /> Khách
                                 </span>
                             ) : (
-                                <span className="flex items-center gap-0.5 text-[8px] font-bold text-emerald-300 bg-emerald-400/20 px-1.5 py-0.5 rounded-full border border-emerald-400/30">
+                                <span className="flex items-center gap-0.5 text-[8px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded-full border border-emerald-200">
                                     <Shield size={7} /> Đã bảo vệ
                                 </span>
                             )}
@@ -462,34 +512,34 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
 
                     {/* Right: Assets & Overview */}
                     <div className="flex-1 rounded-xl px-5 py-3 flex flex-col gap-2"
-                        style={{ background: 'rgba(255,255,255,0.04)', border: '1.5px solid rgba(255,255,255,0.08)' }}>
-                        <span className="flex items-center gap-1.5 text-base font-black text-white/70 tracking-wider uppercase">
+                        style={{ background: C.card, border: `1.5px solid ${C.cardBorder}`, boxShadow: '0 2px 8px rgba(0,150,200,0.1)' }}>
+                        <span className="flex items-center gap-1.5 text-base font-black tracking-wider uppercase" style={{ color: C.textSecondary }}>
                             <span className="text-base">⭐</span> Assets & Overview
                         </span>
                         <div className="flex items-center gap-4 flex-1">
                             {/* XP */}
                             <motion.div custom={1} variants={popIn} initial="hidden" animate="visible"
                                 className="rounded-xl px-5 py-2.5 flex flex-col items-center relative overflow-hidden"
-                                style={{ background: 'linear-gradient(145deg, #f59e0b, #d97706)', border: '2.5px solid #92400e', boxShadow: '0 3px 0 #78350f', minWidth: 100 }}>
-                                <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/15 pointer-events-none" />
-                                <img src={trophyImg} alt="trophy" className="w-9 h-9 relative z-10 object-contain" style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.4))' }} />
+                                style={{ background: C.xpCard.bg, border: `2.5px solid ${C.xpCard.border}`, boxShadow: `0 3px 0 ${C.xpCard.shadow}`, minWidth: 100 }}>
+                                <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/20 pointer-events-none" />
+                                <img src={trophyImg} alt="trophy" className="w-9 h-9 relative z-10 object-contain" style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.3))' }} />
                                 <span className="font-black text-3xl text-white relative z-10"><AnimatedNumber value={score} /></span>
-                                <span className="text-yellow-100 text-[10px] font-bold tracking-wider uppercase relative z-10">XP</span>
+                                <span className="text-amber-900/70 text-[10px] font-bold tracking-wider uppercase relative z-10">XP</span>
                             </motion.div>
                             {/* Coins */}
                             <motion.div custom={2} variants={popIn} initial="hidden" animate="visible"
                                 className="rounded-xl px-5 py-2.5 flex flex-col items-center relative overflow-hidden"
-                                style={{ background: 'linear-gradient(145deg, #eab308, #ca8a04)', border: '2.5px solid #854d0e', boxShadow: '0 3px 0 #713f12', minWidth: 100 }}>
-                                <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/15 pointer-events-none" />
-                                <img src={coinImg} alt="coin" className="w-9 h-9 relative z-10 object-contain" style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.4))' }} />
+                                style={{ background: C.coinCard.bg, border: `2.5px solid ${C.coinCard.border}`, boxShadow: `0 3px 0 ${C.coinCard.shadow}`, minWidth: 100 }}>
+                                <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/20 pointer-events-none" />
+                                <img src={coinImg} alt="coin" className="w-9 h-9 relative z-10 object-contain" style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.3))' }} />
                                 <span className="font-black text-3xl text-white relative z-10"><AnimatedNumber value={userCoins} /></span>
-                                <span className="text-yellow-100 text-[10px] font-bold tracking-wider uppercase relative z-10">Coins</span>
+                                <span className="text-teal-900/60 text-[10px] font-bold tracking-wider uppercase relative z-10">Coins</span>
                             </motion.div>
                             {/* Total Games */}
                             <div className="flex-1 flex flex-col items-center justify-center px-4">
-                                <span className="font-black text-6xl text-white/90"><AnimatedNumber value={totalGames} /></span>
-                                <span className="text-white/40 text-base font-bold mt-0.5">General Statistics:</span>
-                                <span className="text-white/30 text-sm font-semibold">Total: {totalGames} games</span>
+                                <span className="font-black text-6xl" style={{ color: C.textPrimary }}><AnimatedNumber value={totalGames} /></span>
+                                <span className="text-base font-bold mt-0.5" style={{ color: C.textSecondary }}>General Statistics:</span>
+                                <span className="text-sm font-semibold" style={{ color: C.textMuted }}>Total: {totalGames} games</span>
                             </div>
                         </div>
                     </div>
@@ -498,18 +548,18 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                 {/* ═══ ROW 2: Detailed Statistics ═══ */}
                 <motion.div custom={1} variants={fadeUp} initial="hidden" animate="visible"
                     className="rounded-xl px-4 py-3 flex-1 flex flex-col"
-                    style={{ background: 'rgba(255,255,255,0.04)', border: '1.5px solid rgba(255,255,255,0.08)' }}>
+                    style={{ background: C.card, border: `1.5px solid ${C.cardBorder}`, boxShadow: '0 2px 8px rgba(0,150,200,0.1)' }}>
                     <div className="flex items-center gap-2 mb-2">
-                        <Award size={18} className="text-yellow-400" />
-                        <span className="font-black text-lg text-white/80 tracking-wider uppercase">Detailed Statistics</span>
+                        <Award size={18} className="text-amber-400" />
+                        <span className="font-black text-lg tracking-wider uppercase" style={{ color: C.textPrimary }}>Detailed Statistics</span>
                     </div>
                     <div className="grid grid-cols-2 gap-3 flex-1">
                         {/* Solo */}
                         <div className="rounded-xl px-5 py-3 flex flex-col gap-2.5 relative overflow-hidden"
-                            style={{ background: 'linear-gradient(155deg, #059669, #047857)', border: '2.5px solid #064e3b', boxShadow: '0 3px 0 #022c22' }}>
-                            <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/10 pointer-events-none" />
+                            style={{ background: C.soloCard.bg, border: `2.5px solid ${C.soloCard.border}`, boxShadow: `0 3px 0 ${C.soloCard.shadow}` }}>
+                            <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/15 pointer-events-none" />
                             <div className="flex items-center gap-2 relative z-10">
-                                <User size={18} strokeWidth={3} className="text-emerald-200" />
+                                <User size={18} strokeWidth={3} className="text-white" />
                                 <span className="font-black text-xl text-white tracking-wider uppercase">SOLO Mode</span>
                             </div>
                             <div className="space-y-2.5 relative z-10 flex-1 flex flex-col justify-center">
@@ -520,8 +570,8 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                         </div>
                         {/* P2P */}
                         <div className="rounded-xl px-5 py-3 flex flex-col gap-2.5 relative overflow-hidden"
-                            style={{ background: 'linear-gradient(155deg, #7c3aed, #6d28d9)', border: '2.5px solid #4c1d95', boxShadow: '0 3px 0 #3b0764' }}>
-                            <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/10 pointer-events-none" />
+                            style={{ background: C.p2pCard.bg, border: `2.5px solid ${C.p2pCard.border}`, boxShadow: `0 3px 0 ${C.p2pCard.shadow}` }}>
+                            <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/15 pointer-events-none" />
                             <div className="flex items-center gap-2 relative z-10">
                                 <Swords size={18} strokeWidth={3} className="text-purple-200" />
                                 <span className="font-black text-xl text-white tracking-wider uppercase">P2P Mode</span>
@@ -539,30 +589,30 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                 {/* ═══ ROW 3: Rank Progress ═══ */}
                 <motion.div custom={2} variants={fadeUp} initial="hidden" animate="visible"
                     className="rounded-xl px-3.5 py-2.5"
-                    style={{ background: 'rgba(255,255,255,0.04)', border: '1.5px solid rgba(255,255,255,0.08)' }}>
+                    style={{ background: C.card, border: `1.5px solid ${C.cardBorder}`, boxShadow: '0 2px 8px rgba(0,150,200,0.1)' }}>
                     <div className="flex items-center justify-between mb-2">
-                        <span className="flex items-center gap-1.5 text-base font-black text-yellow-300 tracking-wider uppercase">
+                        <span className="flex items-center gap-1.5 text-base font-black tracking-wider uppercase" style={{ color: '#f4a261' }}>
                             <TrendingUp size={16} /> Rank Progress
                         </span>
-                        {nextRank && <span className="text-sm font-bold text-white/40">Còn {formatNumber(xpToNext)} 🏆 XP</span>}
+                        {nextRank && <span className="text-sm font-bold" style={{ color: C.textMuted }}>Còn {formatNumber(xpToNext)} 🏆 XP</span>}
                     </div>
                     <div className="w-full h-6 rounded-full relative overflow-hidden"
-                        style={{ background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,255,255,0.08)' }}>
+                        style={{ background: 'rgba(0,0,0,0.08)', border: '1.5px solid rgba(0,150,200,0.15)' }}>
                         <motion.div initial={{ width: 0 }} animate={{ width: `${progress}%` }}
                             transition={{ delay: 0.6, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                             className="h-full rounded-full relative"
-                            style={{ background: 'linear-gradient(90deg, #f59e0b, #fbbf24)', boxShadow: '0 0 12px rgba(251,191,36,0.5)' }}>
-                            <div className="absolute inset-0 h-1/2 bg-white/25 rounded-full" />
+                            style={{ background: 'linear-gradient(90deg, #f4a261, #ffd166)', boxShadow: '0 0 12px rgba(244,162,97,0.5)' }}>
+                            <div className="absolute inset-0 h-1/2 bg-white/30 rounded-full" />
                         </motion.div>
-                        <span className="absolute inset-0 flex items-center justify-center text-xs font-black text-white drop-shadow-md">
+                        <span className="absolute inset-0 flex items-center justify-center text-xs font-black drop-shadow-md" style={{ color: C.textPrimary }}>
                             <AnimatedPercent value={progress} delay={600} />%
                         </span>
                     </div>
                     <div className="flex justify-between mt-1.5">
-                        <span className="text-sm font-bold text-white/50">Lv.{rankLevel} · {rankName}</span>
+                        <span className="text-sm font-bold" style={{ color: C.textSecondary }}>Lv.{rankLevel} · {rankName}</span>
                         {nextRank
-                            ? <span className="text-sm font-bold text-yellow-300/60">→ Lv.{nextRank.level} · {nextRank.name}</span>
-                            : <span className="text-sm font-bold text-yellow-300">🏆 MAX RANK!</span>}
+                            ? <span className="text-sm font-bold text-amber-500">→ Lv.{nextRank.level} · {nextRank.name}</span>
+                            : <span className="text-sm font-bold text-amber-500">🏆 MAX RANK!</span>}
                     </div>
                 </motion.div>
 
@@ -571,31 +621,31 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                     className="grid grid-cols-2 gap-2.5">
                     <motion.button whileTap={{ scale: 0.97, y: 2 }} onClick={onOpenRoadmap}
                         className="flex items-center justify-between px-4 py-2.5 rounded-xl group"
-                        style={{ background: 'rgba(255,255,255,0.04)', border: '1.5px solid rgba(255,255,255,0.08)', boxShadow: '0 2px 0 rgba(0,0,0,0.15)' }}>
+                        style={{ background: C.card, border: `1.5px solid ${C.cardBorder}`, boxShadow: '0 3px 0 rgba(0,150,200,0.15)' }}>
                         <span className="flex items-center gap-2.5">
-                            <span className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center border border-amber-400/20">
-                                <Map size={14} className="text-amber-300" />
+                            <span className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center border border-amber-200">
+                                <Map size={14} className="text-amber-500" />
                             </span>
                             <span className="flex flex-col text-left">
-                                <span className="font-black text-sm text-white">Hành trình vươn đỉnh</span>
-                                <span className="text-[10px] text-white/30 font-semibold">Xem bản đồ Rank</span>
+                                <span className="font-black text-sm" style={{ color: C.textPrimary }}>Hành trình vươn đỉnh</span>
+                                <span className="text-[10px] font-semibold" style={{ color: C.textMuted }}>Xem bản đồ Rank</span>
                             </span>
                         </span>
-                        <ChevronRight size={14} className="text-white/20 group-hover:text-white/60" />
+                        <ChevronRight size={14} className="text-sky-300 group-hover:text-sky-500 transition-colors" />
                     </motion.button>
                     <motion.button whileTap={{ scale: 0.97, y: 2 }}
                         className="flex items-center justify-between px-4 py-2.5 rounded-xl group"
-                        style={{ background: 'rgba(255,255,255,0.04)', border: '1.5px solid rgba(255,255,255,0.08)', boxShadow: '0 2px 0 rgba(0,0,0,0.15)' }}>
+                        style={{ background: C.card, border: `1.5px solid ${C.cardBorder}`, boxShadow: '0 3px 0 rgba(0,150,200,0.15)' }}>
                         <span className="flex items-center gap-2.5">
-                            <span className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center border border-purple-400/20">
-                                <Trophy size={14} className="text-purple-300" />
+                            <span className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center border border-purple-200">
+                                <Trophy size={14} className="text-purple-500" />
                             </span>
                             <span className="flex flex-col text-left">
-                                <span className="font-black text-sm text-white">Bảng Xếp Hạng</span>
-                                <span className="text-[10px] text-white/30 font-semibold">Coming soon</span>
+                                <span className="font-black text-sm" style={{ color: C.textPrimary }}>Bảng Xếp Hạng</span>
+                                <span className="text-[10px] font-semibold" style={{ color: C.textMuted }}>Coming soon</span>
                             </span>
                         </span>
-                        <ChevronRight size={14} className="text-white/20 group-hover:text-white/60" />
+                        <ChevronRight size={14} className="text-sky-300 group-hover:text-sky-500 transition-colors" />
                     </motion.button>
                 </motion.div>
 
@@ -609,33 +659,36 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
 
     return (
         <div className="w-full h-full flex flex-col overflow-hidden relative"
-            style={{ background: '#0a0e1a' }}>
+            style={{ background: C.bg }}>
 
-            {/* ── Dark textured background ── */}
+            {/* ── Decorative background bubbles ── */}
             <div className="absolute inset-0 pointer-events-none">
-                {/* Radial vignette */}
                 <div className="absolute inset-0"
-                    style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(37,99,235,0.15) 0%, transparent 60%)' }} />
+                    style={{ background: 'radial-gradient(ellipse at 20% 15%, rgba(0,180,216,0.18) 0%, transparent 55%)' }} />
                 <div className="absolute inset-0"
-                    style={{ background: 'radial-gradient(ellipse at 70% 80%, rgba(124,58,237,0.1) 0%, transparent 50%)' }} />
-                {/* Dot pattern */}
-                <div className="absolute inset-0 opacity-[0.03]"
+                    style={{ background: 'radial-gradient(ellipse at 80% 85%, rgba(6,214,160,0.15) 0%, transparent 50%)' }} />
+                {/* Bubble dots */}
+                <div className="absolute inset-0 opacity-[0.06]"
                     style={{
-                        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
-                        backgroundSize: '20px 20px',
+                        backgroundImage: 'radial-gradient(circle, rgba(0,150,200,0.8) 1px, transparent 1px)',
+                        backgroundSize: '22px 22px',
                     }} />
             </div>
 
             {/* ── Header ── */}
             <div className="flex-shrink-0 flex items-center justify-between px-4 py-2 pt-[env(safe-area-inset-top,12px)] z-20 relative rounded-b-2xl"
-                style={{ background: 'rgba(255,255,255,0.06)', borderBottom: '2px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
+                style={{
+                    background: 'rgba(255,255,255,0.85)',
+                    borderBottom: `2px solid ${C.cardBorder}`,
+                    boxShadow: '0 4px 12px rgba(0,150,200,0.12)',
+                }}>
                 <motion.button whileTap={{ y: 2 }} onClick={onBack}
-                    className="w-8 h-8 flex items-center justify-center rounded-full text-white/70 hover:text-white"
-                    style={{ background: 'rgba(255,255,255,0.06)', border: '1.5px solid rgba(255,255,255,0.1)' }}>
-                    <ChevronLeft size={18} strokeWidth={3} />
+                    className="w-8 h-8 flex items-center justify-center rounded-full transition-colors"
+                    style={{ background: 'rgba(0,180,216,0.1)', border: '1.5px solid rgba(0,180,216,0.25)' }}>
+                    <ChevronLeft size={18} strokeWidth={3} style={{ color: '#1b9aaa' }} />
                 </motion.button>
-                <span className="font-black text-sm tracking-widest text-white/80 uppercase"
-                    style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
+                <span className="font-black text-sm tracking-widest uppercase"
+                    style={{ color: C.textPrimary, textShadow: 'none' }}>
                     Hồ Sơ
                 </span>
                 <div className="w-8" />
@@ -650,10 +703,10 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
 /* ── Tiny stat row (portrait) ── */
 const StatRow = ({ icon, label, value, highlight = false }) => (
     <div className="flex items-center justify-between">
-        <span className="flex items-center gap-1 text-xs text-white/60 font-semibold">
+        <span className="flex items-center gap-1 text-xs text-white/70 font-semibold">
             <span className="text-xs">{icon}</span> {label}
         </span>
-        <span className={`text-sm font-black ${highlight ? 'text-yellow-300' : 'text-white/90'}`}>
+        <span className={`text-sm font-black ${highlight ? 'text-yellow-200' : 'text-white'}`}>
             {value}
         </span>
     </div>
@@ -667,10 +720,10 @@ const StatRowLg = ({ icon, label, value, suffix = '', highlight = false, animate
     const displayVal = animated ? (numVal + suffix) : (typeof value === 'string' ? value : value + suffix);
     return (
         <div className="flex items-center justify-between">
-            <span className="flex items-center gap-2 text-base text-white/65 font-semibold">
+            <span className="flex items-center gap-2 text-base text-white/70 font-semibold">
                 <span className="text-base">{icon}</span> {label}
             </span>
-            <span className={`text-lg font-black ${highlight ? 'text-yellow-300' : 'text-white'}`}>
+            <span className={`text-lg font-black ${highlight ? 'text-yellow-200' : 'text-white'}`}>
                 {displayVal}
             </span>
         </div>
