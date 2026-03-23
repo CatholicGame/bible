@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { signInAnonymously } from 'firebase/auth';
 import { ref, set, get, update } from 'firebase/database';
@@ -9,6 +10,7 @@ import CrosswordGame from './components/games/crossword/CrosswordGame';
 import LoginScreen from './components/auth/LoginScreen';
 import ProfileScreen from './components/profile/ProfileScreen';
 import RankRoadmap from './components/profile/RankRoadmap';
+import LoadingScreen, { usePreload } from './components/LoadingScreen';
 import CreateRoom from './components/menu/CreateRoom';
 import JoinRoom from './components/menu/JoinRoom';
 import WaitingRoom from './components/menu/WaitingRoom';
@@ -57,6 +59,8 @@ function App() {
       return !!parsed && typeof parsed === 'object';
     } catch { return false; }
   })();
+
+  const { done: preloadDone, progress } = usePreload(1200);
 
   // Views: 'login' | 'menu' | 'profile' | 'create_room' | 'join_room' | 'waiting_room' | 'playing'
   const [currentView, setCurrentView] = useState(hasSession ? 'menu' : 'login');
@@ -215,7 +219,22 @@ function App() {
 
   return (
     <div className="relative h-screen w-full overflow-hidden bg-[#020617]">
+      <SpeedInsights />
       <BackgroundAnimations />
+
+      {/* ── Loading gate ── */}
+      <AnimatePresence>
+        {!preloadDone && (
+          <motion.div
+            key="loading"
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0 z-[9999]"
+          >
+            <LoadingScreen progress={progress} />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence mode="wait" initial={false}>
 
