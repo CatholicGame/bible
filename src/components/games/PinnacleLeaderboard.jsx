@@ -234,7 +234,7 @@ const PinnacleLeaderboard = ({ onBack }) => {
                     {/* Title row */}
                     <div className="relative flex items-center justify-center mb-3">
                         <button onClick={onBack}
-                            className="absolute left-0 w-10 h-10 rounded-full flex items-center justify-center text-white
+                            className="absolute left-1 w-10 h-10 rounded-full flex items-center justify-center text-white
                                        bg-blue-700 border-[3px] border-[#172554]
                                        shadow-[0_4px_0_rgba(23,37,84,1)]
                                        active:translate-y-1 active:shadow-none transition-all">

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { signInAnonymously } from 'firebase/auth';
-import { ref, set, get, update } from 'firebase/database';
 import MainMenu from './components/menu/MainMenu';
 import LandingScreen from './components/LandingScreen';
 import PinnacleGame from './components/games/PinnacleGame';
@@ -17,7 +16,7 @@ import WaitingRoom from './components/menu/WaitingRoom';
 import { useUserStore } from './store/userStore';
 import { useRoomStore } from './store/roomStore';
 import { usePlayFabStore } from './store/playfabStore';
-import { auth, db } from './config/firebase';
+import { auth } from './config/firebase';
 import { getRankByScore } from './utils/ranks';
 
 // ── Fullscreen helpers ──
@@ -82,10 +81,9 @@ function App() {
           const parsed = JSON.parse(saved);
           const nickname = parsed.name || 'Khách Vô Danh';
           setUser({ uid: user.uid, nickname });
-          set(ref(db, `users/${user.uid}/nickname`), nickname);
         } catch { /* ignore */ }
       }
-      // PlayFab login (song song với Firebase, dùng device ID)
+      // PlayFab login (dùng device ID)
       playfabLogin().catch(console.error);
     }).catch(console.error);
   }, []);
@@ -111,18 +109,6 @@ function App() {
     localStorage.setItem('guestSession', JSON.stringify(mockUser));
     setUser({ uid, nickname });
 
-    // Ghi lên Firebase — chỉ set coins ban đầu cho user MỚI
-    const snap = await get(ref(db, `users/${uid}`));
-    if (snap.exists()) {
-      // User đã tồn tại → cập nhật nickname, khôi phục coins nếu bị mất
-      const data = snap.val();
-      const updates = { nickname };
-      if (!data.coins) updates.coins = 500; // khôi phục coins ban đầu nếu bị xóa
-      await update(ref(db, `users/${uid}`), updates);
-    } else {
-      // User mới → set đầy đủ với 500 coins ban đầu
-      await set(ref(db, `users/${uid}`), { nickname, global_score: 0, coins: 500 });
-    }
     setCurrentView('menu');
   };
 
@@ -278,8 +264,8 @@ function App() {
               {showProfileRoadmap && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                   className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-0 md:p-8">
-                  <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }}
-                    className="bg-white w-full h-full md:h-[90vh] md:max-w-6xl md:rounded-3xl overflow-hidden">
+                   <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }}
+                    className="bg-white w-full h-full md:h-[80vh] md:max-w-2xl md:rounded-3xl overflow-hidden">
                     <RankRoadmap currentScore={user?.score} onBack={() => setShowProfileRoadmap(false)} />
                   </motion.div>
                 </motion.div>

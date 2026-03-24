@@ -6,7 +6,6 @@ import {
     ChevronLeft, Trophy, Star, Award, Swords,
     User, Shield, Map, ChevronRight, TrendingUp, Crown, Pen,
 } from 'lucide-react';
-import { useUserStore } from '../../store/userStore';
 import { usePlayFabStore } from '../../store/playfabStore';
 import UserAvatar from '../common/UserAvatar';
 import {
@@ -72,9 +71,9 @@ const C = {
 };
 
 const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
-    const globalScore = useUserStore(state => state.globalScore);
-    const coins = useUserStore(state => state.coins);
-    const stats = useUserStore(state => state.stats);
+    const globalScore = usePlayFabStore(state => state.globalScore);
+    const coins = usePlayFabStore(state => state.coins);
+    const stats = usePlayFabStore(state => state.stats);
     const avatarUrl = usePlayFabStore(state => state.avatarUrl);
     const giaoxu = usePlayFabStore(state => state.giaoxu);
     const hat = usePlayFabStore(state => state.hat);

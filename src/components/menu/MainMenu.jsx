@@ -5,11 +5,11 @@ import {
     LogOut, Map, ChevronRight, ChevronLeft, Power, Maximize
 } from 'lucide-react';
 import { getRankByScore } from '../../utils/ranks';
-import { useUserStore } from '../../store/userStore';
 import { usePlayFabStore } from '../../store/playfabStore';
 import UserAvatar from '../common/UserAvatar';
 import RankRoadmap from '../profile/RankRoadmap';
 import SettingsModal from '../common/SettingsModal';
+import RosaryOfferingModal from '../rosary/RosaryOfferingModal';
 import bgImage from '../../assets/common/common_background.png';
 import iconCoin from '../../assets/common/coin.png';
 import iconTrophy from '../../assets/common/trophy.png';
@@ -137,8 +137,6 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
                 }}
             >
                 <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none" style={{ background: game.from + '18' }} />
-                {/* Top color stripe */}
-                <div className="absolute top-0 left-0 right-0 h-1.5 rounded-t-3xl pointer-events-none" style={{ background: `linear-gradient(90deg,${game.from},${game.to})` }} />
                 {/* 3D Image Thumbnail */}
                 <div className="absolute inset-x-0 top-[8%] bottom-[30%] flex justify-center pointer-events-none drop-shadow-2xl px-[5px]">
                     <img
@@ -218,11 +216,12 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
     const [showRoadmap, setShowRoadmap] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [showRosary, setShowRosary] = useState(false);
     const [ready, setReady] = useState(false);
     const [cardDims, setCardDims] = useState({ cardW: BASE_CARD_W, cardH: BASE_CARD_H, step: Math.round(BASE_CARD_W * MAX_SC) + GAP });
     const [isLandscape, setIsLandscape] = useState(false);
 
-    const { coins, globalScore } = useUserStore();
+    const { coins, globalScore, rosaryToday, rosaryGlobal, submitRosary } = usePlayFabStore();
     const avatarUrl = usePlayFabStore(state => state.avatarUrl);
 
     /* Measure → set cwRef + card dims based on available height, then centre card-0 */
@@ -354,6 +353,21 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                         <span className="text-xs font-bold italic" style={{ color: '#4a7fa5' }}>Học hỏi Lời Chúa qua trò chơi</span>
                     </div>
 
+                    {/* Dâng Hoa button */}
+                    <motion.button whileTap={{ scale: 0.93, y: 2 }}
+                        onClick={() => setShowRosary(true)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors ml-auto"
+                        style={{
+                            background: 'linear-gradient(135deg, rgba(236,64,122,0.12), rgba(233,30,99,0.18))',
+                            border: '2px solid rgba(233,30,99,0.3)',
+                            boxShadow: '0 2px 0 rgba(136,14,79,0.15)',
+                        }}
+                        title="Dâng Hoa Đức Mẹ"
+                    >
+                        <span style={{ fontSize: 16 }}>🌸</span>
+                        <span className="font-black text-[10px] tracking-wider uppercase hidden sm:inline" style={{ color: '#c2185b' }}>Dâng Hoa</span>
+                    </motion.button>
+
                     {/* Fullscreen button */}
                     <motion.button whileTap={{ scale: 0.9, y: 2 }}
                         onClick={() => {
@@ -363,7 +377,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                 document.exitFullscreen().catch(() => {});
                             }
                         }}
-                        className="flex items-center justify-center w-10 h-10 rounded-full transition-colors ml-auto mr-[-4px]"
+                        className="flex items-center justify-center w-10 h-10 rounded-full transition-colors mr-[-4px]"
                         style={{ background: 'rgba(0,180,216,0.12)', border: '2px solid rgba(0,180,216,0.28)', boxShadow: '0 2px 0 rgba(0,100,150,0.15)' }}
                         title="Toàn màn hình"
                     >
@@ -485,13 +499,26 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                 {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
             </AnimatePresence>
 
+            {/* Rosary Offering Modal */}
+            <AnimatePresence>
+                {showRosary && (
+                    <RosaryOfferingModal
+                        onClose={() => setShowRosary(false)}
+                        coins={coins}
+                        rosaryToday={rosaryToday}
+                        rosaryGlobal={rosaryGlobal}
+                        onSubmit={submitRosary}
+                    />
+                )}
+            </AnimatePresence>
+
             {/* Roadmap */}
             <AnimatePresence>
                 {showRoadmap && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                         className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-0 md:p-8">
                         <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }}
-                            className="bg-white w-full h-full md:h-[90vh] md:max-w-6xl md:rounded-3xl overflow-hidden">
+                            className="bg-white w-full h-full md:h-[80vh] md:max-w-2xl md:rounded-3xl overflow-hidden">
                             <RankRoadmap currentScore={user?.score} onBack={() => setShowRoadmap(false)} />
                         </motion.div>
                     </motion.div>

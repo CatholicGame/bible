@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Clock, Trophy, Star, Check, RotateCcw, Zap, Eye, Lightbulb } from 'lucide-react';
-import { useUserStore } from '../../../store/userStore';
+import { usePlayFabStore } from '../../../store/playfabStore';
 import bgCrossword from '../../../assets/common/bg_crossword.png';
 
 const BG_STYLE = {
@@ -219,7 +219,7 @@ const CrosswordGame = ({
   const [showHintMenu, setShowHintMenu] = useState(false);
 
   // Store — for persisting XP/coins
-  const { addXP, addCoins, coins: userCoins } = useUserStore();
+  const { addXP, addCoins, coins: userCoins } = usePlayFabStore();
 
   // Earned rewards (set at finish for display)
   const [earnedXP, setEarnedXP] = useState(null);

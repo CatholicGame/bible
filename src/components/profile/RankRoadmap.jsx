@@ -241,8 +241,8 @@ const RankRoadmap = ({ currentScore, onBack }) => {
                                             alt={tier.name} 
                                             style={{ 
                                                 // Responsive: 15vw ≈ 60px on 400px screen, capped at 68px on larger screens 
-                                                width: 'min(15vw, 68px)', 
-                                                height: 'min(15vw, 68px)', 
+                                                width: 'min(10.5vw, 48px)', 
+                                                height: 'min(10.5vw, 48px)', 
                                                 display: 'block', 
                                                 objectFit: 'contain' 
                                             }}
@@ -251,7 +251,7 @@ const RankRoadmap = ({ currentScore, onBack }) => {
 
                                     {/* Labels below nodes */}
                                     <div className="absolute flex flex-col items-center pointer-events-none"
-                                        style={{ top: 'min(15vw, 68px)', left: '50%', transform: 'translateX(-50%)', width: 'min(28vw, 130px)' }}>
+                                        style={{ top: 'min(10.5vw, 48px)', left: '50%', transform: 'translateX(-50%)', width: 'min(28vw, 130px)' }}>
                                         <span className="font-black text-center uppercase tracking-wide whitespace-nowrap"
                                             style={{
                                                 fontSize: 'clamp(8.5px, 2vw, 10.5px)',

@@ -2,7 +2,7 @@ import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Trophy, Users, Globe, Lock, ChevronRight } from 'lucide-react';
 import { useRoom } from '../../hooks/useRoom';
-import { useUserStore } from '../../store/userStore';
+import { usePlayFabStore } from '../../store/playfabStore';
 import bgImage from '../../assets/common/common_background.png';
 import iconCoin from '../../assets/common/coin.png';
 import { getBetOptions } from '../../utils/ranks';
@@ -46,7 +46,7 @@ const MAX_PLAYERS_OPTIONS = [2];  // Game này chỉ hỗ trợ 2 người
 
 const CreateRoom = ({ gameName, gameType = 'quiz', onBack, onRoomCreated }) => {
     const { createRoom } = useRoom();
-    const { coins: userCoins, globalScore } = useUserStore();
+    const { coins: userCoins, globalScore } = usePlayFabStore();
     const [roomType, setRoomType] = useState('private');
     const [loading, setLoading] = useState(false);
 

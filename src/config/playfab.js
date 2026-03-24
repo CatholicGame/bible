@@ -78,7 +78,7 @@ export async function loginWithCustomID(customId) {
     CreateAccount: true,
     InfoRequestParameters: {
       GetUserData: true,
-      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh'],
+      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh', 'GlobalScore', 'Coins', 'Stats'],
       GetPlayerProfile: true,
       ProfileConstraints: { ShowDisplayName: true },
     },
@@ -119,7 +119,7 @@ export async function loginWithEmail(email, password) {
     Password: password,
     InfoRequestParameters: {
       GetUserData: true,
-      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh'],
+      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh', 'GlobalScore', 'Coins', 'Stats'],
       GetPlayerProfile: true,
       ProfileConstraints: { ShowDisplayName: true },
     },
@@ -141,7 +141,7 @@ export async function loginWithGoogleAccount(accessToken) {
     CreateAccount: true,
     InfoRequestParameters: {
       GetUserData: true,
-      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh'],
+      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh', 'GlobalScore', 'Coins', 'Stats'],
       GetPlayerProfile: true,
       ProfileConstraints: { ShowDisplayName: true },
     },

@@ -4,7 +4,6 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, ArrowLeft, ChevronLeft, CheckCircle2, XCircle, Play, Phone, Users, Shield, RefreshCcw, Flag, Star, UserCircle2, Settings } from 'lucide-react';
 import { usePlayFabStore } from '../../store/playfabStore';
-import { useUserStore } from '../../store/userStore';
 import { getRankByScore, getRankLevel } from '../../utils/ranks';
 import { useSoundManager } from '../../utils/soundManager';
 import SettingsModal from '../common/SettingsModal';
@@ -365,7 +364,7 @@ const LifelineButton = ({ icon: Icon, text, isUsed, disabled, onClick, active })
 // ─────────────────────────────────────────────────────────────────────────────
 // Lobby Screen
 const LobbyScreen = ({ onPlay, onShowLeaderboard, onLeaveGame, onSettings, onPlayClick, nickname, giaoxu, tinhthanh, saveProfile }) => {
-    const { globalScore, coins } = useUserStore();
+    const { globalScore, coins } = usePlayFabStore();
     const answeredQuestions = usePlayFabStore(s => s.answeredQuestions);
     const rankName = getRankByScore(globalScore || 0);
     const rankLevel = getRankLevel(globalScore || 0);
@@ -1723,7 +1722,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                 <div className="flex-1 flex flex-col landscape:flex-row lg:flex-row gap-2 landscape:gap-3 lg:gap-8 min-h-0 overflow-y-auto landscape:overflow-hidden lg:overflow-hidden">
 
                                 {/* Left Side: Timer & Question Board */}
-                                <div className="flex-1 w-full order-3 landscape:order-1 lg:order-1 flex flex-col pt-1 pb-0 landscape:pb-1 lg:pb-8 min-h-0 landscape:min-h-0 lg:min-h-0 justify-between items-center z-20 relative overflow-y-auto landscape:overflow-hidden lg:overflow-hidden overflow-x-visible mt-auto md:mt-0">
+                                <div className="flex-1 w-full order-3 landscape:order-1 lg:order-1 flex flex-col pt-1 pb-0 landscape:pb-1 lg:pb-8 min-h-0 landscape:min-h-0 lg:min-h-0 justify-between items-center z-20 relative overflow-visible landscape:overflow-hidden lg:overflow-hidden mt-auto md:mt-0">
 
                                     {/* MC Character */}
                                     <motion.div
@@ -1755,25 +1754,24 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                         scale: { type: "spring", stiffness: 500, damping: 30 },
                                                         opacity: { duration: 0.15 }
                                                     }}
-                                                    style={{ transformOrigin: 'calc(100% - 30px) top' }}
-                                                    className="absolute top-full right-0 mt-4 min-w-[340px] max-w-[calc(100vw-16px)] md:max-w-[500px] z-[100] flex flex-col items-end md:items-center"
+                                                    style={{ transformOrigin: 'calc(100% - 30px) 100%' }}
+                                                    className="absolute bottom-full right-0 mb-[44px] landscape:bottom-auto landscape:top-full landscape:mb-0 landscape:mt-4 min-w-[340px] max-w-[calc(100vw-16px)] md:max-w-[500px] z-[100] flex flex-col items-end md:items-center"
                                                 >
-                                                    {/* Custom Speech Bubble pointing UP towards right-aligned avatar */}
-                                                    {/* Cartoon Speech Bubble pointing UP-RIGHT toward avatar */}
+                                                    {/* Cartoon Speech Bubble */}
                                                     <motion.div layout className="relative text-sm md:text-base rounded-3xl text-left md:text-center font-semibold leading-relaxed pointer-events-auto flex flex-col items-start md:items-center w-full"
                                                         style={{
                                                             background: 'linear-gradient(180deg,#1e3a8a,#1e40af)',
                                                             border: '3px solid #60a5fa',
-                                                            boxShadow: '0 6px 0 #1e3a8a, inset 0 1px 0 rgba(147,197,253,0.15)',
                                                             padding: '16px 20px',
                                                         }}
                                                     >
                                                         {/* Shine */}
                                                         <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/8 rounded-t-3xl pointer-events-none" />
-                                                        {/* Tail pointing up */}
-                                                        <div className="absolute -top-[15px] right-[22px] md:right-[30px] w-0 h-0 pointer-events-none"
+
+                                                        {/* Tail pointing UP — landscape only (bubble is BELOW avatar) */}
+                                                        <div className="hidden landscape:block absolute -top-[15px] right-[22px] md:right-[30px] w-0 h-0 pointer-events-none"
                                                             style={{ borderLeft: '13px solid transparent', borderRight: '13px solid transparent', borderBottom: '16px solid #60a5fa' }} />
-                                                        <div className="absolute -top-[11px] right-[24px] md:right-[32px] w-0 h-0 pointer-events-none"
+                                                        <div className="hidden landscape:block absolute -top-[11px] right-[24px] md:right-[32px] w-0 h-0 pointer-events-none"
                                                             style={{ borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderBottom: '13px solid #1e40af' }} />
 
                                                         {/* Text Content */}
@@ -1801,6 +1799,14 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                             </button>
                                                         )}
                                                     </motion.div>
+
+                                                    {/* Tail pointing DOWN — portrait only, OUTSIDE shadow-casting div */}
+                                                    <div className="landscape:hidden relative w-full pointer-events-none" style={{ height: 0 }}>
+                                                        <div className="absolute -top-[1px] right-[22px] md:right-[30px] w-0 h-0"
+                                                            style={{ borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '18px solid #60a5fa' }} />
+                                                        <div className="absolute top-[2px] right-[24px] md:right-[32px] w-0 h-0"
+                                                            style={{ borderLeft: '12px solid transparent', borderRight: '12px solid transparent', borderTop: '15px solid #1e3a8a' }} />
+                                                    </div>
                                                 </motion.div>
                                             )}
                                         </AnimatePresence>
@@ -1880,35 +1886,32 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         </motion.div>
                                     </motion.div>
 
-                                    {/* Dừng cuộc chơi — landscape only, dưới timer, nổi bật */}
-                                    <div
-                                        className="hidden landscape:flex justify-center shrink-0 py-1.5"
-                                        style={{
-                                            visibility: currentQuestionIndex >= 1 && !isAnswerRevealed ? 'visible' : 'hidden',
-                                            pointerEvents: currentQuestionIndex >= 1 && !isAnswerRevealed ? 'auto' : 'none',
-                                        }}
-                                    >
-                                        <button
-                                            onClick={requestStop}
-                                            className="flex items-center gap-2 px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest text-white transition-all hover:brightness-110 active:scale-95"
-                                            style={{
-                                                background: 'linear-gradient(135deg, #7f1d1d, #991b1b)',
-                                                border: '2px solid rgba(239,68,68,0.6)',
-                                                boxShadow: '0 3px 0 #450a0a, 0 0 16px rgba(239,68,68,0.35)',
-                                            }}
-                                        >
-                                            <Flag size={13} />
-                                            Dừng cuộc chơi
-                                        </button>
-                                    </div>
+
 
                                     {/* Question & Options Area */}
                                     <motion.div
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         animate={introPhase >= 4 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
                                         transition={{ duration: 0.5, type: 'spring' }}
-                                        className="w-full max-w-4xl mx-auto flex flex-col gap-3 md:gap-4 px-2 lg:px-0 pb-4 landscape:pb-3"
+                                        className="w-full max-w-4xl mx-auto flex flex-col gap-3 md:gap-4 px-2 lg:px-0 pb-4 landscape:pb-3 relative"
                                     >
+                                        {/* Dừng cuộc chơi — landscape only, top-right of question area */}
+                                        {currentQuestionIndex >= 1 && !isAnswerRevealed && (
+                                            <div className="hidden landscape:flex justify-end mb-0.5">
+                                                <button
+                                                    onClick={requestStop}
+                                                    className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider text-white transition-all hover:brightness-110 active:scale-95"
+                                                    style={{
+                                                        background: 'linear-gradient(135deg, #991b1b, #b91c1c)',
+                                                        border: '2px solid rgba(239,68,68,0.6)',
+                                                        boxShadow: '0 3px 0 #450a0a, 0 0 12px rgba(239,68,68,0.3)',
+                                                    }}
+                                                >
+                                                    <Flag size={12} />
+                                                    Xin dừng cuộc chơi
+                                                </button>
+                                            </div>
+                                        )}
 
                                         <AnimatePresence mode="wait">
                                             {!isSwapping && (
@@ -2344,7 +2347,7 @@ const Confetti = ({ questionIndex = 14 }) => {
 
 const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionIndex, endMessage, showEndMessage, selectedOption, questions, isVoluntaryStop, earnedXP }) => {
     const [showLeaderboard, setShowLeaderboard] = useState(false);
-    const { addXP, addCoins, globalScore, coins: profileCoins, nickname } = useUserStore();
+    const { addXP, addCoins, globalScore, coins: profileCoins, nickname } = usePlayFabStore();
     const savedRef = useRef(false);
 
     const [displayScore, setDisplayScore] = useState(0);
@@ -2523,56 +2526,55 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                     pointerEvents: 'none',
                 }}
             >
-                <div className="flex items-center gap-2.5 px-3 py-1.5 relative overflow-hidden mx-4"
+                <div className="flex flex-col items-center gap-1.5 px-3 py-2 relative overflow-hidden mx-4"
                     style={{
                         background: 'linear-gradient(135deg, #3f1c00 0%, #78350f 55%, #3f1c00 100%)',
                         border: '3px solid #fbbf24',
                         boxShadow: '0 4px 0 #1c0a00, 0 6px 20px rgba(120,53,15,0.6)',
-                        borderRadius: 999,
+                        borderRadius: 20,
                         pointerEvents: 'auto',
                         maxWidth: 'calc(100vw - 32px)',
                     }}>
                     {/* Shine */}
-                    <div className="absolute top-0 left-0 right-0 h-1/2 rounded-t-full pointer-events-none"
+                    <div className="absolute top-0 left-0 right-0 h-1/2 rounded-t-[17px] pointer-events-none"
                         style={{ background: 'rgba(255,255,255,0.08)' }} />
-                    {/* Avatar */}
-                    <div className="w-7 h-7 rounded-full flex items-center justify-center font-black text-amber-800 text-xs shrink-0 relative z-10"
-                        style={{ background: 'linear-gradient(135deg,#fef3c7,#fbbf24)', border: '2px solid #fef08a', boxShadow: '0 2px 0 #1c0a00' }}>
-                        {nickname?.[0]?.toUpperCase() || '?'}
+                    {/* Top row: Avatar + Name + Rank */}
+                    <div className="flex items-center gap-2 relative z-10">
+                        <div className="w-7 h-7 rounded-full flex items-center justify-center font-black text-amber-800 text-xs shrink-0"
+                            style={{ background: 'linear-gradient(135deg,#fef3c7,#fbbf24)', border: '2px solid #fef08a', boxShadow: '0 2px 0 #1c0a00' }}>
+                            {nickname?.[0]?.toUpperCase() || '?'}
+                        </div>
+                        <span className="font-black text-sm leading-none shrink-0"
+                            style={{ color: '#fef3c7', textShadow: '0 1px 0 #1c0a00' }}>
+                            {nickname || 'Người chơi'}
+                        </span>
+                        <span className="text-[9px] font-black px-2 py-0.5 rounded-full shrink-0"
+                            style={{ background: 'rgba(251,191,36,0.2)', border: '1.5px solid #fbbf24', color: '#fde68a' }}>
+                            {rankName}
+                        </span>
                     </div>
-                    {/* Name */}
-                    <span className="font-black text-sm leading-none relative z-10 shrink-0"
-                        style={{ color: '#fef3c7', textShadow: '0 1px 0 #1c0a00' }}>
-                        {nickname || 'Người chơi'}
-                    </span>
-                    {/* Rank badge */}
-                    <span className="text-[9px] font-black px-2 py-0.5 rounded-full relative z-10 shrink-0"
-                        style={{ background: 'rgba(251,191,36,0.2)', border: '1.5px solid #fbbf24', color: '#fde68a' }}>
-                        {rankName}
-                    </span>
-                    {/* Divider */}
-                    <div className="w-px h-5 bg-amber-500/50 relative z-10 shrink-0" />
-                    {/* Coin — particle TARGET + display */}
-                    <div ref={coinTargetRef} className="flex items-center gap-1 px-2 py-1 rounded-full relative z-10 shrink-0"
-                        style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', border: '2px solid #fef08a', boxShadow: '0 2px 0 #92400e' }}>
-                        <img src={iconCoin} alt="" className="w-3.5 h-3.5" />
-                        <motion.span key={profileUpdated ? 'uc' : 'bc'}
-                            initial={{ scale: profileUpdated ? 1.4 : 1 }} animate={{ scale: 1 }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-                            className="text-xs font-black text-white" style={{ textShadow: '0 1px 0 #92400e' }}>
-                            {(profileCoins || 0).toLocaleString()}
-                        </motion.span>
-                    </div>
-                    {/* XP — particle TARGET + display */}
-                    <div ref={xpTargetRef} className="flex items-center gap-1 px-2 py-1 rounded-full relative z-10 shrink-0"
-                        style={{ background: 'linear-gradient(135deg,#fbbf24,#f59e0b)', border: '2px solid #fef08a', boxShadow: '0 2px 0 #92400e' }}>
-                        <img src={iconTrophy} alt="" className="w-3.5 h-3.5" />
-                        <motion.span key={profileUpdated ? 'ux' : 'bx'}
-                            initial={{ scale: profileUpdated ? 1.4 : 1 }} animate={{ scale: 1 }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.1 }}
-                            className="text-xs font-black text-white" style={{ textShadow: '0 1px 0 #92400e' }}>
-                            {(globalScore || 0).toLocaleString()} XP
-                        </motion.span>
+                    {/* Bottom row: Coin + XP */}
+                    <div className="flex items-center gap-2 relative z-10">
+                        <div ref={coinTargetRef} className="flex items-center gap-1 px-2 py-1 rounded-full shrink-0"
+                            style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', border: '2px solid #fef08a', boxShadow: '0 2px 0 #92400e' }}>
+                            <img src={iconCoin} alt="" className="w-3.5 h-3.5" />
+                            <motion.span key={profileUpdated ? 'uc' : 'bc'}
+                                initial={{ scale: profileUpdated ? 1.4 : 1 }} animate={{ scale: 1 }}
+                                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                                className="text-xs font-black text-white" style={{ textShadow: '0 1px 0 #92400e' }}>
+                                {(profileCoins || 0).toLocaleString()}
+                            </motion.span>
+                        </div>
+                        <div ref={xpTargetRef} className="flex items-center gap-1 px-2 py-1 rounded-full shrink-0"
+                            style={{ background: 'linear-gradient(135deg,#fbbf24,#f59e0b)', border: '2px solid #fef08a', boxShadow: '0 2px 0 #92400e' }}>
+                            <img src={iconTrophy} alt="" className="w-3.5 h-3.5" />
+                            <motion.span key={profileUpdated ? 'ux' : 'bx'}
+                                initial={{ scale: profileUpdated ? 1.4 : 1 }} animate={{ scale: 1 }}
+                                transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.1 }}
+                                className="text-xs font-black text-white" style={{ textShadow: '0 1px 0 #92400e' }}>
+                                {(globalScore || 0).toLocaleString()} XP
+                            </motion.span>
+                        </div>
                     </div>
                 </div>
             </motion.div>

@@ -1,71 +1,63 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { Settings, Music, Volume2 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Settings, Music, Volume2, X } from 'lucide-react';
 import { useSettingsStore } from '../../store/settingsStore';
 
-/* ── Design tokens — same as ProfileScreen ── */
-const C = {
-    bg: 'linear-gradient(160deg, #caf0f8 0%, #ade8f4 50%, #90e0ef 100%)',
-    card: 'rgba(255,255,255,0.82)',
-    cardBorder: 'rgba(0,180,216,0.22)',
-    textPrimary: '#1e3a5f',
-    textSecondary: '#4a7fa5',
-    textMuted: '#7fb3cc',
-};
-
-/* ── Animated Toggle ── */
+/* ── Animated Toggle — chunky 3D pill ── */
 const Toggle = ({ value, onToggle }) => (
     <motion.button
         onClick={onToggle}
-        whileTap={{ scale: 0.95 }}
+        whileTap={{ scale: 0.92 }}
         style={{
-            width: 52,
-            height: 28,
-            borderRadius: 14,
+            width: 56,
+            height: 30,
+            borderRadius: 15,
             background: value
-                ? 'linear-gradient(180deg, #06d6a0, #1b9aaa)'
-                : '#cbd5e1',
-            border: `2px solid ${value ? '#0e7490' : '#94a3b8'}`,
-            boxShadow: value ? '0 3px 0 #0c6478' : '0 2px 0 #64748b',
-            transition: 'background 0.25s, border-color 0.25s, box-shadow 0.25s',
+                ? 'linear-gradient(180deg, #34d399, #059669)'
+                : 'linear-gradient(180deg, #94a3b8, #64748b)',
+            border: `2.5px solid ${value ? '#047857' : '#475569'}`,
+            boxShadow: value
+                ? '0 3px 0 #065f46, inset 0 1px 0 rgba(255,255,255,0.25)'
+                : '0 3px 0 #334155, inset 0 1px 0 rgba(255,255,255,0.15)',
             cursor: 'pointer',
             position: 'relative',
             flexShrink: 0,
         }}
     >
         <motion.div
-            animate={{ x: value ? 24 : 2 }}
-            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+            animate={{ x: value ? 26 : 2 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 28 }}
             style={{
                 position: 'absolute',
                 top: 2,
                 left: 0,
-                width: 20,
-                height: 20,
+                width: 22,
+                height: 22,
                 borderRadius: '50%',
-                background: '#fff',
-                boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
+                background: 'linear-gradient(180deg, #fff, #e2e8f0)',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.25)',
             }}
         />
     </motion.button>
 );
 
-/* ── Setting Row ── */
-const SettingRow = ({ icon: Icon, iconColor, iconBg, label, subLabel, value, onToggle }) => (
-    <div className="flex items-center gap-4">
-        {/* Icon */}
-        <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+/* ── Setting Row — game-style row ── */
+const SettingRow = ({ icon: Icon, iconGradient, iconBorder, iconShadow, label, value, onToggle }) => (
+    <div className="flex items-center gap-4 py-1">
+        {/* 3D Icon badge */}
+        <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 relative overflow-hidden"
             style={{
-                background: iconBg,
-                border: `2.5px solid ${C.cardBorder}`,
-                boxShadow: '0 3px 0 rgba(0,150,200,0.18)',
+                background: iconGradient,
+                border: `2.5px solid ${iconBorder}`,
+                boxShadow: `0 4px 0 ${iconShadow}`,
             }}>
-            <Icon size={22} color={iconColor} strokeWidth={2.5} />
+            <div className="absolute inset-0 h-1/2 bg-white/20 pointer-events-none" />
+            <Icon size={22} color="#fff" strokeWidth={2.5} className="relative z-10" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }} />
         </div>
         {/* Label */}
         <div className="flex-1 min-w-0">
-            <p className="font-black text-base" style={{ color: C.textPrimary }}>{label}</p>
-            <p className="text-[11px] font-semibold mt-0.5" style={{ color: C.textMuted }}>
-                {value ? 'Đang bật' : 'Đã tắt'}
+            <p className="font-black text-base text-white" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>{label}</p>
+            <p className="text-[11px] font-bold mt-0.5" style={{ color: value ? '#86efac' : '#fca5a5' }}>
+                {value ? '● Đang bật' : '● Đã tắt'}
             </p>
         </div>
         {/* Toggle */}
@@ -83,104 +75,106 @@ const SettingsModal = ({ onClose }) => {
     return (
         <div
             className="fixed inset-0 z-[200] flex items-center justify-center p-4"
-            style={{ background: 'rgba(10,30,60,0.5)', backdropFilter: 'blur(6px)' }}
+            style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)' }}
             onClick={onClose}
         >
             <motion.div
-                initial={{ scale: 0.88, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.88, opacity: 0 }}
-                transition={{ type: 'spring', stiffness: 420, damping: 30 }}
+                initial={{ scale: 0.85, opacity: 0, y: 30 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.85, opacity: 0, y: 30 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 28 }}
                 onClick={e => e.stopPropagation()}
-                className="w-full max-w-sm rounded-3xl overflow-hidden"
+                className="w-full max-w-sm overflow-hidden relative"
                 style={{
-                    background: C.bg,
-                    border: `2.5px solid ${C.cardBorder}`,
-                    boxShadow: '0 20px 50px rgba(0,80,120,0.28)',
+                    borderRadius: 28,
+                    background: 'linear-gradient(165deg, #1e3a5f 0%, #0e4166 40%, #0c3555 100%)',
+                    border: '3px solid rgba(100,200,255,0.25)',
+                    boxShadow: '0 8px 0 rgba(0,20,40,0.6), 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(100,200,255,0.15)',
                 }}
             >
+                {/* Top shine */}
+                <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/[0.04] pointer-events-none rounded-t-3xl" />
+
                 {/* ── Header ── */}
-                <div
-                    className="relative flex items-center justify-center px-5 py-4"
-                    style={{
-                        background: 'rgba(255,255,255,0.85)',
-                        borderBottom: `2px solid ${C.cardBorder}`,
-                    }}
-                >
-                    <div className="absolute left-5 w-8 h-8 rounded-xl flex items-center justify-center"
-                        style={{ background: 'rgba(0,180,216,0.12)', border: `1.5px solid ${C.cardBorder}` }}>
-                        <Settings size={16} color="#1b9aaa" strokeWidth={2.5} />
-                    </div>
-                    <h2 className="font-black text-xl tracking-wide" style={{ color: C.textPrimary }}>
+                <div className="relative flex items-center justify-center px-5 pt-5 pb-4">
+                    {/* Decorative gear icon */}
+                    <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                        className="absolute left-5 w-9 h-9 rounded-xl flex items-center justify-center"
+                        style={{
+                            background: 'linear-gradient(145deg, #3b82f6, #2563eb)',
+                            border: '2px solid #1d4ed8',
+                            boxShadow: '0 3px 0 #1e3a8a',
+                        }}>
+                        <Settings size={16} color="#fff" strokeWidth={2.5} />
+                    </motion.div>
+
+                    <h2 className="font-black text-2xl tracking-wider uppercase text-white"
+                        style={{ textShadow: '0 2px 0 rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3)' }}>
                         Cài Đặt
                     </h2>
+
+                    {/* Close X */}
                     <motion.button
-                        whileTap={{ scale: 0.9 }}
+                        whileTap={{ scale: 0.88, rotate: 90 }}
                         onClick={onClose}
-                        className="absolute right-4 w-8 h-8 rounded-full flex items-center justify-center font-black text-white text-sm"
+                        className="absolute right-5 w-9 h-9 rounded-full flex items-center justify-center"
                         style={{
-                            background: 'linear-gradient(145deg, #4cc9f0, #1b9aaa)',
-                            border: '2px solid #0e7490',
-                            boxShadow: '0 3px 0 #0c6478',
+                            background: 'linear-gradient(145deg, #ef4444, #dc2626)',
+                            border: '2px solid #991b1b',
+                            boxShadow: '0 3px 0 #7f1d1d',
                         }}
                     >
-                        ✕
+                        <X size={16} color="#fff" strokeWidth={3} />
                     </motion.button>
                 </div>
 
-                {/* ── Body ── */}
-                <div className="px-5 py-5 flex flex-col gap-4">
-                    {/* Settings card */}
-                    <div
-                        className="rounded-2xl px-5 py-4 flex flex-col gap-5"
-                        style={{
-                            background: C.card,
-                            border: `2px solid ${C.cardBorder}`,
-                            boxShadow: '0 4px 12px rgba(0,150,200,0.1)',
-                        }}
-                    >
-                        <SettingRow
-                            icon={Music}
-                            iconColor="#f59e0b"
-                            iconBg="rgba(251,191,36,0.15)"
-                            label="Nhạc nền"
-                            value={music}
-                            onToggle={toggleMusic}
-                        />
-                        {/* Divider */}
-                        <div style={{
-                            height: 1.5,
-                            background: 'linear-gradient(90deg, transparent, rgba(0,180,216,0.2), transparent)',
-                        }} />
-                        <SettingRow
-                            icon={Volume2}
-                            iconColor="#06d6a0"
-                            iconBg="rgba(6,214,160,0.12)"
-                            label="Âm thanh"
-                            value={sound}
-                            onToggle={toggleSound}
-                        />
-                    </div>
+                {/* Separator */}
+                <div className="mx-5 mb-1" style={{ height: 2, background: 'linear-gradient(90deg, transparent, rgba(100,200,255,0.25), transparent)' }} />
 
-                    {/* Version */}
-                    <p className="text-center text-[11px] font-semibold" style={{ color: C.textMuted }}>
-                        Phiên bản 1.0.0 (Beta)
-                    </p>
+                {/* ── Body ── */}
+                <div className="px-5 py-4 flex flex-col gap-4">
+                    <SettingRow
+                        icon={Music}
+                        iconGradient="linear-gradient(145deg, #f59e0b, #d97706)"
+                        iconBorder="#b45309"
+                        iconShadow="#92400e"
+                        label="Nhạc nền"
+                        value={music}
+                        onToggle={toggleMusic}
+                    />
+
+                    {/* Divider */}
+                    <div style={{ height: 1.5, background: 'linear-gradient(90deg, transparent, rgba(100,200,255,0.15), transparent)' }} />
+
+                    <SettingRow
+                        icon={Volume2}
+                        iconGradient="linear-gradient(145deg, #06d6a0, #059669)"
+                        iconBorder="#047857"
+                        iconShadow="#065f46"
+                        label="Âm thanh"
+                        value={sound}
+                        onToggle={toggleSound}
+                    />
                 </div>
 
                 {/* ── Footer ── */}
-                <div className="px-5 pb-5">
+                <div className="px-5 pb-5 pt-1">
                     <motion.button
-                        whileTap={{ scale: 0.97, y: 2 }}
+                        whileTap={{ scale: 0.97, y: 3 }}
                         onClick={onClose}
-                        className="w-full py-3 rounded-2xl font-black text-white text-base tracking-wide"
+                        className="w-full py-3.5 rounded-2xl font-black text-lg uppercase tracking-widest relative overflow-hidden"
                         style={{
-                            background: 'linear-gradient(180deg, #06d6a0, #1b9aaa)',
-                            border: `2.5px solid #0e7490`,
-                            boxShadow: '0 4px 0 #0c6478',
+                            background: 'linear-gradient(180deg, #fbbf24, #f59e0b)',
+                            color: '#78350f',
+                            border: '3px solid #b45309',
+                            boxShadow: '0 5px 0 #92400e, 0 8px 16px rgba(180,83,9,0.3)',
+                            WebkitTextStroke: '0.3px #92400e',
                         }}
                     >
-                        Đóng
+                        <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/25 pointer-events-none" />
+                        <span className="relative z-10">Đóng</span>
                     </motion.button>
                 </div>
             </motion.div>

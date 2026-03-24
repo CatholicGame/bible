@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { loginWithCustomID, loginWithEmail, registerWithEmail, getUserData, updateUserData, updateDisplayName, forgetCredentials, updateStatisticsV2, getLeaderboardV2, getLeaderboardAroundEntityV2 } from '../config/playfab';
 import { getQuestionsForGame } from '../utils/questionManager';
+import { getRankByScore } from '../utils/ranks';
 import { auth } from '../config/firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
@@ -54,7 +55,17 @@ export const usePlayFabStore = create((set, get) => ({
   tinhthanh: null,       // Tỉnh thành
   answeredQuestions: [],
   currentQuestions: [],
+  globalScore: 0,
+  coins: 0,
+  rank: null,
+  stats: { solo: { plays: 0, perfects: 0, totalCorrect: 0, totalQuestions: 0 }, p2p: { plays: 0, wins: 0, losses: 0, totalCorrect: 0, totalQuestions: 0 } },
   error: null,
+
+  // ── Rosary Offering (Dâng Hoa) ──
+  rosaryToday: 0,
+  rosaryDate: null,
+  rosaryTotal: 0,
+  rosaryGlobal: 0,
 
   // ── Pinnacle Leaderboard ──
   pinnacleLeaderboard: [],
@@ -91,6 +102,19 @@ export const usePlayFabStore = create((set, get) => ({
       const hat = userData?.Hat?.Value || null;
       const giaophan = userData?.GiaoPhan?.Value || null;
       const tinhthanh = userData?.TinhThanh?.Value || null;
+      const globalScore = parseInt(userData?.GlobalScore?.Value) || 0;
+      const coins = parseInt(userData?.Coins?.Value) || 0;
+      let stats = null;
+      if (userData?.Stats?.Value) { try { stats = JSON.parse(userData.Stats.Value); } catch (_) {} }
+
+      // Rosary data
+      const rosaryTotal = parseInt(userData?.RosaryTotal?.Value) || 0;
+      const rosaryGlobal = parseInt(userData?.RosaryGlobal?.Value) || 0;
+      const rosaryDate = userData?.RosaryDate?.Value || null;
+      const rosaryToday = parseInt(userData?.RosaryToday?.Value) || 0;
+      // Auto-reset if different day
+      const todayStr = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' })).toISOString().slice(0, 10);
+      const effectiveRosaryToday = rosaryDate === todayStr ? rosaryToday : 0;
 
       set({
         isLoggedIn: true,
@@ -103,10 +127,18 @@ export const usePlayFabStore = create((set, get) => ({
         giaophan,
         tinhthanh,
         answeredQuestions,
+        globalScore,
+        coins,
+        rank: getRankByScore(globalScore),
+        ...(stats ? { stats } : {}),
+        rosaryToday: effectiveRosaryToday,
+        rosaryDate: todayStr,
+        rosaryTotal,
+        rosaryGlobal,
         error: null,
       });
 
-      console.log(`[PlayFab] Guest login: ${playFabId}, answered: ${answeredQuestions.length} questions`);
+      console.log(`[PlayFab] Guest login: ${playFabId}, XP: ${globalScore}, coins: ${coins}, answered: ${answeredQuestions.length}`);
       return true;
     } catch (error) {
       set({ isLoading: false, error: error?.errorMessage || 'Login failed' });
@@ -127,6 +159,9 @@ export const usePlayFabStore = create((set, get) => ({
         try { await updateDisplayName(displayName); } catch (_) {}
       }
 
+      // Init coins for new user
+      try { await updateUserData({ Coins: '500', GlobalScore: '0' }); } catch (_) {}
+
       set({
         isLoggedIn: true,
         isLoading: false,
@@ -134,6 +169,9 @@ export const usePlayFabStore = create((set, get) => ({
         nickname: displayName || email,
         authMethod: 'email',
         answeredQuestions: [],
+        globalScore: 0,
+        coins: 500,
+        rank: getRankByScore(0),
         error: null,
       });
 
@@ -165,6 +203,10 @@ export const usePlayFabStore = create((set, get) => ({
       const hat = userData?.Hat?.Value || null;
       const giaophan = userData?.GiaoPhan?.Value || null;
       const tinhthanh = userData?.TinhThanh?.Value || null;
+      const globalScore = parseInt(userData?.GlobalScore?.Value) || 0;
+      const coins = parseInt(userData?.Coins?.Value) || 0;
+      let stats = null;
+      if (userData?.Stats?.Value) { try { stats = JSON.parse(userData.Stats.Value); } catch (_) {} }
 
       set({
         isLoggedIn: true,
@@ -177,10 +219,14 @@ export const usePlayFabStore = create((set, get) => ({
         giaophan,
         tinhthanh,
         answeredQuestions,
+        globalScore,
+        coins,
+        rank: getRankByScore(globalScore),
+        ...(stats ? { stats } : {}),
         error: null,
       });
 
-      console.log(`[PlayFab] Email login: ${playFabId}, answered: ${answeredQuestions.length}`);
+      console.log(`[PlayFab] Email login: ${playFabId}, XP: ${globalScore}, coins: ${coins}`);
       return { success: true };
     } catch (error) {
       const msg = error?.errorMessage || 'Đăng nhập thất bại';
@@ -227,6 +273,10 @@ export const usePlayFabStore = create((set, get) => ({
       const hat = userData?.Hat?.Value || null;
       const giaophan = userData?.GiaoPhan?.Value || null;
       const tinhthanh = userData?.TinhThanh?.Value || null;
+      const globalScore = parseInt(userData?.GlobalScore?.Value) || 0;
+      const coins = parseInt(userData?.Coins?.Value) || 0;
+      let stats = null;
+      if (userData?.Stats?.Value) { try { stats = JSON.parse(userData.Stats.Value); } catch (_) {} }
 
       usePlayFabStore.setState({
         isLoggedIn: true,
@@ -240,10 +290,14 @@ export const usePlayFabStore = create((set, get) => ({
         giaophan,
         tinhthanh,
         answeredQuestions,
+        globalScore,
+        coins,
+        rank: getRankByScore(globalScore),
+        ...(stats ? { stats } : {}),
         error: null,
       });
 
-      console.log(`[PlayFab] Google login via Firebase: ${playFabId}`);
+      console.log(`[PlayFab] Google login: ${playFabId}, XP: ${globalScore}, coins: ${coins}`);
       return { success: true, nickname: displayName };
     } catch (error) {
       // User closed popup
@@ -316,6 +370,32 @@ export const usePlayFabStore = create((set, get) => ({
         answeredQuestions: [...state.answeredQuestions, questionId],
       };
     });
+  },
+
+  // ── Add XP (persist to PlayFab) ──
+  addXP: async (xp) => {
+    const { globalScore } = get();
+    const newScore = globalScore + xp;
+    set({ globalScore: newScore, rank: getRankByScore(newScore) });
+    try {
+      await updateUserData({ GlobalScore: String(newScore) });
+      console.log(`[PlayFab] XP updated: ${globalScore} → ${newScore}`);
+    } catch (e) {
+      console.warn('[PlayFab] Failed to save XP', e);
+    }
+  },
+
+  // ── Add/subtract coins (persist to PlayFab) ──
+  addCoins: async (amount) => {
+    const { coins } = get();
+    const newCoins = Math.max(0, coins + amount);
+    set({ coins: newCoins });
+    try {
+      await updateUserData({ Coins: String(newCoins) });
+      console.log(`[PlayFab] Coins updated: ${coins} → ${newCoins}`);
+    } catch (e) {
+      console.warn('[PlayFab] Failed to save coins', e);
+    }
   },
 
   // ── Save Pinnacle composite score ──
@@ -452,6 +532,49 @@ export const usePlayFabStore = create((set, get) => ({
     }
   },
 
+  // ── Submit Rosary Offering (Dâng Hoa) ──
+  submitRosary: async (hatCount, coinReward) => {
+    const { rosaryToday, rosaryTotal, rosaryGlobal, coins } = get();
+    const todayStr = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' })).toISOString().slice(0, 10);
+    const DAILY_MAX = 150;
+
+    // Validate daily limit
+    const newToday = rosaryToday + hatCount;
+    if (newToday > DAILY_MAX) {
+      console.warn('[Rosary] Daily limit exceeded');
+      return false;
+    }
+
+    const newTotal = rosaryTotal + hatCount;
+    const newGlobal = rosaryGlobal + hatCount;
+    const newCoins = coins + coinReward;
+
+    // Update local state immediately
+    set({
+      rosaryToday: newToday,
+      rosaryDate: todayStr,
+      rosaryTotal: newTotal,
+      rosaryGlobal: newGlobal,
+      coins: newCoins,
+    });
+
+    // Persist to PlayFab
+    try {
+      await updateUserData({
+        RosaryToday: String(newToday),
+        RosaryDate: todayStr,
+        RosaryTotal: String(newTotal),
+        RosaryGlobal: String(newGlobal),
+        Coins: String(newCoins),
+      });
+      console.log(`[Rosary] Submitted ${hatCount} hạt, +${coinReward} coins. Today: ${newToday}/${DAILY_MAX}`);
+      return true;
+    } catch (e) {
+      console.warn('[Rosary] Failed to save', e);
+      return false;
+    }
+  },
+
   // ── Reset (logout) ──
   reset: () => {
     forgetCredentials();
@@ -464,7 +587,15 @@ export const usePlayFabStore = create((set, get) => ({
       avatarUrl: null,
       answeredQuestions: [],
       currentQuestions: [],
+      globalScore: 0,
+      coins: 0,
+      rank: null,
+      stats: { solo: { plays: 0, perfects: 0, totalCorrect: 0, totalQuestions: 0 }, p2p: { plays: 0, wins: 0, losses: 0, totalCorrect: 0, totalQuestions: 0 } },
       error: null,
+      rosaryToday: 0,
+      rosaryDate: null,
+      rosaryTotal: 0,
+      rosaryGlobal: 0,
     });
   },
 }));
