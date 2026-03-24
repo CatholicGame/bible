@@ -484,6 +484,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
     const [earnedXP, setEarnedXP] = useState(0); // XP tích lũy khi dừng sớm
 
     const [confirmFiftyFifty, setConfirmFiftyFifty] = useState(false);
+    const [showStopConfirm, setShowStopConfirm] = useState(false);
     const [isScanningFiftyFifty, setIsScanningFiftyFifty] = useState(false);
 
     // Audience state
@@ -751,7 +752,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
     };
 
     useEffect(() => {
-        if (gameState !== 'playing' || introPhase < 4 || isAnswerRevealed || confirmFiftyFifty || confirmAudience || confirmPhone || confirmSwap || audienceState || phoneState || isSwapping) return;
+        if (gameState !== 'playing' || introPhase < 4 || isAnswerRevealed || showStopConfirm || confirmFiftyFifty || confirmAudience || confirmPhone || confirmSwap || audienceState || phoneState || isSwapping) return;
 
         const timer = setInterval(() => {
             setTimeLeft(prev => {
@@ -765,7 +766,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [gameState, introPhase, currentQuestionIndex, isAnswerRevealed, confirmFiftyFifty, confirmAudience, confirmPhone, confirmSwap, audienceState, phoneState]);
+    }, [gameState, introPhase, currentQuestionIndex, isAnswerRevealed, showStopConfirm, confirmFiftyFifty, confirmAudience, confirmPhone, confirmSwap, audienceState, phoneState]);
 
     useEffect(() => {
         if (answerStep === 'explained') {
@@ -991,6 +992,9 @@ const PinnacleGame = ({ onLeaveGame }) => {
         try { const a = new Audio(sfxClapShort); a.volume = 0.8; a.play().catch(() => {}); } catch (_) {}
         setGameState('finished');
     };
+
+    // Khi user ấn nút "Dừng" — hỏi xác nhận trước
+    const requestStop = () => setShowStopConfirm(true);
 
     // Lifeline handlers
     const useFiftyFifty = () => {
@@ -1696,7 +1700,27 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             </AnimatePresence>
 
                             {/* Main Game Area */}
-                            <div className="flex-1 flex flex-col landscape:flex-row lg:flex-row w-full max-w-7xl mx-auto overflow-y-auto landscape:overflow-hidden lg:overflow-hidden overflow-x-hidden gap-2 landscape:gap-3 lg:gap-8 pb-2 px-1 lg:px-4 min-h-0">
+                            <div className="flex-1 flex flex-col w-full max-w-7xl mx-auto overflow-y-auto landscape:overflow-hidden lg:overflow-hidden overflow-x-hidden pb-2 px-1 lg:px-4 min-h-0 gap-0">
+
+                                {/* Dừng cuộc chơi — full-width strip, portrait only */}
+                                <div
+                                    className="w-full flex justify-center shrink-0 py-1 landscape:hidden"
+                                    style={{
+                                        visibility: currentQuestionIndex >= 1 && !isAnswerRevealed ? 'visible' : 'hidden',
+                                        pointerEvents: currentQuestionIndex >= 1 && !isAnswerRevealed ? 'auto' : 'none',
+                                    }}
+                                >
+                                    <button
+                                        onClick={requestStop}
+                                        className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider text-red-200 border border-red-500/40 bg-red-950/40 hover:bg-red-900/60 transition-all"
+                                    >
+                                        <Flag size={12} />
+                                        Dừng cuộc chơi
+                                    </button>
+                                </div>
+
+                                {/* Inner columns wrapper — flex-row in landscape */}
+                                <div className="flex-1 flex flex-col landscape:flex-row lg:flex-row gap-2 landscape:gap-3 lg:gap-8 min-h-0 overflow-y-auto landscape:overflow-hidden lg:overflow-hidden">
 
                                 {/* Left Side: Timer & Question Board */}
                                 <div className="flex-1 w-full order-3 landscape:order-1 lg:order-1 flex flex-col pt-1 pb-0 landscape:pb-1 lg:pb-8 min-h-0 landscape:min-h-0 lg:min-h-0 justify-between items-center z-20 relative overflow-y-auto landscape:overflow-hidden lg:overflow-hidden overflow-x-visible mt-auto md:mt-0">
@@ -1787,7 +1811,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         initial={{ opacity: 0, scale: 0.5 }}
                                         animate={introPhase >= 4 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
                                         transition={{ duration: 0.5, type: 'spring' }}
-                                        className="w-full flex flex-col items-center justify-center shrink-0 relative mt-2 landscape:mt-1 md:mt-[15px]"
+                                        className="w-full flex flex-col items-center justify-center shrink-0 relative"
                                     >
                                         {/* Neon timer — outer wrapper handles circular glow via filter:drop-shadow */}
                                         <motion.div
@@ -1856,12 +1880,34 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         </motion.div>
                                     </motion.div>
 
+                                    {/* Dừng cuộc chơi — landscape only, dưới timer, nổi bật */}
+                                    <div
+                                        className="hidden landscape:flex justify-center shrink-0 py-1.5"
+                                        style={{
+                                            visibility: currentQuestionIndex >= 1 && !isAnswerRevealed ? 'visible' : 'hidden',
+                                            pointerEvents: currentQuestionIndex >= 1 && !isAnswerRevealed ? 'auto' : 'none',
+                                        }}
+                                    >
+                                        <button
+                                            onClick={requestStop}
+                                            className="flex items-center gap-2 px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest text-white transition-all hover:brightness-110 active:scale-95"
+                                            style={{
+                                                background: 'linear-gradient(135deg, #7f1d1d, #991b1b)',
+                                                border: '2px solid rgba(239,68,68,0.6)',
+                                                boxShadow: '0 3px 0 #450a0a, 0 0 16px rgba(239,68,68,0.35)',
+                                            }}
+                                        >
+                                            <Flag size={13} />
+                                            Dừng cuộc chơi
+                                        </button>
+                                    </div>
+
                                     {/* Question & Options Area */}
                                     <motion.div
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         animate={introPhase >= 4 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
                                         transition={{ duration: 0.5, type: 'spring' }}
-                                        className="w-full max-w-4xl mx-auto flex flex-col gap-3 md:gap-4 px-2 lg:px-0"
+                                        className="w-full max-w-4xl mx-auto flex flex-col gap-3 md:gap-4 px-2 lg:px-0 pb-4 landscape:pb-3"
                                     >
 
                                         <AnimatePresence mode="wait">
@@ -1909,7 +1955,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                     })()}
 
                                                     {/* Options */}
-                                                    <div className="relative grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-3 landscape:gap-y-1.5 landscape:gap-x-2 md:gap-y-4 md:gap-x-6">
+                                                    <div className="relative grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-3 landscape:gap-y-1.5 landscape:gap-x-2 md:gap-y-4 md:gap-x-6 items-stretch">
                                                         <AnimatePresence>
                                                             {isScanningFiftyFifty && (
                                                                 <motion.div
@@ -1968,6 +2014,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                             )}
                                         </AnimatePresence>
                                     </motion.div>
+
                                 </div>
 
                                 {/* Right Side: Reward Ladder (No-Scroll — fits in full height) */}
@@ -2085,19 +2132,60 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                     <LifelineButton icon={Users} isUsed={lifelines.audience} disabled={isAnswerRevealed} onClick={useAudience} />
                                     <LifelineButton icon={RefreshCcw} isUsed={lifelines.swap} disabled={isAnswerRevealed} onClick={useSwap} />
                                 </motion.div>
+                                </div>{/* end inner columns wrapper */}
+                            </div>{/* end Main Game Area */}
 
-                                {/* Dừng cuộc chơi — chỉ từ Q2 trở đi, khi chưa đang reveal đáp án */}
-                                {currentQuestionIndex >= 1 && !isAnswerRevealed && (
-                                    <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-                                        className="flex justify-center pb-2 order-3 shrink-0">
-                                        <button onClick={handleVoluntaryStop}
-                                            className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider text-red-200 border border-red-500/40 bg-red-950/40 hover:bg-red-900/60 transition-all">
-                                            <Flag size={12} />
-                                            Dừng cuộc chơi
-                                        </button>
+                            {/* ── Popup xác nhận dừng cuộc chơi ── */}
+                            <AnimatePresence>
+                                {showStopConfirm && (
+                                    <motion.div
+                                        key="stop-confirm"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.18 }}
+                                        className="absolute inset-0 z-[200] flex items-center justify-center"
+                                        style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)' }}
+                                    >
+                                        <motion.div
+                                            initial={{ scale: 0.85, opacity: 0, y: 20 }}
+                                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                                            exit={{ scale: 0.85, opacity: 0, y: 20 }}
+                                            transition={{ type: 'spring', stiffness: 420, damping: 28 }}
+                                            className="relative w-[320px] max-w-[90vw] rounded-3xl overflow-hidden"
+                                            style={{
+                                                background: 'linear-gradient(180deg,#1e2d6b 0%,#111c4e 100%)',
+                                                border: '3px solid #3b5bdb',
+                                                boxShadow: '0 8px 0 #0d1a6e, 0 0 40px rgba(59,91,219,0.45)',
+                                            }}
+                                        >
+                                            <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/8 rounded-t-3xl pointer-events-none" />
+                                            <div className="relative z-10 flex flex-col items-center px-6 py-6 gap-4">
+                                                <div className="w-14 h-14 rounded-full flex items-center justify-center"
+                                                    style={{ background: 'linear-gradient(135deg,#7f1d1d,#991b1b)', border: '2px solid rgba(239,68,68,0.5)', boxShadow: '0 0 18px rgba(239,68,68,0.4)' }}>
+                                                    <Flag size={24} className="text-red-200" />
+                                                </div>
+                                                <div className="text-center">
+                                                    <p className="text-white font-black text-lg leading-snug">Dừng cuộc chơi?</p>
+                                                    <p className="text-slate-300 text-sm mt-1 leading-relaxed">Bạn sẽ nhận phần thưởng tương ứng<br/>với số câu hỏi đã trả lời đúng.</p>
+                                                </div>
+                                                <div className="flex gap-3 w-full mt-1">
+                                                    <button
+                                                        onClick={() => setShowStopConfirm(false)}
+                                                        className="flex-1 py-2.5 rounded-2xl font-black text-sm text-slate-200 transition-all hover:brightness-125 active:scale-95"
+                                                        style={{ background: 'rgba(255,255,255,0.08)', border: '2px solid rgba(255,255,255,0.18)' }}
+                                                    >Tiếp tục chơi</button>
+                                                    <button
+                                                        onClick={() => { setShowStopConfirm(false); handleVoluntaryStop(); }}
+                                                        className="flex-1 py-2.5 rounded-2xl font-black text-sm text-white transition-all hover:brightness-110 active:scale-95"
+                                                        style={{ background: 'linear-gradient(135deg,#7f1d1d,#b91c1c)', border: '2px solid rgba(239,68,68,0.5)', boxShadow: '0 3px 0 #450a0a, 0 0 14px rgba(239,68,68,0.35)' }}
+                                                    >Xác nhận dừng</button>
+                                                </div>
+                                            </div>
+                                        </motion.div>
                                     </motion.div>
                                 )}
-                            </div>
+                            </AnimatePresence>
                         </motion.div>
                     )}
 
@@ -2106,7 +2194,6 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             score={score}
                             handlePlayAgain={handlePlayAgain}
                             onLeaveGame={onLeaveGame}
-                            onShowLeaderboard={() => { setLeaderboardSource('finished'); setGameState('leaderboard'); }}
                             currentQuestionIndex={currentQuestionIndex}
                             endMessage={endMessage}
                             showEndMessage={showEndMessage}
@@ -2255,7 +2342,8 @@ const Confetti = ({ questionIndex = 14 }) => {
 };
 
 
-const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, onShowLeaderboard, currentQuestionIndex, endMessage, showEndMessage, selectedOption, questions, isVoluntaryStop, earnedXP }) => {
+const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionIndex, endMessage, showEndMessage, selectedOption, questions, isVoluntaryStop, earnedXP }) => {
+    const [showLeaderboard, setShowLeaderboard] = useState(false);
     const { addXP, addCoins, globalScore, coins: profileCoins, nickname } = useUserStore();
     const savedRef = useRef(false);
 
@@ -2640,7 +2728,7 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, onShowLeaderboard,
                                         <span className="relative z-10 group-hover:scale-105 transition-transform">Về Menu</span>
                                     </button>
                                 </div>
-                                <button onClick={onShowLeaderboard}
+                                <button onClick={() => setShowLeaderboard(true)}
                                     className="w-full bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-widest text-base landscape:text-sm py-3 landscape:py-2 rounded-full border-4 landscape:border-3 border-purple-900 shadow-[0_5px_0_rgba(88,28,135,1),inset_0_-4px_0_rgba(109,40,217,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(88,28,135,1)] transition-all flex justify-center items-center gap-2 relative overflow-hidden group">
                                     <div className="absolute top-0 left-0 w-full h-1/2 bg-white/15 pointer-events-none rounded-t-full" />
                                     <span className="relative z-10 group-hover:scale-105 transition-transform">🏆 Xem Xếp Hạng</span>
@@ -2650,6 +2738,22 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, onShowLeaderboard,
                     </div>{/* end blue card */}
                 </motion.div>{/* end animation wrapper */}
             </div>{/* end centering wrapper */}
+
+            {/* Inline Leaderboard overlay — rendered as portal sibling so EndGameScreen stays mounted */}
+            <AnimatePresence>
+                {showLeaderboard && (
+                    <motion.div
+                        key="end-leaderboard"
+                        initial={{ opacity: 0, x: 60 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 60 }}
+                        transition={{ duration: 0.3 }}
+                        style={{ position: 'fixed', inset: 0, zIndex: 10200 }}
+                    >
+                        <PinnacleLeaderboard onBack={() => setShowLeaderboard(false)} />
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>,
         document.body
     );

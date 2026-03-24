@@ -222,7 +222,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
     const [cardDims, setCardDims] = useState({ cardW: BASE_CARD_W, cardH: BASE_CARD_H, step: Math.round(BASE_CARD_W * MAX_SC) + GAP });
     const [isLandscape, setIsLandscape] = useState(false);
 
-    const { coins } = useUserStore();
+    const { coins, globalScore } = useUserStore();
     const avatarUrl = usePlayFabStore(state => state.avatarUrl);
 
     /* Measure → set cwRef + card dims based on available height, then centre card-0 */
@@ -386,7 +386,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                 <span className="font-black text-xs leading-none" style={{ color: '#1e3a5f' }}>{user.name}</span>
                                 <span className="flex items-center gap-1.5 mt-0.5">
                                     <span className="text-[9px] flex items-center gap-0.5 font-bold" style={{ color: '#f59e0b' }}>
-                                        <img src={iconTrophy} alt="XP" className="w-3 h-3 object-contain" /> {(user.score || 0).toLocaleString()}
+                                        <img src={iconTrophy} alt="XP" className="w-3 h-3 object-contain" /> {(globalScore || 0).toLocaleString()}
                                     </span>
                                     <span className="text-[9px] flex items-center gap-0.5 font-bold" style={{ color: '#06d6a0' }}>
                                         <img src={iconCoin} alt="Coins" className="w-3 h-3 object-contain" /> {(coins || 0).toLocaleString()}
@@ -432,7 +432,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                                 </div>
                                             </div>
                                             <div className="flex gap-3">
-                                                <span className="text-xs font-bold flex items-center gap-1" style={{ color: '#f59e0b' }}><img src={iconTrophy} alt="XP" className="w-4 h-4 object-contain" /> {(user.score || 0).toLocaleString()} XP</span>
+                                                <span className="text-xs font-bold flex items-center gap-1" style={{ color: '#f59e0b' }}><img src={iconTrophy} alt="XP" className="w-4 h-4 object-contain" /> {(globalScore || 0).toLocaleString()} XP</span>
                                                 <span className="text-xs font-bold flex items-center gap-1" style={{ color: '#06d6a0' }}><img src={iconCoin} alt="Coins" className="w-4 h-4 object-contain" /> {(coins || 0).toLocaleString()}</span>
                                             </div>
                                         </div>
@@ -502,10 +502,10 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
             <motion.div layout className={`relative z-10 flex-1 min-h-0 flex flex-col items-center ${isLandscape ? 'pt-1 pb-0 gap-1' : 'pt-5 pb-3 gap-3'}`}>
 
                 {/* PIN / Modes */}
-                <AnimatePresence mode="popLayout">
+                <AnimatePresence mode="wait">
                     {!showModes ? (
                         /* ── Khi chưa chọn game ── */
-                        <motion.div layout key="pin" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                        <motion.div key="pin" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }} transition={{ duration: 0.2 }}
                             className="flex-shrink-0 w-full max-w-xs px-4 md:px-0">
                             <motion.button
                                 whileTap={{ scale: 0.96 }}
@@ -523,7 +523,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                         </motion.div>
                     ) : modeView === 'home' ? (
                         /* ── TẦNG 1: Solo vs P2P ── */
-                        <motion.div layout key="modes-home" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                        <motion.div key="modes-home" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.22 }}
                             className="flex-shrink-0 w-full max-w-sm px-4 flex flex-col gap-3">
                             <div className="flex items-center gap-2">
                                 <motion.button whileHover={{ x: -2 }} onClick={handleBack}
@@ -571,7 +571,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                         </motion.div>
                     ) : (
                         /* ── TẦNG 2: P2P Sub-menu ── */
-                        <motion.div layout key="modes-p2p" initial={{ x: 24 }} animate={{ x: 0 }} exit={{ x: -24 }}
+                        <motion.div key="modes-p2p" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 30 }} transition={{ duration: 0.22 }}
                             className="flex-shrink-0 w-full max-w-sm px-4 flex flex-col gap-2.5">
                             <div className="flex items-center gap-2">
                                 <motion.button whileHover={{ x: -2 }} onClick={handleBack}
