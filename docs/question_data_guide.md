@@ -4,6 +4,89 @@
 
 ---
 
+## 🎯 Mục Đích Game
+
+> **Game không phải để đánh đố — mà để nuôi dưỡng đức tin một cách vui vẻ.**
+
+Bible Quiz Game được xây dựng với 3 mục tiêu cốt lõi:
+
+1. **Ôn lại kiến thức đức tin** đã học nhưng dễ quên — qua trải nghiệm vui thú
+2. **Khám phá điều mới** trong Kinh Thánh, Phụng vụ, Giáo lý — mỗi câu hỏi là một bài học nhỏ
+3. **Có động lực tiến xa hơn** — hệ thống level tăng dần giúp người chơi tự thấy sự tiến bộ
+
+Game phù hợp với **mọi người Công giáo Việt Nam**: từ thiếu nhi biết đọc đến người lớn muốn học lại đức tin.
+
+---
+
+## 🚨 Quy Tắc Tuyệt Đối — Áp Dụng Cho TẤT CẢ Các Level
+
+### ❌ Tránh Thuật Ngữ Latin & Từ Điển Thần Học Phức Tạp
+
+**Không dùng tên Latin hay thuật ngữ học thuật trong câu hỏi** (trừ khi đó chính là điều cần dạy và có giải thích rõ ràng kèm theo):
+
+| ❌ Tránh | ✅ Thay bằng |
+|---|---|
+| "Nunc Dimittis là lời của ai?" | "Ông Simêon nói gì khi bồng ẵm Hài Nhi Giêsu?" |
+| "Lectio Divina gồm mấy bước?" | "Phương pháp đọc Kinh Thánh cầu nguyện gồm mấy bước?" |
+| "Beatific Vision là gì?" | "Linh hồn được gì khi vào Thiên Đàng?" |
+| "Cardinal Virtues là gì?" | "Bốn nhân đức nền tảng Giáo hội dạy là gì?" |
+| "Agnus Dei trong Thánh Lễ" | "Kinh 'Lạy Chiên Thiên Chúa' đọc khi nào?" |
+| "Ex cathedra" | (Chỉ dùng Level 10+, có giải thích bằng tiếng Việt) |
+
+> **Nguyên tắc kiểm tra:** Người đi lễ đều đặn nhưng chưa học thần học không hiểu được → cần diễn đạt lại bằng tiếng Việt bình thường.
+
+---
+
+### ❌ Tránh Số Liệu Vô Nghĩa Ở Level 1–5
+
+Từ Level 1 đến Level 5, **không hỏi những con số người chơi phải đoán mò** hay chỉ biết nếu đã đếm từng điều trong sách. Ưu tiên câu về **sự kiện, nhân vật, tình huống**:
+
+| ❌ Số liệu vô nghĩa | ✅ Thay bằng sự kiện/nhân vật |
+|---|---|
+| "Thánh Vịnh có bao nhiêu bài?" | "Vua nào được coi là tác giả chính của Thánh Vịnh?" |
+| "Mùa Thường Niên có bao nhiêu tuần?" | "Màu áo lễ Mùa Thường Niên là màu gì?" |
+| "Lễ Vọng Phục Sinh có bao nhiêu phần?" | "Đêm Vọng Phục Sinh mở đầu bằng nghi thức gì?" |
+| "14 Công việc Từ thiện chia mấy nhóm?" | "Trong dụ ngôn Bữa Tiệc, chủ nhà mời ai khi khách từ chối?" |
+| "Lời cầu xin thứ 5 trong Kinh Lạy Cha" | "Chúa dạy gì về tha thứ trong Kinh Lạy Cha?" |
+
+**Số liệu ĐƯỢC phép** (có giá trị đức tin, dễ nhớ):
+- ✅ 7 Bí tích, 10 Điều Răn, 12 Tông Đồ, 3 Ngôi Thiên Chúa
+- ✅ 40 ngày Mùa Chay (gắn với 40 ngày Chúa ăn chay)
+- ✅ 4 mùa Phụng Vụ, 4 sách Tin Mừng, 3 ngày Chúa sống lại
+
+**Số liệu KHÔNG được phép ở L1-5:**
+- ❌ Con số chỉ biết được bằng cách đếm (số tuần, số phần nghi lễ...)
+- ❌ Năm tháng lịch sử không có giá trị đức tin rõ ràng
+- ❌ Thứ tự trong danh sách (lời xin thứ mấy, mối phúc thứ mấy...)
+
+---
+
+### ✨ Quy Tắc Viết Giải Thích — Keypoint Hữu Ích & Thú Vị
+
+Phần `explanation` **không chỉ xác nhận đáp án** — đây là cơ hội giúp người chơi học được điều thú vị và hữu dụng.
+
+**Cấu trúc lý tưởng:** ① In đậm đáp án đúng → ② Keypoint thú vị → ③ Liên kết đời sống
+
+```
+❌ Khô: "Phép lạ đầu tiên là biến nước thành **rượu**."
+
+✅ Keypoint: "Tại Cana, Chúa biến nước thành **rượu** theo lời cầu của Đức Mẹ
+— đây là lần đầu tiên Đức Mẹ thể hiện vai trò chuyển cầu giữa người ta
+và Chúa. Tin Mừng Gioan ghi đây là phép lạ đầu tiên."
+```
+
+```
+❌ Khô: "**Lễ Hiện Xuống** là ngày Chúa Thánh Thần ngự xuống."
+
+✅ Keypoint: "**Lễ Hiện Xuống** — Chúa Thánh Thần ngự xuống dưới hình
+lưỡi lửa trên 12 Tông Đồ và Đức Mẹ đang cầu nguyện cùng nhau.
+Ngày này được gọi là 'sinh nhật của Giáo hội'."
+```
+
+**Độ dài:** 1–3 câu, tối đa ~300 ký tự. Ngắn gọn nhưng có chiều sâu.
+
+---
+
 ## 0. Triết Lý Nội Dung
 
 ### Mục tiêu cốt lõi
@@ -83,17 +166,23 @@ Level 9: "Kinh Nguyện Thánh Thể chính thức có mấy loại?" → 4 lo�
 **Đối tượng:** Thiếu nhi, người mới biết đạo  
 **Đặc điểm:** Câu hỏi rất quen thuộc, ai đi Lễ đều biết  
 **Chủ đề trọng tâm:**
-- Chúa Giêsu: sinh ở đâu, mẹ là ai, 12 Tông Đồ
+- Chúa Giêsu: sinh ở đâu, mẹ là ai, 12 Tông Đồ, các phép lạ nổi tiếng
 - Các lễ lớn: Giáng Sinh, Phục Sinh, Hiện Xuống
-- Kinh Lạy Cha, Kính Mừng, Dấu Thánh Giá
+- Kinh Lạy Cha, Kính Mừng, Dấu Thánh Giá, Sáng Danh, Ăn Năn Tội
 - 7 Bí tích (kể tên), 10 Điều Răn (tổng quát)
-- Nhân vật KT dễ: Nôê, Môsê, Đavít, Ábraham
+- Nhân vật KT qua sự kiện: Nôê (tàu & lụt), Môsê (Ai Cập), Đavít (Gôliát), Ábraham (con trai)
+
+> ⚠️ **Level 1 tuyệt đối KHÔNG hỏi số liệu đơn thuần.** Câu hỏi phải dựa vào sự kiện, hành động, nhân vật.
 
 ```json
-// Ví dụ đúng chuẩn Level 1
+// ✅ Đúng chuẩn Level 1
 {"question": "Chúa Giêsu sinh ra ở đâu?", ...}
+{"question": "Ai đã dạy Kinh Lạy Cha cho các môn đệ?", ...}
+{"question": "Mùa Chay nhắc nhớ 40 ngày ăn chay của ai?", ...}
+
+// ❌ Sai — số liệu đơn thuần
 {"question": "Mùa Chay kéo dài bao nhiêu ngày?", ...}
-{"question": "Kinh Lạy Cha do ai dạy?", ...}
+{"question": "Có bao nhiêu Tông Đồ?", ...}
 ```
 
 ---
@@ -102,37 +191,45 @@ Level 9: "Kinh Nguyện Thánh Thể chính thức có mấy loại?" → 4 lo�
 **Đối tượng:** Thiếu nhi đã học giáo lý, người thực hành đạo  
 **Đặc điểm:** Hiểu biết thêm một bậc so với level 1  
 **Chủ đề trọng tâm:**
-- Mùa Vọng: 4 CN, vòng hoa 4 nến
-- Mân Côi: 4 mùa, ai thêm mùa Sáng
+- Mùa Vọng: 4 CN, vòng hoa 4 nến, màu tím/hồng
+- Mân Côi: 4 mùa, ai thêm mùa Sáng, cấu trúc 1 chục
 - Bí tích: Thêm Sức do Giám mục ban, Hôn Phối bất khả phân ly
 - Giáo hội: 4 đặc tính, Hồng Y bầu Giáo Hoàng, khói trắng/đen
-- KT: 73 cuốn, Ábraham/Isaac, Giuse bị bán, 10 tai ương Ai Cập
-- Lịch sử VN: de Rhodes/chữ Quốc Ngữ, TTĐVN 1988
+- KT: Giuse bán sang Ai Cập — anh em làm gì, Ábraham suýt hiến tế con trai nào...
+- Lịch sử VN: 117 TTĐVN — Đức Mẹ La Vang hiện ra an ủi ai
+
+> ⚠️ **Level 2:** Số liệu chỉ dùng nếu đó là điểm cốt lõi cần nhớ (7 bí tích, 4 mùa...). Ưu tiên câu về sự kiện và hành động.
 
 ```json
-// Ví dụ đúng chuẩn Level 2
-{"question": "Mùa Vọng gồm bao nhiêu Chúa Nhật?", ...}
+// ✅ Đúng chuẩn Level 2
+{"question": "Ba Vua mang đến cho Hài Nhi những lễ vật nào?", ...}
 {"question": "Ai đã thêm Mầu nhiệm Sự Sáng vào Kinh Mân Côi?", ...}
+{"question": "Trong một chục Mân Côi, có bao nhiêu kinh Kính Mừng?", ...}
 ```
 
 ---
 
 ### 🟠 Level 3 — Sinh hoạt đức tin
 **Đối tượng:** Người trưởng thành thực hành đạo đều đặn  
-**Đặc điểm:** Đi sâu hơn vào phụng vụ, câu chuyện KT ít quen hơn  
+**Đặc điểm:** Đi sâu vào phụng vụ, câu chuyện KT ít quen hơn — qua tình huống và sự kiện cụ thể  
 **Chủ đề trọng tâm:**
-- Phụng vụ: Thứ Sáu không có Lễ, Rửa Chân Thứ Năm, Mùa PS 50 ngày
-- Giáo lý: Tội trọng/nhẹ, Luyện ngục, Nguyên tội, Xức Dầu Bệnh Nhân
-- KT phổ biến: TV 23, Giôna 3 ngày, "Ta là Đường Sự Thật Sự Sống"
-- Thánh nhân phổ biến: Mẹ Têrêsa, Padre Pio, Faustina, Maximilian Kolbe
-- Lịch sử VN: HĐGM VN, 3 giáo tỉnh, Đức Mẹ La Vang 1798
-- ĐGH: JP II (Ba Lan), Phanxicô (Argentina, Dòng Tên)
+- Phụng vụ: Thứ Sáu không có Lễ, Rửa Chân Thứ Năm, Lễ Tro làm từ đâu
+- Giáo lý: Tội trọng/nhẹ, Luyện ngục, Nguyên tội, ai được lãnh Xức Dầu
+- KT sinh động: Vua Đavít và bà Batseba, Êlia lên trời bằng gì, dân Ninivê đáp lại thế nào
+- Nhân vật dụ ngôn: chủ nhà Bữa Tiệc Lớn, người cha chạy ra đón con
+- Lời kinh sâu hơn: Kinh Magnificat là bài ca của ai, Lạy Cha dạy gì về tha thứ
+
+> ⚠️ **Level 3:** Hoàn toàn không hỏi số liệu đơn thuần. Câu hỏi phải dẫn người chơi vào tình huống hay sự kiện cụ thể.
 
 ```json
-// Ví dụ đúng chuẩn Level 3
+// ✅ Đúng chuẩn Level 3
 {"question": "Thứ Sáu Tuần Thánh có đặc điểm gì đặc biệt?", ...}
+{"question": "Khi gặp người đàn bà ngoại tình, Chúa Giêsu nói gì với đám đông?", ...}
+{"question": "Người trộm thống hối nhận được lời hứa gì từ Chúa Giêsu?", ...}
+
+// ❌ Sai — số liệu đơn thuần
+{"question": "Mùa Thường Niên có bao nhiêu tuần?", ...}
 {"question": "Mùa Phục Sinh kéo dài bao nhiêu ngày?", ...}
-{"question": "Thánh Mẹ Têrêsa Calcutta phục vụ ở nước nào?", ...}
 ```
 
 ---
@@ -144,7 +241,9 @@ Level 9: "Kinh Nguyện Thánh Thể chính thức có mấy loại?" → 4 lo�
 - 3 Tin Mừng Nhất Lãm là gì?
 - Thánh Luca có nghề gì?
 - Sách Gióp bàn về chủ đề gì?
-- Jerusalem ở quốc gia nào?
+- Sông Giođan gắn với sự kiện phép rửa như thế nào?
+
+> ⚠️ **Level 4-5:** Số liệu được phép nhiều hơn, nhưng vẫn ưu tiên ý nghĩa và sự kiện. Thuật ngữ Latin có thể xuất hiện nhưng phải có giải thích tiếng Việt trong đáp án.
 
 ---
 

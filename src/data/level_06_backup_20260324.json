@@ -198,6 +198,17 @@
     "category": "kinh_thanh"
   },
   {
+    "id": "L06_019",
+    "question": "Trong Tin Mừng, phép lạ đầu tiên của Chúa Giêsu xảy ra ở đâu?",
+    "opt_a": "Jerusalem",
+    "opt_b": "Cana (tiệc cưới)",
+    "opt_c": "Capharnaum",
+    "opt_d": "Bethlehem",
+    "correct_ans": 1,
+    "explanation": "Phép lạ đầu tiên: **biến nước thành rượu tại tiệc cưới Cana** (Ga 2:1-11).",
+    "category": "kinh_thanh"
+  },
+  {
     "id": "L06_020",
     "question": "Chúa Giêsu hóa bánh nuôi 5000 người bắt đầu với bao nhiêu bánh và cá?",
     "opt_a": "7 bánh và 3 cá",
@@ -374,6 +385,17 @@
     "category": "thanh_nhan"
   },
   {
+    "id": "L06_036",
+    "question": "Thánh Gioan Bosco (Don Bosco) qua đời năm nào và được phong thánh khi nào?",
+    "opt_a": "Qua đời 1870, phong thánh 1890",
+    "opt_b": "Qua đời 1888, phong thánh 1934",
+    "opt_c": "Qua đời 1900, phong thánh 1950",
+    "opt_d": "Qua đời 1888, phong thánh 1950",
+    "correct_ans": 1,
+    "explanation": "Don Bosco qua đời **31/1/1888** tại Turin, Ý. Được **ĐGH Piô XI phong thánh năm 1934**. Lễ kính ngài mừng 31 tháng 1 mỗi năm.",
+    "category": "thanh_nhan"
+  },
+  {
     "id": "L06_037",
     "question": "Thánh Gioan Vianney (Cha sở xứ Ars) nổi tiếng về Bí tích nào?",
     "opt_a": "Rửa Tội",
@@ -416,6 +438,17 @@
     "correct_ans": 1,
     "explanation": "Ignatius Antiôkia là người **đầu tiên dùng cụm từ 'Giáo hội Công giáo'** (Katholike Ekklesia) trong thư gửi Smyrna.",
     "category": "thanh_nhan"
+  },
+  {
+    "id": "L06_041",
+    "question": "Bernini thiết kế hàng cột nổi tiếng nào tại Vatican?",
+    "opt_a": "Nhà nguyện Sistine",
+    "opt_b": "Hàng cột hình elip bao quanh Quảng trường Thánh Phêrô",
+    "opt_c": "Mái vòm",
+    "opt_d": "Tầng hầm",
+    "correct_ans": 1,
+    "explanation": "**Bernini** thiết kế **hàng cột hình elip (Colonnade)** bao quanh Quảng trường Thánh Phêrô (1656-1667).",
+    "category": "nghe_thuat"
   },
   {
     "id": "L06_042",
@@ -539,6 +572,39 @@
     "category": "thanh_nhan"
   },
   {
+    "id": "L06_053",
+    "question": "Nhà thờ Gothic cao nhất thế giới hiện nay là nhà thờ nào?",
+    "opt_a": "Notre-Dame de Paris",
+    "opt_b": "Cologne (Köln), Đức",
+    "opt_c": "Chartres, Pháp",
+    "opt_d": "Westminster, Anh",
+    "correct_ans": 1,
+    "explanation": "Nhà thờ chính tòa **Cologne (Köln)** tại Đức cao 157m, là nhà thờ Gothic cao nhất thế giới.",
+    "category": "nghe_thuat"
+  },
+  {
+    "id": "L06_054",
+    "question": "Nhà thờ Sagrada Familia ở Barcelona do ai thiết kế?",
+    "opt_a": "Bernini",
+    "opt_b": "Antoni Gaudí",
+    "opt_c": "Michelangelo",
+    "opt_d": "Le Corbusier",
+    "correct_ans": 1,
+    "explanation": "**Antoni Gaudí** thiết kế nhà thờ **Sagrada Familia**, khởi công 1882 và vẫn đang xây.",
+    "category": "nghe_thuat"
+  },
+  {
+    "id": "L06_055",
+    "question": "Gaudí được mở án phong chân phước. Sagrada Familia dự kiến hoàn thành năm nào?",
+    "opt_a": "2020",
+    "opt_b": "2026",
+    "opt_c": "2050",
+    "opt_d": "Không bao giờ",
+    "correct_ans": 1,
+    "explanation": "Sagrada Familia dự kiến hoàn thành khoảng **2026** — kỷ niệm 100 năm ngày Gaudí qua đời.",
+    "category": "nghe_thuat"
+  },
+  {
     "id": "L06_056",
     "question": "Bức tranh 'Bữa Tiệc Ly' (The Last Supper) nổi tiếng do ai vẽ?",
     "opt_a": "Michelangelo",
@@ -550,6 +616,28 @@
     "category": "nghe_thuat"
   },
   {
+    "id": "L06_057",
+    "question": "Bức tranh 'Trường Athens' (School of Athens) trong Vatican do ai vẽ?",
+    "opt_a": "Michelangelo",
+    "opt_b": "Leonardo",
+    "opt_c": "Raphael",
+    "opt_d": "Bernini",
+    "correct_ans": 2,
+    "explanation": "**Raphael** vẽ 'Trường Athens' trong các Phòng Raphael (Stanze) tại Vatican.",
+    "category": "nghe_thuat"
+  },
+  {
+    "id": "L06_058",
+    "question": "Ai phác họa nhà thờ Đức Bà Sài Gòn theo kiến trúc nào?",
+    "opt_a": "Gothic",
+    "opt_b": "Roman-Byzantine",
+    "opt_c": "Baroque",
+    "opt_d": "Hiện đại",
+    "correct_ans": 1,
+    "explanation": "Nhà thờ Đức Bà Sài Gòn xây theo phong cách **Roman-Byzantine** (1877-1880), do kiến trúc sư Pháp J. Bourard.",
+    "category": "nghe_thuat"
+  },
+  {
     "id": "L06_059",
     "question": "Hội Thừa Sai Paris (MEP) có vai trò gì với Giáo hội VN?",
     "opt_a": "Xây Đền Thờ",
@@ -558,6 +646,28 @@
     "opt_d": "Chinh phạt",
     "correct_ans": 1,
     "explanation": "MEP: **đào tạo linh mục bản xứ** và truyền giáo tại Đông Nam Á, đóng vai trò quan trọng trong GH Việt Nam.",
+    "category": "lich_su"
+  },
+  {
+    "id": "L06_060",
+    "question": "Vua Minh Mạng ban bao nhiêu sắc chỉ cấm đạo Công giáo?",
+    "opt_a": "2",
+    "opt_b": "4",
+    "opt_c": "7",
+    "opt_d": "Nhiều sắc chỉ kéo dài nhiều năm",
+    "correct_ans": 3,
+    "explanation": "Vua Minh Mạng ban **nhiều sắc chỉ cấm đạo** kéo dài từ 1833, là giai đoạn bách hại khốc liệt.",
+    "category": "lich_su"
+  },
+  {
+    "id": "L06_061",
+    "question": "Cha Alexandre de Rhodes đóng góp gì quan trọng cho Việt Nam?",
+    "opt_a": "Xây Nhà thờ Đức Bà",
+    "opt_b": "Đặt nền móng chữ Quốc ngữ",
+    "opt_c": "Dịch Kinh Thánh",
+    "opt_d": "Thành lập HĐGM",
+    "correct_ans": 1,
+    "explanation": "Cha Alexandre de Rhodes **đặt nền móng chữ Quốc ngữ** (chữ Latin hóa tiếng Việt) và truyền giáo tại VN.",
     "category": "lich_su"
   },
   {
@@ -591,6 +701,28 @@
     "opt_d": "999",
     "correct_ans": 2,
     "explanation": "Chủ chiên bỏ **99 con** để đi tìm **1 con chiên lạc** (Lc 15:3-7).",
+    "category": "kinh_thanh"
+  },
+  {
+    "id": "L06_065",
+    "question": "Trong dụ ngôn 'Người cha nhân hậu' (Con phung phá), người con hoang trở về được đón tiếp thế nào?",
+    "opt_a": "Bị đuổi đi",
+    "opt_b": "Được cho áo mới, nhẫn, dép, giết bê béo mừng",
+    "opt_c": "Bị làm tôi tớ",
+    "opt_d": "Bị phạt",
+    "correct_ans": 1,
+    "explanation": "Người cha chạy ra ôm con, cho **áo đẹp, nhẫn, dép mới**, và **giết bê béo** mừng (Lc 15:22-23).",
+    "category": "kinh_thanh"
+  },
+  {
+    "id": "L06_066",
+    "question": "Người thu thuế nào leo lên cây sung để nhìn Chúa Giêsu?",
+    "opt_a": "Mátthêu",
+    "opt_b": "Dakêô (Zacchaeus)",
+    "opt_c": "Lêvi",
+    "opt_d": "Simon",
+    "correct_ans": 1,
+    "explanation": "**Dakêô** (người thu thuế nhỏ con) leo lên **cây sung** ở Giêricô để nhìn Chúa Giêsu đi ngang (Lc 19:1-10).",
     "category": "kinh_thanh"
   },
   {
@@ -781,6 +913,28 @@
     "category": "lich_su"
   },
   {
+    "id": "L06_084",
+    "question": "Vua nào của Anh tách khỏi Giáo hội Rome vì muốn ly hôn?",
+    "opt_a": "Henry VII",
+    "opt_b": "Henry VIII",
+    "opt_c": "Richard III",
+    "opt_d": "Edward VI",
+    "correct_ans": 1,
+    "explanation": "**Henry VIII** tách Anh giáo khỏi Rome năm 1534 vì ĐGH không cho phép ly hôn Catherine of Aragon.",
+    "category": "lich_su"
+  },
+  {
+    "id": "L06_085",
+    "question": "Dòng Trappist (nhánh Xitô Nghiêm Luật) nổi tiếng sản xuất gì?",
+    "opt_a": "Rượu vang",
+    "opt_b": "Bia và phô mai",
+    "opt_c": "Vải vóc",
+    "opt_d": "Đồ gốm",
+    "correct_ans": 1,
+    "explanation": "Các đan viện Trappist nổi tiếng sản xuất **bia Trappist** và phô mai chất lượng cao.",
+    "category": "doi_song"
+  },
+  {
     "id": "L06_086",
     "question": "Chúa Giêsu nói 'Anh em hãy yêu thương nhau như Thầy đã yêu thương anh em' ở đâu?",
     "opt_a": "Mt 5:44",
@@ -792,6 +946,50 @@
     "category": "kinh_thanh"
   },
   {
+    "id": "L06_087",
+    "question": "Gregor Mendel — cha đẻ di truyền học — là ai trong Giáo hội?",
+    "opt_a": "Giám mục Công giáo",
+    "opt_b": "Tu sĩ Augustinô, làm thí nghiệm đậu trong tu viện",
+    "opt_c": "Linh mục Dòng Tên",
+    "opt_d": "Giáo dân thường",
+    "correct_ans": 1,
+    "explanation": "**Gregor Mendel** là **tu sĩ Augustinô** — cha đẻ di truyền học hiện đại, làm thí nghiệm trong vườn tu viện Brno.",
+    "category": "lich_su"
+  },
+  {
+    "id": "L06_088",
+    "question": "Cha Georges Lemaître (linh mục Bỉ) nổi tiếng vì lý thuyết khoa học nào?",
+    "opt_a": "Thuyết tiến hóa",
+    "opt_b": "Lý thuyết Big Bang — vũ trụ bắt đầu từ một điểm",
+    "opt_c": "Thuyết tương đối",
+    "opt_d": "Định luật vạn vật hấp dẫn",
+    "correct_ans": 1,
+    "explanation": "**Cha Georges Lemaître** — linh mục Công giáo Bỉ — người đề xuất **lý thuyết Big Bang** (vũ trụ bắt đầu từ 'nguyên tử nguyên thủy').",
+    "category": "lich_su"
+  },
+  {
+    "id": "L06_089",
+    "question": "Đại học Bologna (1088) — đại học đầu tiên thế giới — do ai thành lập?",
+    "opt_a": "Nhà nước Ý",
+    "opt_b": "Giáo hội Công giáo thúc đẩy, trong bối cảnh học thuật Trung Cổ",
+    "opt_c": "Vua Pháp",
+    "opt_d": "Đế quốc La Mã thần thánh",
+    "correct_ans": 1,
+    "explanation": "Bologna (1088) ra đời trong bối cảnh **Giáo hội bảo trợ học thuật Trung Cổ** — mô hình lan sang Paris, Oxford, Cambridge.",
+    "category": "lich_su"
+  },
+  {
+    "id": "L06_090",
+    "question": "Matteo Ricci — nhà truyền giáo Dòng Tên — đóng góp gì khi đến Trung Quốc?",
+    "opt_a": "Xây nhà thờ lớn nhất",
+    "opt_b": "Mang bản đồ thế giới, đồng hồ, khoa học vào triều đình Minh",
+    "opt_c": "Dịch Kinh Thánh sang tiếng Trung",
+    "opt_d": "Sáng lập đại học Trung Quốc",
+    "correct_ans": 1,
+    "explanation": "Matteo Ricci dùng **khoa học (thiên văn, bản đồ, đồng hồ)** để mở cửa đối thoại văn hóa với triều đình Minh (1601).",
+    "category": "lich_su"
+  },
+  {
     "id": "L06_091",
     "question": "Thánh Francis Xavier truyền giáo đến những nước nào theo thứ tự?",
     "opt_a": "Ý → Pháp → Anh",
@@ -800,6 +998,39 @@
     "opt_d": "Ai Cập → Ethiopia → Sudan",
     "correct_ans": 1,
     "explanation": "Xavier: **Ấn Độ (Goa)** → **Malacca** → **Nhật Bản** (1549) — và đang trên đường vào Trung Quốc thì qua đời (1552).",
+    "category": "lich_su"
+  },
+  {
+    "id": "L06_092",
+    "question": "Bartolomé de las Casas (TK 16) đấu tranh cho điều gì?",
+    "opt_a": "Mở rộng thuộc địa",
+    "opt_b": "Bảo vệ quyền con người thổ dân châu Mỹ khỏi chế độ nô lệ",
+    "opt_c": "Cải Cách Tin Lành",
+    "opt_d": "Xây nhà thờ tại Mexico",
+    "correct_ans": 1,
+    "explanation": "**Bartolomé de las Casas** — linh mục Dòng Tên — là người **đầu tiên tranh đấu quyền con người** cho thổ dân châu Mỹ trước triều đình Tây Ban Nha.",
+    "category": "lich_su"
+  },
+  {
+    "id": "L06_093",
+    "question": "Giáo hội Công giáo Triều Tiên (Hàn Quốc) đặc biệt vì điều gì?",
+    "opt_a": "Do người Pháp thành lập",
+    "opt_b": "Giáo hội duy nhất trên thế giới do giáo dân tự sáng lập, không có linh mục ban đầu",
+    "opt_c": "Do Dòng Tên truyền giáo",
+    "opt_d": "Do người Mỹ xây dựng",
+    "correct_ans": 1,
+    "explanation": "GH Triều Tiên: nhóm học giả Joseon đọc sách Kitô tại Trung Quốc → tự rửa tội nhau (1784) — **duy nhất thế giới do giáo dân sáng lập**.",
+    "category": "lich_su"
+  },
+  {
+    "id": "L06_094",
+    "question": "26 Vị Tử Đạo Nagasaki (Nhật Bản, 1597) đặc biệt thế nào?",
+    "opt_a": "Bị thiêu sống",
+    "opt_b": "Bị đóng đinh trên thập giá — gồm cả các em nhỏ",
+    "opt_c": "Bị ném xuống biển",
+    "opt_d": "Bị đầu độc",
+    "correct_ans": 1,
+    "explanation": "26 vị (gồm 3 em nhỏ) bị **đóng đinh trên thập giá** tại Nagasaki — sau đó Kitô hữu Nhật sống ẩn náu 250 năm.",
     "category": "lich_su"
   },
   {
@@ -867,225 +1098,5 @@
     "correct_ans": 1,
     "explanation": "Nicêa I (325): tuyên bố **Chúa Giêsu đồng bản thể (homoousios) với Chúa Cha** — chống lạc giáo **Ariô** (Arianism).",
     "category": "lich_su"
-  },
-  {
-    "id": "L06_N01",
-    "question": "Trong Kinh Thánh, lời hứa 'Giao ước mới' mà Thiên Chúa hứa qua ngôn sứ Giêrêmia là gì?",
-    "opt_a": "Luật mới viết trên đá",
-    "opt_b": "Lề luật khắc trong lòng người — không phải bên ngoài mà từ bên trong tâm hồn",
-    "opt_c": "Đền Thờ mới sẽ xây",
-    "opt_d": "Vua mới từ dòng Đavít",
-    "correct_ans": 1,
-    "explanation": "'**Đây là giao ước Ta sẽ lập với nhà Israel... Ta sẽ ghi Lề Luật vào lòng họ, khắc vào tâm can họ**' (Gr 31:33). Giao ước mới khác cũ: không phải đá bia bên ngoài mà **tâm hồn được biến đổi từ bên trong** — ứng nghiệm trọn vẹn qua Chúa Giêsu.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L06_N02",
-    "question": "Thư Côrintô nổi tiếng với 'Bài ca Đức Ái' (1Cr 13). Câu nào kết thúc bài ca này đặc biệt?",
-    "opt_a": "'Tình yêu mạnh hơn cái chết'",
-    "opt_b": "'Ba điều này tồn tại mãi: đức tin, đức cậy, đức mến — nhưng cao trọng hơn cả là đức mến'",
-    "opt_c": "'Yêu thương là điều răn đầu tiên'",
-    "opt_d": "'Ai có đức mến thì trường tồn'",
-    "correct_ans": 1,
-    "explanation": "Bài ca kết bằng: '**Ba điều tồn tại mãi mãi: đức tin, đức cậy và đức mến — nhưng trổi hơn cả là đức mến**' (1Cr 13:13). Đây là lý do Thánh Lễ hôn nhân thường đọc 1Cr 13 — tình yêu vợ chồng phản chiếu tình yêu Thiên Chúa.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L06_N03",
-    "question": "Trong sách Tông Đồ CV, Chúa Thánh Thần hiện xuống trong dấu hiệu gì?",
-    "opt_a": "Mưa lớn và sấm sét",
-    "opt_b": "Tiếng như gió mạnh thổi, lưỡi lửa đậu trên từng người",
-    "opt_c": "Một vầng sáng từ trời",
-    "opt_d": "Giọng nói từ mây",
-    "correct_ans": 1,
-    "explanation": "Chúa Thánh Thần hiện xuống trong **tiếng như gió mạnh thổi** và **lưỡi lửa đậu trên từng người** (Cv 2:2-3). Gió = *pneuma/ruah* = hơi thở/thần khí; Lửa = thanh tẩy và soi sáng. Kết quả: họ nói nhiều thứ tiếng — Tin Mừng vượt mọi biên giới ngôn ngữ.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L06_N04",
-    "question": "Thư Giacôbê nổi tiếng với câu gì về đức tin và việc làm?",
-    "opt_a": "'Hãy tin vào Chúa và ngồi đợi'",
-    "opt_b": "'Đức tin không có việc làm là đức tin chết'",
-    "opt_c": "'Việc làm không cần đức tin'",
-    "opt_d": "'Chỉ cần tin là đủ, không cần làm gì'",
-    "correct_ans": 1,
-    "explanation": "'**Đức tin không có việc làm là đức tin chết**' (Gc 2:17). Thánh Giacôbê không mâu thuẫn với Phaolô — cả hai đồng ý: đức tin thật sinh ra việc làm. Đức tin không hành động như đống than không cháy — còn hình thức nhưng vô dụng.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L06_N05",
-    "question": "Trong phụng vụ, màu đỏ dùng vào những dịp nào?",
-    "opt_a": "Mùa Vọng và Mùa Chay",
-    "opt_b": "Lễ Hiện Xuống, lễ tông đồ và tử đạo, Lễ Thánh Giá",
-    "opt_c": "Chúa Nhật thường",
-    "opt_d": "Chỉ Lễ Hiện Xuống",
-    "correct_ans": 1,
-    "explanation": "Màu **đỏ** (lửa Thánh Thần và máu tử đạo) dùng cho: **Lễ Hiện Xuống** (Thánh Thần), **lễ kính Tông Đồ** (chịu tử đạo), **lễ Tử Đạo**, và **Lễ Suy Tôn Thánh Giá** (máu Chúa). Là màu mạnh mẽ nhất trong lịch phụng vụ.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L06_N06",
-    "question": "Trong Thánh Lễ, tại sao cộng đoàn đứng trong suốt Mùa Phục Sinh?",
-    "opt_a": "Vì ghế bị bỏ đi",
-    "opt_b": "Đứng là tư thế Phục Sinh — diễn tả niềm vui và chiến thắng của người đã sống lại với Chúa",
-    "opt_c": "Vì Thánh Lễ ngắn hơn",
-    "opt_d": "Đây chỉ là phong tục địa phương",
-    "correct_ans": 1,
-    "explanation": "Trong truyền thống Kitô giáo, **đứng** là tư thế Phục Sinh (khác quỳ là hối lỗi). Công đồng Nicêa I (325) cấm quỳ vào Chúa Nhật và Mùa Phục Sinh. Đứng diễn tả: **chúng ta đã sống lại với Chúa Kitô** — không còn trong cảnh nô lệ tội lỗi.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L06_N07",
-    "question": "Sách Thánh Vịnh được cấu trúc thành mấy quyển và dùng để làm gì?",
-    "opt_a": "3 quyển — đọc tư riêng",
-    "opt_b": "5 quyển — là sách kinh nguyện hàng ngày; Giáo hội dùng trong Phụng Vụ Giờ Kinh",
-    "opt_c": "1 quyển — đọc trong Thánh Lễ",
-    "opt_d": "10 quyển — tương ứng 10 Điều Răn",
-    "correct_ans": 1,
-    "explanation": "Sách 150 Thánh Vịnh chia thành **5 quyển** (song song với Ngũ Thư). Đây là **sách kinh nguyện của Dân Chúa** — Giáo hội dùng đọc Kinh Nhật Tụng mỗi ngày. Chúa Giêsu cũng cầu nguyện bằng Thánh Vịnh — kể cả trên Thập Giá.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L06_N08",
-    "question": "Giáo hội dạy: con người có mấy chiều kích và cần được cứu độ toàn diện?",
-    "opt_a": "Chỉ linh hồn cần được cứu, thể xác không quan trọng",
-    "opt_b": "Con người là thể xác-linh hồn thống nhất — ơn cứu độ liên quan đến cả hai",
-    "opt_c": "Con người gồm 3 phần: thể xác, linh hồn, lý trí",
-    "opt_d": "Linh hồn là thần, thể xác là bẫy",
-    "correct_ans": 1,
-    "explanation": "Giáo lý Công giáo dạy con người là **sự thống nhất thể xác và linh hồn** (GLCG 362) — không phải linh hồn bị nhốt trong thể xác. Do đó Chúa Giêsu **nhập thể** (không phải xuất thể!) và **Phục Sinh với thể xác** — ơn cứu độ là sự toàn vẹn trọn vẹn.",
-    "category": "giao_ly"
-  },
-  {
-    "id": "L06_N09",
-    "question": "Điều gì xảy ra sau khi chết theo giáo lý — trước khi có Phán xét chung?",
-    "opt_a": "Linh hồn ngủ cho đến tận thế",
-    "opt_b": "Phán xét riêng (Particular Judgment) — mỗi linh hồn ngay lập tức được phán xét theo đời sống mình",
-    "opt_c": "Linh hồn trở thành thiên thần",
-    "opt_d": "Chờ trong hư vô",
-    "correct_ans": 1,
-    "explanation": "Ngay sau khi chết, mỗi người gặp **Phán xét Riêng** (Iudicium Particulare) — kết quả: Thiên Đàng, Luyện Ngục, hay Hỏa Ngục. **Phán xét Chung** (Tận Thế) sẽ đến sau, công khai hóa ý nghĩa toàn bộ lịch sử. 'Con người chỉ chết một lần, sau đó đến phán xét' (Dt 9:27).",
-    "category": "giao_ly"
-  },
-  {
-    "id": "L06_N10",
-    "question": "Theo giáo lý, 'Bốn điều sau hết' (Novissima) mà người tín hữu cần suy niệm là gì?",
-    "opt_a": "Sinh, Lão, Bệnh, Tử",
-    "opt_b": "Sự chết, Phán xét, Hỏa Ngục, Thiên Đàng",
-    "opt_c": "Sám hối, Xưng tội, Rước lễ, Ân xá",
-    "opt_d": "Bốn giai đoạn Mùa Vọng",
-    "correct_ans": 1,
-    "explanation": "'**Bốn điều sau hết**': **Sự Chết - Phán Xét - Hỏa Ngục - Thiên Đàng**. Truyền thống Công giáo khuyên suy niệm bốn điều này để giữ mình trong đường lành và đặt cuộc đời trong bối cảnh vĩnh cửu. Sách Huấn Ca 7:36: 'Trong mọi việc, hãy nhớ đến cùng đích của mình.'",
-    "category": "giao_ly"
-  },
-  {
-    "id": "L06_N11",
-    "question": "Cầu nguyện bằng Kinh Thánh — phương pháp 'Lectio Divina' — gồm những bước nào?",
-    "opt_a": "Đọc nhanh, ghi nhớ, kiểm tra",
-    "opt_b": "Đọc (Lectio), Suy gẫm (Meditatio), Cầu nguyện (Oratio), Chiêm niệm (Contemplatio)",
-    "opt_c": "Nghe bài giảng, ghi chú, thảo luận",
-    "opt_d": "Học thuộc lòng, giải thích, áp dụng",
-    "correct_ans": 1,
-    "explanation": "'**Đọc Thánh** (Lectio Divina)': **Đọc chậm** (Lectio) → **Suy gẫm** nghĩa Lời Chúa (Meditatio) → **Cầu nguyện** trả lời Chúa (Oratio) → **Yên lặng ngồi với Chúa** (Contemplatio). Phương pháp cổ của Dòng Biển Đức, được Vatican II và ĐGH Bênêđictô XVI khuyến khích cho mọi giáo dân.",
-    "category": "doi_song"
-  },
-  {
-    "id": "L06_N12",
-    "question": "Thánh Têrêsa Hài Đồng Giêsu (Lisieux) dạy 'Con đường nhỏ' — đây là gì?",
-    "opt_a": "Con đường dành cho trẻ em",
-    "opt_b": "Nên thánh qua những hành động nhỏ bé hàng ngày làm với tình yêu lớn — không cần hành động anh hùng",
-    "opt_c": "Con đường khổ hạnh nghiêm ngặt",
-    "opt_d": "Con đường ẩn dật không giao tiếp",
-    "correct_ans": 1,
-    "explanation": "Thánh Têrêsa dạy: nên thánh không cần làm việc vĩ đại — chỉ cần **làm việc nhỏ với tình yêu lớn**: rửa bát, mỉm cười với người khó tính, chịu đựng bệnh tật... Ngài nói: 'Con muốn tìm thang máy đưa con lên Chúa' — thang máy đó là **sự bé nhỏ và phó thác hoàn toàn**.",
-    "category": "thanh_nhan"
-  },
-  {
-    "id": "L06_N13",
-    "question": "Trong đời sống đức tin, 'Phân định Thiêng liêng' (Discernment) là gì?",
-    "opt_a": "Chọn linh mục giải tội cho mình",
-    "opt_b": "Quá trình cầu nguyện để nhận ra ý Chúa trong các quyết định quan trọng của cuộc sống",
-    "opt_c": "Thi nghề thánh kinh",
-    "opt_d": "Xem xét có nên vào dòng tu không",
-    "correct_ans": 1,
-    "explanation": "'**Phân định thiêng liêng**' (*Discernment spiritualis*) là nghệ thuật **nhận ra ý Thiên Chúa** — qua cầu nguyện, Kinh Thánh, lời cố vấn thiêng liêng và xem xét nội tâm. Thánh Inhaxiô Loyola hệ thống hóa thành **Linh Thao** (Spiritual Exercises) — bộ công cụ phân định nổi tiếng nhất Giáo hội.",
-    "category": "doi_song"
-  },
-  {
-    "id": "L06_N14",
-    "question": "Học thuyết Xã hội Công giáo dựa trên nguyên tắc nào làm nền tảng?",
-    "opt_a": "Lợi nhuận kinh tế",
-    "opt_b": "Phẩm giá con người (Imago Dei), công ích, và liên đới",
-    "opt_c": "Quyền lực nhà nước",
-    "opt_d": "Truyền thống văn hóa",
-    "correct_ans": 1,
-    "explanation": "Học thuyết Xã hội CG xây trên 4 trụ cột: **Phẩm giá con người** (mọi người đều là hình ảnh Chúa), **Công ích**, **Liên đới** (người này gánh người kia), **Bổ trợ** (quyết định ở cấp nhỏ nhất có thể). Tất cả xây trên nền tảng: *mọi người có phẩm giá vì được tạo theo hình ảnh Thiên Chúa*.",
-    "category": "giao_ly"
-  },
-  {
-    "id": "L06_N15",
-    "question": "Kinh nghiệm nào được Chúa Giêsu dùng để mô tả cảm giác bị Thiên Chúa bỏ rơi trên Thập Giá?",
-    "opt_a": "Ngài nghĩ ra câu đó",
-    "opt_b": "Ngài cất tiếng đọc câu đầu của Thánh Vịnh 22 — lời kinh Israel đã dùng trong đau khổ",
-    "opt_c": "Ngài trích từ sách Gióp",
-    "opt_d": "Đây là lời Thiên Thần",
-    "correct_ans": 1,
-    "explanation": "'**Lạy Chúa, Lạy Chúa của con, sao Chúa bỏ con**' (Mc 15:34) = câu đầu **Thánh Vịnh 22** — cầu nguyện Israel trong giờ khổ cực tột đỉnh. Chúa Giêsu không phát minh câu mới: **Ngài cầu nguyện với Kinh Thánh dân Ngài** — điều này gợi ý toàn bộ TV 22 là chân dung Thương Khó.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L06_N16",
-    "question": "Năm Phụng Vụ bắt đầu từ khi nào và kết thúc khi nào?",
-    "opt_a": "Từ 1/1 đến 31/12",
-    "opt_b": "Từ Chúa Nhật I Mùa Vọng đến Lễ Chúa Kitô Vua",
-    "opt_c": "Từ Phục Sinh đến Phục Sinh",
-    "opt_d": "Từ Giáng Sinh đến Giáng Sinh",
-    "correct_ans": 1,
-    "explanation": "Năm Phụng Vụ bắt đầu từ **Chúa Nhật I Mùa Vọng** và kết thúc bằng **Lễ Chúa Kitô Vua** (Chúa Nhật cuối cùng của năm). Lễ Chúa Kitô Vua kết thúc chu kỳ: Ngài đến trong khiêm nhường (Giáng Sinh) và sẽ đến trong vinh quang (Cánh Chung).",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L06_N17",
-    "question": "Trong phụng vụ Thánh Lễ, tại sao linh mục pha nước vào rượu khi chuẩn bị lễ vật?",
-    "opt_a": "Vì rượu quá đặc",
-    "opt_b": "Tượng trưng Thiên Chúa Nhập Thể trong bản tính con người — thần tính kết hợp nhân tính",
-    "opt_c": "Đây là quy định vệ sinh",
-    "opt_d": "Để tiết kiệm rượu",
-    "correct_ans": 1,
-    "explanation": "Khi pha nước vào rượu, linh mục thầm đọc: '**Nhờ mầu nhiệm nước và rượu này, xin cho chúng con được thông phần bản tính thần linh của Đấng đã vui lòng dự phần bản tính yếu hèn của chúng con**.' Giọt nước nhỏ hòa vào rượu = **con người hòa vào thần tính Chúa** — mầu nhiệm Nhập Thể và Ơn Thần Hóa.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L06_N18",
-    "question": "Tại sao Lễ Giáng Sinh được mừng vào ngày 25/12 — có ý nghĩa biểu tượng gì?",
-    "opt_a": "Đây là ngày Chúa sinh ra được ghi trong Kinh Thánh",
-    "opt_b": "Giáo hội chọn ngày Đông Chí (ánh sáng mới bắt đầu tăng) — Chúa Kitô là Ánh Sáng đến thế gian",
-    "opt_c": "Đây là ngày bà Maria chọn",
-    "opt_d": "Do hoàng đế Constantine xác định",
-    "correct_ans": 1,
-    "explanation": "Kinh Thánh không ghi ngày sinh Chúa. Giáo hội chọn 25/12 gần **Đông Chí** — thời điểm ngày bắt đầu dài ra, ánh sáng tăng dần. Ý nghĩa biểu tượng: **Chúa Kitô là Ánh Sáng đến thế gian** khi đêm tối dài nhất — 'Ánh Sáng chiếu vào đêm tối, và đêm tối không thắng được' (Ga 1:5).",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L06_N19",
-    "question": "Sách Khải Huyền (Apocalypse) viết theo thể loại gì và có mục đích gì?",
-    "opt_a": "Tiên tri về ngày tận thế cụ thể",
-    "opt_b": "Văn học khải huyền — dùng biểu tượng để khích lệ người bị bách hại: Chúa đang thắng, đừng sợ",
-    "opt_c": "Lịch sử tương lai",
-    "opt_d": "Hướng dẫn ngày tận thế",
-    "correct_ans": 1,
-    "explanation": "Khải Huyền là **văn học khải huyền** (Apocalyptic Literature) — thể loại dùng ngôn ngữ biểu tượng giàu màu sắc để **khích lệ người bị bách hại dưới thời Đế quốc Roma**. Thông điệp trung tâm: 'Thiên Chúa đang thắng, Chúa Kitô là Chúa tể lịch sử — đừng bỏ cuộc!' Không phải lịch sử tương lai.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L06_N20",
-    "question": "Theo truyền thống, Thánh Giuse được nhớ đến qua câu nói nào duy nhất trong Kinh Thánh?",
-    "opt_a": "Thánh Giuse không có câu nào",
-    "opt_b": "Không có câu nào — Thánh Giuse không nói một lời nào trong toàn bộ Kinh Thánh",
-    "opt_c": "Ngài chỉ nói 'Xin vâng'",
-    "opt_d": "Ngài nói 'Con là dòng dõi Đavít'",
-    "correct_ans": 1,
-    "explanation": "Kinh Thánh **không ghi lại một lời nào của Thánh Giuse** — Ngài được biết đến qua hành động: vâng lệnh thiên thần, dẫn gia đình trốn sang Ai Cập, tìm con ở Đền Thờ. Thánh Giuse là người thánh thiện của **im lặng và hành động** — tấm gương thiêng liêng đặc biệt.",
-    "category": "kinh_thanh"
   }
 ]

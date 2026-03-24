@@ -1,5 +1,16 @@
 [
   {
+    "id": "L05_001",
+    "question": "Ngôn sứ Hôsê dùng hình ảnh gì để diễn tả mối quan hệ Thiên Chúa – Israel?",
+    "opt_a": "Thầy – trò",
+    "opt_b": "Chồng – vợ",
+    "opt_c": "Vua – thần dân",
+    "opt_d": "Cha – con nhỏ",
+    "correct_ans": 1,
+    "explanation": "Hôsê dùng hình ảnh **chồng–vợ**: Thiên Chúa trung thành, Israel bội nghĩa.",
+    "category": "kinh_thanh"
+  },
+  {
     "id": "L05_002",
     "question": "Sách Giảng Viên (Qoheleth) mở đầu bằng câu nổi tiếng nào?",
     "opt_a": "Khởi đầu, Thiên Chúa tạo dựng trời đất",
@@ -19,6 +30,17 @@
     "opt_d": "Ngôn sứ",
     "correct_ans": 2,
     "explanation": "Sách Huấn Ca thuộc nhóm **sách Khôn ngoan**, chỉ có trong bản Công giáo.",
+    "category": "kinh_thanh"
+  },
+  {
+    "id": "L05_004",
+    "question": "Kinh Thánh Công giáo có bao nhiêu sách mà Tin Lành không công nhận?",
+    "opt_a": "3",
+    "opt_b": "5",
+    "opt_c": "7",
+    "opt_d": "10",
+    "correct_ans": 2,
+    "explanation": "Có **7 sách đệ nhị quy điển** mà Tin Lành không công nhận: Tôbia, Giuđitha, 1-2 Macabê, Khôn Ngoan, Huấn Ca, Barúc.",
     "category": "kinh_thanh"
   },
   {
@@ -88,6 +110,28 @@
     "category": "phung_vu"
   },
   {
+    "id": "L05_011",
+    "question": "Ba bí tích nào chỉ được lãnh một lần duy nhất trong đời?",
+    "opt_a": "Thánh Thể, Hòa Giải, Xức Dầu",
+    "opt_b": "Rửa Tội, Thêm Sức, Truyền Chức Thánh",
+    "opt_c": "Rửa Tội, Hôn Phối, Xức Dầu",
+    "opt_d": "Tất cả 7 bí tích",
+    "correct_ans": 1,
+    "explanation": "**Rửa Tội, Thêm Sức, Truyền Chức** in dấu ấn thiêng liêng vĩnh viễn nên **chỉ lãnh 1 lần**.",
+    "category": "giao_ly"
+  },
+  {
+    "id": "L05_012",
+    "question": "Giáo hội chia thành 3 phần: chiến đấu, thanh luyện, vinh thắng. Điều này gọi là gì?",
+    "opt_a": "Ba Ngôi",
+    "opt_b": "Hiệp thông Các Thánh",
+    "opt_c": "Ba lời khấn",
+    "opt_d": "Ba nhân đức",
+    "correct_ans": 1,
+    "explanation": "**Hiệp thông Các Thánh** gồm: GH **chiến đấu** (trần gian), **thanh luyện** (luyện ngục), **vinh thắng** (thiên đàng).",
+    "category": "giao_ly"
+  },
+  {
     "id": "L05_013",
     "question": "Bí tích Hôn Phối — ai là thừa tác viên chính của bí tích?",
     "opt_a": "Linh mục",
@@ -97,6 +141,28 @@
     "correct_ans": 2,
     "explanation": "Trong nghi lễ Latin, **đôi tân hôn** là thừa tác viên chính; linh mục chỉ **chứng hôn**.",
     "category": "giao_ly"
+  },
+  {
+    "id": "L05_014",
+    "question": "Cuộc bách đạo của hoàng đế Nero nhắm vào Kitô hữu sau sự kiện nào?",
+    "opt_a": "Chiến tranh Do Thái",
+    "opt_b": "Vụ cháy lớn Roma năm 64",
+    "opt_c": "Nổi dậy của nô lệ",
+    "opt_d": "Sụp đổ Đền Thờ",
+    "correct_ans": 1,
+    "explanation": "Nero đổ lỗi cho Kitô hữu về **vụ cháy lớn Roma năm 64** để biện minh cho việc bách hại.",
+    "category": "lich_su"
+  },
+  {
+    "id": "L05_015",
+    "question": "Đền Thờ Jerusalem bị quân La Mã phá hủy năm nào?",
+    "opt_a": "586 TCN",
+    "opt_b": "70 SCN",
+    "opt_c": "167 TCN",
+    "opt_d": "135 SCN",
+    "correct_ans": 1,
+    "explanation": "Đền Thờ thứ 2 bị quân **La Mã dưới tướng Titus phá hủy năm 70 SCN**.",
+    "category": "lich_su"
   },
   {
     "id": "L05_016",
@@ -154,6 +220,17 @@
     "category": "giao_ly"
   },
   {
+    "id": "L05_021",
+    "question": "Nhà thờ đá Phát Diệm (Ninh Bình) do ai xây?",
+    "opt_a": "Cha Alexandre de Rhodes",
+    "opt_b": "Cha Trần Lục (Cụ Sáu)",
+    "opt_c": "Đức cha Puginier",
+    "opt_d": "Đức cha Lambert",
+    "correct_ans": 1,
+    "explanation": "Cha **Trần Lục (Cụ Sáu)** xây nhà thờ đá **Phát Diệm** theo kiến trúc Đông-Tây kết hợp.",
+    "category": "viet_nam"
+  },
+  {
     "id": "L05_022",
     "question": "Đức cha Nguyễn Bá Tòng là ai trong lịch sử GH Việt Nam?",
     "opt_a": "Vị thánh tử đạo đầu tiên",
@@ -162,6 +239,17 @@
     "opt_d": "Linh mục đầu tiên",
     "correct_ans": 1,
     "explanation": "Đức cha **Nguyễn Bá Tòng** (1868-1949) là **giám mục người Việt đầu tiên** (1933).",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L05_023",
+    "question": "Trung tâm hành hương La Vang được nâng lên hàng Vương cung Thánh đường năm nào?",
+    "opt_a": "1900",
+    "opt_b": "1961",
+    "opt_c": "1988",
+    "opt_d": "2000",
+    "correct_ans": 1,
+    "explanation": "La Vang được ĐGH Gioan XXIII nâng lên hàng **Vương cung Thánh đường năm 1961**.",
     "category": "viet_nam"
   },
   {
@@ -206,6 +294,72 @@
     "opt_d": "Tu sĩ",
     "correct_ans": 1,
     "explanation": "Thánh Anrê Dũng-Lạc là **linh mục** — tên ngài đại diện cho toàn nhóm 117 vị tử đạo.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L05_028",
+    "question": "Trong 117 Thánh Tử Đạo VN, có bao nhiêu giám mục?",
+    "opt_a": "5",
+    "opt_b": "8",
+    "opt_c": "11",
+    "opt_d": "15",
+    "correct_ans": 1,
+    "explanation": "Có **8 giám mục** (đều là người ngoại quốc: Pháp và Tây Ban Nha) trong 117 vị tử đạo.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L05_029",
+    "question": "Nhà thờ gỗ Kon Tum (Tây Nguyên) nổi tiếng vì điều gì?",
+    "opt_a": "Lớn nhất VN",
+    "opt_b": "Kiến trúc gỗ nhà rông kết hợp Gothic",
+    "opt_c": "Cổ nhất VN",
+    "opt_d": "Nơi ĐGH từng đến",
+    "correct_ans": 1,
+    "explanation": "Nhà thờ gỗ Kon Tum (1913) nổi tiếng vì kiến trúc **nhà rông Bahnar kết hợp Gothic** — độc đáo.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L05_030",
+    "question": "Nhà thờ Đức Bà Sài Gòn xây theo phong cách nào?",
+    "opt_a": "Gothic",
+    "opt_b": "Roman (Romanesque) kết hợp ảnh hưởng phương Tây",
+    "opt_c": "Baroque",
+    "opt_d": "Byzantine",
+    "correct_ans": 1,
+    "explanation": "Nhà thờ Đức Bà SG (1877-1880) xây theo phong cách **Roman** do kiến trúc sư Pháp J. Bourard.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L05_031",
+    "question": "Giáo phận/giáo hạt lâu đời nhất tại Việt Nam được thành lập năm nào?",
+    "opt_a": "1533",
+    "opt_b": "1659",
+    "opt_c": "1802",
+    "opt_d": "1850",
+    "correct_ans": 1,
+    "explanation": "Hai giáo phận **Đàng Trong và Đàng Ngoài** được Tòa Thánh thành lập năm **1659**.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L05_032",
+    "question": "Giáo hội Công giáo Việt Nam hiện có bao nhiêu giáo phận?",
+    "opt_a": "17",
+    "opt_b": "22",
+    "opt_c": "27",
+    "opt_d": "32",
+    "correct_ans": 2,
+    "explanation": "GH CG Việt Nam hiện có **27 giáo phận** chia thành 3 giáo tỉnh: Hà Nội, Huế, Sài Gòn.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L05_033",
+    "question": "Ba giáo tỉnh của Giáo hội Công giáo Việt Nam là gì?",
+    "opt_a": "Bắc, Trung, Nam",
+    "opt_b": "Hà Nội, Huế, Sài Gòn (TP.HCM)",
+    "opt_c": "Hà Nội, Đà Nẵng, Cần Thơ",
+    "opt_d": "Hải Phòng, Huế, Vũng Tàu",
+    "correct_ans": 1,
+    "explanation": "3 giáo tỉnh: **Hà Nội** (miền Bắc), **Huế** (miền Trung), **Sài Gòn** (miền Nam).",
     "category": "viet_nam"
   },
   {
@@ -297,6 +451,39 @@
     "category": "doi_song"
   },
   {
+    "id": "L05_042",
+    "question": "Con số 117 Thánh Tử Đạo VN gồm những thành phần nào?",
+    "opt_a": "Chỉ linh mục",
+    "opt_b": "8 GM, 50 LM, 59 giáo dân (gồm cả nữ)",
+    "opt_c": "Chỉ giáo dân",
+    "opt_d": "Chỉ tu sĩ",
+    "correct_ans": 1,
+    "explanation": "117 vị gồm: **8 giám mục, 50 linh mục, 59 giáo dân** — từ cả 3 miền Việt Nam.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L05_043",
+    "question": "Vua nào ban nhiều sắc chỉ cấm đạo khốc liệt nhất tại VN?",
+    "opt_a": "Gia Long",
+    "opt_b": "Minh Mạng và Tự Đức",
+    "opt_c": "Bảo Đại",
+    "opt_d": "Lê Thánh Tông",
+    "correct_ans": 1,
+    "explanation": "Vua **Minh Mạng** (1820-1840) và **Tự Đức** (1847-1883) ban nhiều **sắc chỉ cấm đạo** khốc liệt nhất.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L05_044",
+    "question": "Thánh Philipphê Phan Văn Minh (tử đạo VN) chịu hình phạt gì?",
+    "opt_a": "Hỏa thiêu",
+    "opt_b": "Trảm quyết (chém đầu)",
+    "opt_c": "Bị ném đá",
+    "opt_d": "Thập giá",
+    "correct_ans": 1,
+    "explanation": "Linh mục **Philipphê Phan Văn Minh** chịu án **trảm quyết** ngày 3/7/1853 tại Đình Khao (Vĩnh Long).",
+    "category": "viet_nam"
+  },
+  {
     "id": "L05_045",
     "question": "Chúa Giêsu chữa bao nhiêu người phong cùi cùng lúc, và mấy người quay lại tạ ơn?",
     "opt_a": "5 người, 2 quay lại",
@@ -305,6 +492,17 @@
     "opt_d": "12 người, 4 quay lại",
     "correct_ans": 1,
     "explanation": "Chúa chữa **10 người phong**, chỉ **1 người** (người Samaria) quay lại tạ ơn (Lc 17:11-19).",
+    "category": "kinh_thanh"
+  },
+  {
+    "id": "L05_046",
+    "question": "Dakêô leo lên cây gì để nhìn Chúa Giêsu?",
+    "opt_a": "Cây ô-liu",
+    "opt_b": "Cây sung",
+    "opt_c": "Cây nho",
+    "opt_d": "Cây vả",
+    "correct_ans": 1,
+    "explanation": "**Dakêô** leo lên **cây sung** ở Giêricô vì ông nhỏ con (Lc 19:1-10).",
     "category": "kinh_thanh"
   },
   {
@@ -339,6 +537,39 @@
     "correct_ans": 1,
     "explanation": "Người cha chạy ra ôm con, cho **áo đẹp, nhẫn, dép mới, giết bê béo** ăn mừng (Lc 15:22-23).",
     "category": "kinh_thanh"
+  },
+  {
+    "id": "L05_050",
+    "question": "Trận Lepanto (1571) liên quan đến Kinh Mân Côi thế nào?",
+    "opt_a": "Không liên quan",
+    "opt_b": "ĐGH Piô V kêu gọi cầu Mân Côi, sau đó lập lễ mừng",
+    "opt_c": "Kinh Mân Côi được viết tại Lepanto",
+    "opt_d": "Bị cấm sau trận này",
+    "correct_ans": 1,
+    "explanation": "**ĐGH Piô V** kêu gọi cầu nguyện Mân Côi, sau chiến thắng đã **thiết lập lễ Đức Mẹ Mân Côi** (7/10).",
+    "category": "lich_su"
+  },
+  {
+    "id": "L05_051",
+    "question": "Vua Henry VIII tách Anh giáo khỏi Roma vì lý do gì?",
+    "opt_a": "Bất đồng thần học",
+    "opt_b": "ĐGH không cho phép ly hôn Catherine of Aragon",
+    "opt_c": "Chiến tranh",
+    "opt_d": "Kinh tế",
+    "correct_ans": 1,
+    "explanation": "**Henry VIII** tách Anh giáo năm 1534 vì ĐGH **không cho phép ly hôn** Catherine of Aragon.",
+    "category": "lich_su"
+  },
+  {
+    "id": "L05_052",
+    "question": "Năm Thánh (Jubilee) trong GH diễn ra mỗi bao lâu?",
+    "opt_a": "10 năm",
+    "opt_b": "25 năm",
+    "opt_c": "50 năm",
+    "opt_d": "100 năm",
+    "correct_ans": 1,
+    "explanation": "Năm Thánh thường diễn ra **mỗi 25 năm** (có thể có Năm Thánh ngoại thường).",
+    "category": "doi_song"
   },
   {
     "id": "L05_053",
@@ -404,6 +635,17 @@
     "opt_d": "Ta là con Ábraham",
     "correct_ans": 1,
     "explanation": "'**Ego eimi**' = Danh Thiên Chúa (Xh 3:14). Khi Chúa Giêsu dùng, Ngài tuyên bố **mình là Thiên Chúa**.",
+    "category": "kinh_thanh"
+  },
+  {
+    "id": "L05_059",
+    "question": "Thánh Phaolô viết thư Philíphi từ đâu?",
+    "opt_a": "Antiôkia",
+    "opt_b": "Trong tù (nhiều khả năng là Roma)",
+    "opt_c": "Đảo Malta",
+    "opt_d": "Êphêsô",
+    "correct_ans": 1,
+    "explanation": "Thư Philíphi được viết **trong tù**, vì thế nó còn được gọi là 'thư ngục tù' dù đầy niềm vui.",
     "category": "kinh_thanh"
   },
   {
@@ -539,6 +781,28 @@
     "category": "lich_su"
   },
   {
+    "id": "L05_072",
+    "question": "Martin Luther đăng '95 luận điểm' ở đâu?",
+    "opt_a": "Trước Giáo Hoàng tại Roma",
+    "opt_b": "Trên cửa nhà thờ Wittenberg",
+    "opt_c": "Tại Công đồng Trentô",
+    "opt_d": "Tại Đại học Paris",
+    "correct_ans": 1,
+    "explanation": "Martin Luther đăng 95 luận điểm trên **cửa nhà thờ Wittenberg** ngày 31/10/1517 — khởi đầu Cải Cách.",
+    "category": "lich_su"
+  },
+  {
+    "id": "L05_073",
+    "question": "Tại sao Thập Tự Chinh đầu tiên được phát động?",
+    "opt_a": "Chinh phục thương mại",
+    "opt_b": "Giải phóng Đất Thánh khỏi tay Hồi giáo",
+    "opt_c": "Trừng phạt Byzantium",
+    "opt_d": "Thống nhất châu Âu",
+    "correct_ans": 1,
+    "explanation": "Thập Tự Chinh I phát động năm 1096 bởi ĐGH Urbanô II nhằm **giải phóng Jerusalem** khỏi tay Hồi giáo.",
+    "category": "lich_su"
+  },
+  {
     "id": "L05_074",
     "question": "Phong trào Cải Cách Tin Lành dẫn đến điều gì trong Giáo hội?",
     "opt_a": "GH Công giáo đoàn kết hơn",
@@ -580,6 +844,39 @@
     "opt_d": "Hãy xây nhà thờ",
     "correct_ans": 1,
     "explanation": "Theo truyền thống, Đức Mẹ an ủi: **'Hãy tin tưởng, cầu nguyện và đừng sợ'** — khích lệ giáo dân đang trốn bách hại.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L05_078",
+    "question": "117 Thánh Tử Đạo VN đến từ những quốc gia nào?",
+    "opt_a": "Chỉ người Việt",
+    "opt_b": "Việt Nam, Pháp và Tây Ban Nha",
+    "opt_c": "Việt Nam và Bồ Đào Nha",
+    "opt_d": "Việt Nam và Roma",
+    "correct_ans": 1,
+    "explanation": "117 vị gồm người **Việt Nam, Pháp** (MEP) và **Tây Ban Nha** (Dòng Đa Minh).",
+    "category": "viet_nan"
+  },
+  {
+    "id": "L05_079",
+    "question": "Ngày lễ kính Các Thánh Tử Đạo Việt Nam là ngày mấy?",
+    "opt_a": "19 tháng 6",
+    "opt_b": "24 tháng 11",
+    "opt_c": "1 tháng 11",
+    "opt_d": "8 tháng 12",
+    "correct_ans": 1,
+    "explanation": "Lễ kính 117 Thánh TĐVN: **24 tháng 11** (19/6 là ngày phong thánh tại Roma năm 1988).",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L05_080",
+    "question": "Nhà thờ đá Phát Diệm đặc biệt về kiến trúc thế nào?",
+    "opt_a": "Gothic thuần túy",
+    "opt_b": "Kết hợp kiến trúc Đông Á (đình làng) và phương Tây",
+    "opt_c": "Kiểu Byzantine",
+    "opt_d": "Kiến trúc hiện đại",
+    "correct_ans": 1,
+    "explanation": "Phát Diệm nổi tiếng vì kiến trúc **kết hợp Đông-Tây**: mái đình làng Việt Nam với cấu trúc nhà thờ CG.",
     "category": "viet_nam"
   },
   {
@@ -800,281 +1097,6 @@
     "opt_d": "Amen — Xin vâng",
     "correct_ans": 1,
     "explanation": "**Kyrie eleison** (tiếng Hy Lạp) = **'Lạy Chúa xin thương xót'** — lời van xin thứ tha mở đầu Thánh Lễ.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N01",
-    "question": "Trong Thánh Lễ, câu 'Hãy đến, hỡi mọi người' hay 'Lễ xong, hãy ra về bình an' — có ý nghĩa nghi thức gì?",
-    "opt_a": "Kết thúc buổi họp",
-    "opt_b": "Sai đi (missio) — tên gọi 'Thánh Lễ' (Missa) xuất phát từ đây — được sai vào thế giới",
-    "opt_c": "Lời chào tạm biệt thông thường",
-    "opt_d": "Báo hiệu hết giờ",
-    "correct_ans": 1,
-    "explanation": "Từ **Missa** (Thánh Lễ) chính là gốc của từ 'Mission' — sứ mạng. Lời giải tán '**Lễ xong, hãy ra về bình an**' không phải kết thúc — mà là **sai đi** để mang Tin Mừng vào cuộc sống. Thánh Lễ kết thúc không phải trên ghế nhà thờ mà giữa đời thường.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N02",
-    "question": "Trong Thánh Lễ, phần 'Phụng Vụ Lời Chúa' và 'Phụng Vụ Thánh Thể' có mối quan hệ thế nào?",
-    "opt_a": "Hai phần độc lập, có thể bỏ một phần",
-    "opt_b": "Hai bàn tiệc — bàn Lời Chúa và bàn Mình Máu Thánh — cùng nuôi dưỡng người tín hữu",
-    "opt_c": "Phụng Vụ Lời Chúa chỉ là phần giới thiệu",
-    "opt_d": "Chỉ Phụng Vụ Thánh Thể mới quan trọng",
-    "correct_ans": 1,
-    "explanation": "Vatican II dạy Thánh Lễ có **hai bàn tiệc**: **bàn Lời Chúa** (Sách Thánh, Giảng) và **bàn Mình Máu Thánh** (Thánh Thể) — cả hai đều nuôi dưỡng người tín hữu và không thể thiếu nhau (SC 51).",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N03",
-    "question": "Kinh Tiền Tụng (Preface) trong Thánh Lễ mở đầu cuộc đối thoại nào?",
-    "opt_a": "Linh mục đọc lời nguyện riêng",
-    "opt_b": "Cuộc đối thoại 'Chúa ở cùng anh chị em / Và ở cùng cha' trước Kinh Tạ Ơn",
-    "opt_c": "Bài đọc Kinh Thánh",
-    "opt_d": "Lời nguyện giáo dân",
-    "correct_ans": 1,
-    "explanation": "Kinh Tiền Tụng mở đầu bằng đối thoại thiêng liêng: '**Chúa ở cùng anh chị em / Và ở cùng cha / Hãy nâng tâm hồn lên / Chúng con đang hướng về Chúa...**' — dẫn vào Kinh Nguyện Thánh Thể — cao điểm của Thánh Lễ.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N04",
-    "question": "Kinh 'Sanctus' (Thánh, Thánh, Thánh) trong Thánh Lễ được trích từ đâu?",
-    "opt_a": "Bài Giảng Trên Núi",
-    "opt_b": "Thị kiến Isaia (Is 6) và lời hoan hô khi Chúa vào Jerusalem (Mt 21)",
-    "opt_c": "Thánh Vịnh 150",
-    "opt_d": "Sách Khải Huyền",
-    "correct_ans": 1,
-    "explanation": "**Sanctus** kết hợp hai nguồn: '**Thánh, Thánh, Thánh**' từ thị kiến của Isaia trước ngai Chúa (Is 6:3) và '**Hoan hô Con Đavít!**' từ dân chúng khi Chúa vào Jerusalem (Mt 21:9) — trời đất hợp tiếng ca tụng.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N05",
-    "question": "Trong nghi thức Rửa Tội, nước được đổ mấy lần và nói gì?",
-    "opt_a": "1 lần, linh mục cầu nguyện",
-    "opt_b": "3 lần trên đầu — nhân danh Cha, Con và Thánh Thần — theo lệnh Chúa Giêsu",
-    "opt_c": "7 lần theo truyền thống",
-    "opt_d": "1 lần nhúng ngập trong bể",
-    "correct_ans": 1,
-    "explanation": "Thừa tác viên đổ nước **3 lần** trên đầu (hoặc nhúng 3 lần) kèm lời: '**tôi rửa tươi nhân danh Cha, và Con, và Thánh Thần**' — ba lần tương ứng Ba Ngôi, theo lệnh Chúa Giêsu (Mt 28:19).",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N06",
-    "question": "Lời Kinh 'Agnus Dei' (Lạy Chiên Thiên Chúa) trong Thánh Lễ được đọc/hát khi nào và ý nghĩa là gì?",
-    "opt_a": "Đầu Lễ — xin tha tội",
-    "opt_b": "Lúc bẻ bánh — xin Chúa thương xót và ban bình an trước khi rước lễ",
-    "opt_c": "Sau bài đọc — tôn vinh Chúa",
-    "opt_d": "Cuối Lễ — cảm tạ",
-    "correct_ans": 1,
-    "explanation": "'**Lạy Chiên Thiên Chúa, Ngài xóa tội trần gian: xin thương xót chúng con... ban bình an cho chúng con**' — đọc trong lúc **bẻ bánh**, trước rước lễ. 'Chiên Thiên Chúa' là danh hiệu Gioan Tẩy Giả gọi Chúa Giêsu (Ga 1:29).",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N07",
-    "question": "Câu tung hô sau truyền phép 'Lạy Chúa, chúng con loan truyền việc Chúa chịu chết...' có ý nghĩa gì?",
-    "opt_a": "Nhắc nhở sự chết của Chúa",
-    "opt_b": "Tuyên xưng mầu nhiệm đức tin — ký ức Tử Nạn, Phục Sinh và mong chờ ngày Chúa đến",
-    "opt_c": "Lời than khóc vì Chúa đã chết",
-    "opt_d": "Kết thúc phần Kinh Nguyện Thánh Thể",
-    "correct_ans": 1,
-    "explanation": "Đây là **'Mầu Nhiệm Đức Tin'** (Mysterium Fidei) — còn gọi là Tung Hô Tưởng Niệm. Toàn cộng đoàn công bố trọng tâm đức tin: **Chúa đã chết, Chúa đã sống lại, Chúa sẽ lại đến**. Ba chiều thời gian: quá khứ, hiện tại, tương lai.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N08",
-    "question": "Kinh Mân Côi — 'một chục' gồm những gì?",
-    "opt_a": "10 kinh Lạy Cha",
-    "opt_b": "1 Kinh Lạy Cha, 10 Kinh Kính Mừng, 1 Kinh Sáng Danh và suy ngẫm 1 Mầu Nhiệm",
-    "opt_c": "10 Kinh Kính Mừng",
-    "opt_d": "5 Kinh Lạy Cha và 5 Kinh Kính Mừng",
-    "correct_ans": 1,
-    "explanation": "Một **chục Mân Côi** gồm: **1 Kinh Lạy Cha + 10 Kinh Kính Mừng + 1 Kinh Sáng Danh** + suy ngẫm 1 Mầu Nhiệm. Đọc 5 chục = 1 chuỗi Mân Côi đầy đủ 1 nhóm mầu nhiệm.",
-    "category": "kinh_nguyen"
-  },
-  {
-    "id": "L05_N09",
-    "question": "Kinh Kính Mừng (Ave Maria) được ghép từ hai nguồn Kinh Thánh nào?",
-    "opt_a": "Lời Thiên Thần chào Đức Mẹ (Lc 1:28) và lời bà Êlisabét (Lc 1:42)",
-    "opt_b": "Kinh Magnificat và lời Gioan Tẩy Giả",
-    "opt_c": "Lời Thánh Giuse và lời Thánh Gioan",
-    "opt_d": "Thánh Vịnh 45 và bài Diễm Ca",
-    "correct_ans": 0,
-    "explanation": "Phần đầu Kinh Kính Mừng ghép hai câu Kinh Thánh: '**Kính mừng Maria đầy ơn phúc, Đức Chúa Trời ở cùng Bà**' (lời Thiên Thần, Lc 1:28) và '**Bà được chúc phúc hơn mọi người nữ và Giêsu con lòng Bà gồm phúc lạ**' (lời bà Êlisabét, Lc 1:42).",
-    "category": "kinh_nguyen"
-  },
-  {
-    "id": "L05_N10",
-    "question": "Kinh Truyền Tin (Angelus) được đọc vào những thời điểm nào trong ngày?",
-    "opt_a": "Chỉ buổi sáng",
-    "opt_b": "Sáng 6h, trưa 12h, chiều 18h — khi chuông nhà thờ đổ",
-    "opt_c": "Trước và sau bữa ăn",
-    "opt_d": "Chỉ tối",
-    "correct_ans": 1,
-    "explanation": "Kinh Truyền Tin đọc **3 lần mỗi ngày** khi nghe chuông nhà thờ: **sáng 6h, trưa 12h, tối 6h**. Nhắc nhớ mầu nhiệm Nhập Thể qua lời Thiên Thần và lời Đức Mẹ 'Xin Vâng'. Trong Mùa Phục Sinh thay bằng Kinh **Regina Caeli**.",
-    "category": "kinh_nguyen"
-  },
-  {
-    "id": "L05_N11",
-    "question": "Kinh Thương Xót (Lòng Chúa Thương Xót) liên quan đến vị thánh nào và sứ điệp gì?",
-    "opt_a": "Thánh Phanxicô Assisi — sứ điệp nghèo khó",
-    "opt_b": "Thánh Faustina Kowalska — sứ điệp Lòng Thương Xót Chúa ban mọi người",
-    "opt_c": "Thánh Têrêsa Avila — sứ điệp chiêm niệm",
-    "opt_d": "Thánh Gioan Vianney — sứ điệp xưng tội",
-    "correct_ans": 1,
-    "explanation": "Kinh Lòng Thương Xót ('Vì cuộc Khổ Nạn đau thương của Chúa Giêsu...') gắn với **Thánh Faustina** (Ba Lan). Chúa Giêsu hiện ra với ngài và trao sứ điệp: **Lòng Thương Xót là phao cứu sinh lớn nhất** — mời mọi người chạy đến với Chúa dù tội lỗi thế nào.",
-    "category": "kinh_nguyen"
-  },
-  {
-    "id": "L05_N12",
-    "question": "Kinh cầu các Thánh (Litany of Saints) thường được sử dụng khi nào trong phụng vụ?",
-    "opt_a": "Mỗi Thánh Lễ Chúa Nhật",
-    "opt_b": "Lễ Vọng Phục Sinh, Lễ truyền chức, Lễ khấn dòng, và cầu nguyện cho người hấp hối",
-    "opt_c": "Chỉ Lễ Các Thánh Nam Nữ",
-    "opt_d": "Mỗi ngày trong Mùa Chay",
-    "correct_ans": 1,
-    "explanation": "Kinh Cầu Các Thánh đặc biệt dùng trong: **Đêm Vọng Phục Sinh** (trước Làm Phép Nước), **Lễ Truyền Chức**, **Lễ Khấn Dòng** (người được phong hoặc khấn nằm sấp trong khi đọc), và **nghi thức cầu nguyện cho người hấp hối**.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N13",
-    "question": "Bài thánh ca 'Đây Nhiệm Tích Lạ Lùng' (Tantum Ergo) dùng trong nghi thức nào?",
-    "opt_a": "Thánh Lễ Giáng Sinh",
-    "opt_b": "Chầu Thánh Thể và Benediction — do Thánh Tôma Aquinô soạn",
-    "opt_c": "Lễ Rước Lá",
-    "opt_d": "Nghi thức an táng",
-    "correct_ans": 1,
-    "explanation": "**Tantum Ergo** ('Đây Nhiệm Tích') là 2 khổ cuối của bài thơ *Pange Lingua* do **Thánh Tôma Aquinô** soạn thế kỷ 13. Được hát khi **Chầu Thánh Thể và Ban Phép Lành Thánh Thể (Benediction)** — một trong những thánh ca phụng vụ đẹp nhất.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N14",
-    "question": "Bài 'Kinh Cầu Đức Bà' (Litany of Loreto) gọi Đức Mẹ bằng nhiều danh hiệu — danh hiệu nào có nghĩa 'Mẹ đã đón nhận ân sủng đầy tràn không chút khiếm khuyết'?",
-    "opt_a": "Đức Mẹ Hằng Cứu Giúp",
-    "opt_b": "Đức Bà Vô Nhiễm Nguyên Tội",
-    "opt_c": "Đức Bà rất Thánh",
-    "opt_d": "Đức Bà Mân Côi",
-    "correct_ans": 1,
-    "explanation": "'**Đức Bà Vô Nhiễm Nguyên Tội**' (Immaculata) diễn tả đặc ân Đức Mẹ được gìn giữ khỏi tội nguyên tổ ngay từ đầu thai — đón nhận ân sủng trọn vẹn để trở thành Mẹ Thiên Chúa. Tín điều được công bố năm 1854.",
-    "category": "kinh_nguyen"
-  },
-  {
-    "id": "L05_N15",
-    "question": "Nghi thức 'Rửa Chân' (Mandatum) trong Thứ Năm Tuần Thánh có ý nghĩa thực hành gì?",
-    "opt_a": "Nhắc nhở vệ sinh",
-    "opt_b": "Làm lại hành động Chúa Giêsu: người lớn nhất phải là người phục vụ — mô hình lãnh đạo của Kitô giáo",
-    "opt_c": "Nghi lễ thanh tẩy cho Phục Sinh",
-    "opt_d": "Tôn vinh 12 Tông Đồ",
-    "correct_ans": 1,
-    "explanation": "Chúa Giêsu rửa chân và nói: '**Thầy là Chúa mà rửa chân cho anh em, thì anh em cũng phải rửa chân cho nhau**' (Ga 13:14). Nghi thức **Mandatum** (= lệnh truyền) thách thức mô hình quyền lực: người có thẩm quyền phục vụ người nhỏ hơn — không phải ngược lại.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N16",
-    "question": "Nghi thức 'Hôn kính Thập Giá' (Adoratio Crucis) trong Thứ Sáu Tuần Thánh có ý nghĩa gì?",
-    "opt_a": "Tưởng nhớ lịch sử",
-    "opt_b": "Bày tỏ lòng biết ơn và tình yêu với Chúa đã chết vì mình — hành động tôn thờ cá nhân trước Thập Giá cứu độ",
-    "opt_c": "Làm phép Thập Giá mới",
-    "opt_d": "Nghi thức bắt buộc không có ý nghĩa sâu xa",
-    "correct_ans": 1,
-    "explanation": "Hôn Thập Giá là hành động **tôn thờ và tạ ơn cá nhân** — không thờ gỗ hay kim loại, mà tôn thờ Chúa Giêsu đã chịu chết trên Thập Giá này vì mình. Đây là khoảnh khắc thinh lặng và gặp gỡ riêng tư nhất trong phụng vụ năm.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N17",
-    "question": "Thánh Vịnh 23 (22 theo Kinh Thánh Do Thái) nổi tiếng với hình ảnh nào?",
-    "opt_a": "Chúa là vua quyền uy",
-    "opt_b": "Chúa là Mục tử — chăn dắt, dẫn dường, đồng hành qua thung lũng tối tăm",
-    "opt_c": "Chúa là pháo đài kiên cố",
-    "opt_d": "Chúa là Đấng Sáng Tạo",
-    "correct_ans": 1,
-    "explanation": "'**Chúa là mục tử chăn dắt tôi, tôi chẳng thiếu thốn gì...**' (TV 23) — bài ca yêu thích nhất trong phụng vụ đám tang và chữa lành. Đặc biệt câu: '**Dầu qua lũng tối tăm, con sợ gì nguy khốn, vì có Chúa ở cùng**' — đồng hành trong đau khổ.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L05_N18",
-    "question": "Thánh Vịnh 51 (50) 'Lạy Chúa xin thương con' — Đavít viết trong hoàn cảnh nào?",
-    "opt_a": "Sau khi chiến thắng Gôliát",
-    "opt_b": "Sau khi phạm tội ngoại tình với Batseba và giết chồng bà — đây là bài sám hối điển hình nhất",
-    "opt_c": "Khi trốn vua Saul",
-    "opt_d": "Khi xây Đền Thờ",
-    "correct_ans": 1,
-    "explanation": "Đavít viết TV 51 sau khi ngôn sứ **Nathan vạch tội** ngoại tình và giết người (2Sm 12). Câu '**Tội lỗi con, chính con biết rõ**' + '**Xin tạo cho con tấm lòng trong sạch**' — là bài ăn năn chân thành nhất, dùng trong Kinh Sáng và đầu Thánh Lễ Mùa Chay.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L05_N19",
-    "question": "Trong phụng vụ giờ kinh (Liturgy of the Hours / Kinh Nhật Tụng), 'Kinh Sáng' và 'Kinh Chiều' đặc biệt vì sao?",
-    "opt_a": "Dài hơn các giờ kinh khác",
-    "opt_b": "Hai 'bản lề' của ngày — được coi là cột trụ và quan trọng nhất trong toàn bộ Kinh Nhật Tụng",
-    "opt_c": "Chỉ dành cho linh mục",
-    "opt_d": "Dành cho người không thể đi Lễ",
-    "correct_ans": 1,
-    "explanation": "**Kinh Sáng** (Lauds) và **Kinh Chiều** (Vespers) được Vatican II gọi là **'bản lề ngày'** — quan trọng nhất. Kinh Sáng thánh hiến bình minh ngày mới cho Chúa; Kinh Chiều tạ ơn cuối ngày. Tu sĩ và linh mục buộc đọc — giáo dân được khuyến khích.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N20",
-    "question": "Bài thánh ca 'Kinh Hòa Bình' (Make Me a Channel of Your Peace) được gán cho ai?",
-    "opt_a": "Thánh Gioan Vianney",
-    "opt_b": "Thánh Phanxicô Assisi — dù nguồn gốc bài thơ phức tạp hơn",
-    "opt_c": "Thánh Inhaxiô Loyola",
-    "opt_d": "ĐGH Piô X",
-    "correct_ans": 1,
-    "explanation": "'**Lạy Chúa, xin hãy dùng con như khí cụ bình an của Chúa...**' — truyền thống gán cho **Thánh Phanxicô Assisi**, dù các nhà nghiên cứu cho thấy bài thơ xuất hiện đầu thế kỷ 20. Bài thơ tóm tắt tinh thần Phanxicô: yêu thương, tha thứ, phục vụ.",
-    "category": "thanh_ca"
-  },
-  {
-    "id": "L05_N21",
-    "question": "'Alleluia' — từ gốc Do Thái Cổ — có nghĩa gì?",
-    "opt_a": "Amen — Xin Vâng",
-    "opt_b": "Hallelujah = Hãy ca ngợi Đức Chúa (Hallel + Jah/Yahweh)",
-    "opt_c": "Hosanna — Xin cứu độ",
-    "opt_d": "Maranatha — Lạy Chúa, xin hãy đến",
-    "correct_ans": 1,
-    "explanation": "**Alleluia / Hallelujah** = ghép của **'Hallel'** (ca ngợi) + **'Jah'** (viết tắt Yahweh — Đức Chúa). Đây là lời tung hô vui mừng nhất trong phụng vụ — đặc biệt trong Mùa Phục Sinh. Vì vậy trong Mùa Chay, Alleluia bị bỏ để tăng cường sự chờ đợi.",
-    "category": "kinh_nguyen"
-  },
-  {
-    "id": "L05_N22",
-    "question": "'Hosanna' — tiếng kêu khi Chúa vào Jerusalem — nghĩa gốc là gì?",
-    "opt_a": "Ca ngợi Chúa",
-    "opt_b": "Xin hãy cứu — lời cầu cứu biến thành tung hô",
-    "opt_c": "Chúa đến rồi",
-    "opt_d": "Chúc Chúa sống mãi",
-    "correct_ans": 1,
-    "explanation": "'**Hosanna**' (tiếng Do Thái: *Hoshiah na* = **Xin hãy cứu chúng tôi**) ban đầu là lời kêu cứu. Nhưng khi đám đông hô lên với Chúa Giêsu, nó trở thành lời **tung hô và thừa nhận Chúa là Đấng Cứu Độ**. Đây là nghịch lý: lời xin cứu trở thành bài ca chiến thắng.",
-    "category": "kinh_nguyen"
-  },
-  {
-    "id": "L05_N23",
-    "question": "'Amen' — từ giáo dân thường nói — thực ra có ý nghĩa sâu nào?",
-    "opt_a": "Kết thúc lời kinh",
-    "opt_b": "Con xác nhận, chấp nhận và muốn điều này thành sự thật — lời tham gia chủ động",
-    "opt_c": "Vâng theo linh mục",
-    "opt_d": "Cảm ơn Chúa",
-    "correct_ans": 1,
-    "explanation": "'**Amen**' từ tiếng Do Thái/Aramaic = **xác tín, chắc chắn là thật**. Khi giáo dân nói 'Amen' sau lời nguyện, đó không phải kết thúc mà là **lời ký nhận** — 'Con đồng ý, con tham gia, con muốn điều này!'. Đặc biệt quan trọng khi nói 'Amen' trước khi rước lễ.",
-    "category": "kinh_nguyen"
-  },
-  {
-    "id": "L05_N24",
-    "question": "Thánh Vịnh nào được hay dùng nhất trong phụng vụ an táng và tại sao?",
-    "opt_a": "TV 1 — người công chính được thưởng",
-    "opt_b": "TV 23 — Chúa là Mục tử đồng hành qua lũng tử thần, và TV 130 — từ vực sâu con kêu lên Chúa",
-    "opt_c": "TV 150 — Hãy ca ngợi Chúa",
-    "opt_d": "TV 51 — Xin thương xót con",
-    "correct_ans": 1,
-    "explanation": "Trong phụng vụ an táng, hay dùng nhất là: **TV 23** ('Chúa là Mục tử... Dầu qua lũng tối tăm, con sợ gì...') và **TV 130** (De Profundis: '**Từ vực sâu con kêu lên Chúa, lạy Chúa xin nghe tiếng con**') — đây là Thánh Vịnh Sám Hối thứ 6 trong 7 TV Sám Hối.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L05_N25",
-    "question": "Kinh Vinh Danh (Gloria in Excelsis) trong Thánh Lễ — câu đầu tiên xuất phát từ đâu?",
-    "opt_a": "Thánh Vịnh 148",
-    "opt_b": "Lời Thiên Thần hát khi loan báo Giáng Sinh cho các mục đồng (Lc 2:14)",
-    "opt_c": "Sách Isaia chương 6",
-    "opt_d": "Bài ca Magnificat",
-    "correct_ans": 1,
-    "explanation": "'**Vinh danh Thiên Chúa trên các tầng trời, bình an dưới thế cho người thiện tâm**' (Lc 2:14) — lời Thiên Thần hát đêm Giáng Sinh. Kinh Gloria của Thánh Lễ mở đầu từ đó rồi phát triển thành bài tụng ca dài ca ngợi Ba Ngôi. Không đọc trong Mùa Vọng và Mùa Chay.",
     "category": "phung_vu"
   }
 ]

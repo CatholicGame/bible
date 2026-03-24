@@ -1,11 +1,13 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import PinnacleLeaderboard from './PinnacleLeaderboard';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, ArrowLeft, ChevronLeft, CheckCircle2, XCircle, Play, Phone, Users, Shield, RefreshCcw, Flag, Star, UserCircle2 } from 'lucide-react';
+import { Trophy, ArrowLeft, ChevronLeft, CheckCircle2, XCircle, Play, Phone, Users, Shield, RefreshCcw, Flag, Star, UserCircle2, Settings } from 'lucide-react';
 import { usePlayFabStore } from '../../store/playfabStore';
 import { useUserStore } from '../../store/userStore';
 import { getRankByScore, getRankLevel } from '../../utils/ranks';
+import { useSoundManager } from '../../utils/soundManager';
+import SettingsModal from '../common/SettingsModal';
 import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.png';
 import mcAvatar from '../../assets/pinnacle/MC.png';
 import pointUpSfx from '../../assets/games/SFX/point_up.wav';
@@ -361,7 +363,8 @@ const LifelineButton = ({ icon: Icon, text, isUsed, disabled, onClick, active })
 // ─────────────────────────────────────────────────────────────────────────────
 // Lobby Screen — shown first when player opens PinnacleGame
 // ─────────────────────────────────────────────────────────────────────────────
-const LobbyScreen = ({ onPlay, onShowLeaderboard, onLeaveGame, nickname, giaoxu, tinhthanh }) => {
+// Lobby Screen
+const LobbyScreen = ({ onPlay, onShowLeaderboard, onLeaveGame, onSettings, onPlayClick, nickname, giaoxu, tinhthanh, saveProfile }) => {
     const { globalScore, coins } = useUserStore();
     const answeredQuestions = usePlayFabStore(s => s.answeredQuestions);
     const rankName = getRankByScore(globalScore || 0);
@@ -377,7 +380,14 @@ const LobbyScreen = ({ onPlay, onShowLeaderboard, onLeaveGame, nickname, giaoxu,
             className="m-auto max-w-sm w-full flex flex-col gap-3 my-auto"
         >
             {/* Game title card */}
-            <div className="bg-[#1e3a8a]/80 backdrop-blur-sm rounded-2xl border-2 border-blue-400/40 p-5 text-center shadow-xl">
+            <div className="bg-[#1e3a8a]/80 backdrop-blur-sm rounded-2xl border-2 border-blue-400/40 p-5 text-center shadow-xl relative">
+                {/* Settings gear — top right */}
+                <button onClick={() => { onPlayClick?.(); onSettings?.(); }}
+                    className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center"
+                    style={{ background: 'rgba(255,255,255,0.1)', border: '1.5px solid rgba(255,255,255,0.2)' }}
+                    aria-label="Cài đặt">
+                    <Settings size={14} color="#93c5fd" strokeWidth={2.5} />
+                </button>
                 <div className="text-4xl mb-1">🎓</div>
                 <h1 className="text-2xl font-black text-yellow-300 uppercase tracking-widest mb-0.5"
                     style={{ textShadow: '0 3px 0 #78350f' }}>
@@ -389,7 +399,7 @@ const LobbyScreen = ({ onPlay, onShowLeaderboard, onLeaveGame, nickname, giaoxu,
             {/* Action buttons */}
             <div className="flex gap-2">
                 <button
-                    onClick={onPlay}
+                    onClick={() => { onPlayClick?.(); onPlay(); }}
                     className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-wider text-base py-4 rounded-2xl border-4 border-[#1e3a8a] shadow-[0_5px_0_rgba(30,58,138,1)] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 relative overflow-hidden group"
                 >
                     <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-xl" />
@@ -397,7 +407,7 @@ const LobbyScreen = ({ onPlay, onShowLeaderboard, onLeaveGame, nickname, giaoxu,
                     <span className="relative z-10">Chơi ngay</span>
                 </button>
                 <button
-                    onClick={onShowLeaderboard}
+                    onClick={() => { onPlayClick?.(); onShowLeaderboard(); }}
                     className="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-wider text-base py-4 rounded-2xl border-4 border-purple-900 shadow-[0_5px_0_rgba(88,28,135,1)] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 relative overflow-hidden group"
                 >
                     <div className="absolute top-0 left-0 w-full h-1/2 bg-white/15 pointer-events-none rounded-t-xl" />
@@ -457,8 +467,9 @@ const PinnacleGame = ({ onLeaveGame }) => {
         hallOfFame, hallOfFameLoading, loadHallOfFame,
         nickname, giaoxu, tinhthanh, saveProfile,
     } = usePlayFabStore();
-    const [gameState, setGameState] = useState('lobby'); // 'lobby', 'rules', 'playing', 'finished', 'leaderboard'
-    const [leaderboardSource, setLeaderboardSource] = useState('lobby'); // where to go back to from leaderboard
+    const [gameState, setGameState] = useState('lobby');
+    const [showSettings, setShowSettings] = useState(false); // settings modal
+    const [leaderboardSource, setLeaderboardSource] = useState('lobby');
     const [introPhase, setIntroPhase] = useState(4); // 0=start, 1=ladder, 2=lifelines, 3=MC, 4=question/timer
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
@@ -469,6 +480,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
     const [answerStep, setAnswerStep] = useState('thinking'); // 'thinking' | 'explained'
     const [explanationTimeLeft, setExplanationTimeLeft] = useState(15);
     const [isSkipped, setIsSkipped] = useState(false);
+    const [isVoluntaryStop, setIsVoluntaryStop] = useState(false); // true khi người chơi chủ động dừng
+    const [earnedXP, setEarnedXP] = useState(0); // XP tích lũy khi dừng sớm
 
     const [confirmFiftyFifty, setConfirmFiftyFifty] = useState(false);
     const [isScanningFiftyFifty, setIsScanningFiftyFifty] = useState(false);
@@ -573,37 +586,43 @@ const PinnacleGame = ({ onLeaveGame }) => {
         }
     }, [currentQuestionIndex, gameState, introPhase, isAnswerRevealed, isSwapping]);
 
-    // Web Audio: intro active sound
-    const playActiveSound = useCallback(() => {
-        try {
-            const audio = new Audio(pointUpSfx);
-            audio.volume = 0.5;
-            audio.play().catch(e => console.log('Audio play failed', e));
-        } catch (_) { }
-    }, []);
+    // ── Sound Manager — wraps all game audio, respects settingsStore ──
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const sfxMap = useMemo(() => ({
+        launch:     sfxLaunch,
+        clapShort:  sfxClapShort,
+        correct:    sfxCorrect,
+        checkpoint: sfxCheckpoint,
+        incorrect:  sfxIncorrect,
+        clapEnd:    sfxClapEnd,
+        pointUp:    pointUpSfx,
+        firework:   fireworkSfx,
+        click:      pointUpSfx,   // reuse point_up as subtle button-click SFX
+    }), []);
+    const { playSfx, playClick } = useSoundManager(null, sfxMap);
 
-    // Generic fire-and-forget audio helper; returns duration via callback
-    const playAudio = useCallback((src, volume = 0.7, onDuration) => {
-        try {
-            const audio = new Audio(src);
-            audio.volume = volume;
-            if (onDuration) {
-                audio.addEventListener('loadedmetadata', () => onDuration(audio.duration * 1000));
-            }
-            audio.play().catch(e => console.log('Audio play failed', e));
-            return audio;
-        } catch (_) { return null; }
-    }, []);
+    // Generic fire-and-forget audio helper (respects sound setting via playSfx)
+    const playAudio = useCallback((sfxKey, _vol, onDuration) => {
+        playSfx(sfxKey);
+        if (onDuration) {
+            // Duration callback fallback — use a fixed map so checkpoint swing still works
+            const durMap = { launch: 3200, checkpoint: 3200, clapEnd: 3000 };
+            const ms = durMap[sfxKey] ?? 1000;
+            setTimeout(() => onDuration(ms), 0);
+        }
+    }, [playSfx]);
+
+    // playActiveSound used on game start (formerly pointUpSfx)
+    const playActiveSound = useCallback(() => playSfx('pointUp'), [playSfx]);
+
 
     useEffect(() => {
         if (gameState === 'playing' && introPhase > 0 && introPhase < 4) {
             let phaseTimer;
             if (introPhase === 1) {
                 // Play launch SFX + spotlight swing for its duration
-                playAudio(sfxLaunch, 0.75, (durationMs) => {
+                playAudio('launch', 0.75, (durationMs) => {
                     setSpotlightSwing(prev => prev + 1);
-                    // SWING_DURATION inside SpotlightEffect is fixed at 3.2s but we only trigger here;
-                    // the swing auto-expires after SWING_DURATION regardless
                 });
                 // Lifelines: start cascading after background
                 phaseTimer = setTimeout(() => {
@@ -796,15 +815,14 @@ const PinnacleGame = ({ onLeaveGame }) => {
             setSpotlightFlash(prev => prev + 1); // brief flicker
 
             // SFX: clap + correct tone together
-            playAudio(sfxClapShort, 0.6);
-            playAudio(sfxCorrect, 0.7);
+            playAudio('clapShort', 0.6);
+            playAudio('correct', 0.7);
 
             // Trigger confetti + dramatic spotlight swing at checkpoint milestones (Q5 = idx 4, Q10 = idx 9)
             if (currentQuestionIndex === 4 || currentQuestionIndex === 9) {
                 // Checkpoint SFX — swing lasts the duration of checkpoint audio
-                playAudio(sfxCheckpoint, 0.8, (durationMs) => {
+                playAudio('checkpoint', 0.8, (durationMs) => {
                     setSpotlightSwing(prev => prev + 1);
-                    // Spotlight component auto-expires after SWING_DURATION (3.2s)
                 });
                 setShowGameConfetti(false);
                 setTimeout(() => {
@@ -841,7 +859,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
             }, 1360);
         } else {
             // SFX: incorrect answer
-            playAudio(sfxIncorrect, 0.8);
+            playAudio('incorrect', 0.8);
             // Spotlight: dim monochromatic converge shake
             setSpotlightWrong(prev => prev + 1);
 
@@ -856,8 +874,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
             
             // Farewell clap after a delay (2.5s)
             setTimeout(() => {
-                playAudio(sfxClapEnd, 0.65, (durationMs) => {
-            setTimeout(() => { saveAnsweredQuestions(); triggerEndGame(currentQuestionIndex, false); }, durationMs);
+                playAudio('clapEnd', 0.65, (durationMs) => {
+                    setTimeout(() => { saveAnsweredQuestions(); triggerEndGame(currentQuestionIndex, false); }, durationMs);
                 });
             }, 2500);
 
@@ -959,8 +977,19 @@ const PinnacleGame = ({ onLeaveGame }) => {
         setAnswerStep('thinking');
         setEndMessage(null);
         setShowEndMessage(false);
+        setIsVoluntaryStop(false);
+        setEarnedXP(0);
         playActiveSound();
         setIntroPhase(1);
+    };
+
+    // Người chơi chủ động dừng: tính XP đã kiếm rồi vào màn kết quả
+    const handleVoluntaryStop = () => {
+        const xp = currentQuestionIndex > 0 ? XP_CUMULATIVE[currentQuestionIndex - 1] : 0;
+        setIsVoluntaryStop(true);
+        setEarnedXP(xp);
+        try { const a = new Audio(sfxClapShort); a.volume = 0.8; a.play().catch(() => {}); } catch (_) {}
+        setGameState('finished');
     };
 
     // Lifeline handlers
@@ -1172,6 +1201,15 @@ const PinnacleGame = ({ onLeaveGame }) => {
 
     return (
         <div className="w-full min-h-full h-full relative flex flex-col items-center z-10 bg-[#020617] overflow-y-auto overflow-x-hidden font-sans text-slate-100">
+            {/* Settings Modal — portal to body */}
+            {createPortal(
+                <AnimatePresence>
+                    {showSettings && (
+                        <SettingsModal onClose={() => setShowSettings(false)} />
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
             {/* XP Comet Particles */}
             {xpParticles.map((p) => (
                 <motion.div
@@ -1219,6 +1257,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             onPlay={() => setGameState('rules')}
                             onShowLeaderboard={() => setGameState('leaderboard')}
                             onLeaveGame={onLeaveGame}
+                            onSettings={() => setShowSettings(true)}
+                            onPlayClick={playClick}
                             nickname={nickname}
                             giaoxu={giaoxu}
                             tinhthanh={tinhthanh}
@@ -1354,7 +1394,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                     </motion.div>
                                 </div>
 
-                                {/* Coin + XP badges group */}
+                                {/* Coin + XP badges group + Settings */}
                                 <div className="flex items-center gap-1.5">
                                     {/* Coins badge */}
                                     <div ref={xpBadgeRef}
@@ -1388,6 +1428,13 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                             {displayXpScore.toLocaleString()}
                                         </motion.span>
                                     </div>
+                                    {/* ⚙️ Settings */}
+                                    <button onClick={() => { playClick(); setShowSettings(true); }}
+                                        className="w-8 h-8 rounded-full flex items-center justify-center"
+                                        style={{ background: 'rgba(255,255,255,0.1)', border: '1.5px solid rgba(255,255,255,0.2)' }}
+                                        aria-label="Cài đặt">
+                                        <Settings size={14} color="#93c5fd" strokeWidth={2.5} />
+                                    </button>
                                 </div>
                             </motion.div>
 
@@ -2038,6 +2085,18 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                     <LifelineButton icon={Users} isUsed={lifelines.audience} disabled={isAnswerRevealed} onClick={useAudience} />
                                     <LifelineButton icon={RefreshCcw} isUsed={lifelines.swap} disabled={isAnswerRevealed} onClick={useSwap} />
                                 </motion.div>
+
+                                {/* Dừng cuộc chơi — chỉ từ Q2 trở đi, khi chưa đang reveal đáp án */}
+                                {currentQuestionIndex >= 1 && !isAnswerRevealed && (
+                                    <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+                                        className="flex justify-center pb-2 order-3 shrink-0">
+                                        <button onClick={handleVoluntaryStop}
+                                            className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider text-red-200 border border-red-500/40 bg-red-950/40 hover:bg-red-900/60 transition-all">
+                                            <Flag size={12} />
+                                            Dừng cuộc chơi
+                                        </button>
+                                    </motion.div>
+                                )}
                             </div>
                         </motion.div>
                     )}
@@ -2053,6 +2112,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             showEndMessage={showEndMessage}
                             selectedOption={selectedOption}
                             questions={currentQuestions}
+                            isVoluntaryStop={isVoluntaryStop}
+                            earnedXP={earnedXP}
                         />
                     )}
                     {gameState === 'leaderboard' && (
@@ -2193,344 +2254,402 @@ const Confetti = ({ questionIndex = 14 }) => {
     return <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1000 }} />;
 };
 
-const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, onShowLeaderboard, currentQuestionIndex, endMessage, showEndMessage, selectedOption, questions }) => {
-    const [displayScore, setDisplayScore] = useState(0);
-    const [displayXP, setDisplayXP] = useState(0);
-    const lastSoundTime = useRef(0);
-    const [confettiKey, setConfettiKey] = useState(0);
-    const [showConfetti, setShowConfetti] = useState(score >= 500);
-    const [testIndex, setTestIndex] = useState(currentQuestionIndex);
-    const [visibleMessageIndex, setVisibleMessageIndex] = useState(0);
 
-    // Calculate XP based on per-question table (Q1=1, Q2=2, ... Q15=15)
+const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, onShowLeaderboard, currentQuestionIndex, endMessage, showEndMessage, selectedOption, questions, isVoluntaryStop, earnedXP }) => {
+    const { addXP, addCoins, globalScore, coins: profileCoins, nickname } = useUserStore();
+    const savedRef = useRef(false);
+
+    const [displayScore, setDisplayScore] = useState(0);
+    const [displayXP,    setDisplayXP]    = useState(0);
+    const [coinsDone,    setCoinsDone]     = useState(false);
+    const [xpDone,       setXpDone]        = useState(false);
+    const [profileUpdated, setProfileUpdated] = useState(false);
+    const [flyParticles,   setFlyParticles]   = useState([]);
+    const [confettiKey,  setConfettiKey]   = useState(0);
+    const [showConfetti, setShowConfetti]  = useState(score >= 500);
+    const [testIndex,    setTestIndex]     = useState(currentQuestionIndex);
+    const [visibleMessageIndex, setVisibleMessageIndex] = useState(0);
+    const msgBoxRef  = useRef(null);   // fixed-height message box container
+    const msgTextRef = useRef(null);   // text inside it, for font-shrink
+
+    // Particle source refs (the reward pills)
+    const coinPillRef   = useRef(null);
+    const xpPillRef     = useRef(null);
+    // Particle target refs (the profile stat chips)
+    const coinTargetRef = useRef(null);
+    const xpTargetRef   = useRef(null);
+
+    // Calculate totals
     const lastAnswerCorrect = questions && selectedOption !== null && selectedOption === questions[currentQuestionIndex]?.answer;
     const correctCount = lastAnswerCorrect ? currentQuestionIndex + 1 : currentQuestionIndex;
-    const totalXP = correctCount > 0 ? XP_CUMULATIVE[correctCount - 1] : 0;
-    const isPerfect = correctCount >= 15;
-    const totalCoins = score + (isPerfect ? 30 : 10); // perfect bonus 30, else 10 for completing
+    const totalXP    = isVoluntaryStop ? earnedXP : (correctCount > 0 ? XP_CUMULATIVE[correctCount - 1] : 0);
+    const totalCoins = score;
+    const rankName   = getRankByScore(globalScore || 0);
 
-    // Xử lý hiệu ứng hiển thị tuần tự các câu hội thoại
+    // Auto-shrink font in fixed-height message box whenever message changes
+    useEffect(() => {
+        const box  = msgBoxRef.current;
+        const text = msgTextRef.current;
+        if (!box || !text) return;
+        let size = 17;
+        text.style.fontSize = size + 'px';
+        while (text.scrollHeight > box.clientHeight && size > 11) {
+            size -= 0.5;
+            text.style.fontSize = size + 'px';
+        }
+    }, [visibleMessageIndex, endMessage, showEndMessage]);
+
+    // Sequential dialog messages
     useEffect(() => {
         if (showEndMessage && Array.isArray(endMessage) && visibleMessageIndex < endMessage.length) {
-            const timer = setTimeout(() => {
-                setVisibleMessageIndex(prev => prev + 1);
-            }, 2500); // Cứ 2.5s hiện thêm 1 câu
-            return () => clearTimeout(timer);
+            const t = setTimeout(() => setVisibleMessageIndex(p => p + 1), 2500);
+            return () => clearTimeout(t);
         }
     }, [showEndMessage, endMessage, visibleMessageIndex]);
 
+    // Dev hotkeys for confetti
     useEffect(() => {
-        const handleKeyDown = (e) => {
-            const key = e.key.toLowerCase();
-            let newIndex = null;
-
-            if (key === 'e') newIndex = currentQuestionIndex;
-            else if (key === '1') newIndex = 10; // Q11 -> 2 pos
-            else if (key === '2') newIndex = 11; // Q12 -> 3 pos
-            else if (key === '3') newIndex = 12; // Q13 -> 4 pos
-            else if (key === '4') newIndex = 14; // Q15 -> 5 pos
-
-            if (newIndex !== null) {
-                setTestIndex(newIndex);
-                setShowConfetti(false);
-                setTimeout(() => {
-                    setConfettiKey(prev => prev + 1);
-                    setShowConfetti(true);
-                }, 10);
+        const fn = (e) => {
+            const k = e.key.toLowerCase();
+            let idx = null;
+            if (k === 'e') idx = currentQuestionIndex;
+            else if (k === '1') idx = 10; else if (k === '2') idx = 11;
+            else if (k === '3') idx = 12; else if (k === '4') idx = 14;
+            if (idx !== null) {
+                setTestIndex(idx); setShowConfetti(false);
+                setTimeout(() => { setConfettiKey(p => p + 1); setShowConfetti(true); }, 10);
             }
         };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+        window.addEventListener('keydown', fn);
+        return () => window.removeEventListener('keydown', fn);
     }, [currentQuestionIndex]);
 
+    // Coin sound
     const playCoinSound = useCallback(() => {
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain); gain.connect(ctx.destination);
-            osc.type = 'sine';
+            const osc = ctx.createOscillator(); const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination); osc.type = 'sine';
             osc.frequency.setValueAtTime(1047, ctx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(1568, ctx.currentTime + 0.1);
             gain.gain.setValueAtTime(0.15, ctx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
             osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.2);
-        } catch (_) { }
+        } catch (_) {}
     }, []);
 
+    // Spawn flying particles: count = actual reward capped at 9 (so 2XP → 2 particles)
+    const spawnFly = useCallback((icon, sourceRef, targetRef, amount = 9) => {
+        const count = Math.min(Math.max(1, amount), 9);
+        const pill   = sourceRef.current?.getBoundingClientRect();
+        const target = targetRef.current?.getBoundingClientRect();
+        if (!pill || !target) return;
+        const ox = pill.left + pill.width / 2,  oy = pill.top  + pill.height / 2;
+        const tx = target.left + target.width / 2, ty = target.top + target.height / 2;
+        const items = Array.from({ length: count }, (_, i) => ({
+            id: `${icon}-${Date.now()}-${i}`, icon,
+            ox: ox + (Math.random() - 0.5) * 28, oy: oy + (Math.random() - 0.5) * 14,
+            bx: (Math.random() - 0.5) * 90,      by: (Math.random() - 0.5) * 60,
+            tx, ty, delay: i * 0.07,
+        }));
+        setFlyParticles(p => [...p, ...items]);
+        setTimeout(() => setFlyParticles(p => p.filter(x => !items.find(pp => pp.id === x.id))), 2200);
+    }, []);
+
+    // Coin count-up — 2 s, starts immediately
     useEffect(() => {
-        let timer;
-        if (displayScore < score) {
-            const step = Math.max(1, Math.floor(score / 50));
+        if (totalCoins <= 0) { setCoinsDone(true); return; }
+        const STEPS = Math.min(totalCoins, 40), step = Math.ceil(totalCoins / STEPS), ms = 2000 / STEPS;
+        let cur = 0;
+        const id = setInterval(() => {
+            cur = Math.min(cur + step, totalCoins);
+            setDisplayScore(cur); playCoinSound();
+            if (cur >= totalCoins) { clearInterval(id); setCoinsDone(true); }
+        }, ms);
+        return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [totalCoins]);
 
-            timer = setTimeout(() => {
-                setDisplayScore(prev => {
-                    const next = Math.min(prev + step, score);
-                    const now = Date.now();
-
-                    if (now - lastSoundTime.current >= 1000) {
-                        playCoinSound();
-                        lastSoundTime.current = now;
-                    }
-
-                    return next;
-                });
-            }, 40);
-        }
-        return () => clearTimeout(timer);
-    }, [displayScore, score, playCoinSound]);
-
-    // Count up XP display — fast animation
+    // After coins done → fly coins (count = totalCoins capped at 9) → addCoins
     useEffect(() => {
-        let timer;
-        const xpDelay = setTimeout(() => {
-            if (displayXP < totalXP) {
-                const step = Math.max(1, Math.ceil(totalXP / 15));
-                timer = setInterval(() => {
-                    setDisplayXP(prev => {
-                        const next = Math.min(prev + step, totalXP);
-                        return next;
-                    });
-                }, 30);
-            }
-        }, 800); // short delay after coins
-        return () => { clearTimeout(xpDelay); clearInterval(timer); };
-    }, [displayXP, totalXP]);
+        if (!coinsDone || totalCoins <= 0) return;
+        const t = setTimeout(() => {
+            spawnFly('coin', coinPillRef, coinTargetRef, totalCoins);
+            setTimeout(() => { if (!savedRef.current) addCoins(totalCoins); setProfileUpdated(true); }, 1400);
+        }, 300);
+        return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [coinsDone]);
+
+    // XP count-up — 2 s, starts simultaneously with coin
+    useEffect(() => {
+        if (totalXP <= 0) { setXpDone(true); return; }
+        const STEPS = Math.min(totalXP, 40), step = Math.ceil(totalXP / STEPS), ms = 2000 / STEPS;
+        let cur = 0;
+        const id = setInterval(() => {
+            cur = Math.min(cur + step, totalXP); setDisplayXP(cur);
+            if (cur >= totalXP) { clearInterval(id); setXpDone(true); }
+        }, ms);
+        return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [totalXP]);
+
+    // After XP done → fly XP (count = totalXP capped at 9) → addXP
+    useEffect(() => {
+        if (!xpDone || totalXP <= 0) return;
+        const t = setTimeout(() => {
+            spawnFly('xp', xpPillRef, xpTargetRef, totalXP);
+            setTimeout(() => {
+                if (!savedRef.current) { savedRef.current = true; addXP(totalXP); }
+                setProfileUpdated(true);
+            }, 1400);
+        }, 300);
+        return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [xpDone]);
 
     return createPortal(
         <>
             {showConfetti && <Confetti key={confettiKey} questionIndex={testIndex} />}
 
-            {/* Backdrop */}
-            <div style={{
-                position: 'fixed', inset: 0, zIndex: 9998,
-                background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
-            }} />
+            {/* Flying icon particles — portal-level, above all UI */}
+            {flyParticles.map((p) => (
+                <motion.div key={p.id} className="fixed pointer-events-none" style={{ top: 0, left: 0, zIndex: 10100 }}
+                    initial={{ x: p.ox, y: p.oy, opacity: 0, scale: 0 }}
+                    animate={{ x: [p.ox, p.ox + p.bx, p.tx], y: [p.oy, p.oy + p.by, p.ty], opacity: [0, 1, 1, 0], scale: [0, 1.4, 1, 0] }}
+                    transition={{ duration: 1.5, delay: p.delay, times: [0, 0.2, 0.85, 1] }}
+                >
+                    <img src={p.icon === 'coin' ? iconCoin : iconTrophy} alt={p.icon}
+                        style={{ width: 20, height: 20, filter: p.icon === 'coin' ? 'drop-shadow(0 0 6px rgba(245,158,11,0.9))' : 'drop-shadow(0 0 6px rgba(251,191,36,0.9))' }} />
+                </motion.div>
+            ))}
 
-            {/* Positioning wrapper — plain div so translate(-50%,-50%) isn't fighting framer transforms */}
+            {/* Backdrop */}
+            <div style={{ position: 'fixed', inset: 0, zIndex: 9998, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }} />
+
+            {/* ── Profile pill — gold champion, centered, no duplicate stats ── */}
+            <motion.div initial={{ y: -50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3, type: 'spring', stiffness: 260, damping: 26 }}
+                style={{
+                    position: 'fixed', top: 10, left: 0, right: 0,
+                    display: 'flex', justifyContent: 'center', zIndex: 10001,
+                    pointerEvents: 'none',
+                }}
+            >
+                <div className="flex items-center gap-2.5 px-3 py-1.5 relative overflow-hidden mx-4"
+                    style={{
+                        background: 'linear-gradient(135deg, #3f1c00 0%, #78350f 55%, #3f1c00 100%)',
+                        border: '3px solid #fbbf24',
+                        boxShadow: '0 4px 0 #1c0a00, 0 6px 20px rgba(120,53,15,0.6)',
+                        borderRadius: 999,
+                        pointerEvents: 'auto',
+                        maxWidth: 'calc(100vw - 32px)',
+                    }}>
+                    {/* Shine */}
+                    <div className="absolute top-0 left-0 right-0 h-1/2 rounded-t-full pointer-events-none"
+                        style={{ background: 'rgba(255,255,255,0.08)' }} />
+                    {/* Avatar */}
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center font-black text-amber-800 text-xs shrink-0 relative z-10"
+                        style={{ background: 'linear-gradient(135deg,#fef3c7,#fbbf24)', border: '2px solid #fef08a', boxShadow: '0 2px 0 #1c0a00' }}>
+                        {nickname?.[0]?.toUpperCase() || '?'}
+                    </div>
+                    {/* Name */}
+                    <span className="font-black text-sm leading-none relative z-10 shrink-0"
+                        style={{ color: '#fef3c7', textShadow: '0 1px 0 #1c0a00' }}>
+                        {nickname || 'Người chơi'}
+                    </span>
+                    {/* Rank badge */}
+                    <span className="text-[9px] font-black px-2 py-0.5 rounded-full relative z-10 shrink-0"
+                        style={{ background: 'rgba(251,191,36,0.2)', border: '1.5px solid #fbbf24', color: '#fde68a' }}>
+                        {rankName}
+                    </span>
+                    {/* Divider */}
+                    <div className="w-px h-5 bg-amber-500/50 relative z-10 shrink-0" />
+                    {/* Coin — particle TARGET + display */}
+                    <div ref={coinTargetRef} className="flex items-center gap-1 px-2 py-1 rounded-full relative z-10 shrink-0"
+                        style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', border: '2px solid #fef08a', boxShadow: '0 2px 0 #92400e' }}>
+                        <img src={iconCoin} alt="" className="w-3.5 h-3.5" />
+                        <motion.span key={profileUpdated ? 'uc' : 'bc'}
+                            initial={{ scale: profileUpdated ? 1.4 : 1 }} animate={{ scale: 1 }}
+                            transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                            className="text-xs font-black text-white" style={{ textShadow: '0 1px 0 #92400e' }}>
+                            {(profileCoins || 0).toLocaleString()}
+                        </motion.span>
+                    </div>
+                    {/* XP — particle TARGET + display */}
+                    <div ref={xpTargetRef} className="flex items-center gap-1 px-2 py-1 rounded-full relative z-10 shrink-0"
+                        style={{ background: 'linear-gradient(135deg,#fbbf24,#f59e0b)', border: '2px solid #fef08a', boxShadow: '0 2px 0 #92400e' }}>
+                        <img src={iconTrophy} alt="" className="w-3.5 h-3.5" />
+                        <motion.span key={profileUpdated ? 'ux' : 'bx'}
+                            initial={{ scale: profileUpdated ? 1.4 : 1 }} animate={{ scale: 1 }}
+                            transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.1 }}
+                            className="text-xs font-black text-white" style={{ textShadow: '0 1px 0 #92400e' }}>
+                            {(globalScore || 0).toLocaleString()} XP
+                        </motion.span>
+                    </div>
+                </div>
+            </motion.div>
+
+            {/* Centering wrapper */}
             <div style={{
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                zIndex: 9999,
-                width: 'min(560px, calc(100vw - 20px))',
-                maxHeight: 'calc(100dvh - 20px)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                overflow: 'visible',
+                position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 9999,
+                width: 'min(560px, calc(100vw - 20px))', maxHeight: 'calc(100dvh - 20px)',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', overflow: 'visible',
             }}>
-                {/* Animation wrapper — framer-motion only does scale/opacity here */}
-                <motion.div
-                    initial={{ scale: 0.85, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
+                <motion.div initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: 'spring', stiffness: 220, damping: 22 }}
                     style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}
                 >
-                {/* Trophy banner — above the card in flex flow, negative margin overlaps card top */}
-                <motion.img
-                    src={resultBanner}
-                    alt="Trophy"
-                    initial={{ scale: 0, y: 30 }}
-                    animate={{ scale: 1, y: 0 }}
-                    transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.15 }}
-                    style={{
-                        width: 'clamp(236px, 47vw, 372px)',
-                        height: 'auto',
-                        flexShrink: 0,
-                        position: 'relative',
-                        zIndex: 10,
-                        marginBottom: 'clamp(-44px, -10vw, -73px)',
-                        filter: 'drop-shadow(0 6px 10px rgba(30,58,138,0.7))',
-                        pointerEvents: 'none',
-                    }}
-                />
+                    {/* Trophy banner */}
+                    <motion.img src={resultBanner} alt="Trophy"
+                        initial={{ scale: 0, y: 30 }} animate={{ scale: 1, y: 0 }}
+                        transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.15 }}
+                        style={{
+                            width: 'clamp(236px, 47vw, 372px)', height: 'auto', flexShrink: 0,
+                            position: 'relative', zIndex: 10,
+                            marginBottom: 'clamp(-44px, -10vw, -73px)',
+                            filter: 'drop-shadow(0 6px 10px rgba(30,58,138,0.7))', pointerEvents: 'none',
+                        }}
+                    />
 
-                {/* Blue card — overflow:hidden, extra padding-top for the banner overlap */}
-                <div style={{
-                    background: '#3b82f6',
-                    border: '4px solid #1e3a8a',
-                    boxShadow: '0 8px 0 rgba(30,58,138,1)',
-                    borderRadius: 24,
-                    width: '100%',
-                    flex: '0 0 auto',
-                    minHeight: 'min(400px, calc(100dvh - 180px))',
-                    maxHeight: 'calc(100dvh - 20px - clamp(60px, 11vw, 110px))',
+                    {/* Blue card */}
+                    <div style={{
+                        background: '#3b82f6', border: '4px solid #1e3a8a', boxShadow: '0 8px 0 rgba(30,58,138,1)',
+                        borderRadius: 24, width: '100%', flex: '0 0 auto',
+                        minHeight: 'min(400px, calc(100dvh - 180px))',
+                        maxHeight: 'calc(100dvh - 20px - clamp(60px, 11vw, 110px))',
+                        display: 'flex', flexDirection: 'column', overflow: 'hidden',
+                    }}>
+                        <div className="overflow-y-auto scrollbar-hide flex-1 flex flex-col items-center"
+                            style={{ padding: 'clamp(56px, 10vw, 88px) 16px 16px' }}>
 
-                    display: 'flex',
-                    flexDirection: 'column',
-                    overflow: 'hidden',
-                }}>
-                    <div className="overflow-y-auto scrollbar-hide flex-1 flex flex-col items-center"
-                        style={{ padding: 'clamp(47px, 9vw, 78px) 16px 16px' }}
-                    >
+                            <h2 className="text-xl sm:text-2xl md:text-4xl landscape:text-xl font-black mb-4 landscape:mb-2 md:mb-8 tracking-widest text-center text-yellow-300 uppercase relative z-10 w-full"
+                                style={{ textShadow: '0 4px 0 #78350f, 2px 0 0 #78350f, -2px 0 0 #78350f, 0 2px 0 #78350f, 0 -2px 0 #78350f' }}>
+                                TRÒ CHƠI KẾT THÚC!
+                            </h2>
 
-                    <h2 className="text-xl sm:text-2xl md:text-4xl landscape:text-xl font-black mb-4 landscape:mb-2 md:mb-8 tracking-widest text-center text-yellow-300 uppercase relative z-10 w-full"
-                        style={{ textShadow: '0 4px 0 #78350f, 2px 0 0 #78350f, -2px 0 0 #78350f, 0 2px 0 #78350f, 0 -2px 0 #78350f, 1px 1px 0 #78350f, -1px -1px 0 #78350f, 1px -1px 0 #78350f, -1px 1px 0 #78350f' }}>
-                        TRÒ CHƠI KẾT THÚC!
-                    </h2>
+                            {/* Dialog message box — fixed height ≈ 4 lines, font auto-shrinks to fit */}
+                            <div ref={msgBoxRef}
+                                className="w-full max-w-lg mb-4 landscape:mb-2 md:mb-5 flex items-center justify-center relative bg-white px-4 rounded-2xl border-4 border-blue-300 shadow-[inset_0_-4px_0_rgba(191,219,254,1),0_6px_0_rgba(30,58,138,0.5)] text-[#1e3a8a] font-bold overflow-hidden"
+                                style={{ height: 'clamp(88px, 17vw, 120px)' }}>
+                                <AnimatePresence mode="popLayout">
+                                    {showEndMessage && Array.isArray(endMessage) && endMessage[visibleMessageIndex] ? (
+                                        <motion.div key={`msg-${visibleMessageIndex}`}
+                                            initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
+                                            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                                            className="w-full px-1">
+                                            <p ref={msgTextRef} className="font-bold leading-snug text-center w-full" style={{ lineHeight: 1.45 }}>
+                                                {endMessage[visibleMessageIndex]}
+                                            </p>
+                                        </motion.div>
+                                    ) : showEndMessage && endMessage ? (
+                                        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                                            className="w-full px-1">
+                                            <p ref={msgTextRef} className="font-bold leading-snug text-center w-full" style={{ lineHeight: 1.45 }}>
+                                                {endMessage}
+                                            </p>
+                                        </motion.div>
+                                    ) : (
+                                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full px-1">
+                                            <p ref={msgTextRef} className="font-bold leading-snug text-center text-[#1e3a8a]/60 w-full" style={{ lineHeight: 1.45 }}>
+                                                Hành trình học hỏi vẫn còn phía trước. Hãy sẵn sàng cho thử thách tiếp theo!
+                                            </p>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
 
-                    {/* Message box — cartoon white card */}
-                    <div className="flex-1 w-full max-w-lg mb-4 landscape:mb-2 md:mb-6 min-h-[70px] landscape:min-h-[40px] md:min-h-[110px] flex items-center justify-center relative bg-white p-3 landscape:p-2 sm:p-5 rounded-2xl border-4 border-blue-300 shadow-[inset_0_-4px_0_rgba(191,219,254,1),0_6px_0_rgba(30,58,138,0.5)] text-[#1e3a8a] font-bold leading-relaxed">
-                        <AnimatePresence mode="popLayout">
-                            {showEndMessage && Array.isArray(endMessage) && endMessage[visibleMessageIndex] ? (
-                                <motion.div
-                                    key={`msg-${visibleMessageIndex}`}
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
-                                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                                    className="text-sm md:text-lg font-bold leading-relaxed text-center w-full px-2 italic"
-                                >
-                                    {endMessage[visibleMessageIndex]}
-                                </motion.div>
-                            ) : (
-                                showEndMessage && endMessage && (
-                                    <motion.div
-                                        initial={{ opacity: 0, scale: 0.95 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        className="text-sm md:text-lg font-bold leading-relaxed text-center w-full px-2"
-                                    >
-                                        {endMessage}
+                            {/* Reward Pills — Coin + XP, both with +N badge, both animated simultaneously */}
+                            <div className="flex items-end justify-center gap-4 landscape:gap-2 md:gap-6 mb-4 landscape:mb-2 md:mb-5 w-full max-w-md mx-auto">
+                                {/* COIN */}
+                                <div className="flex flex-col items-center gap-1">
+                                    <div ref={coinPillRef}
+                                        className="flex items-center justify-center bg-yellow-400 text-[#1e3a8a] rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.2)] py-1.5 landscape:py-1 md:py-2 px-4 landscape:px-3 md:px-6 relative overflow-hidden">
+                                        <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full" />
+                                        <img src={iconCoin} alt="Coins" className="w-6 h-6 md:w-7 md:h-7 relative z-10 mr-1.5" />
+                                        <motion.span key={displayScore} initial={{ y: -4, opacity: 0.7 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.08 }}
+                                            className="text-xl landscape:text-base md:text-3xl font-black relative z-10">
+                                            {displayScore.toLocaleString()}
+                                        </motion.span>
+                                    </div>
+                                </div>
+                                {/* XP */}
+                                <div className="flex flex-col items-center gap-1">
+                                    <div ref={xpPillRef}
+                                        className="flex items-center justify-center bg-amber-500 text-white rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(120,53,15,0.3)] py-1.5 landscape:py-1 md:py-2 px-4 landscape:px-3 md:px-6 relative overflow-hidden">
+                                        <div className="absolute inset-0 w-full h-1/2 bg-white/25 pointer-events-none rounded-t-full" />
+                                        <img src={iconTrophy} alt="XP" className="w-6 h-6 md:w-7 md:h-7 relative z-10 mr-1.5" />
+                                        <motion.span key={displayXP} initial={{ y: -4, opacity: 0.7 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.08 }}
+                                            className="text-xl landscape:text-base md:text-3xl font-black relative z-10">
+                                            {displayXP.toLocaleString()}
+                                        </motion.span>
+                                        <span className="text-base md:text-lg font-black ml-1.5 relative z-10">XP</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Fake Stats — Q10+ only */}
+                            {currentQuestionIndex >= 10 && (() => {
+                                const passRates = [100, 88, 72, 58, 46, 36, 27, 20, 15, 11, 8, 5, 3, 2, 1];
+                                const rate = passRates[Math.min(currentQuestionIndex, 14)];
+                                const topLabel = currentQuestionIndex >= 14
+                                    ? '🏆 Chỉ 2% người chơi hoàn thành cả 15 câu. Bạn thuộc nhóm tinh hoa!'
+                                    : currentQuestionIndex >= 12
+                                    ? `🔥 Bạn lọt vào top ${rate}% người chơi giỏi nhất!`
+                                    : `⭐ Chỉ ${rate}% người chơi vượt qua được câu số ${currentQuestionIndex + 1}!`;
+                                return (
+                                    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
+                                        className="w-full max-w-lg mx-auto mb-4 rounded-2xl overflow-hidden"
+                                        style={{ background: 'linear-gradient(180deg,#1e3a8a,#1e40af)', border: '3px solid #60a5fa' }}>
+                                        <div className="px-4 py-2 text-center text-xs font-black tracking-widest uppercase text-blue-200 border-b border-blue-500/40">📊 Thống Kê Người Chơi</div>
+                                        <div className="px-5 py-3 text-center">
+                                            <p className="text-yellow-300 font-black text-sm md:text-base leading-snug" style={{ textShadow: '0 2px 0 rgba(0,0,0,0.3)' }}>{topLabel}</p>
+                                        </div>
+                                        <div className="px-4 pb-4 grid grid-cols-3 gap-2">
+                                            {[{ q: 10, label: 'Câu 10', pct: passRates[9] }, { q: 12, label: 'Câu 12', pct: passRates[11] }, { q: 15, label: 'Câu 15', pct: passRates[14] }].map(({ q, label, pct }) => {
+                                                const reached = currentQuestionIndex + 1 >= q;
+                                                return (
+                                                    <div key={q} className="flex flex-col items-center gap-1">
+                                                        <div className="w-full h-1.5 rounded-full bg-blue-900 overflow-hidden">
+                                                            <motion.div className="h-full rounded-full"
+                                                                style={{ background: reached ? 'linear-gradient(90deg,#fbbf24,#f59e0b)' : '#3b82f6' }}
+                                                                initial={{ width: 0 }} animate={{ width: `${pct}%` }}
+                                                                transition={{ delay: 0.8, duration: 0.6, ease: 'easeOut' }} />
+                                                        </div>
+                                                        <span className={`text-[10px] font-bold ${reached ? 'text-yellow-300' : 'text-blue-300'}`}>{label}</span>
+                                                        <span className={`text-[10px] font-black ${reached ? 'text-yellow-200' : 'text-blue-400'}`}>{pct}%</span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
                                     </motion.div>
-                                )
-                            )}
-                            {!showEndMessage && (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="text-sm md:text-lg font-medium leading-relaxed text-center italic text-[#1e3a8a]/70 w-full px-2"
-                                >
-                                    Hành trình học hỏi vẫn còn phía trước. Hãy sẵn sàng cho thử thách tiếp theo!
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
+                                );
+                            })()}
 
-                    {/* Score Pills — Coins + XP */}
-                    <div className="flex items-center justify-center gap-3 landscape:gap-2 md:gap-4 mb-5 landscape:mb-2 md:mb-8 w-full max-w-md mx-auto">
-                        {/* Coins pill */}
-                        <div className="flex items-center justify-center bg-yellow-400 text-[#1e3a8a] rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.2)] py-1.5 landscape:py-1 md:py-2 px-4 landscape:px-3 md:px-6 relative overflow-hidden">
-                            <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
-                            <img src={iconCoin} alt="Coins" className="w-6 h-6 md:w-7 md:h-7 relative z-10 mr-1.5" />
-                            <motion.span
-                                key={displayScore}
-                                initial={{ y: -5, opacity: 0.8 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ duration: 0.1 }}
-                                className="text-xl landscape:text-base md:text-3xl font-black relative z-10"
-                            >
-                                {displayScore.toLocaleString()}
-                            </motion.span>
-                        </div>
-                        {/* XP pill */}
-                        <div className="flex items-center justify-center bg-amber-500 text-white rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(120,53,15,0.3)] py-1.5 landscape:py-1 md:py-2 px-4 landscape:px-3 md:px-6 relative overflow-hidden">
-                            <div className="absolute inset-0 w-full h-1/2 bg-white/25 pointer-events-none rounded-t-full"></div>
-                            <img src={iconTrophy} alt="XP" className="w-6 h-6 md:w-7 md:h-7 relative z-10 mr-1.5" />
-                            <motion.span
-                                key={displayXP}
-                                initial={{ y: -5, opacity: 0.8 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ duration: 0.1 }}
-                                className="text-xl landscape:text-base md:text-3xl font-black relative z-10"
-                            >
-                                {displayXP.toLocaleString()}
-                            </motion.span>
-                            <span className="text-base md:text-lg font-black ml-1.5 relative z-10">XP</span>
-                        </div>
-                    </div>
-
-                    {/* Fake Stats — only shown when player reaches Q10+ */}
-                    {currentQuestionIndex >= 10 && (() => {
-                        // Realistic-looking cumulative pass rates per question (decreasing)
-                        const passRates = [100, 88, 72, 58, 46, 36, 27, 20, 15, 11, 8, 5, 3, 2, 1];
-                        const rate = passRates[Math.min(currentQuestionIndex, 14)];
-                        const topLabel = currentQuestionIndex >= 14
-                            ? '🏆 Chỉ 2% người chơi hoàn thành cả 15 câu. Bạn thuộc nhóm tinh hoa!'
-                            : currentQuestionIndex >= 12
-                            ? `🔥 Bạn lọt vào top ${rate}% người chơi giỏi nhất!`
-                            : `⭐ Chỉ ${rate}% người chơi vượt qua được câu số ${currentQuestionIndex + 1}!`;
-
-                        return (
-                            <motion.div
-                                initial={{ opacity: 0, y: 12 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.6 }}
-                                className="w-full max-w-lg mx-auto mb-6 rounded-2xl overflow-hidden border-3 border-blue-300 shadow-[0_4px_0_rgba(30,58,138,0.5)]"
-                                style={{ background: 'linear-gradient(180deg,#1e3a8a,#1e40af)', border: '3px solid #60a5fa' }}
-                            >
-                                {/* Header */}
-                                <div className="px-4 py-2 text-center text-xs font-black tracking-widest uppercase text-blue-200 border-b border-blue-500/40">
-                                    📊 Thống Kê Người Chơi
+                            {/* Buttons */}
+                            <div className="flex flex-col gap-2 relative z-10 w-full max-w-md mx-auto mt-2 landscape:mt-1 pb-4 landscape:pb-2">
+                                <div className="flex flex-row gap-2">
+                                    <button onClick={handlePlayAgain}
+                                        className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-black uppercase tracking-widest text-base landscape:text-sm py-4 landscape:py-3 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(29,78,216,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group">
+                                        <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full" />
+                                        <span className="relative z-10 group-hover:scale-105 transition-transform">Chơi lại</span>
+                                    </button>
+                                    <button onClick={onLeaveGame}
+                                        className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-widest text-base landscape:text-sm py-4 landscape:py-3 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.3)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group">
+                                        <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full" />
+                                        <span className="relative z-10 group-hover:scale-105 transition-transform">Về Menu</span>
+                                    </button>
                                 </div>
-                                {/* Highlight stat */}
-                                <div className="px-5 py-3 text-center">
-                                    <p className="text-yellow-300 font-black text-sm md:text-base leading-snug"
-                                        style={{ textShadow: '0 2px 0 rgba(0,0,0,0.3)' }}>
-                                        {topLabel}
-                                    </p>
-                                </div>
-                                {/* Mini bar chart for nearby questions */}
-                                <div className="px-4 pb-4 grid grid-cols-3 gap-2">
-                                    {[
-                                        { q: 10, label: 'Câu 10', pct: passRates[9] },
-                                        { q: 12, label: 'Câu 12', pct: passRates[11] },
-                                        { q: 15, label: 'Câu 15', pct: passRates[14] },
-                                    ].map(({ q, label, pct }) => {
-                                        const reached = currentQuestionIndex + 1 >= q;
-                                        return (
-                                            <div key={q} className="flex flex-col items-center gap-1">
-                                                <div className="w-full h-1.5 rounded-full bg-blue-900 overflow-hidden">
-                                                    <motion.div
-                                                        className="h-full rounded-full"
-                                                        style={{ background: reached ? 'linear-gradient(90deg,#fbbf24,#f59e0b)' : '#3b82f6' }}
-                                                        initial={{ width: 0 }}
-                                                        animate={{ width: `${pct}%` }}
-                                                        transition={{ delay: 0.8, duration: 0.6, ease: 'easeOut' }}
-                                                    />
-                                                </div>
-                                                <span className={`text-[10px] font-bold ${reached ? 'text-yellow-300' : 'text-blue-300'}`}>{label}</span>
-                                                <span className={`text-[10px] font-black ${reached ? 'text-yellow-200' : 'text-blue-400'}`}>{pct}%</span>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </motion.div>
-                        );
-                    })()}
-
-                    {/* Buttons */}
-                    <div className="flex flex-col gap-2 relative z-10 w-full max-w-md mx-auto mt-2 landscape:mt-1 pb-4 landscape:pb-2">
-                        <div className="flex flex-row gap-2">
-                            <button
-                                onClick={handlePlayAgain}
-                                className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-black uppercase tracking-widest text-base landscape:text-sm py-4 landscape:py-3 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(29,78,216,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
-                            >
-                                <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full"></div>
-                                <span className="relative z-10 group-hover:scale-105 transition-transform">Chơi lại</span>
-                            </button>
-                            <button
-                                onClick={onLeaveGame}
-                                className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-widest text-base landscape:text-sm py-4 landscape:py-3 rounded-full border-4 landscape:border-3 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1),inset_0_-4px_0_rgba(180,83,9,0.3)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(30,58,138,1)] transition-all flex justify-center items-center relative overflow-hidden group"
-                            >
-                                <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full"></div>
-                                <span className="relative z-10 group-hover:scale-105 transition-transform">Về Menu</span>
-                            </button>
-                        </div>
-                        <button
-                            onClick={onShowLeaderboard}
-                            className="w-full bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-widest text-base landscape:text-sm py-3 landscape:py-2 rounded-full border-4 landscape:border-3 border-purple-900 shadow-[0_5px_0_rgba(88,28,135,1),inset_0_-4px_0_rgba(109,40,217,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(88,28,135,1)] transition-all flex justify-center items-center gap-2 relative overflow-hidden group"
-                        >
-                            <div className="absolute top-0 left-0 w-full h-1/2 bg-white/15 pointer-events-none rounded-t-full"></div>
-                            <span className="relative z-10 group-hover:scale-105 transition-transform">🏆 Xem Xếp Hạng</span>
-                        </button>
-                    </div>
-                    </div>{/* end scroll */}
-                </div>{/* end blue card */}
+                                <button onClick={onShowLeaderboard}
+                                    className="w-full bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-widest text-base landscape:text-sm py-3 landscape:py-2 rounded-full border-4 landscape:border-3 border-purple-900 shadow-[0_5px_0_rgba(88,28,135,1),inset_0_-4px_0_rgba(109,40,217,0.5)] active:translate-y-1.5 active:shadow-[0_0px_0_rgba(88,28,135,1)] transition-all flex justify-center items-center gap-2 relative overflow-hidden group">
+                                    <div className="absolute top-0 left-0 w-full h-1/2 bg-white/15 pointer-events-none rounded-t-full" />
+                                    <span className="relative z-10 group-hover:scale-105 transition-transform">🏆 Xem Xếp Hạng</span>
+                                </button>
+                            </div>
+                        </div>{/* end scroll */}
+                    </div>{/* end blue card */}
                 </motion.div>{/* end animation wrapper */}
-            </div>{/* end positioning wrapper */}
-
+            </div>{/* end centering wrapper */}
         </>,
         document.body
     );

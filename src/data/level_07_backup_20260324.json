@@ -66,6 +66,17 @@
     "category": "kinh_thanh"
   },
   {
+    "id": "L07_007",
+    "question": "Một Talent (nén bạc) trong dụ ngôn của Chúa Giêsu tương đương khoảng bao nhiêu năm lương công nhân?",
+    "opt_a": "1 năm",
+    "opt_b": "6.000 ngày (~20 năm)",
+    "opt_c": "100 ngày",
+    "opt_d": "1 tháng",
+    "correct_ans": 1,
+    "explanation": "1 Talent = khoảng **6.000 denarii** = khoảng **20 năm lương** công nhân — số tiền rất lớn.",
+    "category": "kinh_thanh"
+  },
+  {
     "id": "L07_008",
     "question": "Chúa Giêsu nói 'Ta khát' trên thập giá theo Tin Mừng nào?",
     "opt_a": "Mátthêu",
@@ -88,6 +99,17 @@
     "category": "kinh_thanh"
   },
   {
+    "id": "L07_010",
+    "question": "Thánh Phaolô bị đắm tàu mấy lần theo thư 2 Côrintô?",
+    "opt_a": "1",
+    "opt_b": "2",
+    "opt_c": "3",
+    "opt_d": "4",
+    "correct_ans": 2,
+    "explanation": "Phaolô nói ông **3 lần bị đắm tàu** (2Cr 11:25).",
+    "category": "kinh_thanh"
+  },
+  {
     "id": "L07_011",
     "question": "Thánh Phaolô bị 'cái dằm trong thân xác' (2Cr 12:7). Giáo hội biết đó là gì không?",
     "opt_a": "Bệnh mắt",
@@ -107,6 +129,17 @@
     "opt_d": "12",
     "correct_ans": 2,
     "explanation": "Sách Khải Huyền gửi thư cho **7 giáo đoàn** tại Tiểu Á (Kh 2-3).",
+    "category": "kinh_thanh"
+  },
+  {
+    "id": "L07_013",
+    "question": "Con số 666 trong sách Khải Huyền (13:18) được nhiều học giả liên kết với ai?",
+    "opt_a": "Giuđa",
+    "opt_b": "Hoàng đế Nero",
+    "opt_c": "Satan",
+    "opt_d": "Pharaoh",
+    "correct_ans": 1,
+    "explanation": "Nhiều học giả cho 666 = giá trị số của **'Nero Caesar'** viết bằng tiếng Do Thái.",
     "category": "kinh_thanh"
   },
   {
@@ -151,6 +184,17 @@
     "opt_d": "Thánh Têrêsa",
     "correct_ans": 1,
     "explanation": "**Thánh Augustinô** viết trong Tự Thuật: '**Lòng con không yên cho đến khi nghỉ yên trong Chúa.**'",
+    "category": "thanh_nhan"
+  },
+  {
+    "id": "L07_018",
+    "question": "Thánh Patrick, bổn mạng Ireland, dùng hình ảnh gì để giải thích Ba Ngôi?",
+    "opt_a": "Tam giác",
+    "opt_b": "Cỏ ba lá (shamrock)",
+    "opt_c": "Nước-đá-hơi",
+    "opt_d": "Mặt trời",
+    "correct_ans": 1,
+    "explanation": "Thánh Patrick dùng **cỏ ba lá (shamrock)** — 3 lá trên 1 cuống — giải thích Ba Ngôi.",
     "category": "thanh_nhan"
   },
   {
@@ -209,6 +253,17 @@
     "category": "thanh_nhan"
   },
   {
+    "id": "L07_024",
+    "question": "Các số tuổi cực lớn của tổ phụ CƯ (Methuselah 969, Nôê 950...) được học giả giải thích thế nào?",
+    "opt_a": "Họ thật sự sống hơn 900 năm theo nghĩa đen",
+    "opt_b": "Nhiều học giả cho là đơn vị thời gian khác hoặc ý nghĩa biểu tượng",
+    "opt_c": "Do sao chép Kinh Thánh bị nhầm",
+    "opt_d": "Giáo hội đã xác định rõ ý nghĩa",
+    "correct_ans": 1,
+    "explanation": "Số tuổi cực lớn trong CƯ: nhiều học giả cho là **đơn vị tính khác** hoặc **biểu tượng quyền uy, ân phúc**. Giáo hội **không buộc phải hiểu theo nghĩa đen** — đây là vấn đề giải kinh còn mở.",
+    "category": "kinh_thanh"
+  },
+  {
     "id": "L07_025",
     "question": "Sách Thánh Vịnh được truyền thống gán cho ai là tác giả chính?",
     "opt_a": "Môsê",
@@ -217,6 +272,17 @@
     "opt_d": "Isaia",
     "correct_ans": 1,
     "explanation": "**Vua Đavít** là tác giả truyền thống của khoảng 73/150 Thánh Vịnh. Thực ra đây là **tuyển tập từ nhiều tác giả qua nhiều thế kỷ** — dùng trong phụng vụ Do Thái và Thánh Lễ Công giáo mỗi ngày.",
+    "category": "kinh_thanh"
+  },
+  {
+    "id": "L07_026",
+    "question": "Thánh Vịnh 23 (22) bắt đầu bằng câu gì?",
+    "opt_a": "Lạy Chúa, xin thương xót",
+    "opt_b": "Chúa là mục tử chăn dắt tôi, tôi chẳng thiếu thốn gì",
+    "opt_c": "Trời xanh tường thuật vinh quang Chúa",
+    "opt_d": "Từ vực thẳm, con kêu lên Ngài",
+    "correct_ans": 1,
+    "explanation": "TV 23: '**Chúa là mục tử chăn dắt tôi, tôi chẳng thiếu thốn gì**' — thánh vịnh nổi tiếng nhất.",
     "category": "kinh_thanh"
   },
   {
@@ -283,6 +349,17 @@
     "opt_d": "ĐGH Gioan XXIII, 1962",
     "correct_ans": 0,
     "explanation": "Tín điều **Vô Nhiễm Nguyên Tội** được **ĐGH Piô IX** công bố ngày **8/12/1854**. *Gợi ý: Piô IX cũng triệu tập Vatican I.*",
+    "category": "phung_vu"
+  },
+  {
+    "id": "L07_033",
+    "question": "Lễ Thánh Giuse Thợ mừng vào ngày nào?",
+    "opt_a": "19 tháng 3",
+    "opt_b": "1 tháng 5",
+    "opt_c": "25 tháng 12",
+    "opt_d": "15 tháng 8",
+    "correct_ans": 1,
+    "explanation": "Lễ **Thánh Giuse Thợ** mừng **1 tháng 5** (ngày Lao động). Lễ Thánh Giuse chính: 19/3.",
     "category": "phung_vu"
   },
   {
@@ -385,6 +462,72 @@
     "category": "lich_su"
   },
   {
+    "id": "L07_043",
+    "question": "Nhà thờ Chartres (Pháp) nổi tiếng vì điều gì?",
+    "opt_a": "Lớn nhất thế giới",
+    "opt_b": "Kính màu (stained glass) thời Trung Cổ tuyệt đẹp",
+    "opt_c": "Bằng gỗ toàn bộ",
+    "opt_d": "Nơi ĐGH sống",
+    "correct_ans": 1,
+    "explanation": "Nhà thờ Chartres nổi tiếng vì **kính màu thời Trung Cổ** (TK 12-13) — gần như nguyên vẹn.",
+    "category": "nghe_thuat"
+  },
+  {
+    "id": "L07_044",
+    "question": "Bức tranh 'Sự Sáng Tạo Ađam' (tay Chúa chạm tay Ađam) do ai vẽ?",
+    "opt_a": "Leonardo",
+    "opt_b": "Michelangelo",
+    "opt_c": "Raphael",
+    "opt_d": "Caravaggio",
+    "correct_ans": 1,
+    "explanation": "**Michelangelo** vẽ 'Sự Sáng Tạo Ađam' trên trần **nhà nguyện Sistine** (1508-1512).",
+    "category": "nghe_thuat"
+  },
+  {
+    "id": "L07_045",
+    "question": "Bức tranh 'Sự Kêu Gọi của Thánh Mátthêu' là kiệt tác của ai?",
+    "opt_a": "Leonardo",
+    "opt_b": "Raphael",
+    "opt_c": "Caravaggio",
+    "opt_d": "Bernini",
+    "correct_ans": 2,
+    "explanation": "**Caravaggio** vẽ 'Sự Kêu Gọi của Thánh Mátthêu' — nổi tiếng về kỹ thuật **ánh sáng kịch tính**.",
+    "category": "nghe_thuat"
+  },
+  {
+    "id": "L07_046",
+    "question": "Nhà thờ Gothic thường có kính màu (stained glass) thay tường đặc. Ý nghĩa thần học là gì?",
+    "opt_a": "Cho nhà thờ thoáng mát hơn",
+    "opt_b": "Ánh sáng qua kính = Lời Chúa chiếu vào tâm hồn; hình ảnh KT cho người không biết chữ",
+    "opt_c": "Để tiết kiệm vật liệu xây dựng",
+    "opt_d": "Không có ý nghĩa thần học",
+    "correct_ans": 1,
+    "explanation": "Kính màu Gothic = **'Kinh Thánh của người nghèo'** — thời Trung Cổ người không biết chữ học đức tin qua **hình ảnh ánh sáng màu sắc**. Ánh sáng xuyên qua biểu tượng **ân sủng Chúa chiếu vào con người**.",
+    "category": "nghe_thuat"
+  },
+  {
+    "id": "L07_047",
+    "question": "Nhà thờ cháy một phần năm 2019 là nhà thờ nào?",
+    "opt_a": "Cologne",
+    "opt_b": "Notre-Dame de Paris",
+    "opt_c": "Westminster",
+    "opt_d": "Chartres",
+    "correct_ans": 1,
+    "explanation": "**Notre-Dame de Paris** bị cháy ngày 15/4/**2019**, mái và tháp nhọn sụp đổ.",
+    "category": "nghe_thuat"
+  },
+  {
+    "id": "L07_048",
+    "question": "Thánh ca 'Amazing Grace' do ai viết?",
+    "opt_a": "Bach",
+    "opt_b": "John Newton (cựu thuyền trưởng buôn nô lệ)",
+    "opt_c": "Handel",
+    "opt_d": "Mozart",
+    "correct_ans": 1,
+    "explanation": "**John Newton** — cựu thuyền trưởng **buôn nô lệ** hoán cải — viết **Amazing Grace** (1772).",
+    "category": "nghe_thuat"
+  },
+  {
     "id": "L07_049",
     "question": "Cha Alexandre de Rhodes đến Việt Nam lần đầu năm nào?",
     "opt_a": "1524",
@@ -418,6 +561,61 @@
     "category": "viet_nam"
   },
   {
+    "id": "L07_052",
+    "question": "Nhà thờ Tân Định (TP.HCM) nổi tiếng vì điều gì?",
+    "opt_a": "Lớn nhất VN",
+    "opt_b": "Màu hồng đặc trưng",
+    "opt_c": "Bằng gỗ toàn bộ",
+    "opt_d": "Cổ nhất VN",
+    "correct_ans": 1,
+    "explanation": "Nhà thờ Tân Định nổi tiếng vì **màu hồng đặc trưng**, kiến trúc Gothic, xây năm 1870.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L07_053",
+    "question": "Nhà thờ Lớn Hà Nội (St Joseph Cathedral) xây theo phong cách nào?",
+    "opt_a": "Roman",
+    "opt_b": "Gothic",
+    "opt_c": "Baroque",
+    "opt_d": "Byzantine",
+    "correct_ans": 1,
+    "explanation": "Nhà thờ Lớn Hà Nội xây theo phong cách **Gothic** (1886), lấy cảm hứng từ Notre-Dame Paris.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L07_054",
+    "question": "Giáo phận Bùi Chu (Nam Định) nổi tiếng vì điều gì?",
+    "opt_a": "Lớn nhất VN",
+    "opt_b": "Mật độ giáo dân cao nhất VN, nhiều nhà thờ đẹp",
+    "opt_c": "Cổ nhất VN",
+    "opt_d": "Nơi ĐGH từng đến",
+    "correct_ans": 1,
+    "explanation": "Giáo phận Bùi Chu có **mật độ giáo dân cao nhất VN** và rất nhiều nhà thờ đẹp (Nam Định).",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L07_055",
+    "question": "Giáo phận nào ở VN được gọi là 'đất thánh' vì nhiều vị tử đạo?",
+    "opt_a": "Sài Gòn",
+    "opt_b": "Thanh Hóa",
+    "opt_c": "Hà Nội",
+    "opt_d": "Huế",
+    "correct_ans": 1,
+    "explanation": "Giáo phận **Thanh Hóa** được gọi '**đất thánh**' vì có rất nhiều vị tử đạo.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L07_056",
+    "question": "Tổng giáo phận Huế được thành lập trên cơ sở giáo phận nào?",
+    "opt_a": "Đàng Trong",
+    "opt_b": "Đàng Ngoài",
+    "opt_c": "Sài Gòn",
+    "opt_d": "Hà Nội",
+    "correct_ans": 0,
+    "explanation": "TGP Huế kế thừa từ **giáo phận Đàng Trong** (Cochinchine), giáo phận lâu đời nhất VN (1659).",
+    "category": "viet_nam"
+  },
+  {
     "id": "L07_057",
     "question": "Đức Hồng Y Nguyễn Văn Thuận bị cầm tù bao nhiêu năm?",
     "opt_a": "5 năm",
@@ -437,6 +635,28 @@
     "opt_d": "Chánh án Tòa Ân Giải",
     "correct_ans": 1,
     "explanation": "ĐHY Thuận được bổ nhiệm **Chủ tịch HĐGH Công lý và Hòa bình** (1998-2002).",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L07_059",
+    "question": "Hội đồng Giám mục Việt Nam (HĐGMVN) được thành lập năm nào?",
+    "opt_a": "1960",
+    "opt_b": "1975",
+    "opt_c": "1980",
+    "opt_d": "2000",
+    "correct_ans": 2,
+    "explanation": "HĐGMVN được thành lập năm **1980**, sau khi thống nhất đất nước.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L07_060",
+    "question": "Trước 1975, GH Công giáo VN chia thành mấy Hội đồng Giám mục?",
+    "opt_a": "1",
+    "opt_b": "2",
+    "opt_c": "3",
+    "opt_d": "4",
+    "correct_ans": 1,
+    "explanation": "Trước 1975 có **2 HĐGM** riêng biệt: miền Bắc và miền Nam.",
     "category": "viet_nam"
   },
   {
@@ -616,6 +836,17 @@
     "category": "dia_ly"
   },
   {
+    "id": "L07_077",
+    "question": "Martin Luther King Jr. (mục sư nhân quyền) theo đạo nào?",
+    "opt_a": "Công giáo",
+    "opt_b": "Baptist (Tin Lành)",
+    "opt_c": "Anh giáo",
+    "opt_d": "Chính Thống",
+    "correct_ans": 1,
+    "explanation": "Martin Luther King Jr. là mục sư **Baptist** (Tin Lành) — khác Martin Luther (Cải Cách TK 16).",
+    "category": "lich_su"
+  },
+  {
     "id": "L07_078",
     "question": "Mẹ Têrêsa Calcutta sáng lập dòng tu nào?",
     "opt_a": "Dòng Mến Thánh Giá",
@@ -624,6 +855,17 @@
     "opt_d": "Dòng Clara",
     "correct_ans": 1,
     "explanation": "Mẹ Têrêsa sáng lập **Thừa Sai Bác Ái** (1950), phục vụ người nghèo nhất.",
+    "category": "thanh_nhan"
+  },
+  {
+    "id": "L07_079",
+    "question": "Mẹ Têrêsa quê ở đâu?",
+    "opt_a": "Ấn Độ",
+    "opt_b": "Skopje (nay là Bắc Macedonia)",
+    "opt_c": "Albania",
+    "opt_d": "Ý",
+    "correct_ans": 1,
+    "explanation": "Mẹ Têrêsa sinh tại **Skopje** (nay là thủ đô Bắc Macedonia), gốc Albania.",
     "category": "thanh_nhan"
   },
   {
@@ -693,6 +935,28 @@
     "category": "lich_su"
   },
   {
+    "id": "L07_086",
+    "question": "Nhà thờ Phát Diệm (Ninh Bình) có đặc điểm kiến trúc độc đáo nào?",
+    "opt_a": "Phong cách Gothic thuần châu Âu",
+    "opt_b": "Kết hợp kiến trúc đình làng Việt Nam và Công giáo",
+    "opt_c": "Làm bằng tre và gỗ toàn bộ",
+    "opt_d": "Được ĐGH trực tiếp thiết kế",
+    "correct_ans": 1,
+    "explanation": "Nhà thờ Phát Diệm (1891) do **Cha Sáu Trần Lục** xây — kết hợp **đình làng Việt** với nhà thờ Công giáo. Đây là hình mẫu **hội nhập văn hóa (inculturation)** nổi tiếng nhất VN.",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L07_087",
+    "question": "Nhà thờ Phú Nhai (Nam Định) nổi tiếng vì điều gì?",
+    "opt_a": "Nhỏ nhất VN",
+    "opt_b": "Vương cung Thánh đường lớn nhất Đông Nam Á",
+    "opt_c": "Cổ nhất VN",
+    "opt_d": "Bằng tre",
+    "correct_ans": 1,
+    "explanation": "Nhà thờ **Phú Nhai** được xem là **Vương cung Thánh đường lớn nhất Đông Nam Á** (kiểu Gothic).",
+    "category": "viet_nam"
+  },
+  {
     "id": "L07_088",
     "question": "Thánh Anrê Kim Thông (tử đạo VN) là ai?",
     "opt_a": "Linh mục",
@@ -702,6 +966,17 @@
     "correct_ans": 1,
     "explanation": "Thánh Anrê Kim Thông là **Trùm trưởng** — giáo dân, không phải linh mục. Thời bách hại TK 19, Trùm trưởng **lãnh đạo cộng đoàn** khi thiếu linh mục — ngài tử đạo vì từ chối bước qua Thánh Giá.",
     "category": "viet_nam"
+  },
+  {
+    "id": "L07_089",
+    "question": "Giáo luật quy định tuổi tối thiểu để nhận Bí tích Thêm Sức là bao nhiêu?",
+    "opt_a": "7 tuổi",
+    "opt_b": "Giáo luật không quy định tuổi cụ thể — do HĐGM mỗi nước quyết định",
+    "opt_c": "14 tuổi",
+    "opt_d": "18 tuổi",
+    "correct_ans": 1,
+    "explanation": "**Giáo luật 891** để ngỏ cho **HĐGM mỗi quốc gia** quy định tuổi Thêm Sức — VN thường là 12-16 tuổi, nhiều nơi khác muộn hơn. *Gợi ý: nếu GH cố định thì không cần HĐGM quyết.*",
+    "category": "giao_ly"
   },
   {
     "id": "L07_090",
@@ -726,6 +1001,50 @@
     "category": "giao_ly"
   },
   {
+    "id": "L07_092",
+    "question": "Sách nào nhỏ nhất trong Tân Ước?",
+    "opt_a": "Thư Philêmon",
+    "opt_b": "Thư 2 Gioan",
+    "opt_c": "Thư 3 Gioan",
+    "opt_d": "Thư Giuđa",
+    "correct_ans": 2,
+    "explanation": "**Thư 3 Gioan** là sách nhỏ nhất Tân Ước (chỉ 15 câu, 1 chương).",
+    "category": "kinh_thanh"
+  },
+  {
+    "id": "L07_093",
+    "question": "Sách nào ngắn nhất trong Cựu Ước?",
+    "opt_a": "Giôna",
+    "opt_b": "Ôvađia (Abdias)",
+    "opt_c": "Naum",
+    "opt_d": "Habacuc",
+    "correct_ans": 1,
+    "explanation": "**Ôvađia (Abdias)** — chỉ 21 câu và 1 chương — sách ngắn nhất Cựu Ước.",
+    "category": "kinh_thanh"
+  },
+  {
+    "id": "L07_094",
+    "question": "Có bao nhiêu sách Ngôn sứ nhỏ (Minor Prophets)?",
+    "opt_a": "6",
+    "opt_b": "10",
+    "opt_c": "12",
+    "opt_d": "16",
+    "correct_ans": 2,
+    "explanation": "Có **12 sách Ngôn sứ nhỏ**: Hôsê, Giôen, Amốt, Ôvađia, Giôna, Mica, Naum, Habacuc, Xôphônia, Haggai, Dacaria, Malaki.",
+    "category": "kinh_thanh"
+  },
+  {
+    "id": "L07_095",
+    "question": "Trong Tin Mừng Mátthêu, dòng họ Chúa Giêsu gồm mấy đời (thế hệ) từ Ábraham đến Chúa Giêsu?",
+    "opt_a": "28 đời",
+    "opt_b": "3 nhóm, mỗi nhóm 14 đời — tổng 42 đời",
+    "opt_c": "70 đời",
+    "opt_d": "100 đời",
+    "correct_ans": 1,
+    "explanation": "Mátthêu 1:17 chia **3 nhóm × 14 đời**: Ábraham→Đavít, Đavít→lưu đày Babylon, lưu đày→Chúa Giêsu = **42 đời**. *Gợi ý: số 14 = giá trị số của 'Đavít' trong tiếng Do Thái.*",
+    "category": "kinh_thanh"
+  },
+  {
     "id": "L07_096",
     "question": "Lễ kính Thánh Tâm Chúa Giêsu rơi vào ngày nào trong tuần?",
     "opt_a": "Chúa Nhật",
@@ -735,6 +1054,28 @@
     "correct_ans": 1,
     "explanation": "Lễ **Thánh Tâm** rơi vào **Thứ Sáu** sau CN Mình Máu Thánh Chúa. Lòng sùng kính bắt nguồn từ thị kiến **Thánh Margarita Maria Alacoque** (TK 17) — Chúa tỏ Thánh Tâm rực lửa yêu thương đang bị con người xúc phạm.",
     "category": "phung_vu"
+  },
+  {
+    "id": "L07_097",
+    "question": "Giáo phận Xuân Lộc (Đồng Nai) nổi tiếng vì điều gì?",
+    "opt_a": "Cổ nhất VN",
+    "opt_b": "Giáo phận đông giáo dân nhất VN",
+    "opt_c": "Nhỏ nhất VN",
+    "opt_d": "Ít nhà thờ nhất",
+    "correct_ans": 1,
+    "explanation": "Giáo phận **Xuân Lộc** (Đồng Nai) là giáo phận **đông giáo dân nhất VN** (hơn 1 triệu).",
+    "category": "viet_nam"
+  },
+  {
+    "id": "L07_098",
+    "question": "Đức cha Jean-Baptiste Nguyễn Bá Tòng đặt viên đá đầu tiên nhà thờ nào?",
+    "opt_a": "Nhà thờ Đức Bà SG",
+    "opt_b": "Nhà thờ Phát Diệm",
+    "opt_c": "Không rõ — ông chủ yếu hoạt động mục vụ",
+    "opt_d": "Nhà thờ La Vang",
+    "correct_ans": 2,
+    "explanation": "Đức cha Nguyễn Bá Tòng chủ yếu **hoạt động mục vụ** — không nổi tiếng về xây dựng nhà thờ cụ thể.",
+    "category": "viet_nam"
   },
   {
     "id": "L07_099",
@@ -756,226 +1097,6 @@
     "opt_d": "Dòng Đa Minh",
     "correct_ans": 1,
     "explanation": "'**Ora et Labora**' là khẩu hiệu **Dòng Biển Đức** (Benedictines), do Thánh Biển Đức sáng lập (TK 6).",
-    "category": "doi_song"
-  },
-  {
-    "id": "L07_N01",
-    "question": "Khi Chúa Giêsu cám dỗ 3 lần trong hoang địa — Ngài trả lời thế nào với mỗi cám dỗ?",
-    "opt_a": "Ngài dùng quyền năng trục xuất Satan",
-    "opt_b": "Ngài trích Kinh Thánh — cho thấy Lời Chúa là vũ khí chống cám dỗ",
-    "opt_c": "Ngài im lặng",
-    "opt_d": "Ngài cầu nguyện dài",
-    "correct_ans": 1,
-    "explanation": "Với cả 3 cám dỗ, Chúa Giêsu đều trả lời bằng cách **trích Kinh Thánh** (Đnl 8:3; 6:16; 6:13). Điều này dạy: **Lời Chúa là lá chắn và gươm thiêng** trong chiến đấu thiêng liêng (Ep 6:17). Thánh Augustinô: học Kinh Thánh là trang bị vũ khí cho linh hồn.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L07_N02",
-    "question": "Câu chuyện trên đường Emmaus (Lc 24) dạy điều gì về việc nhận ra Chúa?",
-    "opt_a": "Phải nhìn thấy Chúa bằng mắt thường",
-    "opt_b": "Hai môn đệ nhận ra Chúa lúc bẻ bánh — hình ảnh Thánh Thể là nơi gặp Chúa Phục Sinh",
-    "opt_c": "Chúa chỉ hiện ra với người thánh thiện",
-    "opt_d": "Cần có Thánh Phêrô giới thiệu",
-    "correct_ans": 1,
-    "explanation": "Hai môn đệ đi cùng Chúa mà không nhận ra — chỉ khi **Ngài bẻ bánh**, 'mắt họ mở ra'. Thánh Lễ theo cấu trúc Emmaus: **Lời Chúa** (Ngài giải nghĩa Kinh Thánh trên đường) + **Bẻ Bánh** (Thánh Thể) = nơi nhận ra Đấng Phục Sinh.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L07_N03",
-    "question": "Thư gửi tín hữu Do Thái (Dt) giải thích Chúa Giêsu là 'Thượng Tế đời đời' thế nào?",
-    "opt_a": "Ngài là tư tế theo dòng tộc Lêvi như các tư tế CƯ",
-    "opt_b": "Ngài là Thượng Tế vĩnh cửu theo dòng Melkisêđê — vừa dâng lễ vừa là lễ vật, một lần mãi mãi",
-    "opt_c": "Ngài là tư tế do Giáo hội phong",
-    "opt_d": "Không có tư tế trong Tân Ước",
-    "correct_ans": 1,
-    "explanation": "Thư Híp-ri giải thích: Chúa Giêsu là **Thượng Tế theo dòng Melkisêđê** (Dt 7:17) — vĩnh cửu, không theo huyết thống Lêvi. Ngài **vừa là tư tế vừa là lễ vật** dâng lên Chúa Cha — hiến tế **một lần cho tất cả** (ephapax). Thánh Lễ *tưởng niệm* hiến tế duy nhất đó.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L07_N04",
-    "question": "Sách Tông Đồ CV ghi lại cuộc họp nào là 'Công đồng đầu tiên' của Giáo hội?",
-    "opt_a": "Cuộc họp ở Antiôkia",
-    "opt_b": "Công đồng Jerusalem (Cv 15) — giải quyết vấn đề dân ngoại có cần giữ luật Môsê không",
-    "opt_c": "Cuộc họp ở Êphêsô",
-    "opt_d": "Chưa có công đồng trong Cv",
-    "correct_ans": 1,
-    "explanation": "**Công đồng Jerusalem** (Cv 15) là cuộc họp đầu tiên các Tông Đồ và trưởng lão để giải quyết tranh cãi: dân ngoại có cần chịu cắt bì không? Kết luận: **không** — tin vào Chúa Giêsu là đủ. Đây là mẫu mực: Giáo hội cùng nhau quyết định dưới sự hướng dẫn của Chúa Thánh Thần.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L07_N05",
-    "question": "Trong 7 lời cuối của Chúa Giêsu trên Thập Giá, lời nào thể hiện rõ nhất lòng thương xót?",
-    "opt_a": "'Lạy Cha, vào tay Cha con xin phó thác hồn con'",
-    "opt_b": "'Lạy Cha, xin tha cho họ vì họ không biết việc họ làm'",
-    "opt_c": "'Hôm nay anh sẽ được ở với Ta trên Thiên Đàng'",
-    "opt_d": "'Ta khát'",
-    "correct_ans": 1,
-    "explanation": "'**Lạy Cha, xin tha cho họ**' (Lc 23:34) là lời thể hiện lòng thương xót vô biên — Chúa tha thứ ngay trong lúc đau đớn tột cùng, cho chính những kẻ đang giết Ngài. Nhưng cả 7 lời đều có chiều sâu: lời với tên trộm lành ('hôm nay anh sẽ ở với Ta') là hứa hẹn cứu độ giờ cuối.",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L07_N06",
-    "question": "Mầu nhiệm Nhập Thể (Incarnation) có nghĩa gì theo giáo lý?",
-    "opt_a": "Chúa giả vờ làm người",
-    "opt_b": "Ngôi Hai Thiên Chúa thật sự trở thành người — mang lấy xác thịt con người, không mất thần tính",
-    "opt_c": "Chúa Giêsu là người rồi trở thành Thiên Chúa",
-    "opt_d": "Thiên Chúa tạo ra Chúa Giêsu như tạo ra thiên thần",
-    "correct_ans": 1,
-    "explanation": "**Incarnatio** (Latin: mang lấy xác thịt) = Ngôi Hai thật sự trở thành người — không phải giả dạng. **Chúa Giêsu hoàn toàn là Thiên Chúa và hoàn toàn là người** (Chalcedon 451): không trộn lẫn, không tách rời. CĐ Ephêsô (431) tuyên bố Đức Mẹ là **Theotokos** (Mẹ Thiên Chúa) vì Ngài đã nhập thể thật.",
-    "category": "giao_ly"
-  },
-  {
-    "id": "L07_N07",
-    "question": "Mầu nhiệm 'Nhiệm Xuất' (Procession) trong Ba Ngôi — Chúa Thánh Thần 'phát xuất' từ đâu?",
-    "opt_a": "Chỉ từ Chúa Cha (Chính Thống giáo)",
-    "opt_b": "Từ Chúa Cha và Chúa Con (Filioque — Công giáo La Mã)",
-    "opt_c": "Tự mình hiện hữu",
-    "opt_d": "Từ Giáo hội",
-    "correct_ans": 1,
-    "explanation": "**Filioque** ('và từ Chúa Con'): Công giáo tin Chúa Thánh Thần phát xuất từ **Chúa Cha và Chúa Con**. Chính Thống tin chỉ từ **Chúa Cha**. Đây là một trong những điểm thần học dẫn đến **Đại Ly Giáo 1054** — nhưng cả hai đều tuyên xưng Chúa Thánh Thần là Thiên Chúa thật.",
-    "category": "giao_ly"
-  },
-  {
-    "id": "L07_N08",
-    "question": "Đức tin Công giáo dạy gì về hôn nhân một vợ một chồng và không thể ly hôn?",
-    "opt_a": "Đây chỉ là quy định Giáo huấn, có thể thay đổi",
-    "opt_b": "Hôn nhân thành sự và hoàn hợp là bất khả phân ly — vì tượng trưng tình yêu không thể tháo gỡ của Chúa Kitô với Giáo hội",
-    "opt_c": "Giáo hội cho phép tái hôn nếu bạn đời qua đời",
-    "opt_d": "Chỉ linh mục mới hiểu hôn nhân",
-    "correct_ans": 1,
-    "explanation": "Hôn nhân **thành sự và hoàn hợp** (ratum et consummatum) là **bất khả phân ly** (GLCG 1640) — không thể ly hôn mà tái hôn. Lý do thần học: hôn nhân **tượng trưng tình yêu Chúa Kitô với Giáo hội** — tình yêu đó không thể bị hủy bỏ. Giáo hội có thể tuyên bố vô hiệu (tiêu hôn — annulment) nếu hôn nhân chưa bao giờ thành sự.",
-    "category": "giao_ly"
-  },
-  {
-    "id": "L07_N09",
-    "question": "Tại sao người Công giáo thờ phượng các Thánh — không phải là vi phạm Điều Răn I không?",
-    "opt_a": "Đây là vi phạm Điều Răn I",
-    "opt_b": "Cầu xin các Thánh bầu cử (intercession) khác với thờ phượng (latria) chỉ dành cho Thiên Chúa",
-    "opt_c": "Không ai cầu xin các Thánh",
-    "opt_d": "Chỉ cầu xin Đức Mẹ, không cầu xin thánh khác",
-    "correct_ans": 1,
-    "explanation": "Thần học phân biệt: **Latria** (thờ phượng tuyệt đối) = chỉ dành cho Thiên Chúa. **Dulia** (tôn kính) = dành cho các Thánh. **Hyperdulia** (tôn kính cao hơn) = dành cho Đức Mẹ. Cầu xin Thánh bầu cử = nhờ bạn bè tốt lành cầu nguyện cùng — tương tự nhờ người khác cầu nguyện cho mình.",
-    "category": "giao_ly"
-  },
-  {
-    "id": "L07_N10",
-    "question": "Giáo huấn về 'lương tâm' — người Công giáo phải vâng theo lương tâm hay vâng theo Giáo hội?",
-    "opt_a": "Luôn vâng theo Giáo hội, không cần lương tâm",
-    "opt_b": "Vâng theo lương tâm — nhưng lương tâm phải được đào luyện theo chân lý, không phải cảm xúc",
-    "opt_c": "Tự do tuyệt đối, làm theo sở thích",
-    "opt_d": "Vâng theo linh mục giải tội",
-    "correct_ans": 1,
-    "explanation": "Vatican II dạy: 'Con người có bổn phận vâng theo **lương tâm** của mình' (GS 16). Nhưng lương tâm phải được **đào luyện tốt** theo chân lý Thiên Chúa. Lương tâm sai lạc hay lười biếng không được trưng ra như lý do. Hồng Y Newman: 'Trước hết tôi uống mừng lương tâm, rồi mới mừng Giáo Hoàng.'",
-    "category": "giao_ly"
-  },
-  {
-    "id": "L07_N11",
-    "question": "Trong Tam Nhật Vượt Qua, điều gì xảy ra vào Thứ Bảy Tuần Thánh?",
-    "opt_a": "Cử hành Lễ An Táng Chúa",
-    "opt_b": "Ngày thinh lặng — Giáo hội canh thức bên Mộ Chúa, không có phụng vụ công khai",
-    "opt_c": "Thánh Lễ tưởng niệm Phục Sinh sớm",
-    "opt_d": "Nghi thức rước Chúa Thương Khó",
-    "correct_ans": 1,
-    "explanation": "Thứ Bảy Tuần Thánh là ngày **thinh lặng và canh thức** — không có phụng vụ ban ngày. Giáo hội ngồi bên Mộ Chúa trong im lặng, chờ đợi... Đến tối mới bắt đầu **Đêm Vọng Phục Sinh** (nghi thức dài nhất và đẹp nhất trong phụng vụ năm).",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L07_N12",
-    "question": "Nghi thức 'Làm Phép Nhà' đầu năm có ý nghĩa gì?",
-    "opt_a": "Phong tục dân gian không có ý nghĩa tôn giáo",
-    "opt_b": "Thánh hiến không gian gia đình cho Thiên Chúa — ký hiệu C+M+B (Caspar Melchior Balthasar hoặc Christus Mansionem Benedicat)",
-    "opt_c": "Xua đuổi ác thần",
-    "opt_d": "Chỉ áp dụng cho nhà mới",
-    "correct_ans": 1,
-    "explanation": "Làm Phép Nhà dịp Hiển Linh (hoặc Tết Việt Nam) có ký hiệu **C+M+B** = tên 3 Đạo Sĩ, hoặc '**Christus Mansionem Benedicat**' (Chúa Kitô chúc lành cho ngôi nhà này). Linh mục (hoặc cha mẹ) **thánh hiến không gian gia đình** — ngôi nhà trở thành '**Hội Thánh tại gia**' (Ecclesia domestica).",
-    "category": "doi_song"
-  },
-  {
-    "id": "L07_N13",
-    "question": "Kinh 'Cầu Hồn' (De Profundis — TV 130) thường được đọc khi nào?",
-    "opt_a": "Trong Thánh Lễ Chúa Nhật",
-    "opt_b": "Cầu nguyện cho người đã qua đời — đặc biệt ngày 2/11 và khi viếng mộ",
-    "opt_c": "Chỉ trong Mùa Vọng",
-    "opt_d": "Thay thế cho Kinh Lạy Cha",
-    "correct_ans": 1,
-    "explanation": "'**Từ vực sâu, con kêu lên Ngài, lạy Chúa**' (TV 130) — Thánh Vịnh Sám Hối thứ 6. Truyền thống Công giáo đọc cho **người đã qua đời** vào ngày 2/11 (Cầu Hồn), viếng nghĩa địa, và trong nghi lễ an táng. Tên Latin **De profundis** = 'Từ vực thẳm'.",
-    "category": "phung_vu"
-  },
-  {
-    "id": "L07_N14",
-    "question": "Thực hành 'Chầu Thánh Thể' (Eucharistic Adoration) có ý nghĩa gì?",
-    "opt_a": "Ngắm nhìn tượng Chúa",
-    "opt_b": "Tôn thờ Chúa Giêsu thật sự hiện diện trong Mình Thánh được đặt trong Hào Quang — thời gian ở lại với Chúa",
-    "opt_c": "Cầu nguyện trước bàn thờ trống",
-    "opt_d": "Nghi thức chỉ dành cho tu sĩ",
-    "correct_ans": 1,
-    "explanation": "**Chầu Thánh Thể**: Mình Thánh được đặt trong Hào Quang — người tín hữu quỳ **tôn thờ Chúa Giêsu đang thật sự hiện diện**. Đây là thời gian **ngồi bên Chúa** — không cần nói nhiều, chỉ hiện diện. Bà Thánh Têrêsa Calcutta đề nghị mỗi Giáo phận có Chầu liên tục 24/7.",
-    "category": "doi_song"
-  },
-  {
-    "id": "L07_N15",
-    "question": "Thánh Augustinô nói câu nào cho thấy sự thống nhất giữa đức tin và lý trí?",
-    "opt_a": "'Đức tin thay thế lý trí'",
-    "opt_b": "'Hãy tin để hiểu, hãy hiểu để tin' (Crede ut intelligas, intellige ut credas)",
-    "opt_c": "'Không cần hiểu, chỉ cần tin'",
-    "opt_d": "'Lý trí cao hơn đức tin'",
-    "correct_ans": 1,
-    "explanation": "Thánh Augustinô: '**Hãy tin để hiểu, hãy hiểu để tin**' — đức tin và lý trí bổ sung cho nhau, không mâu thuẫn. ĐGH Gioan Phaolô II trong thông điệp **Fides et Ratio** (1998) phát triển thêm: đức tin và lý trí là 'hai cánh để tâm hồn con người bay lên chiêm niệm chân lý'.",
-    "category": "thanh_nhan"
-  },
-  {
-    "id": "L07_N16",
-    "question": "Thánh Tôma Aquinô đề xuất 'Năm Con Đường' (Quinque Viae) chứng minh sự hiện hữu của Thiên Chúa. Con đường đầu tiên là gì?",
-    "opt_a": "Lý luận từ ý thức đạo đức",
-    "opt_b": "Lý luận từ chuyển động: mọi vật chuyển động cần được thúc đẩy, phải có Động Lực Tối Thượng không bị thúc đẩy",
-    "opt_c": "Kinh Thánh chứng minh",
-    "opt_d": "Trải nghiệm huyền bí",
-    "correct_ans": 1,
-    "explanation": "Con đường thứ nhất (**Via Prima**): mọi vật chuyển động đều cần nguyên nhân thúc đẩy — dây chuyền này không thể vô tận — phải có **Động Cơ Tối Thượng** không bị thúc đẩy = Thiên Chúa. Đây là lý luận kế thừa từ Aristotle, được Aquinô Kitô giáo hóa.",
-    "category": "giao_ly"
-  },
-  {
-    "id": "L07_N17",
-    "question": "Thánh Mẹ Têrêsa Calcutta nói câu nổi tiếng nào bày tỏ linh đạo phục vụ?",
-    "opt_a": "'Hãy cầu nguyện nhiều để được ơn'",
-    "opt_b": "'Nếu bạn phán xét mọi người, bạn không có thời gian yêu thương họ'",
-    "opt_c": "'Phục vụ người nghèo là sứ vụ của tu sĩ'",
-    "opt_d": "'Hãy làm việc lớn để giúp đời'",
-    "correct_ans": 1,
-    "explanation": "'**If you judge people, you have no time to love them**' — Mẹ Têrêsa. Linh đạo của Ngài: nhìn thấy **'Chúa Giêsu trong hình dạng tàn tệ nhất'** qua người nghèo. Ngài dạy đội của mình: trước mỗi người khổ cực, hãy tự hỏi 'Chúa Giêsu đang muốn gì từ tôi lúc này?'",
-    "category": "thanh_nhan"
-  },
-  {
-    "id": "L07_N18",
-    "question": "Phong trào Canh Tân Đặc Sủng (Charismatic Renewal) trong Giáo hội Công giáo bắt đầu thế nào?",
-    "opt_a": "Do Vatican II triệu tập",
-    "opt_b": "Bắt đầu từ cuối tuần cầu nguyện tại Đại học Duquesne, Mỹ năm 1967 — ơn ngôn ngữ và chữa lành",
-    "opt_c": "Do ĐGH Phaolô VI phát động",
-    "opt_d": "Bắt đầu từ Ý năm 1980",
-    "correct_ans": 1,
-    "explanation": "Tháng 2/1967, trong cuối tuần cầu nguyện tại **Đại học Duquesne** (Pittsburgh, Mỹ), nhiều sinh viên và giáo sư CG trải nghiệm **ơn đặc sủng** (nói tiếng lạ, chữa lành...). Phong trào lan nhanh — ngày nay hàng triệu giáo dân CG khắp thế giới tham gia.",
-    "category": "doi_song"
-  },
-  {
-    "id": "L07_N19",
-    "question": "Cộng đoàn Kitô hữu sơ khai (Cv 2:42-47) sống như thế nào?",
-    "opt_a": "Mỗi người tự lo riêng",
-    "opt_b": "Chuyên cần nghe giáo lý Tông Đồ, hiệp thông, bẻ bánh, cầu nguyện — và chia sẻ tài sản cho nhau",
-    "opt_c": "Chỉ tập trung cầu nguyện riêng tư",
-    "opt_d": "Sống trong các đền thờ Do Thái",
-    "correct_ans": 1,
-    "explanation": "Cv 2:42-47 mô tả cộng đoàn sơ khai: **'Chuyên cần nghe giáo lý Tông Đồ, hiệp thông với nhau, bẻ bánh và cầu nguyện'** + chia sẻ tài sản. Đây là mô hình Giáo hội: **Kerygma** (rao giảng) + **Koinonia** (hiệp thông) + **Eucharistia** (Thánh Thể) + **Diakonia** (phục vụ).",
-    "category": "kinh_thanh"
-  },
-  {
-    "id": "L07_N20",
-    "question": "Ơn gọi (Vocation) theo giáo lý Công giáo không chỉ là vào dòng tu — còn gồm những gì?",
-    "opt_a": "Chỉ linh mục và tu sĩ mới có ơn gọi",
-    "opt_b": "Mọi người đều có ơn gọi nên thánh qua bậc sống của mình: hôn nhân, độc thân, linh mục, tu sĩ",
-    "opt_c": "Ơn gọi là phải thay đổi nghề nghiệp",
-    "opt_d": "Ơn gọi chỉ đến một lần trong đời",
-    "correct_ans": 1,
-    "explanation": "Vatican II (LG 40): **'Mọi người đều được mời gọi nên thánh'** — không riêng tu sĩ. Ơn gọi phổ quát là **nên thánh trong bậc sống mình đang có**: vợ chồng thánh hóa nhau, cha mẹ thánh hóa con cái, giáo dân thánh hóa xã hội. Ơn gọi đặc biệt (linh mục, tu sĩ) là phục vụ ơn gọi phổ quát này.",
     "category": "doi_song"
   }
 ]
