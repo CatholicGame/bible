@@ -13,6 +13,7 @@ import RosaryOfferingModal from '../rosary/RosaryOfferingModal';
 import bgImage from '../../assets/common/common_background.png';
 import iconCoin from '../../assets/common/coin.png';
 import iconTrophy from '../../assets/common/trophy.png';
+import roseIcon from '../../assets/rosary/rose1.png';
 
 // Game thumbnail imports
 import imgMillionaire from '../../assets/games/millionaire.png';
@@ -337,8 +338,8 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                         </motion.button>
                     )}
 
-                    {/* Logo */}
-                    <div className="flex items-center gap-2 flex-shrink-0">
+                    {/* Logo — hidden on portrait */}
+                    <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
                         <div className="w-7 h-7 rounded-lg bg-yellow-400 flex items-center justify-center text-sm relative overflow-hidden flex-shrink-0"
                             style={{ border: '2px solid #b45309', boxShadow: '0 2px 0 #b45309' }}>
                             <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none" />
@@ -353,10 +354,10 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                         <span className="text-xs font-bold italic" style={{ color: '#4a7fa5' }}>Học hỏi Lời Chúa qua trò chơi</span>
                     </div>
 
-                    {/* Dâng Hoa button */}
+                    {/* Dâng Hoa button — hidden on portrait, visible on landscape/desktop */}
                     <motion.button whileTap={{ scale: 0.93, y: 2 }}
                         onClick={() => setShowRosary(true)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors ml-auto"
+                        className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors ml-auto"
                         style={{
                             background: 'linear-gradient(135deg, rgba(236,64,122,0.12), rgba(233,30,99,0.18))',
                             border: '2px solid rgba(233,30,99,0.3)',
@@ -365,10 +366,10 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                         title="Dâng Hoa Đức Mẹ"
                     >
                         <span style={{ fontSize: 16 }}>🌸</span>
-                        <span className="font-black text-[10px] tracking-wider uppercase hidden sm:inline" style={{ color: '#c2185b' }}>Dâng Hoa</span>
+                        <span className="font-black text-[10px] tracking-wider uppercase" style={{ color: '#c2185b' }}>Dâng Hoa</span>
                     </motion.button>
 
-                    {/* Fullscreen button */}
+                    {/* Fullscreen button — ml-auto on portrait to push right */}
                     <motion.button whileTap={{ scale: 0.9, y: 2 }}
                         onClick={() => {
                             if (!document.fullscreenElement) {
@@ -377,7 +378,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                 document.exitFullscreen().catch(() => {});
                             }
                         }}
-                        className="flex items-center justify-center w-10 h-10 rounded-full transition-colors mr-[-4px]"
+                        className="flex items-center justify-center w-10 h-10 rounded-full transition-colors ml-auto sm:ml-0 mr-[-4px]"
                         style={{ background: 'rgba(0,180,216,0.12)', border: '2px solid rgba(0,180,216,0.28)', boxShadow: '0 2px 0 rgba(0,100,150,0.15)' }}
                         title="Toàn màn hình"
                     >
@@ -508,6 +509,8 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                         rosaryToday={rosaryToday}
                         rosaryGlobal={rosaryGlobal}
                         onSubmit={submitRosary}
+                        user={user}
+                        avatarUrl={avatarUrl}
                     />
                 )}
             </AnimatePresence>
@@ -760,6 +763,31 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                     </motion.div>
                 )}
             </motion.div>
+
+            {/* Floating Dâng Hoa FAB — portrait only */}
+            <motion.button
+                className="sm:hidden fixed bottom-6 right-4 z-30 flex flex-col items-center gap-1"
+                onClick={() => setShowRosary(true)}
+                whileTap={{ scale: 0.93 }}
+                whileHover={{ scale: 1.06 }}
+                style={{
+                    background: 'linear-gradient(145deg, rgba(255,240,245,0.95), rgba(255,220,235,0.92))',
+                    border: '2px solid rgba(220,120,160,0.45)',
+                    boxShadow: '0 6px 24px rgba(180,60,100,0.25), 0 2px 0 rgba(200,80,120,0.3)',
+                    borderRadius: 20,
+                    padding: '10px 16px',
+                    backdropFilter: 'blur(10px)',
+                }}
+            >
+                <img src={roseIcon} alt="" style={{ width: 36, height: 36, objectFit: 'contain' }} />
+                <span style={{
+                    fontSize: 10,
+                    fontWeight: 900,
+                    letterSpacing: '0.08em',
+                    color: '#b03060',
+                    textTransform: 'uppercase',
+                }}>Hoa Mân Côi</span>
+            </motion.button>
 
         </div>
     );
