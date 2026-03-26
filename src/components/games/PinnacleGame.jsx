@@ -1729,7 +1729,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         initial={{ opacity: 0, scale: 0.5 }}
                                         animate={introPhase >= 3 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
                                         transition={{ duration: 0.5, type: 'spring' }}
-                                        className="absolute top-0 right-2 md:right-8 lg:right-12 flex flex-col items-end z-[100] mt-[39px] md:mt-[47px] pointer-events-none"
+                                        className="absolute top-0 right-2 md:right-8 lg:right-12 flex flex-col items-end z-[100] mt-[39px] landscape:mt-[139px] md:mt-[47px] pointer-events-none"
                                     >
                                         {/* MC Avatar */}
                                     <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 relative z-[101] pointer-events-auto group">
@@ -1817,7 +1817,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         initial={{ opacity: 0, scale: 0.5 }}
                                         animate={introPhase >= 4 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
                                         transition={{ duration: 0.5, type: 'spring' }}
-                                        className="w-full flex flex-col items-center justify-center shrink-0 relative"
+                                        className="w-full flex flex-col items-center justify-center shrink-0 relative landscape:mt-[100px]"
                                     >
                                         {/* Neon timer — outer wrapper handles circular glow via filter:drop-shadow */}
                                         <motion.div
@@ -1833,7 +1833,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                 scale: 1,
                                             }}
                                             transition={{ duration: 0.75, repeat: Infinity, ease: 'easeInOut' }}
-                                            className="relative w-40 h-40 landscape:w-28 landscape:h-28 md:w-48 md:h-48 lg:w-56 lg:h-56 rounded-full overflow-hidden"
+                                            className="relative w-40 h-40 landscape:w-40 landscape:h-40 md:w-[193px] md:h-[193px] lg:w-[225px] lg:h-[225px] rounded-full overflow-hidden"
                                             style={{
                                                 background: 'radial-gradient(circle at 40% 30%, rgba(14,30,80,0.95) 0%, #020617 70%)',
                                                 border: timeLeft <= 10
@@ -1845,11 +1845,11 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                             <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full transform -rotate-90" overflow="visible">
                                                 {/* Track */}
                                                 <circle cx="50" cy="50" r="44"
-                                                    stroke="rgba(255,255,255,0.07)" strokeWidth="6" fill="transparent" />
+                                                    stroke="rgba(255,255,255,0.07)" strokeWidth="4" fill="transparent" />
                                                 {/* Glow duplicate (wider, more transparent) */}
                                                 <circle cx="50" cy="50" r="44"
                                                     stroke={timeLeft <= 10 ? 'rgba(236,72,153,0.4)' : 'rgba(34,211,238,0.3)'}
-                                                    strokeWidth="14" fill="transparent"
+                                                    strokeWidth="8" fill="transparent"
                                                     strokeDasharray="276"
                                                     strokeDashoffset={276 - (timeLeft / 30) * 276}
                                                     strokeLinecap="round"
@@ -1858,7 +1858,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                 {/* Main progress arc */}
                                                 <circle cx="50" cy="50" r="44"
                                                     stroke={timeLeft <= 10 ? '#ec4899' : '#22d3ee'}
-                                                    strokeWidth="6" fill="transparent"
+                                                    strokeWidth="4" fill="transparent"
                                                     strokeLinecap="round"
                                                     strokeDasharray="276"
                                                     strokeDashoffset={276 - (timeLeft / 30) * 276}
@@ -1868,7 +1868,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                             {/* Timer content */}
                                             <div className="absolute inset-0 flex flex-col items-center justify-center">
                                                 <span
-                                                    className="text-5xl landscape:text-4xl md:text-6xl lg:text-7xl font-black leading-none tracking-tight"
+                                                    className="text-[2.9rem] landscape:text-[3.3rem] md:text-[3.5rem] lg:text-[4.6rem] font-black leading-none tracking-tight"
                                                     style={{
                                                         color: timeLeft <= 10 ? '#f9a8d4' : '#e0f9ff',
                                                         textShadow: timeLeft <= 10
@@ -1879,7 +1879,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                     {timeLeft}
                                                 </span>
                                                 <span
-                                                    className="text-[10px] landscape:text-[9px] md:text-xs font-bold tracking-[0.2em] uppercase mt-1"
+                                                    className="text-[10px] landscape:text-[13px] md:text-[13px] font-bold tracking-[0.2em] uppercase mt-1"
                                                     style={{ color: timeLeft <= 10 ? 'rgba(236,72,153,0.6)' : 'rgba(34,211,238,0.5)' }}
                                                 >giây</span>
                                             </div>

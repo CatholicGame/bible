@@ -7,7 +7,9 @@ import './RosaryOfferingModal.css';
 
 import rosaryBgLandscape from '../../assets/rosary/rosary_bg_landscape.jpg';
 import rosaryBgPortrait from '../../assets/rosary/rosary_bg_potrait.jpg';
+import rosaryBgMusic from '../../assets/rosary/rosary_bg_music.mp3';
 import iconCoin from '../../assets/common/coin.png';
+import { useSoundManager } from '../../utils/soundManager';
 import rose1 from '../../assets/rosary/rose1.png';
 import rose2 from '../../assets/rosary/rose2.png';
 import rose3 from '../../assets/rosary/rose3.png';
@@ -72,6 +74,10 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
     const [flyingCoins, setFlyingCoins] = useState([]);
     const rosesActiveRef = useRef(false);
     const haloRef = useRef({ x: 0, y: 0, r: 80 });
+
+    // ── Background music — loops while modal is open ──
+    const { setBgVolume } = useSoundManager(rosaryBgMusic, {});
+    useEffect(() => { setBgVolume(0.35); }, [setBgVolume]);
 
     useEffect(() => {
         const query = window.matchMedia("(min-width: 700px) and (orientation: landscape)");
