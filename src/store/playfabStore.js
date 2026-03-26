@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { loginWithCustomID, loginWithEmail, registerWithEmail, getUserData, updateUserData, updateDisplayName, forgetCredentials, updateStatisticsV2, getLeaderboardV2, getLeaderboardAroundEntityV2 } from '../config/playfab';
+import { loginWithCustomID, loginWithEmail, registerWithEmail, getUserData, updateUserData, updateDisplayName, forgetCredentials, updatePlayerStatistics, getLeaderboard, getLeaderboardAroundPlayer, getPlayerProfile } from '../config/playfab';
 import { getQuestionsForGame } from '../utils/questionManager';
 import { getRankByScore } from '../utils/ranks';
 import { auth } from '../config/firebase';
@@ -13,13 +13,14 @@ const PINNACLE_STATS = {
   allTime: 'PinnacleScore_AllTime',
 };
 
-// Composite points per game based on highest level reached
-// Q15 complete: +1,000,000 | Q14 reached: +1,000 | Q13 reached: +1 | below: 0
+// Positional encoding — mã hóa để 1 số nguyên đảm bảo lexicographic ranking:
+//   Hàng triệu = số lần Q15 | Hàng nghìn = số lần Q10–Q14 | Đơn vị = số lần Q5–Q9
+// Đảm bảo: N lần Q15 luôn > bất kỳ số lần Q10 nào (cần >999,999 ván Q10 mới bằng 1 Q15)
 function calcPinnaclePoints(levelIndex, isQ15Complete) {
-  if (isQ15Complete) return 1_000_000;  // answered all 15 correctly
-  if (levelIndex >= 13) return 1_000;   // got to Q14 or Q15 but didn't complete
-  if (levelIndex >= 12) return 1;       // got to Q13
-  return 0;
+  if (levelIndex < 4) return 0;         // Q1–Q4: không gửi
+  if (isQ15Complete) return 1_000_000;  // Q15: hàng triệu
+  if (levelIndex >= 9) return 1_000;    // Q10–Q14: hàng nghìn
+  return 1;                             // Q5–Q9: đơn vị
 }
 
 /**
@@ -77,9 +78,27 @@ export const usePlayFabStore = create((set, get) => ({
 
   // ── Login ──
   login: async (customNickname) => {
+    // Guard: skip if already logged-in state is set or login is in progress
+    const s = get();
+    if (s.isLoggedIn || s.isLoading) return true;
+    // Guard: skip if sessionTicket already exists in sessionStorage (survives Vite HMR)
+    if (sessionStorage.getItem('pf_session')) {
+      // Tokens restored — just re-trigger login silently to refresh user data
+      // but debounce: avoid double-calling within 10 seconds
+      const lastLogin = sessionStorage.getItem('pf_last_login');
+      const now = Date.now();
+      if (lastLogin && now - parseInt(lastLogin) < 10_000) {
+        // Already logged in recently — restore state from next login
+        // (let the full login proceed on next hard reload instead)
+        console.log('[PlayFab] Skipping duplicate login within 10s');
+        return true;
+      }
+    }
+
     set({ isLoading: true, error: null });
     try {
       const deviceId = getDeviceId();
+      sessionStorage.setItem('pf_last_login', String(Date.now()));
       const data = await loginWithCustomID(deviceId);
 
       const playFabId = data.PlayFabId;
@@ -403,11 +422,11 @@ export const usePlayFabStore = create((set, get) => ({
     const points = calcPinnaclePoints(levelIndex, isQ15Complete);
     if (points <= 0) return;
     try {
-      await updateStatisticsV2([
-        { Name: PINNACLE_STATS.daily,   Value: points },
-        { Name: PINNACLE_STATS.weekly,  Value: points },
-        { Name: PINNACLE_STATS.monthly, Value: points },
-        { Name: PINNACLE_STATS.allTime, Value: points },
+      await updatePlayerStatistics([
+        { StatisticName: PINNACLE_STATS.daily,   Value: points },
+        { StatisticName: PINNACLE_STATS.weekly,  Value: points },
+        { StatisticName: PINNACLE_STATS.monthly, Value: points },
+        { StatisticName: PINNACLE_STATS.allTime, Value: points },
       ]);
       console.log(`[Pinnacle] Saved composite score ${points} (levelIndex=${levelIndex}, q15=${isQ15Complete})`);
     } catch (e) {
@@ -423,26 +442,31 @@ export const usePlayFabStore = create((set, get) => ({
     set({ pinnacleLeaderboardLoading: true, pinnacleActiveTab: tab });
     try {
       const [topData, aroundData] = await Promise.all([
-        getLeaderboardV2(statName, 10),
-        getLeaderboardAroundEntityV2(statName, 3),
+        getLeaderboard(statName, 10),
+        getLeaderboardAroundPlayer(statName, 7),
       ]);
 
-      // Parse top 10 entries
-      const entries = (topData?.Rankings || []).map(e => ({
-        position: e.Rank,
-        displayName: e.Entity?.DisplayName || e.Entity?.Id?.slice(-6) || '???',
-        score: e.Statistics?.[0]?.Value ?? e.Score ?? 0,
-        entityId: e.Entity?.Id,
+      // V1 response: data.Leaderboard = [{Position (0-indexed), DisplayName, StatValue, ...}]
+      const entries = (topData?.Leaderboard || []).map(e => ({
+        position: e.Position + 1,
+        displayName: e.DisplayName || e.PlayFabId?.slice(-6) || '???',
+        score: e.StatValue ?? 0,
+        entityId: e.PlayFabId,
       }));
 
-      // Find player's own rank — PlayFab returns current player at center of around-entity response
+      // Find player's rank from around-player response (player is somewhere in the list)
       let playerRank = null;
-      if (aroundData?.Rankings && aroundData.Rankings.length > 0) {
-        const mid = aroundData.Rankings[Math.floor(aroundData.Rankings.length / 2)];
-        playerRank = {
-          position: mid.Rank,
-          score: mid.Statistics?.[0]?.Value ?? mid.Score ?? 0,
-        };
+      const around = aroundData?.Leaderboard || [];
+      if (around.length > 0) {
+        // The current player's entry will have the same PlayFabId
+        // PlayFab centers the list around the player; use the middle entry as fallback
+        const midEntry = around[Math.floor(around.length / 2)];
+        if (midEntry) {
+          playerRank = {
+            position: midEntry.Position + 1,
+            score: midEntry.StatValue ?? 0,
+          };
+        }
       }
 
       set({
@@ -450,6 +474,20 @@ export const usePlayFabStore = create((set, get) => ({
         pinnaclePlayerRank: playerRank,
         pinnacleLeaderboardLoading: false,
       });
+
+      // Enrich entries with avatar URLs in parallel (best-effort)
+      const playfabIds = entries.map(e => e.entityId).filter(Boolean);
+      if (playfabIds.length > 0) {
+        const results = await Promise.allSettled(playfabIds.map(id => getPlayerProfile(id)));
+        const enriched = entries.map((e, i) => {
+          const result = results[i];
+          const avatarUrl = result?.status === 'fulfilled'
+            ? (result.value?.PlayerProfile?.AvatarUrl || null)
+            : null;
+          return { ...e, avatarUrl };
+        });
+        set({ pinnacleLeaderboard: enriched });
+      }
     } catch (e) {
       console.warn('[Pinnacle] Failed to load leaderboard', e);
       set({ pinnacleLeaderboardLoading: false });
@@ -460,27 +498,23 @@ export const usePlayFabStore = create((set, get) => ({
   loadHallOfFame: async () => {
     set({ hallOfFameLoading: true });
     try {
-      // Get top 10 from AllTime leaderboard
-      const data = await getLeaderboardV2(PINNACLE_STATS.allTime, 10);
-      const entries = (data?.Rankings || []).map(e => {
-        const score = e.Statistics?.[0]?.Value ?? e.Score ?? 0;
-        // Decode composite score back to readable achievement
+      const data = await getLeaderboard(PINNACLE_STATS.allTime, 10);
+      const entries = (data?.Leaderboard || []).map(e => {
+        const score = e.StatValue ?? 0;
         let achievement;
         if (score >= 1_000_000) {
-          const q15Count = Math.floor(score / 1_000_000);
-          achievement = `${q15Count}× Q15 ✅`;
+          achievement = `${Math.floor(score / 1_000_000)}× Q15 ✅`;
         } else if (score >= 1_000) {
-          const q14Count = Math.floor(score / 1_000);
-          achievement = `${q14Count}× Q14`;
+          achievement = `${Math.floor(score / 1_000)}× Q14`;
         } else {
           achievement = `${score}× Q13`;
         }
         return {
-          displayName: e.Entity?.DisplayName || '???',
-          avatarUrl: e.Profile?.AvatarUrl || null,
+          displayName: e.DisplayName || '???',
+          avatarUrl: null,
           achievement,
           score,
-          rank: e.Rank,
+          rank: e.Position + 1,
         };
       });
       set({ hallOfFame: entries, hallOfFameLoading: false });

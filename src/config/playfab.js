@@ -8,13 +8,13 @@
 const TITLE_ID = '15C4E5';
 const BASE_URL = `https://${TITLE_ID}.playfabapi.com`;
 
-// Session ticket — set after login
-let sessionTicket = null;
+// Session ticket — set after login, persisted to sessionStorage to survive Vite HMR
+let sessionTicket = sessionStorage.getItem('pf_session') || null;
 
 // Entity token — for PlayFab v2 Statistics & Leaderboard API
-let entityToken = null;
-let entityId = null;
-let entityType = null;
+let entityToken = sessionStorage.getItem('pf_entity_token') || null;
+let entityId    = sessionStorage.getItem('pf_entity_id')    || null;
+let entityType  = sessionStorage.getItem('pf_entity_type')  || null;
 
 /**
  * Generic PlayFab API call
@@ -85,11 +85,15 @@ export async function loginWithCustomID(customId) {
   }, false); // Auth not needed for login
 
   sessionTicket = data.SessionTicket;
+  sessionStorage.setItem('pf_session', sessionTicket);
   // Store entity token for v2 APIs
   if (data.EntityToken) {
     entityToken = data.EntityToken.EntityToken;
     entityId = data.EntityToken.Entity?.Id;
     entityType = data.EntityToken.Entity?.Type;
+    sessionStorage.setItem('pf_entity_token', entityToken);
+    sessionStorage.setItem('pf_entity_id', entityId || '');
+    sessionStorage.setItem('pf_entity_type', entityType || '');
   }
   return data;
 }
@@ -104,10 +108,14 @@ export async function registerWithEmail(email, password, displayName) {
   }, false);
 
   sessionTicket = data.SessionTicket;
+  sessionStorage.setItem('pf_session', sessionTicket);
   if (data.EntityToken) {
     entityToken = data.EntityToken.EntityToken;
     entityId = data.EntityToken.Entity?.Id;
     entityType = data.EntityToken.Entity?.Type;
+    sessionStorage.setItem('pf_entity_token', entityToken);
+    sessionStorage.setItem('pf_entity_id', entityId || '');
+    sessionStorage.setItem('pf_entity_type', entityType || '');
   }
   return data;
 }
@@ -126,10 +134,14 @@ export async function loginWithEmail(email, password) {
   }, false);
 
   sessionTicket = data.SessionTicket;
+  sessionStorage.setItem('pf_session', sessionTicket);
   if (data.EntityToken) {
     entityToken = data.EntityToken.EntityToken;
     entityId = data.EntityToken.Entity?.Id;
     entityType = data.EntityToken.Entity?.Type;
+    sessionStorage.setItem('pf_entity_token', entityToken);
+    sessionStorage.setItem('pf_entity_id', entityId || '');
+    sessionStorage.setItem('pf_entity_type', entityType || '');
   }
   return data;
 }
@@ -148,10 +160,14 @@ export async function loginWithGoogleAccount(accessToken) {
   }, false);
 
   sessionTicket = data.SessionTicket;
+  sessionStorage.setItem('pf_session', sessionTicket);
   if (data.EntityToken) {
     entityToken = data.EntityToken.EntityToken;
     entityId = data.EntityToken.Entity?.Id;
     entityType = data.EntityToken.Entity?.Type;
+    sessionStorage.setItem('pf_entity_token', entityToken);
+    sessionStorage.setItem('pf_entity_id', entityId || '');
+    sessionStorage.setItem('pf_entity_type', entityType || '');
   }
   return data;
 }
@@ -198,6 +214,29 @@ export async function getLeaderboard(statName, maxResults = 10) {
   return callPlayFab('/Client/GetLeaderboard', {
     StatisticName: statName,
     MaxResultsCount: maxResults,
+    ProfileConstraints: { ShowDisplayName: true },
+  });
+}
+
+export async function getLeaderboardAroundPlayer(statName, maxResults = 7) {
+  return callPlayFab('/Client/GetLeaderboardAroundPlayer', {
+    StatisticName: statName,
+    MaxResultsCount: maxResults,
+    ProfileConstraints: { ShowDisplayName: true },
+  });
+}
+
+/**
+ * Get a single player's profile including their avatar URL.
+ * playFabId: the player's PlayFabId from the leaderboard entry.
+ */
+export async function getPlayerProfile(playFabId) {
+  return callPlayFab('/Client/GetPlayerProfile', {
+    PlayFabId: playFabId,
+    ProfileConstraints: {
+      ShowDisplayName: true,
+      ShowAvatarUrl: true,
+    },
   });
 }
 
@@ -212,13 +251,15 @@ export async function updateStatisticsV2(stats) {
     console.warn('[PlayFab v2] No entity token — skipping stat update');
     return null;
   }
-  return callPlayFabV2('/Statistic/UpdateStatistics', {
+  const body = {
     Entity: { Id: entityId, Type: entityType || 'title_player_account' },
     Statistics: stats.map(s => ({
       Name: s.Name,
       Value: s.Value,
     })),
-  });
+  };
+  console.log('[PlayFab v2] UpdateStatistics body:', JSON.stringify(body));
+  return callPlayFabV2('/Statistic/UpdateStatistics', body);
 }
 
 /**
@@ -256,4 +297,8 @@ export function forgetCredentials() {
   entityToken = null;
   entityId = null;
   entityType = null;
+  sessionStorage.removeItem('pf_session');
+  sessionStorage.removeItem('pf_entity_token');
+  sessionStorage.removeItem('pf_entity_id');
+  sessionStorage.removeItem('pf_entity_type');
 }

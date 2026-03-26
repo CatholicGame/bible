@@ -739,8 +739,13 @@ const PinnacleGame = ({ onLeaveGame }) => {
             size: 10 + Math.random() * 8,
         }));
         setXpParticles(particles);
-        setTimeout(() => setXpParticles([]), 2600);
+
+        // Timeout = last particle delay + fly duration (1600ms) + fade-out buffer (400ms)
+        const lastDelayMs = (count - 1) * 60; // i * 0.06s → i * 60ms
+        const cleanupMs = lastDelayMs + 1600 + 400;
+        setTimeout(() => setXpParticles([]), cleanupMs);
     }, []);
+
 
     const handleStartGame = () => {
         loadNewGame(); // Rút 15 câu hỏi mới từ pool
@@ -2147,8 +2152,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
                                         transition={{ duration: 0.18 }}
-                                        className="absolute inset-0 z-[200] flex items-center justify-center"
-                                        style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)' }}
+                                        className="fixed inset-0 z-[9999] flex items-center justify-center"
+                                        style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
                                     >
                                         <motion.div
                                             initial={{ scale: 0.85, opacity: 0, y: 20 }}
