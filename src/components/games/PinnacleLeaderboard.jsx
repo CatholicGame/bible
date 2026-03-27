@@ -185,27 +185,31 @@ const MedalIcon = ({ pos }) => {
     );
 };
 
-const PlayerAvatar = ({ name, avatarUrl }) => (
-    <div className="relative z-10 w-16 h-16 rounded-full p-[2px] shadow-[0_4px_10px_rgba(0,0,0,0.5)] flex items-center justify-center shrink-0"
+const PlayerAvatar = ({ name, avatarUrl, sizeClass = "w-16 h-16", textClass = "text-2xl" }) => (
+    <div className={`relative z-10 ${sizeClass} rounded-full p-[2px] shadow-[0_4px_10px_rgba(0,0,0,0.5)] flex items-center justify-center shrink-0`}
          style={{ background: 'linear-gradient(135deg, #fef08a 0%, #ca8a04 50%, #78350f 100%)' }}>
         <div className="w-full h-full rounded-full border-[2px] border-[#fef08a]/60 bg-gradient-to-br from-[#b45309] via-[#eab308] to-[#fef08a] flex items-center justify-center shadow-[inset_0_2px_8px_rgba(0,0,0,0.4)] overflow-hidden">
              {avatarUrl ? (
                  <img src={avatarUrl} alt={name || 'Avatar'} className="w-full h-full object-cover" onError={e => e.target.style.display='none'} />
              ) : (
-                 <span className="font-black text-2xl text-[#78350f] drop-shadow-sm">{(name || '?')[0].toUpperCase()}</span>
+                 <span className={`font-black ${textClass} text-[#78350f] drop-shadow-sm`}>{(name || '?')[0].toUpperCase()}</span>
              )}
         </div>
     </div>
 );
 
-const NormalAvatar = ({ name }) => {
+const NormalAvatar = ({ name, avatarUrl, sizeClass = "w-14 h-14", textClass = "text-xl" }) => {
     const col = seedColor(name);
     return (
-        <div className="relative z-10 w-14 h-14 rounded-full p-[2px] shadow-[0_2px_5px_rgba(0,0,0,0.5)] flex items-center justify-center shrink-0"
+        <div className={`relative z-10 ${sizeClass} rounded-full p-[2px] shadow-[0_2px_5px_rgba(0,0,0,0.5)] flex items-center justify-center shrink-0`}
              style={{ background: `linear-gradient(135deg, ${col}cc 0%, ${col} 60%, ${col}99 100%)` }}>
-            <div className="w-full h-full rounded-full border-[2px] border-white/30 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]"
+            <div className="w-full h-full rounded-full border-[2px] border-white/30 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)] overflow-hidden"
                  style={{ background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.25) 0%, rgba(0,0,0,0.25) 100%), ${col}` }}>
-                <span className="font-black text-2xl text-white drop-shadow-md" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>{(name || '?')[0].toUpperCase()}</span>
+                 {avatarUrl ? (
+                     <img src={avatarUrl} alt={name || 'Avatar'} className="w-full h-full object-cover" onError={e => e.target.style.display='none'} />
+                 ) : (
+                    <span className={`font-black ${textClass} text-white drop-shadow-md`} style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>{(name || '?')[0].toUpperCase()}</span>
+                 )}
             </div>
             {/* Tiny crown */}
             <div className="absolute -bottom-1 -right-1 z-20 w-6 h-6 flex items-center justify-center drop-shadow-md">
@@ -215,56 +219,169 @@ const NormalAvatar = ({ name }) => {
     );
 };
 
-// ── Rank Row ──────────────────────────────────────────────────────────────────
+// ── Rank Content ────────────────────────────────────────────────────────────
 
-const RankRow = ({ entry, isPlayer, myAvatarUrl }) => {
+const HeroCard = ({ entry, isPlayer, myAvatarUrl }) => {
+    const { q15, q14, q13 } = decodeScore(entry.score);
+    // Build pills based on counts
+    const pills = [];
+    if (q15 > 0) pills.push({ label: `Q15 ×${q15}`, color: 'text-red-400' });
+    if (q14 > 0) pills.push({ label: `Q14 ×${q14}`, color: 'text-yellow-400' });
+    if (q13 > 0) pills.push({ label: `Q13 ×${q13}`, color: 'text-sky-400' });
+    if (pills.length === 0) pills.push({ label: `${entry.score} XP`, color: 'text-emerald-400' });
+
+    // Mock banner text based on top score
+    let bannerText = "Vượt qua thử thách xuất sắc trong tuần!";
+    if (q15 > 0) bannerText = `Chinh phục Level 15 ${q15} lần trong tuần!`;
+    else if (q14 > 0) bannerText = `Vượt qua Level 14 ${q14} lần trong tuần!`;
+    else if (q13 > 0) bannerText = `Vượt qua Level 13 ${q13} lần trong tuần!`;
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="rounded-xl border-[2px] relative overflow-hidden mb-4 mt-1 flex flex-col shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
+            style={{
+                background: 'linear-gradient(135deg, #b45309 0%, #422006 100%)', // gold to dark brown
+                borderColor: '#fde047',
+                zIndex: 20
+            }}
+        >
+            {/* Ambient glows */}
+            <div className="absolute top-0 left-1/4 w-40 h-40 bg-yellow-400/20 blur-3xl rounded-full pointer-events-none" />
+            <div className="absolute bottom-0 right-0 w-32 h-32 bg-yellow-600/20 blur-2xl rounded-full pointer-events-none" />
+            
+            <div className="flex gap-2 items-center px-1 sm:px-2 py-3 relative z-10 w-full min-w-0">
+                <div className="shrink-0 relative z-20 flex justify-center transform scale-100 sm:scale-105">
+                    <MedalIcon pos={1} />
+                </div>
+
+                <div className="shrink-0 relative ml-0.5 sm:ml-1 flex justify-center items-center z-20">
+                    <div className="absolute inset-0 bg-yellow-400/40 blur-xl rounded-full scale-125" />
+                    <PlayerAvatar 
+                        name={entry.displayName} 
+                        avatarUrl={isPlayer ? myAvatarUrl : entry.avatarUrl} 
+                        sizeClass="w-[62px] h-[62px] sm:w-[72px] sm:h-[72px]" 
+                        textClass="text-3xl sm:text-4xl"
+                    />
+                </div>
+
+                <div className="flex-1 flex flex-col justify-center ml-1 z-20 min-w-0">
+                    <div className="text-base sm:text-lg font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-wide uppercase truncate mb-1">
+                        {isPlayer ? 'Bạn' : entry.displayName}
+                    </div>
+                    
+                </div>
+
+                <div className="flex flex-col gap-1.5 items-end ml-1 mr-1 shrink-0 z-20">
+                    {pills.slice(0, 2).map((p, idx) => (
+                         <div key={idx} className="bg-black/30 rounded-full px-1.5 sm:px-2.5 py-0.5 sm:py-1 border border-white/10 flex items-center gap-1 sm:gap-1.5 shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                             <span className={p.color + " text-[10px] sm:text-[12px]"}>⚡</span>
+                             <span className="text-white text-[10px] sm:text-[11px] font-bold whitespace-nowrap">{p.label}</span>
+                         </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="bg-black/40 w-full py-1.5 px-2 text-center mt-auto border-t border-white/10 relative z-10">
+                <span className="text-yellow-300 text-[9px] sm:text-[10px] font-bold tracking-wide">🏆 Thành tích: {bannerText}</span>
+            </div>
+        </motion.div>
+    );
+};
+
+const PlayerCard = ({ entry, isPlayer, targetEntry, myAvatarUrl }) => {
     const pos = entry.position;
-    const isTop3 = pos <= 3;
-    const isSpecial = isPlayer || pos === 1;
-
-    // Row Container styles
-    const rowBorder = isSpecial ? 'rgba(251,191,36,0.6)' : 'rgba(255,255,255,0.1)';
-    const rowBg = isSpecial
-        ? 'linear-gradient(180deg, rgba(30,58,138,0.9) 0%, rgba(23,37,84,0.95) 100%)'
+    const bg = isPlayer 
+        ? 'linear-gradient(135deg, #0284c7 0%, #4338ca 100%)' // xanh -> tím
         : 'linear-gradient(180deg, rgba(30,58,138,0.7) 0%, rgba(23,37,84,0.8) 100%)';
-    const rowShadow = isSpecial ? '0 0 20px rgba(251,191,36,0.2), inset 0 2px 0 rgba(255,255,255,0.2)' : 'inset 0 1px 0 rgba(255,255,255,0.1)';
+    const border = isPlayer ? '#38bdf8' : 'rgba(255,255,255,0.1)';
+    const shadow = isPlayer ? '0 0 15px rgba(56,189,248,0.3), inset 0 1px 0 rgba(255,255,255,0.2)' : 'inset 0 1px 0 rgba(255,255,255,0.1)';
+
+    const { q15, q14, q13 } = decodeScore(entry.score);
+    let scoreStrParts = [];
+    if (q15 > 0) scoreStrParts.push(`${q15}x Q15`);
+    if (q14 > 0) scoreStrParts.push(`${q14}x Q14`);
+    if (q13 > 0) scoreStrParts.push(`${q13}x Q13`);
+    const scoreStr = scoreStrParts.join(' | ') || `${entry.score} XP`;
+
+    let progressEl = null;
+    if (isPlayer && targetEntry) {
+        // Calculate rough percentage (minimum 5%)
+        let percent = 5;
+        if (targetEntry.score > 0) {
+            percent = Math.floor(Math.max(5, Math.min(100, (entry.score / targetEntry.score) * 100)));
+        }
+        const gap = gapMessage(entry.score, targetEntry.score);
+        progressEl = gap ? (
+            <div className="mt-3 pt-2.5 border-t border-white/10 w-full relative z-30">
+                <div className="flex justify-between items-center text-[10px] font-bold text-sky-200 mb-1.5 px-0.5">
+                    <span className="flex items-center gap-1">
+                        <span className="text-yellow-400">⚡</span> Đuổi Top #{targetEntry.position}
+                    </span>
+                    <span>{percent}%</span>
+                </div>
+                <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden flex border border-white/5 relative">
+                    <div className="h-full rounded-full transition-all duration-1000 relative overflow-hidden"
+                        style={{ width: `${percent}%`, background: 'linear-gradient(90deg, #facc15 0%, #4ade80 100%)' }}>
+                        <div className="absolute top-0 right-0 bottom-0 w-4 bg-white/40 skew-x-12 translate-x-2 blur-[1px]" />
+                    </div>
+                </div>
+                <div className="text-center mt-1.5 text-[10px] text-sky-200 italic font-semibold">
+                    → {gap}
+                </div>
+            </div>
+        ) : null;
+    }
 
     return (
         <motion.div
             initial={{ opacity: 0, x: -24 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: Math.min((pos - 1) * 0.07, 0.5), type: 'spring', stiffness: 210, damping: 20 }}
-            className={`flex items-center ${isSpecial ? 'py-2.5 px-3' : 'py-2 px-3'} rounded-full border-2 relative overflow-visible`}
-            style={{ background: rowBg, borderColor: rowBorder, boxShadow: rowShadow, zIndex: isSpecial ? 10 : 1 }}>
+            className={`rounded-xl border-2 p-3 relative mb-2 flex flex-col`}
+            style={{ background: bg, borderColor: border, boxShadow: shadow, zIndex: isPlayer ? 10 : 1 }}>
+            
+            {isPlayer && <div className="absolute inset-0 bg-white/5 rounded-xl pointer-events-none" />}
 
+            <div className="flex items-center gap-2 relative z-20">
+                <div className={`shrink-0 flex items-center justify-center relative z-20 ml-1 sm:ml-0`}>
+                    <MedalIcon pos={pos} />
+                </div>
 
+                <div className="shrink-0 relative flex items-center justify-center z-20 ml-1">
+                    {isPlayer
+                        ? <PlayerAvatar name={entry.displayName} avatarUrl={myAvatarUrl} sizeClass="w-12 h-12" textClass="text-xl" />
+                        : <NormalAvatar name={entry.displayName} avatarUrl={entry.avatarUrl} sizeClass="w-12 h-12" textClass="text-xl" />
+                    }
+                </div>
 
-            {/* Medal / rank badge */}
-            <div className={`shrink-0 flex items-center justify-center relative z-20 ${isTop3 ? '-ml-2' : 'ml-1 w-8'}`}>
-                <MedalIcon pos={pos} />
+                <div className="flex-1 min-w-0 z-20 flex flex-col justify-center gap-0.5 ml-2">
+                    <div className="flex justify-between items-center pr-1">
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                            <p className={`${isPlayer ? 'text-lg text-sky-50' : 'text-base text-white'} font-black truncate drop-shadow-md`}>
+                                {isPlayer ? 'Bạn' : entry.displayName}
+                            </p>
+                            {isPlayer && <span className="shrink-0 px-1.5 py-0.5 rounded text-[9px] font-black bg-sky-500/30 text-sky-200 border border-sky-400/30">YOU</span>}
+                        </div>
+                    </div>
+                    <div className="text-xs font-bold text-yellow-300 drop-shadow-sm flex items-center gap-1.5">
+                        <span className="bg-black/40 px-1.5 py-0.5 rounded text-[10px] text-white/80 border border-white/5">Score</span>
+                        {scoreStr}
+                    </div>
+                </div>
             </div>
 
-            {/* Avatar */}
-            <div className="shrink-0 flex items-center justify-center relative z-20 ml-2">
-                {isSpecial
-                    ? <PlayerAvatar name={entry.displayName} avatarUrl={isPlayer ? myAvatarUrl : entry.avatarUrl} />
-                    : <NormalAvatar name={entry.displayName} />
-                }
-            </div>
-
-            {/* Name */}
-            <div className="flex-1 min-w-0 ml-4 relative z-20">
-                <p className={`${isSpecial ? 'text-xl' : 'text-lg'} font-black text-white truncate drop-shadow-md`}>
-                    {isPlayer ? 'Bạn' : entry.displayName}
-                </p>
-            </div>
-
-            {/* Score */}
-            <div className="shrink-0 relative z-20 font-black ml-2 pr-2" style={{ fontSize: isSpecial ? '18px' : '16px', color: '#fcd34d', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
-                <ScoreLabel score={entry.score} inheritColor={true} />
-            </div>
+            {progressEl}
         </motion.div>
     );
+};
+
+const RankRow = ({ entry, isPlayer, targetEntry, myAvatarUrl }) => {
+    if (entry.position === 1) {
+        return <HeroCard entry={entry} isPlayer={isPlayer} myAvatarUrl={myAvatarUrl} />;
+    }
+    return <PlayerCard entry={entry} isPlayer={isPlayer} targetEntry={targetEntry} myAvatarUrl={myAvatarUrl} />;
 };
 
 
@@ -298,12 +415,6 @@ const PinnacleLeaderboard = ({ onBack }) => {
     const playerPos    = pinnaclePlayerRank?.position ?? null;
     const playerInList = pinnacleLeaderboard.some(e => e.position === playerPos);
 
-    let gapMsg = null;
-    if (playerPos && playerPos > 1) {
-        const above = pinnacleLeaderboard.find(e => e.position === playerPos - 1);
-        if (above) gapMsg = gapMessage(playerScore, above.score);
-    }
-
     const isEmpty = !pinnacleLeaderboardLoading && pinnacleLeaderboard.length === 0;
     const myAvatarUrl = usePlayFabStore(s => s.avatarUrl);
 
@@ -330,21 +441,25 @@ const PinnacleLeaderboard = ({ onBack }) => {
                 <div className="shrink-0 px-4 pt-3 pb-3 border-b-2 border-[#172554]">
 
                     {/* Title row */}
-                    <div className="relative flex items-center justify-center mb-3">
+                    <div className="relative flex flex-col items-center justify-center mb-3">
                         <button onClick={onBack}
-                            className="absolute left-1 w-10 h-10 rounded-full flex items-center justify-center text-white
+                            className="absolute left-1 top-0 w-10 h-10 rounded-full flex items-center justify-center text-white
                                        bg-blue-700 border-[3px] border-[#172554]
                                        shadow-[0_4px_0_rgba(23,37,84,1)]
                                        active:translate-y-1 active:shadow-none transition-all">
                             <ChevronLeft size={20} strokeWidth={3} />
                         </button>
 
-                        <div className="flex items-center gap-2 px-12">
-                            <Trophy size={18} className="text-yellow-400 shrink-0" />
-                            <h1 className="text-white font-black text-sm sm:text-base tracking-wide text-center leading-tight"
-                                style={{ textShadow: '0 2px 0 #172554' }}>
-                                BXH Ai là Nhà Thần Học
+                        <div className="flex items-center gap-2 px-12 pb-1">
+                            <h1 className="text-yellow-400 font-black text-lg sm:text-xl tracking-wide text-center leading-tight uppercase"
+                                style={{ textShadow: '0 2px 0 #172554, 0 0 10px rgba(250, 204, 21, 0.5)' }}>
+                                🏆 AI ARENA RANKING
                             </h1>
+                        </div>
+                        <div className="flex justify-center -mt-1 mb-1">
+                             <div className="text-sky-200 text-[11px] sm:text-xs font-semibold px-3 py-0.5 rounded-full border border-sky-400/30 bg-sky-900/40">
+                                 "Bạn đang chiến đấu để leo top"
+                             </div>
                         </div>
                     </div>
 
@@ -404,32 +519,28 @@ const PinnacleLeaderboard = ({ onBack }) => {
                         </div>
                     ) : (
                         <>
-                            {pinnacleLeaderboard.map(entry => (
-                                <RankRow key={entry.position} entry={entry} isPlayer={entry.position === playerPos} myAvatarUrl={myAvatarUrl} />
-                            ))}
+                            {pinnacleLeaderboard.map((entry, index) => {
+                                let target = null;
+                                if (entry.position === playerPos && playerPos > 1) {
+                                    target = pinnacleLeaderboard.find(e => e.position === playerPos - 1) || pinnacleLeaderboard[index - 1];
+                                }
+                                return <RankRow key={entry.position} entry={entry} isPlayer={entry.position === playerPos} targetEntry={target} myAvatarUrl={myAvatarUrl} />;
+                            })}
 
                             {pinnaclePlayerRank && !playerInList && (
                                 <>
-                                    <div className="flex items-center gap-2 my-1">
+                                    <div className="flex items-center gap-2 my-2">
                                         <div className="flex-1 h-px bg-white/15" />
-                                        <span className="text-white/30 text-xs tracking-widest">···</span>
+                                        <span className="text-white/30 text-[10px] tracking-widest uppercase font-bold">Vị trí của bạn</span>
                                         <div className="flex-1 h-px bg-white/15" />
                                     </div>
                                     <RankRow
                                         entry={{ position: playerPos, displayName: 'Bạn', score: playerScore, giaoxu: null }}
                                         isPlayer
+                                        targetEntry={pinnacleLeaderboard.length > 0 ? pinnacleLeaderboard[pinnacleLeaderboard.length - 1] : null}
                                         myAvatarUrl={myAvatarUrl}
                                     />
                                 </>
-                            )}
-
-                            {gapMsg && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-                                    className="mt-1 px-4 py-2.5 rounded-2xl border-2 border-yellow-400/40 text-center"
-                                    style={{ background: 'linear-gradient(135deg, #0c1a3e, #080f28)' }}>
-                                    <p className="text-yellow-200 text-xs font-bold">💡 {gapMsg}</p>
-                                </motion.div>
                             )}
                         </>
                     )}
