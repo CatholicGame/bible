@@ -78,7 +78,7 @@ export async function loginWithCustomID(customId) {
     CreateAccount: true,
     InfoRequestParameters: {
       GetUserData: true,
-      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh', 'GlobalScore', 'Coins', 'Stats'],
+      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh', 'GlobalScore', 'Coins', 'Stats', 'PinnacleMyVote'],
       GetPlayerProfile: true,
       ProfileConstraints: { ShowDisplayName: true },
     },
@@ -127,7 +127,7 @@ export async function loginWithEmail(email, password) {
     Password: password,
     InfoRequestParameters: {
       GetUserData: true,
-      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh', 'GlobalScore', 'Coins', 'Stats'],
+      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh', 'GlobalScore', 'Coins', 'Stats', 'PinnacleMyVote'],
       GetPlayerProfile: true,
       ProfileConstraints: { ShowDisplayName: true },
     },
@@ -153,7 +153,7 @@ export async function loginWithGoogleAccount(accessToken) {
     CreateAccount: true,
     InfoRequestParameters: {
       GetUserData: true,
-      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh', 'GlobalScore', 'Coins', 'Stats'],
+      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh', 'GlobalScore', 'Coins', 'Stats', 'PinnacleMyVote'],
       GetPlayerProfile: true,
       ProfileConstraints: { ShowDisplayName: true },
     },
@@ -216,6 +216,22 @@ export async function getLeaderboard(statName, maxResults = 10) {
     MaxResultsCount: maxResults,
     ProfileConstraints: { ShowDisplayName: true },
   });
+}
+
+/** Same as getLeaderboard but returns null silently if stat doesn't exist yet */
+export async function getLeaderboardSilent(statName, maxResults = 10) {
+  try {
+    const res = await fetch(`${BASE_URL}/Client/GetLeaderboard`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Authorization': sessionTicket },
+      body: JSON.stringify({ StatisticName: statName, MaxResultsCount: maxResults }),
+    });
+    const json = await res.json();
+    if (json.code !== 200) return null;
+    return json.data;
+  } catch {
+    return null;
+  }
 }
 
 export async function getLeaderboardAroundPlayer(statName, maxResults = 7) {

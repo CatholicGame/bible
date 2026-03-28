@@ -116,7 +116,7 @@ const HallOfFameSlider = ({ entries = [], loading }) => {
                             <span className="absolute -bottom-1 -right-1 text-lg drop-shadow-lg z-30">{rankBadge}</span>
                         </div>
                         <div className="flex-1 min-w-0 flex flex-col justify-center">
-                            <p className="text-white font-black text-[15px] truncate leading-tight mt-0.5" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>{e.displayName}</p>
+                            <p className="text-white font-black text-[13px] leading-tight mt-0.5 break-words" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.8)', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{e.displayName}</p>
                             <div className="flex items-center gap-1.5 pt-0.5">
                                 {e.giaoxu && <span className="text-[10px] text-blue-200 font-semibold truncate">⛪ {e.giaoxu}</span>}
                             </div>
@@ -267,7 +267,7 @@ const HeroCard = ({ entry, isPlayer, myAvatarUrl }) => {
                 </div>
 
                 <div className="flex-1 flex flex-col justify-center ml-1 z-20 min-w-0">
-                    <div className="text-base sm:text-lg font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-wide uppercase truncate mb-1">
+                    <div className="text-sm sm:text-base font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-wide uppercase mb-1 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
                         {isPlayer ? 'Bạn' : entry.displayName}
                     </div>
                     
@@ -359,7 +359,7 @@ const PlayerCard = ({ entry, isPlayer, targetEntry, myAvatarUrl }) => {
                 <div className="flex-1 min-w-0 z-20 flex flex-col justify-center gap-0.5 ml-2">
                     <div className="flex justify-between items-center pr-1">
                         <div className="flex items-center gap-2 min-w-0 flex-1">
-                            <p className={`${isPlayer ? 'text-lg text-sky-50' : 'text-base text-white'} font-black truncate drop-shadow-md`}>
+                            <p className={`${isPlayer ? 'text-base text-sky-50' : 'text-sm text-white'} font-black drop-shadow-md break-words`} style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
                                 {isPlayer ? 'Bạn' : entry.displayName}
                             </p>
                             {isPlayer && <span className="shrink-0 px-1.5 py-0.5 rounded text-[9px] font-black bg-sky-500/30 text-sky-200 border border-sky-400/30">YOU</span>}

@@ -1,26 +1,36 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Settings, Music, Volume2, X } from 'lucide-react';
+import { Settings, Music, Volume2, X, Bell, BellOff } from 'lucide-react';
 import { useSettingsStore } from '../../store/settingsStore';
+import { updateUserData } from '../../config/playfab';
+
+// Lazy-load notifications to avoid crashing if firebase/messaging fails
+const getNotifUtils = () => import('../../utils/notifications');
 
 /* ── Animated Toggle — chunky 3D pill ── */
-const Toggle = ({ value, onToggle }) => (
+const Toggle = ({ value, onToggle, disabled }) => (
     <motion.button
-        onClick={onToggle}
-        whileTap={{ scale: 0.92 }}
+        onClick={disabled ? undefined : onToggle}
+        whileTap={disabled ? {} : { scale: 0.92 }}
         style={{
             width: 56,
             height: 30,
             borderRadius: 15,
-            background: value
+            background: disabled
+                ? 'linear-gradient(180deg, #475569, #334155)'
+                : value
                 ? 'linear-gradient(180deg, #34d399, #059669)'
                 : 'linear-gradient(180deg, #94a3b8, #64748b)',
-            border: `2.5px solid ${value ? '#047857' : '#475569'}`,
-            boxShadow: value
+            border: `2.5px solid ${disabled ? '#334155' : value ? '#047857' : '#475569'}`,
+            boxShadow: disabled
+                ? '0 3px 0 #1e293b'
+                : value
                 ? '0 3px 0 #065f46, inset 0 1px 0 rgba(255,255,255,0.25)'
                 : '0 3px 0 #334155, inset 0 1px 0 rgba(255,255,255,0.15)',
-            cursor: 'pointer',
+            cursor: disabled ? 'not-allowed' : 'pointer',
             position: 'relative',
             flexShrink: 0,
+            opacity: disabled ? 0.5 : 1,
         }}
     >
         <motion.div
@@ -41,7 +51,7 @@ const Toggle = ({ value, onToggle }) => (
 );
 
 /* ── Setting Row — game-style row ── */
-const SettingRow = ({ icon: Icon, iconGradient, iconBorder, iconShadow, label, value, onToggle }) => (
+const SettingRow = ({ icon: Icon, iconGradient, iconBorder, iconShadow, label, sublabel, value, onToggle, disabled }) => (
     <div className="flex items-center gap-4 py-1">
         {/* 3D Icon badge */}
         <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 relative overflow-hidden"
@@ -56,12 +66,12 @@ const SettingRow = ({ icon: Icon, iconGradient, iconBorder, iconShadow, label, v
         {/* Label */}
         <div className="flex-1 min-w-0">
             <p className="font-black text-base text-white" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>{label}</p>
-            <p className="text-[11px] font-bold mt-0.5" style={{ color: value ? '#86efac' : '#fca5a5' }}>
-                {value ? '● Đang bật' : '● Đã tắt'}
+            <p className="text-[11px] font-bold mt-0.5" style={{ color: disabled ? '#94a3b8' : value ? '#86efac' : '#fca5a5' }}>
+                {sublabel || (disabled ? '● Không khả dụng' : value ? '● Đang bật' : '● Đã tắt')}
             </p>
         </div>
         {/* Toggle */}
-        <Toggle value={value} onToggle={onToggle} />
+        <Toggle value={value} onToggle={onToggle} disabled={disabled} />
     </div>
 );
 
@@ -71,6 +81,53 @@ const SettingsModal = ({ onClose }) => {
     const sound = useSettingsStore(s => s.sound);
     const toggleMusic = useSettingsStore(s => s.toggleMusic);
     const toggleSound = useSettingsStore(s => s.toggleSound);
+
+    const [notifState, setNotifState] = useState('default'); // 'default'|'granted'|'denied'|'unsupported'|'loading'
+    const [notifEnabled, setNotifEnabled] = useState(false);
+
+    // Check current notification permission on mount
+    useEffect(() => {
+        if (!('Notification' in window)) {
+            setNotifState('unsupported');
+            return;
+        }
+        const perm = Notification.permission;
+        setNotifState(perm);
+        setNotifEnabled(perm === 'granted');
+    }, []);
+
+    const handleNotifToggle = async () => {
+        if (notifState === 'denied' || notifState === 'unsupported' || notifState === 'loading') return;
+
+        const utils = await getNotifUtils().catch(() => null);
+        if (!utils) return;
+
+        if (notifEnabled) {
+            setNotifEnabled(false);
+            await utils.deleteFcmToken();
+            await updateUserData({ FcmToken: '' }).catch(() => {});
+        } else {
+            setNotifState('loading');
+            const token = await utils.requestPermissionAndGetToken();
+            if (token) {
+                setNotifEnabled(true);
+                setNotifState('granted');
+                await updateUserData({ FcmToken: token }).catch(() => {});
+            } else {
+                setNotifState(Notification.permission);
+                setNotifEnabled(false);
+            }
+        }
+    };
+
+    const notifDisabled = notifState === 'denied' || notifState === 'unsupported' || notifState === 'loading';
+    const notifSublabel = notifState === 'denied'
+        ? '● Bị chặn — bật lại trong trình duyệt'
+        : notifState === 'unsupported'
+        ? '● Trình duyệt không hỗ trợ'
+        : notifState === 'loading'
+        ? '● Đang yêu cầu quyền...'
+        : notifEnabled ? '● Đang bật' : '● Đã tắt';
 
     return (
         <div
@@ -156,6 +213,21 @@ const SettingsModal = ({ onClose }) => {
                         label="Âm thanh"
                         value={sound}
                         onToggle={toggleSound}
+                    />
+
+                    {/* Divider */}
+                    <div style={{ height: 1.5, background: 'linear-gradient(90deg, transparent, rgba(100,200,255,0.15), transparent)' }} />
+
+                    <SettingRow
+                        icon={notifEnabled ? Bell : BellOff}
+                        iconGradient="linear-gradient(145deg, #8b5cf6, #7c3aed)"
+                        iconBorder="#5b21b6"
+                        iconShadow="#3b0764"
+                        label="Thông báo"
+                        sublabel={notifSublabel}
+                        value={notifEnabled}
+                        onToggle={handleNotifToggle}
+                        disabled={notifDisabled}
                     />
                 </div>
 

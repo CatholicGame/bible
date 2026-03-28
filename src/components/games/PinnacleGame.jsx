@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import PinnacleLeaderboard from './PinnacleLeaderboard';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, ArrowLeft, ChevronLeft, CheckCircle2, XCircle, Play, Phone, Users, Shield, RefreshCcw, Flag, Star, UserCircle2, Settings } from 'lucide-react';
+import { Trophy, ArrowLeft, ChevronLeft, CheckCircle2, XCircle, Play, Phone, Users, Shield, RefreshCcw, Flag, Star, UserCircle2, Settings, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { usePlayFabStore } from '../../store/playfabStore';
 import { getRankByScore, getRankLevel } from '../../utils/ranks';
 import { useSoundManager } from '../../utils/soundManager';
@@ -363,9 +363,12 @@ const LifelineButton = ({ icon: Icon, text, isUsed, disabled, onClick, active })
 // Lobby Screen — shown first when player opens PinnacleGame
 // ─────────────────────────────────────────────────────────────────────────────
 // Lobby Screen
-const LobbyScreen = ({ onPlay, onShowLeaderboard, onLeaveGame, onSettings, onPlayClick, nickname, giaoxu, tinhthanh, saveProfile }) => {
+const LobbyScreen = ({ onPlay, onShowLeaderboard, onLeaveGame, onSettings, onPlayClick, nickname, giaoxu, tinhthanh, saveProfile, playerCount }) => {
     const { globalScore, coins } = usePlayFabStore();
     const answeredQuestions = usePlayFabStore(s => s.answeredQuestions);
+    const myVote = usePlayFabStore(s => s.pinnacleMyVote);
+    const submitVote = usePlayFabStore(s => s.submitPinnacleVote);
+    const voteCounts = usePlayFabStore(s => s.pinnacleVoteCounts);
     const rankName = getRankByScore(globalScore || 0);
     const rankLevel = getRankLevel(globalScore || 0);
 
@@ -393,6 +396,40 @@ const LobbyScreen = ({ onPlay, onShowLeaderboard, onLeaveGame, onSettings, onPla
                     Nhà Thần Học
                 </h1>
                 <p className="text-blue-200 text-xs font-semibold">Thử thách 15 câu hỏi về Kinh Thánh</p>
+
+                {/* Player count + Like/Dislike */}
+                <div className="flex items-center justify-center gap-3 mt-2">
+                    {playerCount > 0 && (
+                        <span className="text-[11px] font-bold text-blue-200/70 flex items-center gap-1">
+                            <Users size={11} className="text-blue-300" />
+                            {playerCount.toLocaleString()} người đã chơi
+                        </span>
+                    )}
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => submitVote('like')}
+                            title="Thích"
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black text-sm transition-all active:scale-90 ${
+                                myVote === 'like'
+                                    ? 'bg-green-500 text-white border-2 border-green-300 shadow-[0_2px_0_#14532d] cursor-default'
+                                    : 'bg-green-500/15 text-green-300 border border-green-400/40 hover:bg-green-500/30 cursor-pointer'
+                            }`}>
+                            <ThumbsUp size={13} fill={myVote === 'like' ? 'currentColor' : 'none'} />
+                            <span>{voteCounts?.like ?? 0}</span>
+                        </button>
+                        <button
+                            onClick={() => submitVote('dislike')}
+                            title="Không thích"
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black text-sm transition-all active:scale-90 ${
+                                myVote === 'dislike'
+                                    ? 'bg-red-500 text-white border-2 border-red-300 shadow-[0_2px_0_#7f1d1d] cursor-default'
+                                    : 'bg-red-500/15 text-red-300 border border-red-400/40 hover:bg-red-500/30 cursor-pointer'
+                            }`}>
+                            <ThumbsDown size={13} fill={myVote === 'dislike' ? 'currentColor' : 'none'} />
+                            <span>{voteCounts?.dislike ?? 0}</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             {/* Action buttons */}
@@ -465,6 +502,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
         pinnacleActiveTab, loadPinnacleLeaderboard,
         hallOfFame, hallOfFameLoading, loadHallOfFame,
         nickname, giaoxu, tinhthanh, saveProfile,
+        trackPinnaclePlay, submitPinnacleVote, loadPinnacleVoteCounts,
+        pinnaclePlayerCount, pinnacleMyVote, pinnacleVoteCounts,
     } = usePlayFabStore();
     const [gameState, setGameState] = useState('lobby');
     const [showSettings, setShowSettings] = useState(false); // settings modal
@@ -517,6 +556,9 @@ const PinnacleGame = ({ onLeaveGame }) => {
         audience: false,
         swap: false
     });
+
+    // Load vote counts when game opens
+    useEffect(() => { loadPinnacleVoteCounts(); }, []); // eslint-disable-line
 
     // XP Particle animation
     const [xpParticles, setXpParticles] = useState([]);
@@ -906,6 +948,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
             setTimeout(() => setShowEndMessage(false), 8000);
         }
         savePinnacleCompositeScore(levelIndex, isQ15Complete);
+        trackPinnaclePlay(); // đếm unique player + cập nhật count
     };
 
     const handleNextQuestion = () => {
@@ -1271,6 +1314,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             giaoxu={giaoxu}
                             tinhthanh={tinhthanh}
                             saveProfile={saveProfile}
+                            playerCount={pinnaclePlayerCount}
                         />
                     )}
 
@@ -2209,6 +2253,9 @@ const PinnacleGame = ({ onLeaveGame }) => {
                             questions={currentQuestions}
                             isVoluntaryStop={isVoluntaryStop}
                             earnedXP={earnedXP}
+                            myVote={pinnacleMyVote}
+                            voteCounts={pinnacleVoteCounts}
+                            onVote={submitPinnacleVote}
                         />
                     )}
                     {gameState === 'leaderboard' && (
@@ -2350,7 +2397,7 @@ const Confetti = ({ questionIndex = 14 }) => {
 };
 
 
-const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionIndex, endMessage, showEndMessage, selectedOption, questions, isVoluntaryStop, earnedXP }) => {
+const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionIndex, endMessage, showEndMessage, selectedOption, questions, isVoluntaryStop, earnedXP, myVote, voteCounts, onVote }) => {
     const [showLeaderboard, setShowLeaderboard] = useState(false);
     const { addXP, addCoins, globalScore, coins: profileCoins, nickname } = usePlayFabStore();
     const savedRef = useRef(false);

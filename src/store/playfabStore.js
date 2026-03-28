@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { loginWithCustomID, loginWithEmail, registerWithEmail, getUserData, updateUserData, updateDisplayName, forgetCredentials, updatePlayerStatistics, getLeaderboard, getLeaderboardAroundPlayer, getPlayerProfile } from '../config/playfab';
+import { loginWithCustomID, loginWithEmail, registerWithEmail, getUserData, updateUserData, updateDisplayName, forgetCredentials, updatePlayerStatistics, getLeaderboard, getLeaderboardSilent, getLeaderboardAroundPlayer, getPlayerProfile } from '../config/playfab';
 import { getQuestionsForGame } from '../utils/questionManager';
 import { getRankByScore } from '../utils/ranks';
 import { auth } from '../config/firebase';
@@ -75,6 +75,9 @@ export const usePlayFabStore = create((set, get) => ({
   pinnacleActiveTab: 'daily',
   hallOfFame: [],            // top achievers for header slider
   hallOfFameLoading: false,
+  pinnaclePlayerCount: 0,    // unique player count
+  pinnacleMyVote: null,      // null | 'like' | 'dislike' — vote của player này
+  pinnacleVoteCounts: { like: 0, dislike: 0 }, // tổng vote (xấp xỉ từ stats)
 
   // ── Login ──
   login: async (customNickname) => {
@@ -135,6 +138,9 @@ export const usePlayFabStore = create((set, get) => ({
       const todayStr = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' })).toISOString().slice(0, 10);
       const effectiveRosaryToday = rosaryDate === todayStr ? rosaryToday : 0;
 
+      // Pinnacle vote
+      const pinnacleMyVote = userData?.PinnacleMyVote?.Value || null;
+
       set({
         isLoggedIn: true,
         isLoading: false,
@@ -154,6 +160,7 @@ export const usePlayFabStore = create((set, get) => ({
         rosaryDate: todayStr,
         rosaryTotal,
         rosaryGlobal,
+        pinnacleMyVote,
         error: null,
       });
 
@@ -227,6 +234,8 @@ export const usePlayFabStore = create((set, get) => ({
       let stats = null;
       if (userData?.Stats?.Value) { try { stats = JSON.parse(userData.Stats.Value); } catch (_) {} }
 
+      const pinnacleMyVote = userData?.PinnacleMyVote?.Value || null;
+
       set({
         isLoggedIn: true,
         isLoading: false,
@@ -242,6 +251,7 @@ export const usePlayFabStore = create((set, get) => ({
         coins,
         rank: getRankByScore(globalScore),
         ...(stats ? { stats } : {}),
+        pinnacleMyVote,
         error: null,
       });
 
@@ -297,6 +307,8 @@ export const usePlayFabStore = create((set, get) => ({
       let stats = null;
       if (userData?.Stats?.Value) { try { stats = JSON.parse(userData.Stats.Value); } catch (_) {} }
 
+      const pinnacleMyVote = userData?.PinnacleMyVote?.Value || null;
+
       usePlayFabStore.setState({
         isLoggedIn: true,
         isLoading: false,
@@ -313,6 +325,7 @@ export const usePlayFabStore = create((set, get) => ({
         coins,
         rank: getRankByScore(globalScore),
         ...(stats ? { stats } : {}),
+        pinnacleMyVote,
         error: null,
       });
 
@@ -607,6 +620,54 @@ export const usePlayFabStore = create((set, get) => ({
       console.warn('[Rosary] Failed to save', e);
       return false;
     }
+  },
+
+  // ── Track Pinnacle Play (unique player count) ──
+  trackPinnaclePlay: async () => {
+    try {
+      await updatePlayerStatistics([
+        { StatisticName: 'PinnaclePlayerCount', Value: 1 },
+      ]);
+      // Đọc vị trí của player ≈ số người đã chơi
+      const res = await getLeaderboardAroundPlayer('PinnaclePlayerCount', 1);
+      const entries = res?.Leaderboard || [];
+      if (entries.length > 0) {
+        const pos = entries[Math.floor(entries.length / 2)]?.Position;
+        if (pos != null) set({ pinnaclePlayerCount: pos + 1 });
+      }
+    } catch (e) {
+      console.warn('[Pinnacle] trackPlay failed', e);
+    }
+  },
+
+  // ── Submit Like / Dislike vote ──
+  submitPinnacleVote: async (vote) => {
+    if (get().pinnacleMyVote === vote) return;
+    // Update UI immediately
+    set({ pinnacleMyVote: vote });
+    try {
+      // 1. Save this player's vote to UserData (persists across sessions)
+      await updateUserData({ PinnacleMyVote: vote });
+      // 2. Write stat = 1 so this player appears in the leaderboard count
+      //    Each player has exactly one stat entry, so count = number of unique voters
+      const statName = vote === 'like' ? 'PinnacleVoteLike' : 'PinnacleVoteDislike';
+      await updatePlayerStatistics([{ StatisticName: statName, Value: 1 }]);
+      // 3. Reload global counts
+      await get().loadPinnacleVoteCounts();
+    } catch (e) {
+      console.warn('[Pinnacle] vote save failed', e);
+    }
+  },
+
+  // ── Load global vote counts from PlayFab leaderboard ──
+  loadPinnacleVoteCounts: async () => {
+    const [likeData, dislikeData] = await Promise.all([
+      getLeaderboardSilent('PinnacleVoteLike', 100),
+      getLeaderboardSilent('PinnacleVoteDislike', 100),
+    ]);
+    const likes    = likeData?.Leaderboard?.length ?? 0;
+    const dislikes = dislikeData?.Leaderboard?.length ?? 0;
+    set({ pinnacleVoteCounts: { like: likes, dislike: dislikes } });
   },
 
   // ── Reset (logout) ──
