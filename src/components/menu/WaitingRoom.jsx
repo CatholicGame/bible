@@ -5,6 +5,7 @@ import { useRoom } from '../../hooks/useRoom';
 import { usePresence } from '../../hooks/usePresence';
 import { useRoomStore } from '../../store/roomStore';
 import { useUserStore } from '../../store/userStore';
+import { usePlayFabStore } from '../../store/playfabStore';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -19,6 +20,7 @@ export default function WaitingRoom({ onLeave, onGameStart }) {
   const { uid } = useUserStore();
   const { roomId, roomData, myRole } = useRoomStore();
   const { setReady, startGame, leaveRoom, watchRoom } = useRoom();
+  const { playedCrosswordIds, authMethod } = usePlayFabStore();
   const [opponentOffline, setOpponentOffline] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -59,8 +61,8 @@ export default function WaitingRoom({ onLeave, onGameStart }) {
   const guestReady = opponentData?.isReady;
   const canStart = guestJoined && (myRole === 'host' ? guestReady : (myData?.isReady && guestReady));
 
-  const handleReady = () => setReady(roomId);
-  const handleStart = () => startGame(roomId);
+  const handleReady = () => setReady(roomId, playedCrosswordIds, authMethod);
+  const handleStart = () => startGame(roomId, roomData?.gameType);
   const handleLeave = async () => {
     await leaveRoom(roomId, myRole);
     onLeave?.();

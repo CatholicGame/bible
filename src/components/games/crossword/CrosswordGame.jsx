@@ -1,8 +1,15 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Clock, Trophy, Star, Check, RotateCcw, Zap, Eye, Lightbulb } from 'lucide-react';
+import { ArrowLeft, Clock, Trophy, Star, Check, RotateCcw, Zap, Eye, Lightbulb, ChevronLeft, Play, RefreshCcw } from 'lucide-react';
 import { usePlayFabStore } from '../../../store/playfabStore';
+import { getRankByScore } from '../../../utils/ranks';
+import { useRoomStore } from '../../../store/roomStore';
 import bgCrossword from '../../../assets/common/bg_crossword.png';
+import resultBanner from '../../../assets/common/result_banner.png';
+import iconCoin from '../../../assets/common/coin.png';
+import iconTrophy from '../../../assets/common/trophy.png';
+import RAW_PUZZLES from '../../../data/crossword_puzzles.json';
 
 const BG_STYLE = {
   backgroundImage: `url(${bgCrossword})`,
@@ -11,68 +18,17 @@ const BG_STYLE = {
 };
 
 /* ══════════════════════════════════════════════════════════════
-   PUZZLE DATA — 3 bộ puzzle chủ đề Công giáo
+   PUZZLE DATA — load từ crossword_puzzles.json
    ══════════════════════════════════════════════════════════════ */
+const PUZZLES = RAW_PUZZLES;
 
-const PUZZLES = [
-  {
-    id: 1,
-    title: 'Kinh Thánh Cơ Bản',
-    gridSize: { rows: 12, cols: 12 },
-    words: [
-      { id: '1-across', num: 1, direction: 'across', row: 0, col: 0, answer: 'GIÊSU',      clue: 'Con Thiên Chúa, Đấng Cứu Thế' },
-      { id: '2-down',   num: 2, direction: 'down',   row: 0, col: 2, answer: 'ÊĐEN',       clue: 'Vườn địa đàng đầu tiên' },
-      { id: '3-across', num: 3, direction: 'across', row: 2, col: 1, answer: 'PHERÔ',      clue: 'Tông đồ trưởng, giữ chìa khóa Nước Trời' },
-      { id: '4-down',   num: 4, direction: 'down',   row: 0, col: 4, answer: 'MARIA',      clue: 'Mẹ Thiên Chúa, Đức Trinh Nữ' },
-      { id: '5-across', num: 5, direction: 'across', row: 4, col: 0, answer: 'THÁNH',      clue: 'Danh xưng cho người được Chúa tôn vinh' },
-      { id: '6-down',   num: 6, direction: 'down',   row: 2, col: 5, answer: 'GIUSE',      clue: 'Bạn trăm năm của Đức Maria' },
-      { id: '7-across', num: 7, direction: 'across', row: 6, col: 2, answer: 'GIOAN',      clue: 'Tông đồ được Chúa yêu mến nhất' },
-      { id: '8-down',   num: 8, direction: 'down',   row: 4, col: 3, answer: 'NOAH',       clue: 'Người đóng tàu cứu muôn loài khỏi đại hồng thủy' },
-      { id: '9-across', num: 9, direction: 'across', row: 8, col: 0, answer: 'MÔSÊ',       clue: 'Người dẫn dân Israel qua Biển Đỏ' },
-      { id: '10-down',  num: 10, direction: 'down',  row: 6, col: 4, answer: 'AĐAM',       clue: 'Người nam đầu tiên Chúa tạo dựng' },
-      { id: '11-across',num: 11, direction: 'across', row: 10, col: 1, answer: 'SINAI',    clue: 'Núi nơi Môsê nhận Mười Điều Răn' },
-      { id: '12-down',  num: 12, direction: 'down',  row: 8, col: 2, answer: 'SÁNG',       clue: 'Điều đầu tiên Thiên Chúa tạo ra: "Hãy có ___"' },
-    ],
-  },
-  {
-    id: 2,
-    title: 'Bí Tích & Phụng Vụ',
-    gridSize: { rows: 12, cols: 12 },
-    words: [
-      { id: '1-across', num: 1, direction: 'across', row: 0, col: 0, answer: 'THÁNH',     clue: 'Bí tích ___ Thể: Mình và Máu Chúa Kitô' },
-      { id: '2-down',   num: 2, direction: 'down',   row: 0, col: 0, answer: 'TRUYỀN',    clue: 'Bí tích ___ Chức Thánh' },
-      { id: '3-across', num: 3, direction: 'across', row: 2, col: 1, answer: 'CHAY',      clue: 'Mùa ___ : 40 ngày ăn chay, cầu nguyện' },
-      { id: '4-down',   num: 4, direction: 'down',   row: 0, col: 4, answer: 'NƯỚC',      clue: 'Bí tích Rửa Tội dùng ___ để thanh tẩy' },
-      { id: '5-across', num: 5, direction: 'across', row: 4, col: 0, answer: 'PHỤC',      clue: '___ Sinh: Chúa sống lại ngày thứ ba' },
-      { id: '6-down',   num: 6, direction: 'down',   row: 2, col: 3, answer: 'DẦU',       clue: '___ thánh dùng trong bí tích Thêm Sức' },
-      { id: '7-across', num: 7, direction: 'across', row: 6, col: 1, answer: 'GIÁNG',     clue: '___ Sinh: lễ mừng Chúa ra đời 25/12' },
-      { id: '8-down',   num: 8, direction: 'down',   row: 4, col: 2, answer: 'CẦU',       clue: '___ nguyện: nói chuyện với Chúa' },
-      { id: '9-across', num: 9, direction: 'across', row: 8, col: 0, answer: 'TÌNH',      clue: 'Điều răn mới: Yêu ___ như Thầy đã yêu' },
-      { id: '10-down',  num: 10, direction: 'down',  row: 6, col: 5, answer: 'LỄ',        clue: '___ Vọng Phục Sinh: đêm thánh nhất năm' },
-      { id: '11-across',num: 11, direction: 'across', row: 10, col: 2, answer: 'BÁNH',    clue: '___ Thánh: Mình Chúa Kitô' },
-      { id: '12-down',  num: 12, direction: 'down',  row: 8, col: 3, answer: 'HÒA',       clue: 'Bí tích ___ Giải: xưng tội, làm hoà với Chúa' },
-    ],
-  },
-  {
-    id: 3,
-    title: 'Các Thánh & Đức Mẹ',
-    gridSize: { rows: 12, cols: 12 },
-    words: [
-      { id: '1-across', num: 1, direction: 'across', row: 0, col: 1, answer: 'LUCA',       clue: 'Thánh sử viết Phúc Âm thứ ba' },
-      { id: '2-down',   num: 2, direction: 'down',   row: 0, col: 1, answer: 'LỘ',         clue: 'Đức Mẹ hiện ra tại ___ Đức (Lourdes)' },
-      { id: '3-across', num: 3, direction: 'across', row: 2, col: 0, answer: 'TÔMA',       clue: 'Tông đồ đòi xem dấu đinh mới tin' },
-      { id: '4-down',   num: 4, direction: 'down',   row: 0, col: 3, answer: 'CATARINA',   clue: 'Thánh nữ ___ Siena, Tiến sĩ Hội Thánh' },
-      { id: '5-across', num: 5, direction: 'across', row: 4, col: 1, answer: 'GIUĐA',      clue: 'Kẻ phản bội Chúa Giêsu' },
-      { id: '6-down',   num: 6, direction: 'down',   row: 2, col: 2, answer: 'MÂN',        clue: 'Kinh ___ Côi: 20 mầu nhiệm' },
-      { id: '7-across', num: 7, direction: 'across', row: 6, col: 0, answer: 'PHAOLÔ',     clue: 'Tông đồ dân ngoại, trước đó tên Saolô' },
-      { id: '8-down',   num: 8, direction: 'down',   row: 4, col: 5, answer: 'TÊRÊXA',     clue: 'Thánh nữ ___ Hài Đồng Giêsu' },
-      { id: '9-across', num: 9, direction: 'across', row: 8, col: 1, answer: 'FATIMA',     clue: 'Đức Mẹ hiện ra năm 1917 tại ___' },
-      { id: '10-down',  num: 10, direction: 'down',  row: 6, col: 3, answer: 'ÔLÔP',       clue: 'Thánh Phêrô thủ lĩnh ___ đồ đoàn' },
-      { id: '11-across',num: 11, direction: 'across', row: 10, col: 0, answer: 'PHÚC',     clue: '___ Âm: Tin Mừng của Chúa Giêsu' },
-      { id: '12-down',  num: 12, direction: 'down',  row: 8, col: 4, answer: 'IM',          clue: 'Đức Mẹ Vô Nhiễm Nguyên Tội (Bà ___ aculata)' },
-    ],
-  },
-];
+/* ── Helper: chọn puzzle tiếp theo theo thứ tự ── */
+function pickNextPuzzle(allPuzzles, playedIds, exclude = null) {
+  const next = allPuzzles.find(p => !playedIds.includes(p.id) && p !== exclude);
+  if (next) return next;
+  // Đã chơi hết → reset về đầu
+  return allPuzzles.find(p => p !== exclude) ?? allPuzzles[0];
+}
 
 /* ══════════════════════════════════════════════════════════════
    HELPER: build grid map from puzzle data
@@ -174,6 +130,295 @@ const ProgressBar = ({ label, percent, color, avatar }) => (
 );
 
 /* ══════════════════════════════════════════════════════════════
+   CROSSWORD FINISHED OVERLAY — portal, Pinnacle EndGameScreen style
+   ══════════════════════════════════════════════════════════════ */
+
+const CrosswordFinishedOverlay = ({
+  isPerfect, isP2P, isWinner, isDraw,
+  solvedWords, totalWords, timeLeft, score,
+  earnedXP, earnedCoins,
+  myProfile, opponentProfile, myPercent, opponentPercent,
+  onReplay, onNewGame, onLeaveGame,
+}) => {
+  const { globalScore, coins: profileCoins, nickname } = usePlayFabStore();
+  const rankName = getRankByScore(globalScore || 0);
+
+  const totalCoins = earnedCoins?.total ?? 0;
+  const totalXP    = earnedXP?.total ?? 0;
+  const [displayCoins, setDisplayCoins] = useState(0);
+  const [displayXP,    setDisplayXP]    = useState(0);
+  const [coinsDone,    setCoinsDone]     = useState(false);
+  const [xpDone,       setXpDone]       = useState(false);
+  const [profileUpdated, setProfileUpdated] = useState(false);
+  const [flyParticles, setFlyParticles]  = useState([]);
+
+  // Source refs (reward pills)
+  const coinPillRef   = useRef(null);
+  const xpPillRef     = useRef(null);
+  // Target refs (profile chip)
+  const coinTargetRef = useRef(null);
+  const xpTargetRef   = useRef(null);
+
+  // Spawn flying icons
+  const spawnFly = useCallback((icon, sourceRef, targetRef, count = 6) => {
+    const n = Math.min(Math.max(1, count), 9);
+    const pill   = sourceRef.current?.getBoundingClientRect();
+    const target = targetRef.current?.getBoundingClientRect();
+    if (!pill || !target) return;
+    const ox = pill.left   + pill.width  / 2, oy = pill.top    + pill.height / 2;
+    const tx = target.left + target.width / 2, ty = target.top + target.height / 2;
+    const items = Array.from({ length: n }, (_, i) => ({
+      id: `${icon}-${Date.now()}-${i}`, icon,
+      ox: ox + (Math.random() - 0.5) * 28, oy: oy + (Math.random() - 0.5) * 14,
+      bx: (Math.random() - 0.5) * 80,      by: (Math.random() - 0.5) * 50,
+      tx, ty, delay: i * 0.07,
+    }));
+    setFlyParticles(p => [...p, ...items]);
+    setTimeout(() => setFlyParticles(p => p.filter(x => !items.find(pp => pp.id === x.id))), 2200);
+  }, []);
+
+  // Coin count-up
+  useEffect(() => {
+    if (totalCoins === 0) { setCoinsDone(true); return; }
+    const abs = Math.abs(totalCoins);
+    const STEPS = Math.min(abs, 40), step = Math.ceil(abs / STEPS), ms = 1600 / STEPS;
+    let cur = 0;
+    const id = setInterval(() => {
+      cur = Math.min(cur + step, abs);
+      setDisplayCoins(totalCoins < 0 ? -cur : cur);
+      if (cur >= abs) { clearInterval(id); setCoinsDone(true); }
+    }, ms);
+    return () => clearInterval(id);
+  }, [totalCoins]);
+
+  // After coins done → fly coins → update profile
+  useEffect(() => {
+    if (!coinsDone || totalCoins <= 0) return;
+    const t = setTimeout(() => {
+      spawnFly('coin', coinPillRef, coinTargetRef, Math.min(totalCoins, 9));
+      setTimeout(() => setProfileUpdated(true), 1400);
+    }, 300);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coinsDone]);
+
+  // XP count-up
+  useEffect(() => {
+    if (totalXP <= 0) { setXpDone(true); return; }
+    const STEPS = Math.min(totalXP, 40), step = Math.ceil(totalXP / STEPS), ms = 1600 / STEPS;
+    let cur = 0;
+    const id = setInterval(() => {
+      cur = Math.min(cur + step, totalXP); setDisplayXP(cur);
+      if (cur >= totalXP) { clearInterval(id); setXpDone(true); }
+    }, ms);
+    return () => clearInterval(id);
+  }, [totalXP]);
+
+  // After XP done → fly trophies → update profile
+  useEffect(() => {
+    if (!xpDone || totalXP <= 0) return;
+    const t = setTimeout(() => {
+      spawnFly('xp', xpPillRef, xpTargetRef, Math.min(totalXP, 9));
+      setTimeout(() => setProfileUpdated(true), 1400);
+    }, 300);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [xpDone]);
+
+  const titleText =
+    isPerfect ? 'HOÀN THÀNH XUẤT SẮC!' :
+    isP2P ? (isWinner ? 'BẠN THẮNG!' : isDraw ? 'HÒA!' : 'BẠN THUA!') :
+    'HẾT THỜI GIAN!';
+
+  const msgText =
+    isPerfect
+      ? `Hoàn hảo! Bạn giải được tất cả ${totalWords} từ!`
+      : isP2P
+      ? (isWinner
+          ? `Bạn thắng! ${solvedWords.size}/${totalWords} từ.`
+          : isDraw
+          ? `Hòa cuộc! ${solvedWords.size}/${totalWords} từ.`
+          : `Chơi tốt hơn lần sau nhé! ${solvedWords.size}/${totalWords} từ.`)
+      : `Hết thời gian! Bạn đã tìm được ${solvedWords.size}/${totalWords} từ.`;
+
+  const formatT = (s) => `${String(Math.floor(s / 60)).padStart(2,'0')}:${String(s % 60).padStart(2,'0')}`;
+
+  return createPortal(
+    <>
+      {/* Backdrop */}
+      <div style={{ position:'fixed', inset:0, zIndex:9998, background:'rgba(0,0,0,0.65)', backdropFilter:'blur(4px)' }} />
+
+      {/* Profile pill — top */}
+      <motion.div initial={{ y:-50, opacity:0 }} animate={{ y:0, opacity:1 }} transition={{ delay:0.3, type:'spring', stiffness:260, damping:26 }}
+        style={{ position:'fixed', top:10, left:0, right:0, display:'flex', justifyContent:'center', zIndex:10001, pointerEvents:'none' }}>
+        <div style={{
+          background:'linear-gradient(135deg,#3f1c00 0%,#78350f 55%,#3f1c00 100%)',
+          border:'3px solid #fbbf24', boxShadow:'0 4px 0 #1c0a00, 0 6px 20px rgba(120,53,15,0.6)',
+          borderRadius:20, pointerEvents:'auto', maxWidth:'calc(100vw - 32px)',
+          padding:'8px 12px', display:'flex', flexDirection:'column', alignItems:'center', gap:6, position:'relative', overflow:'hidden',
+        }}>
+          <div style={{ position:'absolute', top:0, left:0, right:0, height:'50%', borderRadius:'17px 17px 0 0', background:'rgba(255,255,255,0.08)', pointerEvents:'none' }} />
+          <div style={{ display:'flex', alignItems:'center', gap:8, position:'relative', zIndex:10 }}>
+            <div style={{ width:28, height:28, borderRadius:'50%', background:'linear-gradient(135deg,#fef3c7,#fbbf24)', border:'2px solid #fef08a', boxShadow:'0 2px 0 #1c0a00', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, color:'#92400e', fontSize:12 }}>
+              {nickname?.[0]?.toUpperCase() || '?'}
+            </div>
+            <span style={{ fontWeight:900, fontSize:14, color:'#fef3c7', textShadow:'0 1px 0 #1c0a00' }}>{nickname || 'Nguoi choi'}</span>
+            <span style={{ fontSize:9, fontWeight:900, padding:'2px 8px', borderRadius:9999, background:'rgba(251,191,36,0.2)', border:'1.5px solid #fbbf24', color:'#fde68a' }}>{rankName}</span>
+          </div>
+          <div style={{ display:'flex', alignItems:'center', gap:8, position:'relative', zIndex:10 }}>
+            <div ref={coinTargetRef} style={{ display:'flex', alignItems:'center', gap:4, padding:'4px 8px', borderRadius:9999, background:'linear-gradient(135deg,#f59e0b,#d97706)', border:'2px solid #fef08a', boxShadow:'0 2px 0 #92400e' }}>
+              <img src={iconCoin} alt="" style={{ width:14, height:14 }} />
+              <motion.span key={profileUpdated?'uc':'bc'} initial={{ scale: profileUpdated?1.4:1 }} animate={{ scale:1 }} transition={{ type:'spring', stiffness:300, damping:15 }}
+                style={{ fontSize:12, fontWeight:900, color:'white', textShadow:'0 1px 0 #92400e' }}>
+                {(profileCoins||0).toLocaleString()}
+              </motion.span>
+            </div>
+            <div ref={xpTargetRef} style={{ display:'flex', alignItems:'center', gap:4, padding:'4px 8px', borderRadius:9999, background:'linear-gradient(135deg,#fbbf24,#f59e0b)', border:'2px solid #fef08a', boxShadow:'0 2px 0 #92400e' }}>
+              <img src={iconTrophy} alt="" style={{ width:14, height:14 }} />
+              <motion.span key={profileUpdated?'ux':'bx'} initial={{ scale: profileUpdated?1.4:1 }} animate={{ scale:1 }} transition={{ type:'spring', stiffness:300, damping:15, delay:0.1 }}
+                style={{ fontSize:12, fontWeight:900, color:'white', textShadow:'0 1px 0 #92400e' }}>
+                {(globalScore||0).toLocaleString()} XP
+              </motion.span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Fly particles */}
+      {flyParticles.map(p => (
+        <motion.img
+          key={p.id}
+          src={p.icon === 'coin' ? iconCoin : iconTrophy}
+          alt=""
+          initial={{ x: p.ox, y: p.oy, scale: 1, opacity: 1 }}
+          animate={{ x: [p.ox, p.ox + p.bx, p.tx], y: [p.oy, p.oy + p.by, p.ty], scale: [1, 1.3, 0.3], opacity: [1, 1, 0] }}
+          transition={{ duration: 1.0, delay: p.delay, ease: 'easeInOut', times: [0, 0.4, 1] }}
+          style={{ position: 'fixed', top: 0, left: 0, width: 28, height: 28, zIndex: 11000, pointerEvents: 'none', borderRadius: '50%', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}
+        />
+      ))}
+
+      {/* Centering wrapper */}
+      <div style={{ position:'fixed', top:'50%', left:'50%', transform:'translate(-50%,-50%)', zIndex:9999, width:'min(520px, calc(100vw - 20px))', maxHeight:'calc(100dvh - 20px)', display:'flex', flexDirection:'column', alignItems:'center', overflow:'visible' }}>
+        <motion.div initial={{ scale:0.85, opacity:0 }} animate={{ scale:1, opacity:1 }} transition={{ type:'spring', stiffness:220, damping:22 }}
+          style={{ display:'flex', flexDirection:'column', alignItems:'center', width:'100%' }}>
+
+          {/* Trophy banner */}
+          <motion.img src={resultBanner} alt="Result"
+            initial={{ scale:0, y:30 }} animate={{ scale:1, y:0 }}
+            transition={{ type:'spring', stiffness:200, damping:15, delay:0.15 }}
+            style={{ width:'clamp(210px,42vw,320px)', height:'auto', flexShrink:0, position:'relative', zIndex:10, marginBottom:'clamp(-38px,-8vw,-62px)', filter:'drop-shadow(0 6px 10px rgba(30,58,138,0.7))', pointerEvents:'none' }}
+          />
+
+          {/* Blue card */}
+          <div style={{ background:'#3b82f6', border:'4px solid #1e3a8a', boxShadow:'0 8px 0 rgba(30,58,138,1)', borderRadius:24, width:'100%', flex:'0 0 auto', minHeight:'min(360px,calc(100dvh - 180px))', maxHeight:'calc(100dvh - 20px - clamp(52px,9vw,96px))', display:'flex', flexDirection:'column', overflow:'hidden' }}>
+            <div className="overflow-y-auto scrollbar-hide flex-1 flex flex-col items-center" style={{ padding:'clamp(48px,8vw,76px) 16px 16px' }}>
+
+              <h2 className="text-xl sm:text-2xl font-black mb-3 tracking-widest text-center text-yellow-300 uppercase"
+                style={{ textShadow:'0 4px 0 #78350f,1px 0 0 #78350f,-1px 0 0 #78350f' }}>
+                {titleText}
+              </h2>
+
+              {/* Message box */}
+              <div className="w-full max-w-lg mb-4 flex items-center justify-center bg-white rounded-2xl border-4 border-blue-300 shadow-[inset_0_-4px_0_rgba(191,219,254,1),0_6px_0_rgba(30,58,138,0.5)] text-[#1e3a8a]"
+                style={{ minHeight:68, padding:'10px 16px' }}>
+                <p className="font-bold text-sm leading-snug text-center">{msgText}</p>
+              </div>
+
+              {/* Stats row */}
+              <div className="flex flex-wrap items-center justify-center gap-2 mb-4 w-full">
+                <span className="text-white font-bold text-sm bg-white/15 px-3 py-1.5 rounded-xl border border-white/20">
+                  {solvedWords.size}/{totalWords} từ
+                </span>
+                <span className="text-white font-bold text-sm bg-white/15 px-3 py-1.5 rounded-xl border border-white/20">
+                  {formatT(timeLeft)} còn lại
+                </span>
+                {score > 0 && (
+                  <span className="text-white font-bold text-sm bg-white/15 px-3 py-1.5 rounded-xl border border-white/20">
+                    {score} pts
+                  </span>
+                )}
+              </div>
+
+              {/* Reward Pills */}
+              {(totalCoins !== 0 || totalXP > 0) && (
+                <div className="flex items-end justify-center gap-4 mb-4 w-full max-w-md mx-auto">
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-white/70 text-[10px] font-black uppercase tracking-widest">Coin</span>
+                    <div ref={coinPillRef} className="flex items-center justify-center bg-yellow-400 text-[#1e3a8a] rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1)] py-1.5 px-4 relative overflow-hidden">
+                      <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full" />
+                      <img src={iconCoin} alt="" className="w-6 h-6 relative z-10 mr-1.5" />
+                      <motion.span key={displayCoins} initial={{ y:-4, opacity:0.7 }} animate={{ y:0, opacity:1 }} transition={{ duration:0.08 }}
+                        className="text-xl font-black relative z-10">
+                        {displayCoins >= 0 ? '+' : ''}{displayCoins.toLocaleString()}
+                      </motion.span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-white/70 text-[10px] font-black uppercase tracking-widest">XP</span>
+                    <div ref={xpPillRef} className="flex items-center justify-center bg-amber-500 text-white rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1)] py-1.5 px-4 relative overflow-hidden">
+                      <div className="absolute inset-0 w-full h-1/2 bg-white/25 pointer-events-none rounded-t-full" />
+                      <img src={iconTrophy} alt="" className="w-6 h-6 relative z-10 mr-1.5" />
+                      <motion.span key={displayXP} initial={{ y:-4, opacity:0.7 }} animate={{ y:0, opacity:1 }} transition={{ duration:0.08 }}
+                        className="text-xl font-black relative z-10">
+                        +{displayXP.toLocaleString()}
+                      </motion.span>
+                      <span className="text-base font-black ml-1.5 relative z-10">XP</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* P2P comparison */}
+              {isP2P && (
+                <div className="w-full max-w-md mb-4 rounded-2xl overflow-hidden"
+                  style={{ background:'linear-gradient(180deg,#1e3a8a,#1e40af)', border:'3px solid #60a5fa' }}>
+                  <div className="px-4 py-2 text-center text-xs font-black tracking-widest uppercase text-blue-200 border-b border-blue-500/40">
+                    Số Từ Tìm Được
+                  </div>
+                  <div className="px-4 py-3 flex flex-col gap-2">
+                    <ProgressBar label={myProfile?.nickname || 'Bạn'} percent={myPercent} color="#3b82f6" avatar={(myProfile?.nickname || 'B')[0]} />
+                    <ProgressBar label={opponentProfile?.nickname || 'Đối thủ'} percent={opponentPercent} color="#ef4444" avatar={(opponentProfile?.nickname || 'Đ')[0]} />
+                  </div>
+                </div>
+              )}
+
+              {/* Buttons */}
+              <div className="flex flex-col gap-2 relative z-10 w-full max-w-md mx-auto mt-1 pb-4">
+                {(onReplay || onNewGame) && (
+                  <div className="flex flex-row gap-2">
+                    {onReplay && (
+                      <button onClick={onReplay}
+                        className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-black uppercase tracking-widest text-sm py-4 rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1)] active:translate-y-1.5 active:shadow-none transition-all flex justify-center items-center relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full" />
+                        <span className="relative z-10">Chơi Lại</span>
+                      </button>
+                    )}
+                    {onNewGame && (
+                      <button onClick={onNewGame}
+                        className="flex-1 bg-green-500 hover:bg-green-400 text-white font-black uppercase tracking-widest text-sm py-4 rounded-full border-4 border-green-900 shadow-[0_6px_0_rgba(20,83,45,1)] active:translate-y-1.5 active:shadow-none transition-all flex justify-center items-center relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full" />
+                        <span className="relative z-10">Chủ Đề Mới</span>
+                      </button>
+                    )}
+                  </div>
+                )}
+                <button onClick={onLeaveGame}
+                  className="w-full bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-widest text-base py-4 rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1)] active:translate-y-1.5 active:shadow-none transition-all flex justify-center items-center relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full" />
+                  <span className="relative z-10">Về Menu</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </>,
+    document.body
+  );
+};
+
+/* ══════════════════════════════════════════════════════════════
    MAIN COMPONENT
    ══════════════════════════════════════════════════════════════ */
 
@@ -190,8 +435,17 @@ const CrosswordGame = ({
   const [gameState, setGameState] = useState('intro');
   const [confirmQuit, setConfirmQuit] = useState(false);
 
-  // Puzzle
-  const [puzzle, setPuzzle] = useState(() => PUZZLES[Math.floor(Math.random() * PUZZLES.length)]);
+  // Store — MUST be declared before puzzle state so lazy initialisers can use them
+  const { addXP, addCoins, coins: userCoins, playedCrosswordIds, markCrosswordPlayed, globalScore, nickname, giaoxu } = usePlayFabStore();
+  const { roomData } = useRoomStore();
+
+  // Puzzle — solo: theo thứ tự; P2P: từ roomData.puzzleId
+  const [puzzle, setPuzzle] = useState(() => {
+    if (opponentProgress != null && roomData?.puzzleId) {
+      return PUZZLES.find(p => p.id === roomData.puzzleId) ?? PUZZLES[0];
+    }
+    return pickNextPuzzle(PUZZLES, playedCrosswordIds);
+  });
   const gridMap = useMemo(() => buildGridMap(puzzle), [puzzle]);
   const totalWords = puzzle.words.length;
   const [isReplay, setIsReplay] = useState(false);
@@ -217,9 +471,6 @@ const CrosswordGame = ({
   const [hintUsed, setHintUsed] = useState(false);     // whether any hint was used
   const [hintsSpent, setHintsSpent] = useState(0);      // total coins spent on hints
   const [showHintMenu, setShowHintMenu] = useState(false);
-
-  // Store — for persisting XP/coins
-  const { addXP, addCoins, coins: userCoins } = usePlayFabStore();
 
   // Earned rewards (set at finish for display)
   const [earnedXP, setEarnedXP] = useState(null);
@@ -292,14 +543,70 @@ const CrosswordGame = ({
     scrollToCellRef.current?.(w.row, w.col);
   }, [puzzle.words]);
 
-  /* ── Move to next cell ── */
+  /* ── Move to next cell — skips filled cells, wraps to next unsolved word ── */
   const moveToNext = useCallback((row, col, dir) => {
-    const nr = dir === 'down' ? row + 1 : row;
-    const nc = dir === 'across' ? col + 1 : col;
-    if (nr < puzzle.gridSize.rows && nc < puzzle.gridSize.cols && gridMap[nr]?.[nc]?.isCell) {
-      setSelectedCell({ row: nr, col: nc });
+    // Find the active word containing this cell in the current direction
+    const activeWord = puzzle.words.find(w => {
+      if (w.direction !== dir) return false;
+      return [...w.answer].some((_, i) => {
+        const wr = w.direction === 'down' ? w.row + i : w.row;
+        const wc = w.direction === 'across' ? w.col + i : w.col;
+        return wr === row && wc === col;
+      });
+    });
+
+    if (activeWord) {
+      // Find next empty cell AFTER current position within this word
+      const len = activeWord.answer.length;
+      for (let i = 0; i < len; i++) {
+        const wr = activeWord.direction === 'down' ? activeWord.row + i : activeWord.row;
+        const wc = activeWord.direction === 'across' ? activeWord.col + i : activeWord.col;
+        const isAfter = dir === 'across' ? wc > col : wr > row;
+        if (isAfter && !userGrid[wr]?.[wc]) {
+          setSelectedCell({ row: wr, col: wc });
+          return;
+        }
+      }
+    } else {
+      // No matched word with current direction — simple one-step advance
+      const nr = dir === 'down' ? row + 1 : row;
+      const nc = dir === 'across' ? col + 1 : col;
+      if (nr < puzzle.gridSize.rows && nc < puzzle.gridSize.cols && gridMap[nr]?.[nc]?.isCell && !userGrid[nr]?.[nc]) {
+        setSelectedCell({ row: nr, col: nc });
+        return;
+      }
     }
-  }, [gridMap, puzzle.gridSize]);
+
+    // Word complete or all cells filled → jump to next unsolved word
+    const words = puzzle.words;
+    const currentIdx = words.findIndex(w => w.id === activeWord?.id);
+    const ordered = currentIdx >= 0
+      ? [...words.slice(currentIdx + 1), ...words.slice(0, currentIdx + 1)]
+      : words;
+
+    const nextWord = ordered.find(w => {
+      if (solvedWords.has(w.id)) return false;
+      return [...w.answer].some((_, i) => {
+        const wr = w.direction === 'down' ? w.row + i : w.row;
+        const wc = w.direction === 'across' ? w.col + i : w.col;
+        return !userGrid[wr]?.[wc];
+      });
+    });
+    if (nextWord) {
+      const firstEmpty = [...nextWord.answer].findIndex((_, i) => {
+        const wr = nextWord.direction === 'down' ? nextWord.row + i : nextWord.row;
+        const wc = nextWord.direction === 'across' ? nextWord.col + i : nextWord.col;
+        return !userGrid[wr]?.[wc];
+      });
+      const idx = firstEmpty >= 0 ? firstEmpty : 0;
+      const tr = nextWord.direction === 'down' ? nextWord.row + idx : nextWord.row;
+      const tc = nextWord.direction === 'across' ? nextWord.col + idx : nextWord.col;
+      setDirection(nextWord.direction);
+      setActiveWordId(nextWord.id);
+      setSelectedCell({ row: tr, col: tc });
+      scrollToCellRef.current?.(tr, tc);
+    }
+  }, [gridMap, puzzle.gridSize, puzzle.words, solvedWords, userGrid]);
 
   /* ── Move to previous cell ── */
   const moveToPrev = useCallback((row, col, dir) => {
@@ -678,7 +985,7 @@ const CrosswordGame = ({
   /* ── Start game ── */
   const handleStart = () => {
     setGameState('playing');
-    // Select first cell of first word
+    markCrosswordPlayed(puzzle.id);
     const firstWord = puzzle.words[0];
     if (firstWord) {
       setSelectedCell({ row: firstWord.row, col: firstWord.col });
@@ -686,6 +993,18 @@ const CrosswordGame = ({
       setActiveWordId(firstWord.id);
     }
   };
+
+  /* ── P2P: sync puzzle từ roomData khi host đã chọn ── */
+  useEffect(() => {
+    if (opponentProgress == null) return;
+    if (!roomData?.puzzleId) return;
+    const p = PUZZLES.find(pp => pp.id === roomData.puzzleId);
+    if (p && p.id !== puzzle.id) {
+      setPuzzle(p);
+      resetGameState(p);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomData?.puzzleId]);
 
   /* ── Reset game state (shared by replay & new game) ── */
   const resetGameState = (targetPuzzle) => {
@@ -723,14 +1042,7 @@ const CrosswordGame = ({
   /* ── New game with a different puzzle (full rewards) ── */
   const handleNewGame = () => {
     setIsReplay(false);
-    // Pick a different puzzle if possible
-    let newPuzzle;
-    if (PUZZLES.length > 1) {
-      const others = PUZZLES.filter(p => p !== puzzle);
-      newPuzzle = others[Math.floor(Math.random() * others.length)];
-    } else {
-      newPuzzle = PUZZLES[0];
-    }
+    const newPuzzle = pickNextPuzzle(PUZZLES, playedCrosswordIds, puzzle);
     setPuzzle(newPuzzle);
     resetGameState(newPuzzle);
     setGameState('intro');
@@ -815,125 +1127,104 @@ const CrosswordGame = ({
 
   // ── INTRO SCREEN ──
   if (gameState === 'intro') {
+    const rankName = getRankByScore(globalScore || 0);
     return (
-      <div className="w-full h-full flex flex-col items-center relative overflow-y-auto"
+      <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden"
         style={{ ...BG_STYLE }}>
         {/* Dark overlay */}
-        <div className="fixed inset-0 pointer-events-none z-0" style={{ background: 'rgba(10,15,30,0.72)' }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'rgba(5,10,25,0.78)' }} />
 
-        {/* Decorative shapes */}
+        {/* Ambient glow shapes */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div animate={{ rotate: 360 }} transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-            className="absolute -top-20 -left-20 w-60 h-60 rounded-full bg-amber-500/10" />
-          <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 8, repeat: Infinity }}
-            className="absolute bottom-10 right-10 w-40 h-40 rounded-2xl rotate-45 bg-blue-500/10" />
+          <motion.div animate={{ rotate: 360 }} transition={{ duration: 70, repeat: Infinity, ease: 'linear' }}
+            className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-amber-500/8" />
+          <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 9, repeat: Infinity }}
+            className="absolute -bottom-16 -right-16 w-52 h-52 rounded-3xl rotate-45 bg-blue-600/8" />
         </div>
 
-        {/* Back button — top left */}
-        <motion.button
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={onLeaveGame}
-          className="absolute top-4 left-4 z-20 w-10 h-10 rounded-full flex items-center justify-center"
-          style={{ background: 'rgba(255,255,255,0.1)', border: '2px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)' }}>
-          <ArrowLeft size={20} className="text-white/80" />
-        </motion.button>
-
-        <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-          className="z-10 flex flex-col items-center gap-3 px-6 py-6 max-w-md w-full text-center my-auto">
-
-          {/* Icon — smaller on landscape */}
-          <div className="w-16 h-16 md:w-24 md:h-24 rounded-2xl md:rounded-3xl flex items-center justify-center text-3xl md:text-5xl relative shrink-0"
-            style={{ background: 'linear-gradient(135deg, #d97706, #b45309)', border: '4px solid #92400e', boxShadow: '0 6px 0 #78350f, 0 10px 24px rgba(0,0,0,0.5)' }}>
-            <span className="absolute inset-0 w-full h-1/2 rounded-t-xl md:rounded-t-2xl bg-white/15 pointer-events-none" />
-            <span className="relative z-10">✝️</span>
-          </div>
-
-          <div>
-            <h1 className="text-2xl md:text-4xl font-black text-white mb-1"
-              style={{ textShadow: '0 3px 0 rgba(0,0,0,0.5)' }}>
-              Ô Chữ Công Giáo
+        <motion.div
+          key="lobby"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -24 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+          className="m-auto max-w-sm w-full flex flex-col gap-3 px-4 my-auto z-10"
+        >
+          {/* ── Game title card — matches Pinnacle lobby ── */}
+          <div className="bg-[#1e3a8a]/80 backdrop-blur-sm rounded-2xl border-2 border-blue-400/40 p-5 text-center shadow-xl relative">
+            <div className="text-4xl mb-1">✝️</div>
+            <h1 className="text-2xl font-black text-yellow-300 uppercase tracking-widest mb-0.5"
+              style={{ textShadow: '0 3px 0 #78350f' }}>
+              Giải Ô Chữ
             </h1>
-            <p className="text-amber-200/70 text-sm font-semibold">
-              {puzzle.title} — {totalWords} từ cần tìm
-            </p>
-          </div>
+            <p className="text-blue-200 text-xs font-semibold">{puzzle.theme} · {totalWords} từ cần tìm</p>
 
-          {/* Rules — compact */}
-          <div className="w-full rounded-2xl p-3 text-left space-y-1.5"
-            style={{ background: 'rgba(0,0,0,0.4)', border: '2px solid rgba(255,255,255,0.1)' }}>
-            <p className="text-white/80 text-xs md:text-sm flex items-center gap-2">
-              <span className="text-amber-400">📝</span>
-              Điền chữ cái vào ô trống dựa theo gợi ý
-            </p>
-            <p className="text-white/80 text-xs md:text-sm flex items-center gap-2">
-              <span className="text-amber-400">⏱️</span>
-              Thời gian: 5 phút
-            </p>
-            <p className="text-white/80 text-xs md:text-sm flex items-center gap-2">
-              <span className="text-amber-400">💡</span>
-              Click vào gợi ý để nhảy đến ô tương ứng
-            </p>
-          </div>
+            {/* Rules chips */}
+            <div className="flex flex-wrap justify-center gap-1.5 mt-3">
+              {[
+                { icon: '📝', text: 'Điền chữ theo gợi ý' },
+                { icon: '⏱️', text: '5 phút' },
+                { icon: '💡', text: 'Hint: 20-50 💰' },
+              ].map(({ icon, text }) => (
+                <span key={text} className="text-[11px] font-semibold px-2.5 py-1 rounded-full text-blue-100"
+                  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                  {icon} {text}
+                </span>
+              ))}
+            </div>
 
-          {/* Rewards info */}
-          <div className="w-full rounded-2xl p-3 text-left space-y-2"
-            style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(245,158,11,0.15))', border: '2px solid rgba(255,255,255,0.12)' }}>
-            <p className="text-white/50 text-[10px] md:text-xs font-black uppercase tracking-widest text-center mb-1">
-              🎁 Phần Thưởng
-            </p>
-            {/* XP section */}
-            <div className="flex items-start gap-2">
-              <span className="w-7 h-7 rounded-lg flex items-center justify-center text-sm shrink-0 mt-0.5"
-                style={{ background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)', boxShadow: '0 2px 0 #4c1d95' }}>
-                ⭐
-              </span>
-              <div className="text-xs md:text-sm space-y-0.5">
-                <p><span className="text-purple-300 font-black">XP</span></p>
-                <p className="text-white/70 font-semibold">+3 mỗi từ đúng · +20 hoàn thành</p>
-                <p className="text-white/70 font-semibold">+10 không dùng hint · +10 hoàn thành {'<'} 2 phút</p>
-              </div>
-            </div>
-            {/* Coin section */}
-            <div className="flex items-start gap-2">
-              <span className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
-                style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', boxShadow: '0 2px 0 #92400e' }}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <circle cx="8" cy="8" r="7" fill="#fef3c7" stroke="#92400e" strokeWidth="1"/>
-                  <circle cx="8" cy="8" r="5" fill="#fbbf24"/>
-                  <text x="8" y="11.5" textAnchor="middle" fontSize="7" fontWeight="900" fill="#78350f">$</text>
-                </svg>
-              </span>
-              <div className="text-xs md:text-sm space-y-0.5">
-                <p><span className="text-amber-300 font-black">Coin</span></p>
-                <p className="text-white/70 font-semibold">+5 mỗi từ đúng · +20 hoàn thành</p>
-                <p className="text-white/70 font-semibold">+20 bonus nếu 100%</p>
-              </div>
-            </div>
-            {/* Hint info */}
-            <div className="flex items-start gap-2 pt-1 border-t border-white/10">
-              <span className="w-7 h-7 rounded-lg flex items-center justify-center text-sm shrink-0 mt-0.5"
-                style={{ background: 'linear-gradient(135deg, #06b6d4, #0891b2)', boxShadow: '0 2px 0 #0e7490' }}>
-                💡
-              </span>
-              <div className="text-xs md:text-sm space-y-0.5">
-                <p><span className="text-cyan-300 font-black">Gợi Ý (Solo)</span></p>
-                <p className="text-white/70 font-semibold">Mở 1 chữ: 20 💰 · Mở cả từ: 50 💰</p>
-              </div>
+            {/* Reward row */}
+            <div className="flex justify-center gap-3 mt-3 pt-3 border-t border-white/10">
+              <span className="text-[11px] font-bold text-purple-300">⭐ +3 XP/từ</span>
+              <span className="text-white/30 text-[11px]">·</span>
+              <span className="text-[11px] font-bold text-amber-300">💰 +5 Coin/từ</span>
+              <span className="text-white/30 text-[11px]">·</span>
+              <span className="text-[11px] font-bold text-yellow-300">🏆 Bonus 100%</span>
             </div>
           </div>
 
-          <motion.button
-            whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96, y: 3 }}
+          {/* ── Action button ── */}
+          <button
             onClick={handleStart}
-            className="w-full py-3 md:py-4 rounded-2xl font-black text-lg md:text-xl text-white relative overflow-hidden shrink-0"
-            style={{ background: 'linear-gradient(180deg, #d97706, #b45309)', border: '3px solid #92400e', boxShadow: '0 6px 0 #78350f' }}>
-            <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
-            <span className="relative z-10 flex items-center justify-center gap-2">
-              <Zap size={22} /> Bắt Đầu
-            </span>
-          </motion.button>
+            className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-wider text-base py-4 rounded-2xl border-4 border-[#1e3a8a] shadow-[0_5px_0_rgba(30,58,138,1)] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 relative overflow-hidden group"
+          >
+            <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-xl" />
+            <Play fill="currentColor" size={18} className="relative z-10" />
+            <span className="relative z-10">Bắt Đầu</span>
+          </button>
+
+          {/* ── Player info card ── */}
+          <div className="bg-[#1e40af]/70 backdrop-blur-sm rounded-2xl border-2 border-blue-400/30 p-3.5 shadow-lg flex items-center gap-3">
+            <div className="relative shrink-0">
+              <div className="w-11 h-11 rounded-full bg-blue-500 flex items-center justify-center font-black text-white text-base border-2 border-blue-300">
+                {nickname?.[0]?.toUpperCase() || '?'}
+              </div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <p className="text-white font-black text-sm leading-tight truncate">{nickname || 'Người chơi'}</p>
+                {rankName && <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-yellow-400/20 text-yellow-300 border border-yellow-400/30 shrink-0">{rankName}</span>}
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] text-blue-200 font-semibold">🏆 {(globalScore || 0).toLocaleString()} XP</span>
+                <span className="text-blue-400/60 text-[10px]">·</span>
+                <span className="text-[11px] text-blue-200 font-semibold">💰 {(userCoins || 0).toLocaleString()}</span>
+                {giaoxu && <><span className="text-blue-400/60 text-[10px]">·</span><span className="text-[11px] text-blue-200 font-semibold truncate">⛪ {giaoxu}</span></>}
+              </div>
+            </div>
+          </div>
+
+          {/* Back to menu */}
+          <button onClick={onLeaveGame}
+            className="mx-auto flex items-center gap-2 px-4 py-2 rounded-full text-white/80 hover:text-white font-bold text-xs transition-all active:translate-y-0.5"
+            style={{
+              background: 'rgba(30,58,138,0.6)',
+              border: '2px solid rgba(96,165,250,0.3)',
+              boxShadow: '0 2px 0 rgba(15,23,42,0.5)',
+            }}>
+            <ChevronLeft size={16} strokeWidth={3} />
+            Về trang chính
+          </button>
         </motion.div>
       </div>
     );
@@ -946,176 +1237,19 @@ const CrosswordGame = ({
     const oppWordsCount = opponentProgress?.completedItems?.length || 0;
     const isWinner = isP2P ? myWordsCount > oppWordsCount : false;
     const isDraw = isP2P ? myWordsCount === oppWordsCount : false;
-
-    return (
-      <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden"
-        style={{ ...BG_STYLE }}>
-        {/* Dark overlay */}
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'rgba(10,15,30,0.72)' }} />
-
-        {showCelebration && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
-            <div className="text-8xl animate-bounce">🎉</div>
-          </motion.div>
-        )}
-
-        <motion.div initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-          className="z-10 flex flex-col items-center gap-5 px-6 max-w-md w-full text-center">
-
-          <div className="w-20 h-20 rounded-full flex items-center justify-center text-4xl"
-            style={{
-              background: solvedWords.size === totalWords
-                ? 'linear-gradient(135deg, #fbbf24, #d97706)'
-                : 'linear-gradient(135deg, #3b82f6, #1e40af)',
-              border: '4px solid rgba(0,0,0,0.3)', boxShadow: '0 6px 0 rgba(0,0,0,0.4)',
-            }}>
-            {solvedWords.size === totalWords ? '🏆' : '⏱️'}
-          </div>
-
-          <div>
-            <h2 className="text-2xl font-black text-white mb-1" style={{ textShadow: '0 2px 0 rgba(0,0,0,0.5)' }}>
-              {solvedWords.size === totalWords
-                ? 'Hoàn Thành Xuất Sắc!'
-                : 'Hết Thời Gian!'}
-            </h2>
-            {isP2P && (
-              <p className="text-lg font-black" style={{ color: isWinner ? '#4ade80' : isDraw ? '#fbbf24' : '#f87171' }}>
-                {isWinner ? '🎉 Bạn Thắng!' : isDraw ? '🤝 Hoà!' : '😔 Bạn Thua!'}
-              </p>
-            )}
-          </div>
-
-          {/* Stats */}
-          <div className="w-full rounded-2xl p-4 space-y-3"
-            style={{ background: 'rgba(0,0,0,0.4)', border: '2px solid rgba(255,255,255,0.1)' }}>
-            <div className="flex justify-between items-center">
-              <span className="text-white/60 text-sm font-bold">Từ đúng</span>
-              <span className="text-white font-black text-lg">{solvedWords.size}/{totalWords}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-white/60 text-sm font-bold">Thời gian còn lại</span>
-              <span className="text-blue-400 font-black text-lg">{formatTime(timeLeft)}</span>
-            </div>
-
-            {/* XP Breakdown */}
-            {earnedXP && (
-              <div className="border-t border-white/10 pt-3 mt-1">
-                <p className="text-purple-300 text-xs font-black uppercase tracking-widest mb-2">⭐ XP Nhận Được</p>
-                <div className="space-y-1 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-white/50 font-semibold">Từ đúng ({solvedWords.size} × 3)</span>
-                    <span className="text-white/80 font-black">+{earnedXP.wordsXP}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/50 font-semibold">Hoàn thành puzzle</span>
-                    <span className="text-white/80 font-black">+{earnedXP.completionXP}</span>
-                  </div>
-                  {earnedXP.noHintXP > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-green-400/70 font-semibold">🛡️ Không dùng hint</span>
-                      <span className="text-green-400 font-black">+{earnedXP.noHintXP}</span>
-                    </div>
-                  )}
-                  {earnedXP.speedXP > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-cyan-400/70 font-semibold">⚡ Tốc độ {'<'} 2 phút</span>
-                      <span className="text-cyan-400 font-black">+{earnedXP.speedXP}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between pt-1 border-t border-white/5">
-                    <span className="text-purple-300 font-black">Tổng XP</span>
-                    <span className="text-purple-300 font-black text-sm">+{earnedXP.total}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Coin Breakdown */}
-            {earnedCoins && (
-              <div className="border-t border-white/10 pt-3 mt-1">
-                <p className="text-amber-300 text-xs font-black uppercase tracking-widest mb-2">💰 Coin Nhận Được</p>
-                <div className="space-y-1 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-white/50 font-semibold">Từ đúng ({solvedWords.size} × 5)</span>
-                    <span className="text-white/80 font-black">+{earnedCoins.wordCoins}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/50 font-semibold">Hoàn thành puzzle</span>
-                    <span className="text-white/80 font-black">+{earnedCoins.completionCoins}</span>
-                  </div>
-                  {earnedCoins.perfectBonus > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-yellow-400/70 font-semibold">🏆 Bonus 100%</span>
-                      <span className="text-yellow-400 font-black">+{earnedCoins.perfectBonus}</span>
-                    </div>
-                  )}
-                  {earnedCoins.hintsSpent > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-red-400/70 font-semibold">💡 Chi phí hint</span>
-                      <span className="text-red-400 font-black">-{earnedCoins.hintsSpent}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between pt-1 border-t border-white/5">
-                    <span className="text-amber-300 font-black">Tổng Coin</span>
-                    <span className={`font-black text-sm ${earnedCoins.total >= 0 ? 'text-amber-300' : 'text-red-400'}`}>{earnedCoins.total >= 0 ? '+' : ''}{earnedCoins.total}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {isP2P && (
-              <>
-                <div className="border-t border-white/10 pt-3 mt-3">
-                  <p className="text-white/50 text-xs font-bold mb-2">SO SÁNH</p>
-                  <ProgressBar label={myProfile?.nickname || 'Bạn'} percent={myPercent} color="#3b82f6" avatar={(myProfile?.nickname || 'B')[0]} />
-                  <div className="h-1.5" />
-                  <ProgressBar label={opponentProfile?.nickname || 'Đối thủ'} percent={opponentPercent} color="#ef4444" avatar={(opponentProfile?.nickname || 'Đ')[0]} />
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* Action buttons */}
-          <div className="w-full flex flex-col gap-2.5">
-            {isSolo && (
-              <>
-                <motion.button
-                  whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96, y: 3 }}
-                  onClick={handleReplay}
-                  className="w-full py-3 rounded-2xl font-black text-base text-white relative overflow-hidden"
-                  style={{ background: 'linear-gradient(180deg, #f59e0b, #d97706)', border: '3px solid #b45309', boxShadow: '0 5px 0 #92400e' }}>
-                  <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    🔄 Chơi Lại <span className="text-xs font-bold opacity-70">(+2💰/từ)</span>
-                  </span>
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96, y: 3 }}
-                  onClick={handleNewGame}
-                  className="w-full py-3 rounded-2xl font-black text-base text-white relative overflow-hidden"
-                  style={{ background: 'linear-gradient(180deg, #10b981, #059669)', border: '3px solid #047857', boxShadow: '0 5px 0 #047857' }}>
-                  <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    🆕 Chơi Mới
-                  </span>
-                </motion.button>
-              </>
-            )}
-            <motion.button
-              whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96, y: 3 }}
-              onClick={onLeaveGame}
-              className="w-full py-3 rounded-2xl font-black text-base text-white relative overflow-hidden"
-              style={{ background: 'linear-gradient(180deg, #3b82f6, #1e40af)', border: '3px solid #1e3a8a', boxShadow: '0 5px 0 #1e3a8a' }}>
-              <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                <ArrowLeft size={18} /> Về Menu
-              </span>
-            </motion.button>
-          </div>
-        </motion.div>
-      </div>
-    );
+    const isPerfect = solvedWords.size === totalWords;
+    return <CrosswordFinishedOverlay
+      isPerfect={isPerfect}
+      isP2P={isP2P} isWinner={isWinner} isDraw={isDraw}
+      solvedWords={solvedWords} totalWords={totalWords}
+      timeLeft={timeLeft} earnedXP={earnedXP} earnedCoins={earnedCoins}
+      hintsSpent={hintsSpent} score={score}
+      myProfile={myProfile} opponentProfile={opponentProfile}
+      myPercent={myPercent} opponentPercent={opponentPercent}
+      onReplay={isSolo ? handleReplay : undefined}
+      onNewGame={isSolo ? handleNewGame : undefined}
+      onLeaveGame={onLeaveGame}
+    />;
   }
 
   // ── PLAYING SCREEN ──
@@ -1163,7 +1297,7 @@ const CrosswordGame = ({
 
         {/* Title */}
         <span className="font-black text-white text-sm md:text-base flex-1 truncate" style={{ textShadow: '0 1px 0 #172554' }}>
-          Ô Chữ
+          Giải ô chữ <span className="font-semibold text-blue-200 text-xs ml-1 opacity-80">· {puzzle.theme}</span>
         </span>
 
         {/* Timer */}

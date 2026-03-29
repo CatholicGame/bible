@@ -2,6 +2,7 @@ import { ref, set, update, get, onValue, remove, onDisconnect } from 'firebase/d
 import { db, auth } from '../config/firebase';
 import { useRoomStore } from '../store/roomStore';
 import { useUserStore } from '../store/userStore';
+import RAW_PUZZLES from '../data/crossword_puzzles.json';
 
 export function useRoom() {
   const { uid: storeUid, nickname } = useUserStore();
@@ -85,19 +86,55 @@ export function useRoom() {
 
   /**
    * Đánh dấu mình sẵn sàng
+   * @param {string} roomId
+   * @param {string[]} playedCrosswordIds - danh sách puzzle ID đã chơi của player này
+   * @param {string} authMethod - 'guest' | 'email' | 'google'
    */
-  const setReady = async (roomId) => {
+  const setReady = async (roomId, playedCrosswordIds = [], authMethod = 'guest') => {
     await update(ref(db, `rooms/${roomId}/players/${uid}`), {
       isReady: true,
       lastSeen: Date.now(),
+      // Chỉ ghi playedCrosswordIds nếu đã đăng nhập chính thức
+      playedCrosswordIds: authMethod !== 'guest' ? (playedCrosswordIds ?? []) : null,
+      authMethod,
     });
   };
 
   /**
    * Bắt đầu game (chỉ Host gọi)
+   * Tự động chọn puzzleId phù hợp cho crossword P2P
    */
-  const startGame = async (roomId) => {
-    await update(ref(db, `rooms/${roomId}`), { status: 'playing' });
+  const startGame = async (roomId, gameType) => {
+    let updatePayload = { status: 'playing' };
+
+    if (gameType === 'crossword') {
+      // Đọc thông tin players để chọn puzzle
+      const snap = await get(ref(db, `rooms/${roomId}/players`));
+      const players = snap.val() ?? {};
+
+      const playerEntries = Object.values(players);
+      const anyGuest = playerEntries.some(p => p.authMethod === 'guest' || p.authMethod == null);
+
+      let selectedPuzzle;
+      if (anyGuest) {
+        // Có guest → random
+        selectedPuzzle = RAW_PUZZLES[Math.floor(Math.random() * RAW_PUZZLES.length)];
+      } else {
+        // Cả 2 đã đăng nhập → tìm puzzle chưa ai chơi, index nhỏ nhất
+        const playedByAll = playerEntries.reduce((acc, p) => {
+          (p.playedCrosswordIds ?? []).forEach(id => acc.add(id));
+          return acc;
+        }, new Set());
+
+        selectedPuzzle = RAW_PUZZLES.find(p => !playedByAll.has(p.id));
+        // Đã hết tất cả → reset, chọn từ đầu
+        if (!selectedPuzzle) selectedPuzzle = RAW_PUZZLES[0];
+      }
+
+      updatePayload.puzzleId = selectedPuzzle.id;
+    }
+
+    await update(ref(db, `rooms/${roomId}`), updatePayload);
   };
 
   /**

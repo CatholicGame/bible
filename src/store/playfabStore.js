@@ -56,6 +56,7 @@ export const usePlayFabStore = create((set, get) => ({
   tinhthanh: null,       // Tỉnh thành
   answeredQuestions: [],
   currentQuestions: [],
+  playedCrosswordIds: [],   // IDs của crossword puzzle đã chơi
   globalScore: 0,
   coins: 0,
   rank: null,
@@ -118,6 +119,12 @@ export const usePlayFabStore = create((set, get) => ({
         }
       }
 
+      // Guest: load crossword history from localStorage
+      let playedCrosswordIds = [];
+      try {
+        playedCrosswordIds = JSON.parse(localStorage.getItem('crossword_played_guest') || '[]');
+      } catch (_) {}
+
       // Get display name and profile fields
       const displayName = data.InfoResultPayload?.PlayerProfile?.DisplayName;
       const giaoxu = userData?.GiaoXu?.Value || null;
@@ -152,6 +159,7 @@ export const usePlayFabStore = create((set, get) => ({
         giaophan,
         tinhthanh,
         answeredQuestions,
+        playedCrosswordIds,
         globalScore,
         coins,
         rank: getRankByScore(globalScore),
@@ -224,6 +232,12 @@ export const usePlayFabStore = create((set, get) => ({
         try { answeredQuestions = JSON.parse(userData.AnsweredQuestions.Value); } catch (_) {}
       }
 
+      // Extract crossword history
+      let playedCrosswordIds = [];
+      if (userData?.PlayedCrosswordIds?.Value) {
+        try { playedCrosswordIds = JSON.parse(userData.PlayedCrosswordIds.Value); } catch (_) {}
+      }
+
       const displayName = data.InfoResultPayload?.PlayerProfile?.DisplayName;
       const giaoxu = userData?.GiaoXu?.Value || null;
       const hat = userData?.Hat?.Value || null;
@@ -247,6 +261,7 @@ export const usePlayFabStore = create((set, get) => ({
         giaophan,
         tinhthanh,
         answeredQuestions,
+        playedCrosswordIds,
         globalScore,
         coins,
         rank: getRankByScore(globalScore),
@@ -285,6 +300,12 @@ export const usePlayFabStore = create((set, get) => ({
         try { answeredQuestions = JSON.parse(userData.AnsweredQuestions.Value); } catch (_) {}
       }
 
+      // Extract crossword history
+      let playedCrosswordIds = [];
+      if (userData?.PlayedCrosswordIds?.Value) {
+        try { playedCrosswordIds = JSON.parse(userData.PlayedCrosswordIds.Value); } catch (_) {}
+      }
+
       // Use Google display name as nickname
       const displayName = data.InfoResultPayload?.PlayerProfile?.DisplayName
         || firebaseUser.displayName
@@ -321,6 +342,7 @@ export const usePlayFabStore = create((set, get) => ({
         giaophan,
         tinhthanh,
         answeredQuestions,
+        playedCrosswordIds,
         globalScore,
         coins,
         rank: getRankByScore(globalScore),
@@ -378,6 +400,30 @@ export const usePlayFabStore = create((set, get) => ({
     } catch (error) {
       console.error('[PlayFab] Failed to save answered questions', error);
       return false;
+    }
+  },
+
+  // ── Mark crossword puzzle as played ──
+  markCrosswordPlayed: async (puzzleId) => {
+    const { authMethod } = get();
+    set(state => {
+      if (state.playedCrosswordIds.includes(puzzleId)) return state;
+      const updated = [...state.playedCrosswordIds, puzzleId];
+      // Guest: sync to localStorage
+      if (authMethod === 'guest') {
+        try { localStorage.setItem('crossword_played_guest', JSON.stringify(updated)); } catch (_) {}
+      }
+      return { playedCrosswordIds: updated };
+    });
+    // Registered: persist to PlayFab
+    if (authMethod !== 'guest') {
+      const { playedCrosswordIds } = get();
+      try {
+        await updateUserData({ PlayedCrosswordIds: JSON.stringify(playedCrosswordIds) });
+        console.log(`[CrosswordHistory] Saved ${playedCrosswordIds.length} played puzzles`);
+      } catch (e) {
+        console.warn('[CrosswordHistory] Failed to save', e);
+      }
     }
   },
 
@@ -682,6 +728,7 @@ export const usePlayFabStore = create((set, get) => ({
       avatarUrl: null,
       answeredQuestions: [],
       currentQuestions: [],
+      playedCrosswordIds: [],
       globalScore: 0,
       coins: 0,
       rank: null,
