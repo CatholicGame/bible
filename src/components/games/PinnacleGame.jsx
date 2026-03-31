@@ -8,6 +8,7 @@ import { getRankByScore, getRankLevel } from '../../utils/ranks';
 import { useSoundManager } from '../../utils/soundManager';
 import SettingsModal from '../common/SettingsModal';
 import AdBanner from '../ads/AdBanner';
+import AdArticle from '../ads/AdArticle';
 import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.png';
 import mcAvatar from '../../assets/pinnacle/MC.png';
 import pointUpSfx from '../../assets/games/SFX/point_up.wav';
@@ -825,20 +826,12 @@ const PinnacleGame = ({ onLeaveGame }) => {
         return () => clearInterval(timer);
     }, [gameState, introPhase, currentQuestionIndex, isAnswerRevealed, showStopConfirm, confirmFiftyFifty, confirmAudience, confirmPhone, confirmSwap, audienceState, phoneState]);
 
+    // NOTE: Auto-advance đã bị tắt — user phải bấm "Tiếp tục" thủ công.
+    // explanationTimeLeft giữ lại để tránh lỗi reference ở JSX render.
     useEffect(() => {
         if (answerStep === 'explained') {
             setExplanationTimeLeft(15);
-            const timer = setInterval(() => {
-                setExplanationTimeLeft(prev => {
-                    if (prev <= 1) {
-                        clearInterval(timer);
-                        handleNextQuestion();
-                        return 0;
-                    }
-                    return prev - 1;
-                });
-            }, 1000);
-            return () => clearInterval(timer);
+            // Không còn auto-advance nữa — chỉ reset countdown về 15 để UI đẹp
         }
     }, [answerStep]);
 
@@ -1974,6 +1967,13 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                                 <span>{mcMessage}</span>
                                                             )}
                                                         </motion.div>
+
+                                                        {/* In-article Ad — chỉ hiện khi đang ở bước giải thích */}
+                                                        {answerStep === 'explained' && (
+                                                            <div className="w-full mt-3 rounded-xl overflow-hidden" style={{ border: '1px solid rgba(96,165,250,0.2)' }}>
+                                                                <AdArticle />
+                                                            </div>
+                                                        )}
 
                                                         {/* Next / End button */}
                                                         {answerStep === 'explained' && currentQuestionIndex < currentQuestions.length - 1 && (
