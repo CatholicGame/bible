@@ -105,7 +105,7 @@ export default function WaitingRoom({ onLeave, onGameStart }) {
         <motion.div variants={container} initial="hidden" animate="visible" className="px-5 pb-6">
           <motion.h2 variants={fadeUp}
             className="text-center font-black text-2xl uppercase tracking-wider mb-1"
-            style={{ color: '#fbbf24', textShadow: '0 3px 0 #b45309', WebkitTextStroke: '1px #92400e' }}>
+            style={{ color: '#fbbf24', textShadow: '0 3px 0 #b45309' }}>
             PHÒNG CHỜ
           </motion.h2>
           <motion.p variants={fadeUp} className="text-center text-blue-200 text-xs font-semibold mb-4">

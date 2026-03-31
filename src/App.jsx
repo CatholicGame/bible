@@ -336,6 +336,11 @@ function App() {
               gameType={activeGameType}
               onBack={() => setCurrentView('menu')}
               onRoomCreated={handleRoomCreated}
+              onPlaySolo={() => {
+                // Về menu trước để reset state, rồi trigger solo play
+                setActiveMode('solo');
+                setCurrentView('playing');
+              }}
             />
           </motion.div>
         )}

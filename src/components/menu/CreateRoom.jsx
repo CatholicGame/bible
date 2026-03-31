@@ -44,7 +44,7 @@ const ROOM_TYPES = [
 
 const MAX_PLAYERS_OPTIONS = [2];  // Game này chỉ hỗ trợ 2 người
 
-const CreateRoom = ({ gameName, gameType = 'quiz', onBack, onRoomCreated }) => {
+const CreateRoom = ({ gameName, gameType = 'quiz', onBack, onRoomCreated, onPlaySolo }) => {
     const { createRoom } = useRoom();
     const { coins: userCoins, globalScore } = usePlayFabStore();
     const [roomType, setRoomType] = useState('private');
@@ -202,7 +202,7 @@ const CreateRoom = ({ gameName, gameType = 'quiz', onBack, onRoomCreated }) => {
                                 Chỉnh lại
                             </motion.button>
                             <motion.button whileTap={{ scale: 0.97 }}
-                                onClick={onBack}
+                                onClick={onPlaySolo ?? onBack}
                                 className="flex-1 py-3.5 rounded-full font-black text-[#7f1d1d] text-sm uppercase relative overflow-hidden"
                                 style={{ background: 'linear-gradient(180deg,#fbbf24,#f59e0b)', border: '3px solid #b45309', boxShadow: '0 4px 0 #b45309' }}>
                                 <div className="absolute top-0 left-0 w-full h-1/2 bg-white/25 pointer-events-none rounded-t-full" />

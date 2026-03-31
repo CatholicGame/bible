@@ -24,7 +24,7 @@ import imgGolgotha from '../../assets/games/thumb_golgotha.png';
 const GAMES = [
     { id: 'millionaire', title: 'Nhà Thần Học?', subtitle: 'Ai Là', image: imgMillionaire, from: '#8b5cf6', to: '#5b21b6', isSoloOnly: true },
     { id: 'crossword', title: 'Giải ô chữ', subtitle: 'Ô Chữ', image: imgSorting, from: '#d97706', to: '#92400e', isSoloOnly: false },
-    { id: 'golgotha', title: 'Đỉnh Golgotha', subtitle: 'Đường Lên', image: imgGolgotha, from: '#0ea5e9', to: '#0369a1', isSoloOnly: false },
+    { id: 'golgotha', title: 'Đỉnh Golgotha', subtitle: 'Đường Lên', image: imgGolgotha, from: '#0ea5e9', to: '#0369a1', isSoloOnly: false, comingSoon: true },
 ];
 
 // Default card proportions: portrait baseline
@@ -108,13 +108,14 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
     const { scale, zIndex, x } = useCardTransform(dragX, idx, cwRef, cardW, step);
     const pointerDownX = useRef(0);
     const hasStats = stats && stats.plays > 0;
+    const isComingSoon = !!game.comingSoon;
 
     // Scale font/spacing proportionally so cards look right at any size
     const titleSize   = Math.round(cardH * 0.082);
     const badgeSize   = Math.round(cardH * 0.039);
     const bottomOff   = Math.round(cardH * 0.088);
     const badgeOff    = Math.round(cardH * 0.300);
-    const borderRad   = Math.round(cardH * 0.065); // ~24px at 364, ~14px at small
+    const borderRad   = Math.round(cardH * 0.065);
 
     return (
         <motion.div style={{ width: cardW, height: cardH, scale, zIndex, x, flexShrink: 0, position: 'relative' }}>
@@ -124,21 +125,24 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
                     const moved = Math.abs(e.clientX - pointerDownX.current);
                     if (moved < 8) onPress();
                 }}
-                whileTap={{ y: 3 }}
+                whileTap={isComingSoon ? {} : { y: 3 }}
                 className="w-full h-full overflow-hidden flex flex-col justify-between relative"
                 style={{
                     borderRadius: borderRad,
                     padding: Math.round(cardH * 0.055),
-                    background: `linear-gradient(145deg, ${game.from}28, rgba(255,255,255,0.92))`,
-                    border: `3px solid ${game.from}55`,
+                    background: isComingSoon
+                        ? `linear-gradient(145deg, #64748b18, rgba(240,240,240,0.88))`
+                        : `linear-gradient(145deg, ${game.from}28, rgba(255,255,255,0.92))`,
+                    border: `3px solid ${isComingSoon ? '#94a3b8' : game.from + '55'}`,
                     boxShadow: isSnapped
-                        ? `0 ${step < 200 ? 4 : 8}px 0 ${game.from}55, 0 ${step < 200 ? 6 : 12}px 24px ${game.from}33`
-                        : `0 ${step < 200 ? 2 : 5}px 0 ${game.from}44, 0 ${step < 200 ? 4 : 8}px 16px rgba(0,80,120,0.18)`,
+                        ? `0 ${step < 200 ? 4 : 8}px 0 ${isComingSoon ? '#94a3b8' : game.from + '55'}, 0 ${step < 200 ? 6 : 12}px 24px ${isComingSoon ? '#94a3b833' : game.from + '33'}`
+                        : `0 ${step < 200 ? 2 : 5}px 0 ${isComingSoon ? '#64748b' : game.from + '44'}, 0 ${step < 200 ? 4 : 8}px 16px rgba(0,80,120,0.18)`,
                     userSelect: 'none',
-                    cursor: 'grab',
+                    cursor: isComingSoon ? 'default' : 'grab',
+                    filter: isComingSoon ? 'saturate(0.3)' : 'none',
                 }}
             >
-                <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none" style={{ background: game.from + '18' }} />
+                <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none" style={{ background: (isComingSoon ? '#94a3b8' : game.from) + '18' }} />
                 {/* 3D Image Thumbnail */}
                 <div className="absolute inset-x-0 top-[8%] bottom-[30%] flex justify-center pointer-events-none drop-shadow-2xl px-[5px]">
                     <img
@@ -148,47 +152,73 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
                     />
                 </div>
 
+                {/* COMING SOON overlay */}
+                {isComingSoon && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
+                        style={{ borderRadius: borderRad, background: 'rgba(15,23,42,0.45)', backdropFilter: 'blur(1.5px)' }}>
+                        <motion.div
+                            animate={{ scale: [1, 1.06, 1] }}
+                            transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                            className="px-3 py-1.5 rounded-full font-black uppercase tracking-widest"
+                            style={{
+                                fontSize: Math.round(cardH * 0.038),
+                                background: 'linear-gradient(135deg,#fbbf24,#f59e0b)',
+                                color: '#7c2d12',
+                                border: '2.5px solid #b45309',
+                                boxShadow: '0 3px 0 #b45309',
+                            }}>
+                            Coming Soon
+                        </motion.div>
+                        <span className="mt-2 font-bold text-white/70"
+                            style={{ fontSize: Math.round(cardH * 0.03) }}>
+                            Sắp ra mắt
+                        </span>
+                    </div>
+                )}
+
                 {/* Subtitle / Title at bottom */}
                 <div className="absolute left-0 right-0 text-center select-none pointer-events-none overflow-hidden"
                     style={{ bottom: bottomOff }}>
                     <span className="block font-black tracking-[0.1em] uppercase mb-0.5"
-                        style={{ fontSize: badgeSize, color: '#7fb3cc' }}>
+                        style={{ fontSize: badgeSize, color: isComingSoon ? '#94a3b8' : '#7fb3cc' }}>
                         {game.subtitle}
                     </span>
                     <span className="block font-black leading-tight px-1 truncate"
-                        style={{ fontSize: titleSize, color: '#1e3a5f' }}>
+                        style={{ fontSize: titleSize, color: isComingSoon ? '#64748b' : '#1e3a5f' }}>
                         {game.title}
                     </span>
                 </div>
 
-                {/* Stats badges: XP + Coins + plays */}
-                <motion.div
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="absolute left-0 right-0 flex justify-center gap-1 pointer-events-none select-none"
-                    style={{ bottom: badgeOff }}
-                >
-                    <span
-                        className="flex items-center gap-0.5 font-black px-1.5 py-0.5 rounded-full"
-                        style={{ fontSize: badgeSize, background: 'rgba(255,255,255,0.85)', border: '1px solid rgba(0,150,200,0.2)', color: '#f59e0b' }}
+                {/* Stats badges: chỉ hiện khi không phải comingSoon */}
+                {!isComingSoon && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="absolute left-0 right-0 flex justify-center gap-1 pointer-events-none select-none"
+                        style={{ bottom: badgeOff }}
                     >
-                        <img src={iconTrophy} alt="XP" className="w-3.5 h-3.5 object-contain" /> {(stats?.xp || 0).toLocaleString()}
-                    </span>
-                    <span
-                        className="flex items-center gap-0.5 font-black px-1.5 py-0.5 rounded-full"
-                        style={{ fontSize: badgeSize, background: 'rgba(255,255,255,0.85)', border: '1px solid rgba(0,150,200,0.2)', color: '#06d6a0' }}
-                    >
-                        <img src={iconCoin} alt="Coins" className="w-3.5 h-3.5 object-contain" /> {(stats?.coins || 0).toLocaleString()}
-                    </span>
-                    <span
-                        className="flex items-center gap-0.5 font-black px-1.5 py-0.5 rounded-full"
-                        style={{ fontSize: badgeSize, background: 'rgba(255,255,255,0.85)', border: '1px solid rgba(0,150,200,0.2)', color: '#4a7fa5' }}
-                    >
-                        🎮 {stats?.plays || 0}
-                    </span>
-                </motion.div>
+                        <span
+                            className="flex items-center gap-0.5 font-black px-1.5 py-0.5 rounded-full"
+                            style={{ fontSize: badgeSize, background: 'rgba(255,255,255,0.85)', border: '1px solid rgba(0,150,200,0.2)', color: '#f59e0b' }}
+                        >
+                            <img src={iconTrophy} alt="XP" className="w-3.5 h-3.5 object-contain" /> {(stats?.xp || 0).toLocaleString()}
+                        </span>
+                        <span
+                            className="flex items-center gap-0.5 font-black px-1.5 py-0.5 rounded-full"
+                            style={{ fontSize: badgeSize, background: 'rgba(255,255,255,0.85)', border: '1px solid rgba(0,150,200,0.2)', color: '#06d6a0' }}
+                        >
+                            <img src={iconCoin} alt="Coins" className="w-3.5 h-3.5 object-contain" /> {(stats?.coins || 0).toLocaleString()}
+                        </span>
+                        <span
+                            className="flex items-center gap-0.5 font-black px-1.5 py-0.5 rounded-full"
+                            style={{ fontSize: badgeSize, background: 'rgba(255,255,255,0.85)', border: '1px solid rgba(0,150,200,0.2)', color: '#4a7fa5' }}
+                        >
+                            🎮 {stats?.plays || 0}
+                        </span>
+                    </motion.div>
+                )}
 
-                {isSnapped && (
+                {isSnapped && !isComingSoon && (
                     <motion.span initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }}
                         className="absolute top-3 right-3 font-black text-white px-2.5 py-0.5 rounded-full uppercase tracking-widest"
                         style={{ fontSize: badgeSize, background: game.from, boxShadow: `0 2px 0 ${game.to}` }}>
@@ -288,8 +318,9 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
     };
 
     const handleSelect = (id) => {
-        enterFullscreen();
         const g = GAMES.find(g => g.id === id);
+        if (g?.comingSoon) return; // blocked
+        enterFullscreen();
         if (g?.isSoloOnly) onCreateGame(id, 'solo');
         else { setSelectedGame(id); setShowModes(true); setModeView('home'); }
     };
