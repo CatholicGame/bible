@@ -1,5 +1,5 @@
 module.exports = [
-  {id:16,theme:'Kinh Thanh Tan Uoc',words:[
+  {id:16,theme:'Kinh Thánh Tân Ước',words:[
     {answer:'MATTHEU',clue:'Tác giả cuốn Tin Mừng mang biểu tượng người có cánh, viết cho người Do Thái để chứng minh Chúa là Đấng Mêsia.',explanation:'Thánh Mátthêu vốn là một người thu thuế tội lỗi được Chúa gọi. Phúc Âm của ngài trích dẫn nhiều nhất từ Cựu Ước để khẳng định gốc gác vương giả của Chúa Giêsu.'},
     {answer:'MACCO',clue:'Tác giả cuốn Tin Mừng ngắn gọn nhất mang biểu tượng sư tử, đi sát bước chân dồn dập của Chúa Giêsu.',explanation:'Thánh Máccô ghi lại rất ít lời giảng của Chúa nhưng tập trung miêu tả các phép lạ hùng hồn để chứng tỏ Chúa Giêsu có quyền năng trên cả ma quỷ.'},
     {answer:'LUCA',clue:'Vị bác sĩ tài ba viết Tin Mừng mang biểu tượng con bò, ghi lại nhiều dụ ngôn nhất về lòng thương xót.',explanation:'Thánh Luca đặc biệt ưu ái viết về người nghèo, phụ nữ và những kẻ lạc độ. Những dụ ngôn tuyệt đẹp như Con Hoang Đàng hay người Samaria chỉ có trong sách này.'},
@@ -7,7 +7,7 @@ module.exports = [
     {answer:'PHAOLO',clue:'Tác giả vĩ đại đóng góp đến mười bốn bức thư tín trong Tân Ước, dù ngài không thuộc nhóm mười hai tông đồ ban đầu.',explanation:'Thánh Phaolô từng bách hại Hội Thánh quyết liệt nhưng sau khi ngã ngựa, ngài trở thành vị tông đồ năng nổ nhất đi bôn ba truyền giáo cho dân ngoại.'},
     {answer:'KHAIHUYEN',clue:'Cuốn sách cuối cùng bí ẩn của Kinh Thánh, dùng vô số hình ảnh thị kiến để báo trước khải hoàn ca của Chiên Con.',explanation:'Sách Khải Huyền do thánh Gioan viết khi bị lưu đày ở Patmos, truyền tải thông điệp hy vọng bất khuất cho các Kitô hữu đang chịu cơn bách hại đẫm máu.'},
   ]},
-  {id:17,theme:'Kinh Thanh Cuu Uoc',words:[
+  {id:17,theme:'Kinh Thánh Cựu Ước',words:[
     {answer:'SANGTHE',clue:'Cuốn sách đầu tiên mở ra lịch sử vũ trụ với trình thuật tuyệt đẹp về nguồn gốc muôn loài do tay Chúa nhào nặn.',explanation:'Sáng Thế Ký không phải là sách khoa học sinh học mà là một bài hùng ca tôn giáo, khẳng định muôn loài tồn tại là do ý chí yêu thương của Thiên Chúa.'},
     {answer:'XUATHANH',clue:'Cuốn sách hùng tráng ghi lại cuộc rũ bùn đứng lên trốn chạy vĩ đại khỏi Ai Cập và rẽ nước vượt Biển Đỏ.',explanation:'Sách Xuất Hành kể về biến cố trọng đại nhất của Cựu Ước: Môsê dẫn dắt dân Chúa khỏi ách nô lệ, tiền đô cho sự tự do của phép Rửa Tội sau này.'},
     {answer:'THANHVINH',clue:'Bộ sưu tập đồ sộ gồm một trăm năm mươi bài thơ ca ngợi khen và than van, được dùng làm xương sống cho Phụng Vụ Giờ Kinh.',explanation:'Được truyền thống gán phần lớn cho Thánh vương Đavít, các bài Thánh Vịnh diễn tả mọi cung bậc cảm xúc vui buồn, xót xa và hy vọng của con người.'},
@@ -15,7 +15,7 @@ module.exports = [
     {answer:'CHAMNGON',clue:'Tập sách đúc kết những lời răn dạy khôn ngoan ngắn gọn súc tích, thường được truyền thuyết gắn liền với vua Salômôn.',explanation:'Sách Châm Ngôn dạy cách sống khôn ngoan ở đời, biết kính sợ Đức Chúa là khởi đầu sự khôn ngoan và xa lánh nẻo đường ngông cuồng.'},
     {answer:'DANIEN',clue:'Vị ngôn sứ can đảm bị đám người ném vào hang sư tử đói hung dữ nhưng vẫn bình tĩnh sống sót nhờ lòng trung kiên.',explanation:'Dù làm quan cho vua ngoại bang, Đanien vẫn kiên quyết không lạy tượng thần tà giáo. Niềm tin bất khuất của ông đã khóa chặt mõm sư tử.'},
   ]},
-  {id:18,theme:'Mau Nhiem Cuu Do',words:[
+  {id:18,theme:'Mầu Nhiệm Cứu Độ',words:[
     {answer:'NHAPTHE',clue:'Hồng ân kỳ diệu khi Ngôi Lời vô hình hạ mình xuống khoác lấy chiếc áo xác phàm nằm trong bụng Mẹ Maria.',explanation:'Mầu Nhiệm Nhập Thể đi ngược lại tư duy kiêu chảnh của loài người: một Vị Thần linh tối cao lại chấp nhận giới hạn và tiếng khóc dạ đề trong máng cỏ.'},
     {answer:'CUUCHUOC',clue:'Sự trả giá vô cùng tốn kém bằng chính mạng sống của Đức Kitô để mua lại tự do cho chúng ta khỏi ách ma quỷ.',explanation:'Chúa Giêsu đóng vai trò là Chiên Thiên Chúa, lấy máu mình làm giá chuộc rửa sạch lỗi lầm nhân loại, gánh chịu án vi phạm thay cho chúng ta.'},
     {answer:'NGUYENTOI',clue:'Vết nhơ tăm tối di truyền từ thời Ađam và Evà, làm xô lệch bản tính thiện lương nhưng được tẩy xóa qua Phép Rửa.',explanation:'Tội nguyên tổ không mang tính cá nhân, nhưng là hậu quả của sự tự cao muốn gạt bỏ Thiên Chúa ngay từ buổi bình minh, khiến con người phải vất vả đau ốm.'},
@@ -23,7 +23,7 @@ module.exports = [
     {answer:'THIENDANG',clue:'Quê hương đích thực và viên mãn nhất, nơi linh hồn trong sạch được diện kiến dung nhan Chúa mặt đối mặt muôn đời.',explanation:'Thiên Đàng không phải là một địa hạt vật lý trên mây, mà là trạng thái hạnh phúc tuyệt hảo, nơi ta yêu mến Chúa nồng nhiệt không còn bị cản trở.'},
     {answer:'LUYENNGUC',clue:'Nơi thanh luyện rát buốt xót xa của những linh hồn đã rạt bó xác phàm nhưng vẫn còn rấn bận những cặn bẩn chưa đền.',explanation:'Linh hồn ở Luyện Ngục là những người đã an toàn nắm chắc phần rỗi, đang nóng lòng chờ được thanh lọc hoàn toàn để trở nên tinh tuyền bước vào Tiệc Cưới.'},
   ]},
-  {id:19,theme:'Vat Dung Phung Vu',words:[
+  {id:19,theme:'Vật Dụng Phụng Vụ',words:[
     {answer:'BANTHO',clue:'Khối đá hoặc miếng gỗ trang trọng đặt sừng sững giữa cung thánh, tượng trưng chính Chúa Kitô và là nơi hiến tế.',explanation:'Bàn Thờ không phải cái bàn ăn thông thường. Cộng đoàn cúi chào và linh mục hôn Bàn Thờ ngay đầu Lễ vì nơi đây hội tụ mầu nhiệm Hy Tế Canvê thập tự.'},
     {answer:'CHENTHANH',clue:'Chiếc ly cao quý mạ vàng hay bạc được vị linh mục nâng niu đựng rượu nho chờ phép mầu biến đổi.',explanation:'Chén Thánh chứa Máu cực trọng bửu huyết của Chúa. Trong Bữa Tiệc Ly, chính Chúa đã thiết lập Giao Ước Mới và vĩnh cửu trong chiếc chén này.'},
     {answer:'AOLE',clue:'Phẩm phục lộng lẫy mặc ngoài cùng mà linh mục khoác lên khi dâng lễ, có màu sắc thay đổi luân phiên theo mùa.',explanation:'Áo lễ diễn tả "ách của Chúa" mà linh mục mang vào. Màu xanh lá báo hiệu mùa Thường niên, Tím là Mùa Chay/Vọng, Trắng là Mùa Phục Sinh, Đỏ là Tử Đạo.'},
@@ -31,7 +31,7 @@ module.exports = [
     {answer:'NHATAM',clue:'Chiếc tủ nhỏ kiên cố tinh xảo, thường lót nhung đỏ, dùng để cất giữ cẩn thận Mình Thánh Chúa giữa giáo đường.',explanation:'Nhà Tạm đi kèm với một cây đèn chầu leo lét sáng ngày đêm, là trái tim yêu thương đang thổn thức của bí tích Thánh Thể hiện diện thường trực.'},
     {answer:'MATNHAT',clue:'Khung kính viền kim loại mang hình hào quang mặt trời tỏa sáng rực rỡ, ôm trọn bánh Thánh cho các buổi chầu.',explanation:'Mặt Nhật được dùng trong Phép Lành Thánh Thể, để mọi ánh mắt tín hữu đều có thể quy hướng chiêm ngắm tấm Bánh Hằng Sống không rào cản.'},
   ]},
-  {id:20,theme:'Tuoc Hieu Chua Giesu',words:[
+  {id:20,theme:'Tước Hiệu Chúa Giêsu',words:[
     {answer:'MESIA',clue:'Danh xưng mòn mỏi của ngôn sứ Do Thái nghĩa là đấng được xức dầu, người được dân Chúa mong ngóng đêm ngày lộ diện.',explanation:'Người Do Thái xưa mong đợi một Mêsia theo kiểu anh hùng giải phóng chính trị, nhưng Chúa Giêsu đến để tỏ ra tước vị Mêsia chịu đóng đinh vác thập giá.'},
     {answer:'EMMANUEN',clue:'Hồng danh vĩ đại mang ý nghĩa là Chúa ở cùng chúng ta, từng là thông điệp làm cho Giuse an tâm qua thiên thần báo mộng.',explanation:'Emmanuen không phải là họ tên vật lý, mà là bản tính chức vụ của Chúa. Ngài bỏ trời cao để xuống làm bạn đồng hành gần gũi nhất bên cạnh đau khổ của ta.'},
     {answer:'NGOILOI',clue:'Danh hiệu trí tuệ trừu tượng mà thánh Gioan dùng để diễn tả Ngôi Hai đã có từ muôn thuở trước khi đất trời tạo thành.',explanation:'Ngôi Lời (Logos) là Lời sống động duy nhất thốt ra từ miệng Chúa Cha. Cả công trình sáng tạo vạn vật đều được thực hiện qua Ngôi Lời uy quyền phán dạy.'},
@@ -39,4 +39,20 @@ module.exports = [
     {answer:'MUCTU',clue:'Hình ảnh vị thao lược dịu dàng vác con chiên trên vai, sẵn sàng xả thân hy sinh mạng sống bất cứ lúc nào để bảo vệ ràn.',explanation:'Chúa là Mục Tử nhân lành, đi trước dẫn đường cho chiên. Khác với người làm thuê tháo chạy khi sói đến, Ngài nằm xuống ngăn lối chặn cửa bảo vệ bầy đàn.'},
     {answer:'CHIENCON',clue:'Loài con vật bé nhỏ vô tội dùng để hiến tế mà thánh Gioan Tẩy Giả đã thốt kêu lên khi thấy Chúa ở bờ sông sỏi đá.',explanation:'Chiên Con hàm ý về con chiên chịu sát tế ngày Lễ Vượt Qua bên Ai Cập. Thay thế nghi lễ cổ xưa bôi máu trên cửa, nay là Máu Chúa ban ơn thoát cơn thịnh nộ Thần Chết.'},
   ]},
+  { id: 105, theme: 'XH 5: Pharaô Bắt Nạt', words: [
+    { answer: 'PHARAO', clue: 'Vị vua kiêu ngạo của Ai Cập đã ngang ngược thách thức: "Đức Chúa là ai mà ta phải nghe lời?"', explanation: 'Sự cứng lòng của Pharaô là đại diện cho sự mù quáng của quyền lực trần thế tước đoạt từ chối quyền tể trị của Thiên Chúa.' },
+    { answer: 'TUCHOI', clue: 'Quyết định phũ phàng của vua Ai Cập khi không chịu phóng thích dân Israel đi tế lễ trong sa mạc.', explanation: 'Quyết định từ chối này đã châm ngòi cho chuỗi mười tai ương kinh hoàng giáng trút xuống đất nước Ai Cập.' },
+    { answer: 'ROM', clue: 'Vật liệu rơm rạ trộn đất mà bọn cai ngục không chịu cung cấp nữa, bắt dân phải tự đi nhặt lấy.', explanation: 'Việc bắt dân tự đi kiếm rơm mà vẫn phải nộp đủ ngạch gạch là hình phạt tàn nhẫn nhằm dập tắt ý chí nổi dậy của họ.' },
+    { answer: 'GACH', clue: 'Khối đất sét nung hình chữ nhật mà dân Israel phải khổ nhọc đóng khuôn mỗi ngày không thiếu một viên.', explanation: 'Gạch là biểu tượng của sự lao động trĩu nặng mồ hôi nước mắt mà đế chế ngoại bang đè bẹp lên vai dân Chúa.' },
+    { answer: 'NANGNE', clue: 'Trách nhiệm lao dịch thêm phần chồng chất khắc nghiệt giáng xuống đầu dân chúng sau khi Môsê ra mặt.', explanation: 'Gánh nặng gia tăng khiến dân chúng ban đầu quay sang oán trách Môsê, đẩy ông vào một tình thế tuyệt vọng kêu cầu Chúa.' },
+    { answer: 'CAIQUAN', clue: 'Viên chức quản đốc đánh đập những người đốc công Híp-ri vì họ không nộp đúng mức chỉ tiêu quy định.', explanation: 'Sự áp bức của các viên cai quản phản ánh hệ thống nô lệ tàn độc tước đoạt nhân phẩm trọn vẹn của con người.' }
+  ]},
+  { id: 106, theme: 'XH 6: Giao Ước Được Nhắc Lại', words: [
+    { answer: 'GIAVE', clue: 'Danh xưng thiêng liêng YHWH mà Thiên Chúa tuyên bố đã chưa từng tiết lộ cho các tổ phụ xưa kia.', explanation: 'Danh Gia-vê mang ý nghĩa sự hiện diện giải phóng chủ động. Ngài không chỉ là Chúa tạo dựng mà còn là Chúa Cứu Chuộc.' },
+    { answer: 'ABRAHAM', clue: 'Vị tổ phụ đầu tiên của đức tin được Chúa nhắc đến để khẳng định Ngài sẽ nhớ mãi giao ước lâu đời.', explanation: 'Thiên Chúa của Abraham, Ixaac, Giacop bảo chứng rằng lịch sử gian truân của họ nằm gọn trong bàn tay yêu thương kế hoạch của Ngài.' },
+    { answer: 'IXAAC', clue: 'Người con trai của lời hứa, được nhắc nhở tiếp nối dòng dõi được Thiên Chúa ban tặng đất hứa bao la.', explanation: 'Việc nhắc tên Ixaac nối kết lời thề với các thế hệ quá khứ để làm điểm tựa vững chắc cho khát vọng tự do của hiện tại.' },
+    { answer: 'GIACOP', clue: 'Vị tổ phụ mang tên mới là Israel, cha của mười hai chi tộc đang rên xiết dưới gánh nặng nô lệ.', explanation: 'Danh xưng con cái Israel gợi lên niềm tự hào dân tộc và quyền lợi chính đáng thiêng liêng bảo vệ căn tính của họ trước Ai Cập.' },
+    { answer: 'GIAOUOC', clue: 'Lời thề hứa bền chặt mà Thiên Chúa đã lập ra để ban cho dân Đất Hứa làm gia nghiệp vĩnh viễn.', explanation: 'Giao ước là văn bản tình yêu vô điều kiện: Ta sẽ nhận các ngươi làm dân Ta, và Ta sẽ là Thiên Chúa của các ngươi.' },
+    { answer: 'XUAT', clue: 'Hành động đưa dân đi ra khỏi đất Ai Cập tăm tối bằng một cánh tay giơ cao uy quyền tuyệt đối.', explanation: 'Cuộc Xuất (Hành) không chỉ là di dân vật lý mà là một hành trình thanh tẩy tâm linh để trở thành một dân thánh hiến.' }
+  ]}
 ];

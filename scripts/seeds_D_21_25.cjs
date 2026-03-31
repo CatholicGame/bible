@@ -49,4 +49,20 @@ module.exports = [
       { answer: 'LUOILUA', clue: 'Hình dạng hừng hực hữu hình rạng rỡ chói lòa thiêu rụi mà Thần Khí đã biến ra để đốt cháy tiêu tan cõi lòng nhút nhát yếu ớt của môn đệ.', explanation: 'Ngọn lửa là biểu tượng hùng hồn nhất của Thánh linh: nó soi rọi đêm thâu, nung đỏ thanh luyện kim loại và hun nóng hực lửa lòng mến kiên cường.' },
     ]
   },
+  { id: 107, theme: 'XH 7: Gậy Rắn & Sông Máu', words: [
+    { answer: 'GAY', clue: 'Chiếc gậy chăn chiên của Aharon được ném xuống điện các quan liền biến ngay thành con bò sát lớn.', explanation: 'Chiếc gậy của Aharon đã nuốt chửng những chiếc gậy của các pháp sư Ai Cập, minh chứng quyền năng Thiên Chúa áp đảo mọi phép thuật.' },
+    { answer: 'AHARON', clue: 'Người thực hiện việc vung gậy đập xuống mặt nước hồ để giáng đòn tai ương đầu tiên cho Ai Cập.', explanation: 'Aharon thi hành lệnh của Môsê, báo hiệu sự khởi đầu của một cuộc chiến khốc liệt giữa Thiên Chúa và các thần linh Ai Cập giả tạo.' },
+    { answer: 'RAN', clue: 'Sinh vật bò sát trườn trên nền gạch do chiếc gậy rớt xuống biến thành trước mặt triều đình Pharaô.', explanation: 'Rắn vốn là biểu tượng sức mạnh vương quyền của Pharaô, việc gậy Aharon nuốt chửng rắn Ai Cập là lời thách thức vương đạo.' },
+    { answer: 'NIN', clue: 'Dòng sông vĩ đại tự hào của Ai Cập bỗng chốc biến đổi mùi hôi thối vì toàn bộ nước đã thành máu.', explanation: 'Sông Nin bị hóa máu trực diện đánh đổ thần linh bảo hộ của người Ai Cập, cho thấy nguồn sống của họ phụ thuộc vào Thiên Chúa.' },
+    { answer: 'MAU', clue: 'Sắc đỏ kinh hoàng nhuốm toàn bộ nước sông sòi ao hồ Ai Cập trong tai ương khủng khiếp đầu tiên.', explanation: 'Nước hóa máu là hình phạt thích đáng cho tội lỗi của Pharaô từng ra lệnh ném các bé trai Híp-ri xuống sông Nin cho chết đuối.' },
+    { answer: 'PHUTHUY', clue: 'Những kẻ dùng ma thuật tà đạo của Ai Cập cũng bắt chước làm cho nước hóa máu đổi màu bằng bùa chú.', explanation: 'Dù các phù thủy làm được y hệt, nhưng họ không thể giải trừ được tai ương, làm cho đất nước Ai Cập càng thêm khốn đốn.' }
+  ]},
+  { id: 108, theme: 'XH 8: Ếch, Muỗi, Ruồi', words: [
+    { answer: 'ECH', clue: 'Loài lưỡng cư nhầy nhụa lúc nhúc bò lên bâu đầy giường chiếu và chui vào tận lò nướng của người Ai Cập.', explanation: 'Ếch nhái là tai ương thứ hai. Cả nước tràn ngập xác ếch thối rữa, chứng tỏ các nữ thần tự nhiên của Ai Cập đã thất bại thảm hại.' },
+    { answer: 'MUOI', clue: 'Tai ương thứ ba đầy ngứa ngáy do cát bụi biến thành, khiến đám phù thủy Ai Cập bó tay không gọi ra được.', explanation: 'Triệu hồi muỗi từ bụi đất phơi lộ sự bất lực của tà thuật. Các pháp sư buột miệng thú nhận: "Đây là ngón tay của Thiên Chúa!"' },
+    { answer: 'RUOI', clue: 'Những bầy nhặng nhặng đen kịt bay xâu xé vào hoàng cung cắn chích làm hư hại rục nát cả đất nước Ai Cập.', explanation: 'Ruồi muỗi là tai ương thứ tư. Lần này Thiên Chúa vạch rõ ranh giới: tai ương chỉ giáng xuống kẻ thù ác, không chạm đến dân Ngài.' },
+    { answer: 'GOSEN', clue: 'Vùng đất canh tác màu mỡ nơi dân Israel cư ngụ, hoàn toàn bình an vô sự vắng bóng lũ ruồi nhặng.', explanation: 'Sự phân rẽ rạch ròi tại vùng Gô-sen cho thấy quyền kiểm soát không gian tuyệt đối của Chúa bảo vệ lãnh địa dân Ngài chọn.' },
+    { answer: 'TAIHOA', clue: 'Chuỗi trừng phạt giáng xuống kiêu hãnh của vua Ai Cập ngày một tăng cấp nghiêm trọng về mức độ thiệt hại.', explanation: 'Các tai họa tự nhiên nối tiếp nhau là lời cảnh báo đanh thép mời gọi ăn năn, nhưng vua Pharaô lại liên tục trở mặt lật lọng.' },
+    { answer: 'NAN', clue: 'Sự khốn đốn tràn lan đau khổ mà người Ai Cập hằng ngày hằng giờ phải chịu đựng vì án phạt từ trời.', explanation: 'Kiếp nạn tồi tệ giáng xuống không chỉ phá vỡ sự no ấm vật chất mà còn tàn phá niềm tin vào thần minh bách chiến bách thắng của họ.' }
+  ]}
 ];

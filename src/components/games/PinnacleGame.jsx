@@ -561,6 +561,10 @@ const PinnacleGame = ({ onLeaveGame }) => {
     const xpBadgeRef = useRef(null);
     const ladderScrollRef = useRef(null);
 
+    // MC bubble portal positioning
+    const mcAvatarRef = useRef(null);
+    const [mcBubblePos, setMcBubblePos] = useState({ right: 16, bottom: 0, top: 'auto' });
+
     // Lifelines state
     const [lifelines, setLifelines] = useState({
         fiftyFifty: false,
@@ -623,6 +627,38 @@ const PinnacleGame = ({ onLeaveGame }) => {
     const [showMcBubble, setShowMcBubble] = useState(false);
     const [endMessage, setEndMessage] = useState(null);
     const [showEndMessage, setShowEndMessage] = useState(true);
+
+    // Recalculate bubble portal position whenever it becomes visible
+    useEffect(() => {
+        if (!showMcBubble || !mcAvatarRef.current) return;
+        const updatePos = () => {
+            const rect = mcAvatarRef.current?.getBoundingClientRect();
+            if (!rect) return;
+            const isLandscape = window.matchMedia('(orientation: landscape)').matches;
+            if (isLandscape) {
+                // Bubble appears below avatar in landscape
+                setMcBubblePos({
+                    top: rect.bottom + 8,
+                    right: window.innerWidth - rect.right,
+                    bottom: 'auto',
+                });
+            } else {
+                // Bubble appears above avatar in portrait
+                setMcBubblePos({
+                    top: 'auto',
+                    right: window.innerWidth - rect.right,
+                    bottom: window.innerHeight - rect.top + 8,
+                });
+            }
+        };
+        updatePos();
+        window.addEventListener('resize', updatePos);
+        window.addEventListener('scroll', updatePos, true);
+        return () => {
+            window.removeEventListener('resize', updatePos);
+            window.removeEventListener('scroll', updatePos, true);
+        };
+    }, [showMcBubble]);
 
     // Prompt MC on level changes
     useEffect(() => {
@@ -1397,6 +1433,125 @@ const PinnacleGame = ({ onLeaveGame }) => {
                 </AnimatePresence>,
                 document.body
             )}
+            {/* MC Speech Bubble — portal to body so it always renders above header/stacking contexts */}
+            {createPortal(
+                <AnimatePresence>
+                    {showMcBubble && (
+                        <motion.div
+                            layout
+                            initial={{ opacity: 0, scale: 0 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0 }}
+                            transition={{
+                                layout: { type: 'spring', stiffness: 500, damping: 30 },
+                                scale: { type: 'spring', stiffness: 500, damping: 30 },
+                                opacity: { duration: 0.15 },
+                            }}
+                            style={{
+                                position: 'fixed',
+                                zIndex: 9999,
+                                right: mcBubblePos.right,
+                                top: mcBubblePos.top,
+                                bottom: mcBubblePos.bottom,
+                                transformOrigin: 'calc(100%) 100%',
+                                minWidth: 260,
+                                maxWidth: 'min(400px, calc(100vw - 24px))',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-end',
+                                pointerEvents: 'none',
+                            }}
+                        >
+                            {/* Cartoon Speech Bubble box */}
+                            <motion.div
+                                layout
+                                style={{
+                                    background: 'linear-gradient(180deg,#1e3a8a,#1e40af)',
+                                    border: '3px solid #60a5fa',
+                                    borderRadius: '1.5rem',
+                                    padding: '16px 20px',
+                                    position: 'relative',
+                                    width: '100%',
+                                    pointerEvents: 'auto',
+                                }}
+                            >
+                                {/* Shine */}
+                                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '33%', background: 'rgba(255,255,255,0.06)', borderRadius: '1.5rem 1.5rem 0 0', pointerEvents: 'none' }} />
+
+                                {/* Tail triangle — portrait: points DOWN (below bubble, avatar is below) */}
+                                <div style={{
+                                    position: 'absolute', bottom: -18, right: 30, width: 0, height: 0,
+                                    borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '18px solid #60a5fa',
+                                    display: mcBubblePos.top === 'auto' ? 'block' : 'none',
+                                }} />
+                                <div style={{
+                                    position: 'absolute', bottom: -14, right: 32, width: 0, height: 0,
+                                    borderLeft: '12px solid transparent', borderRight: '12px solid transparent', borderTop: '15px solid #1e3a8a',
+                                    display: mcBubblePos.top === 'auto' ? 'block' : 'none',
+                                }} />
+
+                                {/* Tail triangle — landscape: points UP (above bubble, avatar is above) */}
+                                <div style={{
+                                    position: 'absolute', top: -18, right: 30, width: 0, height: 0,
+                                    borderLeft: '13px solid transparent', borderRight: '13px solid transparent', borderBottom: '16px solid #60a5fa',
+                                    display: mcBubblePos.top !== 'auto' ? 'block' : 'none',
+                                }} />
+                                <div style={{
+                                    position: 'absolute', top: -14, right: 32, width: 0, height: 0,
+                                    borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderBottom: '13px solid #1e40af',
+                                    display: mcBubblePos.top !== 'auto' ? 'block' : 'none',
+                                }} />
+
+                                {/* Text */}
+                                <div style={{ position: 'relative', zIndex: 10, color: '#e2e8f0', fontSize: '0.95rem', fontWeight: 600, lineHeight: 1.55 }}>
+                                    {mcMessage.includes('**') ? (
+                                        <span dangerouslySetInnerHTML={{ __html: mcMessage.replace(/\*\*(.*?)\*\*/g, '<span style="color:#fcd34d;font-weight:700">$1</span>') }} />
+                                    ) : (
+                                        <span>{mcMessage}</span>
+                                    )}
+                                </div>
+
+                                {/* In-article Ad */}
+                                {answerStep === 'explained' && (
+                                    <div style={{ width: '100%', marginTop: 12, borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(96,165,250,0.2)' }}>
+                                        <AdArticle />
+                                    </div>
+                                )}
+
+                                {/* Next / End button */}
+                                {answerStep === 'explained' && currentQuestionIndex < currentQuestions.length - 1 && (
+                                    <button
+                                        onClick={handleNextQuestion}
+                                        style={{
+                                            marginTop: 12,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: 8,
+                                            marginLeft: 'auto',
+                                            marginRight: 'auto',
+                                            background: 'linear-gradient(160deg,#38bdf8,#0ea5e9,#0284c7)',
+                                            border: '3px solid #7dd3fc',
+                                            boxShadow: '0 5px 0 #0369a1, 0 0 18px rgba(14,165,233,0.55)',
+                                            color: '#fff',
+                                            fontWeight: 900,
+                                            fontSize: '0.875rem',
+                                            padding: '10px 24px',
+                                            borderRadius: 9999,
+                                            cursor: 'pointer',
+                                            position: 'relative',
+                                            zIndex: 10,
+                                        }}
+                                    >
+                                        <span>{(!isSkipped && selectedOption !== currentQuestions[currentQuestionIndex].answer) ? 'Kết thúc' : 'Tiếp tục'}</span>
+                                        <ArrowLeft size={14} style={{ transform: 'rotate(180deg)' }} />
+                                    </button>
+                                )}
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
             {/* XP Comet Particles */}
             {xpParticles.map((p) => (
                 <motion.div
@@ -1917,7 +2072,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         className="absolute top-0 right-2 md:right-8 lg:right-12 flex flex-col items-end z-[100] mt-[39px] landscape:mt-[139px] md:mt-[47px] pointer-events-none"
                                     >
                                         {/* MC Avatar */}
-                                    <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 relative z-[101] pointer-events-auto group">
+                                        <div ref={mcAvatarRef} className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 relative z-[101] pointer-events-auto group">
                                             {/* Container background & clipped body */}
                                             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full border-[1.5px] border-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.5)] overflow-hidden transition-transform duration-300 group-hover:scale-105">
                                                 <img src={mcAvatar} alt="MC" className="absolute -bottom-[8%] left-1/2 -translate-x-1/2 translate-y-[5px] w-[115%] h-auto max-w-none object-bottom" />
@@ -1927,81 +2082,6 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                                 <img src={mcAvatar} alt="MC" className="absolute -bottom-[8%] left-1/2 -translate-x-1/2 translate-y-[5px] w-[115%] h-auto max-w-none object-bottom drop-shadow-[0_-3px_5px_rgba(0,0,0,0.35)]" />
                                             </div>
                                         </div>
-                                        <AnimatePresence>
-                                            {showMcBubble && (
-                                                <motion.div
-                                                    layout
-                                                    initial={{ opacity: 0, scale: 0 }}
-                                                    animate={{ opacity: 1, scale: 1 }}
-                                                    exit={{ opacity: 0, scale: 0 }}
-                                                    transition={{
-                                                        layout: { type: "spring", stiffness: 500, damping: 30 },
-                                                        scale: { type: "spring", stiffness: 500, damping: 30 },
-                                                        opacity: { duration: 0.15 }
-                                                    }}
-                                                    style={{ transformOrigin: 'calc(100% - 30px) 100%' }}
-                                                    className="absolute bottom-full right-0 mb-[44px] landscape:bottom-auto landscape:top-full landscape:mb-0 landscape:mt-4 min-w-[340px] max-w-[calc(100vw-16px)] md:max-w-[500px] z-[100] flex flex-col items-end md:items-center"
-                                                >
-                                                    {/* Cartoon Speech Bubble */}
-                                                    <motion.div layout className="relative text-sm md:text-base rounded-3xl text-left md:text-center font-semibold leading-relaxed pointer-events-auto flex flex-col items-start md:items-center w-full"
-                                                        style={{
-                                                            background: 'linear-gradient(180deg,#1e3a8a,#1e40af)',
-                                                            border: '3px solid #60a5fa',
-                                                            padding: '16px 20px',
-                                                        }}
-                                                    >
-                                                        {/* Shine */}
-                                                        <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/8 rounded-t-3xl pointer-events-none" />
-
-                                                        {/* Tail pointing UP — landscape only (bubble is BELOW avatar) */}
-                                                        <div className="hidden landscape:block absolute -top-[15px] right-[22px] md:right-[30px] w-0 h-0 pointer-events-none"
-                                                            style={{ borderLeft: '13px solid transparent', borderRight: '13px solid transparent', borderBottom: '16px solid #60a5fa' }} />
-                                                        <div className="hidden landscape:block absolute -top-[11px] right-[24px] md:right-[32px] w-0 h-0 pointer-events-none"
-                                                            style={{ borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderBottom: '13px solid #1e40af' }} />
-
-                                                        {/* Text Content */}
-                                                        <motion.div layout className="w-full relative z-10 text-slate-100">
-                                                            {mcMessage.includes('**') ? (
-                                                                <span dangerouslySetInnerHTML={{ __html: mcMessage.replace(/\*\*(.*?)\*\*/g, '<span class="text-amber-300 font-bold">$1') }} />
-                                                            ) : (
-                                                                <span>{mcMessage}</span>
-                                                            )}
-                                                        </motion.div>
-
-                                                        {/* In-article Ad — chỉ hiện khi đang ở bước giải thích */}
-                                                        {answerStep === 'explained' && (
-                                                            <div className="w-full mt-3 rounded-xl overflow-hidden" style={{ border: '1px solid rgba(96,165,250,0.2)' }}>
-                                                                <AdArticle />
-                                                            </div>
-                                                        )}
-
-                                                        {/* Next / End button */}
-                                                        {answerStep === 'explained' && currentQuestionIndex < currentQuestions.length - 1 && (
-                                                            <button
-                                                                onClick={handleNextQuestion}
-                                                                className="mt-3 font-black text-white text-sm px-6 py-2.5 rounded-full transition-all active:translate-y-1 flex items-center gap-2 mx-auto relative z-10 hover:brightness-110"
-                                                                style={{
-                                                                    background: 'linear-gradient(160deg,#38bdf8,#0ea5e9,#0284c7)',
-                                                                    border: '3px solid #7dd3fc',
-                                                                    boxShadow: '0 5px 0 #0369a1, 0 0 18px rgba(14,165,233,0.55)',
-                                                                }}
-                                                            >
-                                                                <span>{(!isSkipped && selectedOption !== currentQuestions[currentQuestionIndex].answer) ? 'Kết thúc' : 'Tiếp tục'}</span>
-                                                                <ArrowLeft size={14} className="rotate-180" />
-                                                            </button>
-                                                        )}
-                                                    </motion.div>
-
-                                                    {/* Tail pointing DOWN — portrait only, OUTSIDE shadow-casting div */}
-                                                    <div className="landscape:hidden relative w-full pointer-events-none" style={{ height: 0 }}>
-                                                        <div className="absolute -top-[1px] right-[22px] md:right-[30px] w-0 h-0"
-                                                            style={{ borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '18px solid #60a5fa' }} />
-                                                        <div className="absolute top-[2px] right-[24px] md:right-[32px] w-0 h-0"
-                                                            style={{ borderLeft: '12px solid transparent', borderRight: '12px solid transparent', borderTop: '15px solid #1e3a8a' }} />
-                                                    </div>
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
                                     </motion.div>
 
                                     {/* Timer */}
@@ -2935,6 +3015,18 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
                     </div>{/* end blue card */}
                 </motion.div>{/* end animation wrapper */}
             </div>{/* end centering wrapper */}
+
+            {/* Ad Banner — vùng trống phía dưới card kết quả */}
+            <div style={{
+                position: 'fixed',
+                bottom: 0,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: 'min(560px, calc(100vw - 20px))',
+                zIndex: 10000,
+            }}>
+                <AdBanner />
+            </div>
 
             {/* Inline Leaderboard overlay — rendered as portal sibling so EndGameScreen stays mounted */}
             <AnimatePresence>

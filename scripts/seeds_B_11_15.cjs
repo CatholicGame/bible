@@ -1,5 +1,5 @@
 module.exports = [
-  {id:11,theme:'Mau Nhiem Giang Sinh',words:[
+  {id:11,theme:'Mầu Nhiệm Giáng Sinh',words:[
     {answer:'GIESU',clue:'Đấng Cứu Thế giáng trần hạ sinh khó nghèo nơi Bêlem, mang lấy xác phàm để đem ơn cứu độ cho nhân loại.',explanation:'Chúa Giêsu là Ngôi Hai Thiên Chúa Nhập Thể. Ngài sinh ra nơi thấp hèn tột cùng để nâng vớt con người sa ngã lên địa vị Thiên Chúa.'},
     {answer:'BELEM',clue:'Thị trấn nhỏ bé nghèo nàn thuộc miền Giuđê, nơi ứng nghiệm lời các tiên tri xưa về nơi vị Vua hòa bình chào đời.',explanation:'Bêlem có nghĩa là "Nhà Bánh". Việc Chúa sinh ra ở đây báo trước Ngài chính là Bánh Hằng Sống từ trời xuống nuôi dưỡng nhân gian.'},
     {answer:'MANGCO',clue:'Chiếc nôi êm ái đầu tiên của Hài Nhi Thánh, vốn chỉ là chiếc khay đựng rơm cỏ cho súc vật ăn giữa đêm đông giá.',explanation:'Máng cỏ mộc mạc làm nổi bật sự khiêm hạ tột cùng của Thiên Chúa, khi Vua Vũ Trụ lại chọn một tempat tăm tối hôi hám làm nơi ngả đầu.'},
@@ -7,7 +7,7 @@ module.exports = [
     {answer:'MUCDONG',clue:'Những người nghèo thức trắng đêm chăn chiên ngoài đồng hoang, lại là những vị khách danh dự đầu tiên đến viếng Chúa.',explanation:'Chúa Giêsu không chọn tỏ mình cho vua quan hay tu sĩ học giả mà là những kẻ du mục bé mọn, khẳng định Tin Mừng luôn ưu ái người nghèo.'},
     {answer:'BAVUA',clue:'Những đạo sĩ uyên bác từ phương Đông xa xôi, vượt đường dài theo ánh sao mầu nhiệm đến dâng vàng, nhũ hương, mộc dược.',explanation:'Phái đoàn Ba Vua (Hiển Linh) đại diện cho các dân ngoại khao khát tìm kiếm chân lý, nay được ánh sáng Thiên Chúa dẫn dắt về chính lộ.'},
   ]},
-  {id:12,theme:'Bai Giang Tren Nui',words:[
+  {id:12,theme:'Bài Giảng Trên Núi',words:[
     {answer:'MOIPHUC',clue:'Tám tuyên ngôn mở đầu Bài giảng của Chúa Giêsu, đảo lộn hoàn toàn mọi tiêu chuẩn hạnh phúc vật chất của thế gian.',explanation:'Tám Mối Phúc Thật không phải là một bộ luật khô khan mà là chân dung đích thực của Chúa Giêsu, khơi dậy niềm vui vì có Chúa làm gia nghiệp.'},
     {answer:'MUOIDAT',clue:'Loại gia vị mặn mà Chúa ví von để gọi các môn đệ, căn dặn họ phải ướp mặn cho đời và bảo vệ sự thiện khỏi hư nát.',explanation:'"Anh em là muối cho đời". Người Kitô hữu phải mang vào xã hội vị đậm đà của tình yêu, nếu mất chất luân lý thì vô dụng chỉ đáng vứt ra ngoài.'},
     {answer:'ANHSANG',clue:'Thứ mà Chúa căn dặn không được thắp lên rồi lấy thúng úp lại, mà phải đặt trên giá cao chiếu soi cho vạn vật.',explanation:'"Anh em là ánh sáng thế gian". Ánh sáng đức tin không thể giấu kín trong nhà thờ mà phải tỏa ra qua các việc làm nhân ái nơi trần thế.'},
@@ -15,7 +15,7 @@ module.exports = [
     {answer:'YEUTHU',clue:'Lệnh truyền thách thức nhất của Chúa: không chỉ quảng đại tha thứ mà còn phải thiết tha cầu nguyện cho kẻ thù.',explanation:'Điều răn yêu kẻ bách hại mình là điểm phân biệt cốt lõi của Kitô giáo. Một tình yêu vô điều kiện tựa như mặt trời chiếu sáng cả kẻ lành người dữ.'},
     {answer:'DATANG',clue:'Nền móng vững chãi vô song mà kẻ khôn ngoan chọn để xây nhà, tượng trưng cho đức tin nghe và thực hành Lời Chúa.',explanation:'Nghe Lời Chúa mà không thực hành thì giống xây nhà trên cát, sẽ sụp đổ thảm thương khi gặp bão táp cám dỗ. Còn đá tảng là chính Đức Kitô.'},
   ]},
-  {id:13,theme:'Mau Nhiem Ba Ngoi',words:[
+  {id:13,theme:'Mầu Nhiệm Ba Ngôi',words:[
     {answer:'THIENCHUA',clue:'Đấng Tạo Hóa uy quyền muôn loài, nguồn gốc mọi sự, trọn vẹn sự thiện mỹ, duy nhất một bản thể nhưng có ba Ngôi Vị.',explanation:'Mầu nhiệm Một Chúa Ba Ngôi là trung tâm tuyệt đối của đức tin Kitô giáo. Lý trí con người không thể tự khám phá mà nhờ mặc khải của Chúa Giêsu.'},
     {answer:'CHUACHA',clue:'Ngôi Thứ Nhất uy nghiêm thánh thiện, Đấng thấu suốt mọi bí ẩn và yêu thương thế gian đến nỗi ban chính Con Một mình.',explanation:'Trong Tín biểu, Chúa Cha là Đấng Tạo Thành trời đất vô hình và hữu hình. Mọi quyền năng bắt nguồn từ Ngài trong sự yêu thương bao la.'},
     {answer:'CHUACON',clue:'Ngôi Hai chí thánh, Đấng từ trời ngự xuống, mặc lấy xác phàm và chịu đóng đinh thập giá để đền tội thập hình thay cho loài người.',explanation:'Đức Kitô (Ngôi Hai Nhập Thể) mang trọn hai bản tính: Thiên Chúa thật và Người thật. Ngài là nhịp cầu duy nhất giữa Thiên Chúa ban ơn và nhân loại.'},
@@ -23,7 +23,7 @@ module.exports = [
     {answer:'BOCAU',clue:'Hình bóng trắng trẻo dịu dàng mà Ngôi Ba đã mượn để nhẹ nhàng ngự xuống vai Chúa Giêsu lúc chịu phép rửa tại mương Giođan.',explanation:'Biểu tượng chim bồ câu gắn liền với sự bình an (giao ước thời Nôê). Khi trời mở ra, Chúa Ba Ngôi lần đầu được tỏ bày công khai tại sông Giođan.'},
     {answer:'TINKINH',clue:'Bản tuyên xưng đức tin oai hùng của cọng đoàn, đọc vang giữa Thánh Lễ Chúa Nhật để quả quyết niềm tin Mầu Nhiệm Ba Ngôi.',explanation:'Kinh Tin Kính (Credo) là biểu thức tín lý đúc kết tại công đồng Nixêa và Cônstantinôpôn, lấp kín mọi chân lý cốt tử để người tín hữu không đi lạc.'},
   ]},
-  {id:14,theme:'Nam Phung Vu',words:[
+  {id:14,theme:'Năm Phụng Vụ',words:[
     {answer:'MUAVONG',clue:'Tháng ngày tĩnh lặng đầu năm phụng vụ khoác áo tím đợi chờ, gồm bốn tuần thắp nến dọn lòng đón mừng Chúa Giáng Sinh.',explanation:'Mùa Vọng (Advent) không chỉ là hân hoan nhớ lại biến cố Bêlem mà còn là thái độ tỉnh thức đợi chờ Đức Kitô quang lâm lần thứ hai rực rỡ.'},
     {answer:'MUACHAY',clue:'Hành trình tĩnh tâm bốn mươi ngày mang đậm dấu ấn hoán cải, ăn chay và bố thí, đưa tâm hồn tịnh tiến về Canvê.',explanation:'Con số 40 gợi lại thời gian Chúa Giêsu chịu cám dỗ trong hoang địa. Mùa Chay rèn luyện ý chí, thanh tẩy đam mê để chuẩn bị mừng mầu nhiệm Vượt Qua.'},
     {answer:'PHUCSINH',clue:'Biến cố khải hoàn rực rỡ nhất vượt qua giới hạn lịch sử, khi màn đêm nhường chỗ cho ánh sáng vinh quang Chúa thắng cái chết.',explanation:'Lễ Phục Sinh (Easter) là trái tim Năm Phụng vụ. Suốt 50 ngày sau đó, Giáo hội kéo dài niềm hân hoan hát khúc Alleluia mừng Chúa Sống Lại.'},
@@ -31,7 +31,7 @@ module.exports = [
     {answer:'LETRO',clue:'Nghi thức xức chút bụi rắc lên đỉnh đầu vào Thứ Tư nhắc nhớ thân phận mỏng giòn, mở cổng khai mạc hành trình Mùa Chay.',explanation:'Tro là tàn dư gạch cháy, tượng trưng cho kiếp tro bụi ("Ngươi là bụi tro sễ trở về tro bụi"). Ái dụ này mời gọi từ bỏ lối sống kiêu ngạo giả hình.'},
     {answer:'CANHTHUC',clue:'Đêm thao thức huy hoàng đốt Nến Phục Sinh khổng lồ vạch tan màn tối, vang vọng khúc Exultet ca mừng Ánh Sáng vinh diệu.',explanation:'Đêm Canh Thức Vượt Qua là "Mẹ của mọi đêm lễ". Bóng tối hội đường bừng sáng ánh lửa báo hiệu sự sống trỗi dậy oai hùng từ nấm mồ tăm tối.'},
   ]},
-  {id:15,theme:'Doi Song Duc Tin',words:[
+  {id:15,theme:'Đời Sống Đức Tin',words:[
     {answer:'CAUNGUYEN',clue:'Việc dâng tâm trí bay bổng hướng về Thiên Chúa, là lúc ta khiêm tốn thưa chuyện, tạ ơn hay lắng nghe tiếng Ngài thì thầm.',explanation:'Cầu nguyện là dưỡng khí của đức tin. Chúa Giêsu thường xuyên ẩn mình vào nơi thanh vắng suốt canh thâu để tri âm đàm đạo cùng Chúa Cha.'},
     {answer:'MANCOI',clue:'Chuỗi lời kinh Kính Mừng êm ái xâu nối tràng hạt như những đóa hoa yêu thương thơm ngát dâng lên ngợi khen Đức Mẹ.',explanation:'Là phương pháp ngắm nhìn cuộc đời Chúa Giêsu bằng đôi mắt của Đức Maria, giúp tín hữu bình tâm tĩnh lặng giữa dòng đời bão tố chông gai.'},
     {answer:'XUNGTOI',clue:'Bí tích ngọt ngào tẩy rửa cõi lòng, gột bỏ án phạt tội lỗi đem lại bình an và hòa giải sâu sắc giữa linh hồn và Thiên Chúa.',explanation:'Không phải tòa án hình sự, mà là phòng khám tâm linh nơi lòng thương xót vô biên của Thiên Chúa nhậm lời ăn năn và băng bó vết sẹo tội chướng.'},
@@ -39,4 +39,20 @@ module.exports = [
     {answer:'ANNAN',clue:'Nỗi đau thắt nội tâm dằn vặt vì tội đã làm mất lòng Chúa, là bước nền cơ bản để giao hòa nhận lãnh ơn đại xá giải thoát.',explanation:'Sự ăn năn rập đầu (thống hối trọn hảo) bắt nguồn từ tình yêu Đức Chúa mới là xót xa đích thực, chứ không chỉ vì ám ảnh sợ phần phạt.'},
     {answer:'TINMUNG',clue:'Bốn quyển sách Tân Ước nòng cốt tựa bản tin vui chan chứa, ghi chép tường tận về thân thế và giáo lý mầu nhiệm của Chúa Giêsu.',explanation:'Evangelion (Tin Mừng) là mạc khải trọn vẹn của Thiên Chúa qua Ngôi Lời Nhập Thể, soi sáng trí hiểu và định hướng sống cốt lõi luật yêu thương.'},
   ]},
+  { id: 103, theme: 'XH 3: Bụi Gai Bốc Lửa', words: [
+    { answer: 'BUIGAI', clue: 'Bụi cây kỳ lạ bốc cháy rừng rực trên núi nhưng ngọn lửa không hề thiêu rụi cành lá.', explanation: 'Bụi gai cháy không tàn là hình ảnh biểu trưng cho sự hiện diện thiêng liêng và quyền năng không giới hạn của Thiên Chúa.' },
+    { answer: 'CHAY', clue: 'Hiện tượng ngọn lửa hừng hực bao trùm lấy bụi cây giữa sa mạc khiến Môsê tò mò tiến lại gần xem.', explanation: 'Ánh lửa thu hút sự chú ý của Môsê, từ đó Thiên Chúa cất tiếng gọi ông thực hiện sứ mạng giải phóng dân tộc.' },
+    { answer: 'NUI', clue: 'Ngọn cao nguyên hoang vắng Khô-rếp, nơi Thiên Chúa lần đầu tiên mặc khải chính mình cho Môsê.', explanation: 'Núi Khô-rếp (hay Sinai) được mệnh danh là núi của Thiên Chúa, bối cảnh của những cuộc giao ước vĩ đại.' },
+    { answer: 'DUCCHUA', clue: 'Danh xưng uy lực mà Thiên Chúa tự xưng: "Ta là Đấng Hiện Hữu", nguồn gốc của mọi sự sống.', explanation: 'Danh xưng YHWH (Gia-vê) khẳng định Thiên Chúa là Đấng tự hữu, hằng hữu và luôn hiện diện bên cạnh dân Ngài.' },
+    { answer: 'THANH', clue: 'Mảnh đất linh thiêng dưới chân Môsê khiến ông phải nghe lệnh cởi bỏ ngay lập tức giày dép ra.', explanation: 'Cởi dép là cử chỉ tôn kính tuyệt đối khi con người phàm trần được đứng trước sự hiện diện thánh thiện của Thiên Chúa.' },
+    { answer: 'THAO', clue: 'Hành động cởi mở đôi dép dưới chân để tỏ lòng tôn vinh Nhan Thánh Thiên Chúa đang ngự trị.', explanation: 'Bỏ dép chăng rễ vào đất mẹ là dấu chỉ con người ý thức thân phận bụi tro trước uy linh cao thẳm của Đấng Tối Cao.' }
+  ]},
+  { id: 104, theme: 'XH 4: Chúa Ban Quyền Năng', words: [
+    { answer: 'GAY', clue: 'Vật dụng chăn cừu mộc mạc cầm tay của Môsê được Chúa ban quyền năng biến hóa thành con rắn.', explanation: 'Cây gậy chăn chiên bình thường trở thành bảo bối thi hành các phép lạ vĩ đại như rẽ nước Biển Đỏ, gõ vỡ tảng đá.' },
+    { answer: 'RAN', clue: 'Loài bò sát đáng sợ mà cây gậy của Môsê hóa thành khi vứt xuống đất, khiến ông hốt hoảng bỏ chạy.', explanation: 'Phép lạ hóa rắn giúp Môsê có thêm niềm tin vững vàng để thuyết phục dân Israel và đối đầu với các pháp sư Ai Cập.' },
+    { answer: 'PHONGHUI', clue: 'Căn bệnh đáng sợ nổi trắng toát trên bàn tay Môsê khi ông thọc tay vào ngực theo lệnh Thiên Chúa.', explanation: 'Dấu lạ bàn tay bị phong hủi rồi lại lành lặn chứng tỏ quyền năng chữa lành và tha bổng sinh mạng của Thiên Chúa.' },
+    { answer: 'AHARON', clue: 'Người anh trai ruột thịt có tài ăn nói lưu loát được Chúa cắt cử làm người phát ngôn thay cho Môsê.', explanation: 'Sự xuất hiện của Aharon bù đắp cho điểm yếu ăn nói ấp úng của Môsê, thể hiện Chúa luôn ban ơn trợ giúp người Ngài chọn.' },
+    { answer: 'KHEP', clue: 'Động tác khép miệng, mở miệng đều do quyền năng tạo hóa của Thiên Chúa, Ngài phán hỏi Môsê như thế.', explanation: 'Khi Môsê than phiền mình có tật nói ngọng, Chúa nhắc nhở Ngài mới là Đấng ban cho con người mọi giác quan.' },
+    { answer: 'TINHIEU', clue: 'Ba phép lạ lớn được Chúa chỉ dạy để Môsê làm ra trước mặt toàn dân Israel nhằm chứng minh sứ mạng.', explanation: 'Những dấu lạ (tín hiệu) này là bằng cớ không thể chối cãi để dân Israel tin rằng Thiên Chúa của cha ông đã thực sự hiện ra.' }
+  ]}
 ];

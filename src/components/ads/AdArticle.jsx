@@ -1,37 +1,65 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+const IS_DEV = import.meta.env.DEV;
 
 /**
  * AdArticle — Google AdSense In-article Ad (fluid, centered)
  * Slot: 5313164365
  *
- * Usage:
- *   <AdArticle />
- *
- * Best placements:
- * - Giữa đoạn giải thích câu trả lời (sau khi trả lời đúng/sai)
- * - Giữa các section văn bản dài (giải thích Kinh Thánh, bình luận)
- * - Giữa màn kết quả game (giữa bảng điểm và nút hành động)
- *
- * Notes:
- * - In-article ads tự căn chỉnh theo chiều rộng container.
- * - AdSense policy: tối đa 3 ads/trang, không đặt quá gần nhau.
- * - Không hiển thị ở localhost — chỉ hoạt động trên domain đã đăng ký.
+ * - Tự động collapse về height 0 nếu Google không fill ad (unfilled / localhost).
+ * - DEV mode: hiện badge trạng thái (loading / done / failed / no-sdk).
  */
 const AdArticle = ({ className = '', style = {} }) => {
     const adRef = useRef(null);
     const pushed = useRef(false);
+    const [adStatus, setAdStatus] = useState('loading'); // 'loading' | 'done' | 'failed' | 'no-sdk'
 
     useEffect(() => {
+        if (!window.adsbygoogle) {
+            setAdStatus('no-sdk');
+            return;
+        }
         if (pushed.current) return;
         try {
-            if (adRef.current && window.adsbygoogle) {
-                (window.adsbygoogle = window.adsbygoogle || []).push({});
-                pushed.current = true;
-            }
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+            pushed.current = true;
         } catch (e) {
-            console.warn('[AdArticle] adsbygoogle push failed:', e);
+            setAdStatus('failed');
+            console.error('[AdArticle] adsbygoogle push thất bại:', e);
+            return;
         }
+
+        // Poll data-adsbygoogle-status — Google gán khi xử lý xong
+        let attempts = 0;
+        const maxAttempts = 20; // 20 × 500ms = 10s
+        const poll = setInterval(() => {
+            attempts++;
+            const ins = adRef.current;
+            if (!ins) { clearInterval(poll); return; }
+
+            const status = ins.getAttribute('data-adsbygoogle-status');
+            if (status === 'done') {
+                setAdStatus('done');
+                clearInterval(poll);
+            } else if (attempts >= maxAttempts) {
+                setAdStatus('failed');
+                clearInterval(poll);
+                console.warn('[AdArticle] ⚠️ Ad không fill sau 10s');
+            }
+        }, 500);
+
+        return () => clearInterval(poll);
     }, []);
+
+    const STATUS_CONFIG = {
+        loading: { color: '#f59e0b', label: '⏳ Ad: loading...' },
+        done:    { color: '#22c55e', label: '✅ Ad: loaded' },
+        failed:  { color: '#ef4444', label: '❌ Ad: unfilled' },
+        'no-sdk':{ color: '#94a3b8', label: '⚪ Ad: no SDK' },
+    };
+    const cfg = STATUS_CONFIG[adStatus] || STATUS_CONFIG.loading;
+
+    const isHidden = adStatus === 'failed' || adStatus === 'no-sdk';
 
     return (
         <div
@@ -40,9 +68,23 @@ const AdArticle = ({ className = '', style = {} }) => {
                 width: '100%',
                 overflow: 'hidden',
                 textAlign: 'center',
+                height: isHidden ? 0 : undefined,
+                transition: 'height 0.3s ease',
+                position: 'relative',
                 ...style,
             }}
         >
+            {IS_DEV && (
+                <div style={{
+                    position: 'absolute', top: 4, left: 4, zIndex: 9999,
+                    background: 'rgba(0,0,0,0.75)', borderRadius: 6,
+                    padding: '2px 8px', fontSize: 11, fontWeight: 700,
+                    color: cfg.color, pointerEvents: 'none',
+                    fontFamily: 'monospace', whiteSpace: 'nowrap',
+                }}>
+                    {cfg.label}
+                </div>
+            )}
             <ins
                 ref={adRef}
                 className="adsbygoogle"

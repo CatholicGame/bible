@@ -1,5 +1,5 @@
 module.exports = [
-  {id:46,theme:'Chua Giesu Chua Lanh',words:[
+  {id:46,theme:'Chúa Giêsu Chữa Lành',words:[
     {answer:'PHONGHUI',clue:'Căn bệnh ngoài da gớm ghiếc tước đoạt nhân phẩm, nhưng đã biến mất nhẵn nhụi khi Chúa chạnh lòng chạm tay vào.',explanation:'Bệnh phong trong xã hội Do Thái là bản án tử hình xã hội vì bị coi là ô uế. Chúa Giêsu bẽ gãy lề luật để chạm vào vớt vát họ, trả lại phẩm giá con người.'},
     {answer:'BATIME',clue:'Anh mù ăn xin dạn dĩ kiên trì ngồi rũ bên vệ đường Giê-ri-cô, la hét khản cổ xin Con vua Đa-vít thương xót.',explanation:'Ba-ti-mê đại diện cho một đức tin nhảy vọt. Bất chấp bị đám đông áp đảo la mắng bảo im, anh vất bỏ áo choàng nhảy cẫng lên chạy đến cùng ánh sáng đời mình.'},
     {answer:'LADARO',clue:'Người bạn thân thiết quý mến của Chúa ở Bê-ta-ni-a, tuy đã nằm liệt chết sình trong mồ bốn ngày nhưng vẫn đi ra rách rưới.',explanation:'Phép lạ gọi bùn dậy La-da-rô là đỉnh cao quyền năng của Chúa trên thân xác tan rã, dấu chỉ báo trước sự kiện Ngài đập vỡ mồ đá Phục Sinh.'},
@@ -7,7 +7,7 @@ module.exports = [
     {answer:'DOITRUONG',clue:'Viên sĩ quan La Mã có đức tin khiêm cung vĩ đại, xin Chúa chỉ cần phán một lời từ xa thì đứa đầy tớ ông sẽ khỏi bệnh.',explanation:'Lời thưa "Lạy Chúa con chẳng đáng rước Chúa ngự vào nhà con" của viên bách quản vô danh đã trở thành câu kinh rầm rộ xướng lên trước khi rước lễ ngàn đời.'},
     {answer:'HUYETLAU',clue:'Căn bệnh rong máu đeo bám khổ sở ruột gan ròng rã mười hai năm, nhưng chỉ lén cần sờ gấu áo Chúa cũng khô sạch.',explanation:'Người phụ nữ mắc bệnh xuất huyết lén lút chen lấn rờ tay áo Chúa là điển hình cho đức tin lấp bờ im lặng. Quyền năng rướm thoát khỏi Đấng Thánh để chữa lành bệnh ô uế.'},
   ]},
-  {id:47,theme:'Tam Tinh Phuc Am',words:[
+  {id:47,theme:'Tâm Tình Phúc Âm',words:[
     {answer:'KHIEMNHUONG',clue:'Đức tính hạ mình thẳm sâu, coi người khác trọng hơn chính mình như chính tấm gương Chúa vứt cởi áo dọn rửa chân.',explanation:'Tự mãn là hòn đá mài cản trở ân sủng. Chúa dạy ai cất mình lên sẽ bị hạ xuống, ai hạ mình xuống sẽ được suy tôn vào hàng khanh khách dự tiệc Nước Trời.'},
     {answer:'HIENLANH',clue:'Sức mạnh tịnh tâm nội tại êm dịu không dùng bạo lực trả đũa nện răng, vì chính họ sẽ được Đất Hứa làm gia nghiệp.',explanation:'Sự hiền lành của Phúc Âm không phải là sự nhu nhược thụ động câm nín, mà là năng lực lớn mạnh chế ngự được thịnh nộ bản ngã, tuân theo gương Con Chiên bị xén lông.'},
     {answer:'PHUCVU',clue:'Tiêu chuẩn tối cao của quyền bính trong Đạo: ai muốn làm lớn thì phải cúi gập mình hầu hạ rửa ráy mọi người anh em.',explanation:'Khác với thói đời xưng vương xưng bá đòi thiên hạ phải tung hô bưng bợ, Chúa ấn định hình ảnh vị lãnh đạo Kitô Giáo là một người cầm thau nước chậu khăn.'},
@@ -15,7 +15,7 @@ module.exports = [
     {answer:'NGHEOKHO',clue:'Bát phúc đi đầu tiên và là cửa ngõ Nước Trời, đòi hỏi một sự trống rỗng thoát tục không bám víu vào bã vinh hoa trần gian.',explanation:'Nghèo khó tinh thần là việc tháo bỏ lòng cậy dựa vướng bận vào của cải, đặt để toàn bộ niềm hi vọng an ninh của mình vào chiếc túi không hề thủng của Thiên Chúa.'},
     {answer:'NHANNHUC',clue:'Sức chịu đựng dẻo dai kiên nhẫn khi bị bách hại sỉ nhục oan ức vì niềm tin mà không buông lời thóa mạ gắt gỏng đắng cay.',explanation:'Quay má kia dâng cho kẻ mới tát mình bên này chính là đỉnh điểm trớ trêu của hành vi nhẫn nhục tha thứ, một nét độc bản ngây dại nhưng anh hùng của Tin Mừng.'},
   ]},
-  {id:48,theme:'Bi Tich Thanh The',words:[
+  {id:48,theme:'Bí Tích Thánh Thể',words:[
     {answer:'TIECLY',clue:'Bữa ăn tối lịch sử ngậm ngùi rớm lệ diễn ra vách kín trước cuộc Khổ Nạn, nơi Bí Tích Tình Yêu Thượng Đỉnh được phôi thai nảy sinh.',explanation:'Bữa Tiệc Ly (Bữa Ăn Cuối Cùng) thiết lập giao ước mới bọc trong Máu ban cho Giáo Hội một lệnh truyền thiết tha "Hãy làm việc này mà nhớ đến Thầy".'},
     {answer:'TRUYENPHEP',clue:'Trọng tâm của kinh Tạ Ơn, khi linh mục đọc lớn lại y đúc lời của chính Chúa Giê-su lúc Người dâng cử bánh miến và rượu nho.',explanation:'Lời ngôn sứ thần luợng vang lên trên miệng linh mục được Chúa Thánh Thần thi triển quyền năng để biến bản thể vật chất rêu rêu thành nguồn mạch sự sống bất tử.'},
     {answer:'BIENTHE',clue:'Sầu nhiệm màu nhiệm lớn lao oai hùng khi bản khía cạnh bánh ngự lãm chuyển hóa hoàn toàn thành chính thân thể sống động Chúa Kitô.',explanation:'Thuyết Biến Thể (Transubstantiation) vạch ngõ: Các phụ thể mùi vị trông thấy vẫn là miếng bánh ngụm rượu trần tục, nhưng bề bản sâu thẳm đã là Chúa toàn tại.'},
@@ -23,7 +23,7 @@ module.exports = [
     {answer:'NHATAM',clue:'Chiếc hộp kim loại khóa lưu giữ tủ ấp bảo mật Mình Thánh đặt trên cao gian cung thánh nhà thờ để bầy chiên tín hữu quỳ gối viếng thăm.',explanation:'Nhà Chầu/Nhà Tạm rực ngọn đèn chầu đỏ ối nhắc nhở Chúa luôn hằng hiện diện đanh thép thực sự ở đó để trông chờ xoa dịu những nhũn nhẽn nhọc nhằn ưu tư con cái.'},
     {answer:'MATNHAT',clue:'Chiếc lồng chứa hình lấp lánh nạm ngọc bằng vàng hay đồng thau chứa giữ Thánh Thể bên trong vòn vọt để rước kiệu thiêng.',explanation:'Mặt Nhật rạng ngời phô diễn Bánh Thánh ở chính gian chóp để người ta ngước mắt chiêm bái bái phục trượng phủ Tình Yêu nhập thể phơi mình không giấu che.'},
   ]},
-  {id:49,theme:'Su Mang Truyen Giao',words:[
+  {id:49,theme:'Sứ Mạng Truyền Giáo',words:[
     {answer:'TRUYENGIAO',clue:'Mệnh lệnh khẩn thiết và trăn trở khao khát lớn nhất của Giáo Hội: đem niềm vui sống động của Phúc Âm đi tứ phương đến tận chân trời.',explanation:'Truyền giáo không bao giờ là áp đặt, mà cốt là sức cuốn hút tự thân tỏa hương của cộng đoàn dấn bước vứt bỏ ích kỷ để đến gần với vùng ngoại biên hoang vu.'},
     {answer:'TINMUNG',clue:'Thông điệp rạng rỡ của niềm vui ngời sáng cứu độ, ngã rẽ đổi đời mà các tông đồ lặn lội thi nhau hăng hái mang ra phơi sáng.',explanation:'Khởi đầm Tin Giai không phải là quyển quy luật pháp lý còng lưng gò bó mà là sự xác quyết sưởi ấm: Thiên Chúa hằng hữu đã nhảy xuống sống cùng loài người bụi nhơ.'},
     {answer:'TUDAO',clue:'Hành vi chói lòa làm chứng nảy lửa cho đức tin dũng cảm nhất bằng cách tưới máu nhuộm đỏ đất nghèo thay vì mím mặt chối Chúa.',explanation:'Máu các vị tử đạo giọt rớt làm tưới tẩm thắm lên đất cỗi sẽ tức thì trổ ra hàng nghìn những hạt giống đức tin kiên trung mạnh mẽ. Cái chết vì danh Chúa là phép rửa rực rỡ.'},
@@ -31,7 +31,7 @@ module.exports = [
     {answer:'RUATOI',clue:'Bí tích nguyên rèn tẩy sạch án phạt nhơ nhớp tội tổ tông gỡ bỏ mọi dơ bẩn và chính thức tháp nhập ứng viên ngây ngô vào Mật Thể Hội Thánh.',explanation:'Cánh cửa then cài của các bí tích, làm nảy mầm địa vị một đứa con nuôi chính thức mang trên mình chức tư tế vương giả và sứ mệnh tiên tri gánh vác Nước Chúa.'},
     {answer:'TONGDO',clue:'Nhóm mười hai trụ cột nòng cốt được Chúa cất bước đích thân gọi tên và trui rèn cắt cử gửi đi lấm lem như bầy chiên hiền vào giữa bầy sói.',explanation:'Kế vị nhóm mười hai, mọi Kitô hữu đều hưởng rệt ơn gọi Tông Đồ, là phải túa ra sải bước gieo vãi hạt mầm gặt hái lúa chín đã vàng úa đầy đồng xum xuê.'},
   ]},
-  {id:50,theme:'Bieu Tuong Kinh Thanh',words:[
+  {id:50,theme:'Biểu Tượng Kinh Thánh',words:[
     {answer:'CAYNHO',clue:'Hình ảnh gân guốc miêu tả Chúa Giê-su là thân cành mầu mỡ đầy nhựa, còn chúng ta là những nhánh nhỏ nhoi đeo bám liên kề kết kết sinh trái.',explanation:'Chúa dặn không cành nào tự bản tính có thể sinh được hoa trái thơm tho, nếu kiêu ngạo muốn chẻ nhánh tách rời khỏi gốc nho tình yêu thì lập tức sẽ héo cành lìa đời.'},
     {answer:'MUCTU',clue:'Vị chăn chiên nhân lành tốt bụng sẵn sàng lặn lội nơi đồi núi hiểm nghèo vứt bỏ chín mươi chín cừu cốt tìm cho kỳ được một con chiên đi lạc hớ hênh.',explanation:'Chúa Kitô là mẫu hình tột bậc của Đức Chúa lùa chiên cõng gánh băng bó yêu thương nhẫn nại, không ngớt đánh đổi cả dòng máu tơi bời vì an nguy sinh mệnh bầy vật nhỏ bé.'},
     {answer:'MANNA',clue:'Thứ bánh tấm cám kỳ diệu rơi nhẹ như sương hạt nhỏ li ti từ trời xuống mỗi sáng tinh mơ để vỗ bé dạ dày đói lả dân Chúa trong hoang địa.',explanation:'Hứa hẹn bánh chép Man-na là viễn tượng tấu rước Bánh Thánh Thể Thật ăn không hề đói luân chuyển từ Thân mình Cứu Tinh hiến tế cứu độ khỏi hoang địa tăm tối.'},
@@ -39,4 +39,20 @@ module.exports = [
     {answer:'CHIENCON',clue:'Biểu tượng con vật thảm thương tàn tạ chịu đưa đi xén rụng lông phanh xác trên đĩa tiệc mừng Vượt Qua ám chỉ sự tự hiến của Đấng Cứu Độ.',explanation:'Giữa bữa tiệc chầu Vượt Qua năm xưa dân Do Thái sấp mặt ăn vội thịt chiên chết xức máu lên cửa, báo hiệu dòng Máu cực thánh Chiên Thiên Chúa đổ vọt dẹp án tử.'},
     {answer:'MAOGAI',clue:'Chiếc vòng quấn sắc lẻm rách tướp oằn oại đau đớn nhuốm máu đội trên sọ đầu Vua Dân Do Thái, sau vụt sáng thành chiếc vương miện khải triều.',explanation:'Từ món đồ dã man hèn mọn rách da để nhạo báng chua chát cười cợt báng bổ, mão gai thấm đầy giá máu cứu chuộc tự hóa thân vinh hiển bằng uy linh thiên quốc tuyệt trần.'},
   ]},
+  { id: 117, theme: 'XH 17: Nước Từ Tảng Đá', words: [
+    { answer: 'TANGDA', clue: 'Khối đất đá cứng ngắc sần sùi ở Hô-rếp bị gậy Môsê đập trúng thì lập tức tuôn trào dòng nước mát lạnh.', explanation: 'Tảng đá bị đập vỡ tuôn nước là hình ảnh của Đức Kitô bị đâm thâu để ban Mạch Nước Hằng Sống cho nhân loại khát khao.' },
+    { answer: 'GAY', clue: 'Vật dụng thần kỳ mà Môsê từng dùng để rẽ Biển Đỏ, nay lại được lệnh cầm lên gõ mạnh vào mặt đá sỏi.', explanation: 'Chiếc gậy không có phép thuật tự thân, nó chỉ có sức mạnh khi được vâng lời Thiên Chúa để thực thi quyền năng của Ngài.' },
+    { answer: 'NUOC', clue: 'Thứ chất lỏng mát mẻ quý giá trào ra từ vách đá cứng giúp toàn bộ dân chúng và súc vật được giải cơn khát cồn cào.', explanation: 'Dòng nước tuôn từ đá khô hạn là món quà sự sống hoàn toàn miễn phí, xoa dịu cơn giận dữ oán trách tột độ của Israel.' },
+    { answer: 'MASA', clue: 'Một trong hai cái tên mới được đặt cho địa danh này, có nghĩa là "thử thách", vì dân Chúa đã nhẫn tâm thử thách Ngài.', explanation: 'Ma-xa và Mơ-ri-va trở thành biểu tượng buồn bã cho sự cứng lòng của con người trước những ân huệ hiển nhiên của Thiên Chúa.' },
+    { answer: 'OANTRACH', clue: 'Thái độ hằn học bực tức của dân Israel khi thiếu nước, đi xa tới mức chất vấn liệu Đức Chúa có đang ở giữa họ không.', explanation: 'Sự oán trách không chỉ là kêu ca về thể xác mà là sự xói mòn niềm tin, phủ nhận sự đồng hành yêu thương của Thiên Chúa.' },
+    { answer: 'BATMAN', clue: 'Cảm giác chán nản cùng cực của Môsê khi phải đối diện với khối ác cảm đòi ném đá tử hình mình từ đám đông khát nước.', explanation: 'Sự bất mãn của dân chúng đẩy Môsê đến chỗ tuyệt vọng kêu cầu Chúa: "Họ sắp ném đá con đến nơi rồi!"' }
+  ]},
+  { id: 118, theme: 'XH 18: Gít-rô Khuyên Nhủ', words: [
+    { answer: 'GITRO', clue: 'Người cha vợ khôn ngoan của Môsê, vốn là tư tế xứ Ma-đi-an, đã dắt vợ và hai con trai đến thăm ông.', explanation: 'Sự xuất hiện của Gít-rô đánh dấu sự thừa nhận từ một tư tế dân ngoại về những việc kỳ diệu mà Thiên Chúa đã làm cho Israel.' },
+    { answer: 'VIPHAM', clue: 'Hành vi làm trái lề luật mà dân chúng tranh cãi và thường kéo nhau đến chầu chực từ sáng tới chiều để nhờ Môsê phân xử.', explanation: 'Tình trạng quá tải xét xử các vụ vi phạm phản ánh sự thiếu tổ chức của một cộng đồng mới hình thành chưa có lề lối rõ ràng.' },
+    { answer: 'XETXU', clue: 'Công việc phân định đúng sai căng thẳng mệt mỏi mà Môsê ôm đồm làm một mình từ chói chang ban sớm đến mịt mù đêm đen.', explanation: 'Việc Môsê một mình xét xử cho thấy lòng tận tụy, nhưng cũng bộc lộ nguy cơ kiệt sức do không biết san sẻ khối lượng công việc.' },
+    { answer: 'LOIKHUYEN', clue: 'Giải pháp quản lý nhân sự tuyệt vời mà Gít-rô đề xuất, khuyên Môsê nên chia sẻ gánh nặng với các cộng sự tài đức.', explanation: 'Lời khuyên của Gít-rô là bài học quý giá về kỹ năng lãnh đạo: biết phân quyền, chọn người tài đức và chỉ giải quyết những ca khó nhất.' },
+    { answer: 'CHIETEU', clue: 'Hành động chia nhỏ đám đông thành các toán ngàn người, trăm người, năm mươi người để dễ bề quản lý và phân công.', explanation: 'Việc chia tiểu đội theo cấu trúc kim tự tháp giúp thiết lập hệ thống tư pháp sơ khai hiệu quả đầu tiên trong lịch sử Israel.' },
+    { answer: 'KHOELUYEN', clue: 'Tiêu chuẩn hàng đầu để chọn thẩm phán mà Gít-rô gợi ý: phải tìm những người tài đức, kính sợ Thiên Chúa và ghét sự thanh toán hối lộ.', explanation: 'Một nền tư pháp công bình cần những con người không chỉ có năng lực (khỏe luyện tài trí) mà phải có đạo đức, không tư lợi cá nhân.' }
+  ]}
 ];

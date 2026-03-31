@@ -1,5 +1,5 @@
 module.exports = [
-  {id:36,theme:'Phan Xet Cuoi Cung',words:[
+  {id:36,theme:'Phán Xét Cuối Cùng',words:[
     {answer:'PHANXET',clue:'Hành động tối cao và dứt khoát của Chúa Kitô khi Ngài tra vấn phán xử mọi tư tưởng và việc làm của mỗi người.',explanation:'Sẽ có hai cuộc phán xét: phán xét riêng ngay khi linh hồn lìa xác, và phán xét chung công khai vào ngày tận thế để tỏ lộ công lý trọn vẹn của Thiên Chúa.'},
     {answer:'THIENDANG',clue:'Tình trạng chung phúc tuyệt hảo, nơi các thánh được chiêm ngưỡng dung nhan Thiên Chúa nhãn tiền.',explanation:'Thiên Đàng không phải là một nơi chốn vật lý bồng bềnh mây trắng, mà là tình trạng hiệp thông tình yêu viên mãn không gì đứt đoạn với Ba Ngôi.'},
     {answer:'HOANGUC',clue:'Bản án đau đớn tụt cùng dành cho những kẻ kiên quyết chối từ tình yêu Chúa đến hơi thở cuối cùng.',explanation:'Thiên Chúa không ấn ai vào Lửa Đời Đời. Hỏa ngục là hệ quả tự nhiên của một quyền tự do ương ngạnh cố tình cự tuyệt lòng thương xót vô biên cứu độ.'},
@@ -7,7 +7,7 @@ module.exports = [
     {answer:'PHUCSINH',clue:'Biến cố oai hùng khi thân xác của mọi người được chỗi dậy kết hợp lại với linh hồn trong ngày thế mạt.',explanation:'Tin vào sự sống lại của thân xác là đặc trưng của Kitô giáo. Xác phàm yếu đuối sẽ mục nát, nhưng sẽ được Thiên Chúa phục hồi thân xác vinh quang.'},
     {answer:'QUANGLAM',clue:'Sự ngự đến vinh quang tráng lệ và chói lòa của Con Người trên cụm mây để chấm dứt dòng chảy lịch sử.',explanation:'Ngày Quang Lâm (Parousia) là ngày Đức Kitô trở lại. Không ai biết trước ngày giờ đó, nên thái độ của tín hữu luôn phải là thắp đèn chầu chực thức tỉnh.'},
   ]},
-  {id:37,theme:'Cac Nhan Duc',words:[
+  {id:37,theme:'Các Nhân Đức',words:[
     {answer:'DUCTIN',clue:'Nhân đức đối thần giúp chúng ta nhắm mắt tựa đầu, vững vàng phó thác vào những điều Chúa đã mặc khải.',explanation:'Tin không đơn thuần là đồng ý bằng một mớ lý trí khô khan, mà là sự hiến thân cá nhân hoàn toàn phó mặc cuộc đời mình cho Thiên Chúa lèo lái.'},
     {answer:'DUCCAY',clue:'Chiếc mỏ neo chắc chắn giữ linh hồn không bị tuyệt vọng chìm nghỉm giữa đại dương đau khổ trần gian.',explanation:'Đức Cậy hướng nếp sống chúng ta về phần thưởng Thiên Đàng, giúp ta vững lòng bước qua bóng tối thử thách vì tin chắc Chúa sẽ không bỏ rơi chữ tín.'},
     {answer:'DUCAI',clue:'Cốt tủy của lề luật, đòi hỏi chúng ta phải yêu mến Thiên Chúa hết lòng và yêu tha nhân như yêu chính thân mình.',explanation:'Không có Đức Ái, mọi lề luật đều trống rỗng. Thánh Phao-lô khẳng định: "Dù có nói được mọi thứ tiếng, có hiến cả thân mình mà không có tình yêu, cũng vô ích".'},
@@ -15,7 +15,7 @@ module.exports = [
     {answer:'DUNGCAM',clue:'Sức mạnh nội tâm phi thường hùng dũng giúp các vị tử đạo ngày xưa mỉm cười gác đầu trên máy chém đẫm máu.',explanation:'Sự dũng cảm siêu nhiên không phải là liều lĩnh thiếu bề suy nghĩ, mà là sẵn sàng chấp nhận thiệt thòi vì lòng trung thành sắc son với chân lý Phúc Âm.'},
     {answer:'TIETDO',clue:'Thái độ chừng mực nhẫn nhục cầm cương các đam mê nhục dục, không chiều theo lôi kéo xác thịt thấp hèn.',explanation:'Nhân đức Tiết độ làm chủ các giới hạn thèm khát ăn uống và sắc dục, bảo đảm phẩm giá lẫm liệt của con người trước những bản năng xu hướng hoang dã.'},
   ]},
-  {id:38,theme:'Nhan Vat Cuu Uoc',words:[
+  {id:38,theme:'Nhân Vật Cựu Ước',words:[
     {answer:'MOSE',clue:'Vị lãnh tụ vĩ đại cầm gậy rẽ nước Biển Đỏ nứt làm đôi, dẫn dắt dân Chúa thoát khỏi ách kiếp nô lệ Ai Cập.',explanation:'Ngài Mô-sê là vị ngôn sứ lớn nhất của thời Cựu Ước, người đối thoại mặt đối mặt với Chúa tại núi Xi-nai và lãnh nhận bản Mười Điều Răn khắc trên đá.'},
     {answer:'IXAAC',clue:'Đứa con hiếm muộn ngoan ngoãn bị trói đặt lên đống củi hừng hực để làm hiến lễ thử thách đức tin người cha.',explanation:'Sự vâng phục của I-xa-ác khi gác mình trên củi gỗ là hình ảnh báo trước tuyệt hảo về cái chết hy sinh tình nguyện của Chúa Giêsu trên Thập Giá năm xưa.'},
     {answer:'GIACOP',clue:'Kẻ sinh đôi nhưng khôn lỏi nắm gót chân anh mình, sau khi giằng co oai hùng với thiên thần thì được phong tên mới.',explanation:'Gia-cóp, với tên gọi lẫy lừng mới là Ít-ra-en, đã sinh ra mười hai cậu con trai, tạo thành nguồn bách tinh lập ra mười hai chi tộc gốc rễ dân Chúa chọn.'},
@@ -23,7 +23,7 @@ module.exports = [
     {answer:'TOBIA',clue:'Chàng thanh niên hiếu thảo được thiên sứ Ra-pha-en âm thầm mở đường chỉ lối bắt cá lấy gan chữa mù mắt cho cha.',explanation:'Câu chuyện kỳ diệu của Tô-bi-a nhấn mạnh tầm vóc sự quan phòng mầu nhiệm của Chúa nâng đỡ những gia đình giữ vững lề luật đạo đức cự tuyệt mê tín thờ bái.'},
     {answer:'MACABE',clue:'Gia tộc kháng chiến anh hùng lẫm liệt, sẵn sàng chịu đun vạc dầu sôi nhổ móng chứ quyết không bỏ lề luật cha ông.',explanation:'Những anh em dòng dõi Ma-ca-bê thà chết nhục hình rách da xẻo rốn còn hơn phạm luật ô uế an thịt heo, là ví dụ sống động về nền tảng giáo lý cầu cho người chết.'},
   ]},
-  {id:39,theme:'Bay Moi Toi Dau',words:[
+  {id:39,theme:'Bảy Mối Tội Đầu',words:[
     {answer:'KIEUNGAO',clue:'Cội rễ của vạn sự tội ác, là thói tự phụ ngông cuồng vô lối muốn đuổi cổ Thiên Chúa để tự tôn mình lên làm chúa tể.',explanation:'Lu-xi-phe sa ngã thiên đình cũng vì "Không phục quyền!". Kiêu ngạo phá hủy toàn bộ gốc rễ lòng khiêm nhường, tự cho mình là trung tâm vũ trụ rốn rụng.'},
     {answer:'HATIEN',clue:'Căn bệnh rủn rỉn tôn thờ đồng tiền, gom góp bo bo ky cóp làm nô lệ lệ thói trói buộc vật chất bọt bèo.',explanation:'Chúa đã phán quyết không ai có thể làm tôi hai chủ. Thói tham lam vắt kiệt tình thương, khiến con người bủn xỉn chà đạp lên đau khổ của người bên cạnh nghèo khó.'},
     {answer:'GHENTI',clue:'Tính xấu gặm nhấm linh hồn bứt rứt, cảm thấy bực tức xót xa đỏ con mắt trước những thành công rực rỡ của người khác.',explanation:'Ghen tị chính là hạt giống giết người. Xưa kia Ca-in đã xuống tay nhẫn tâm đập đầu A-ben giữa đồng ruộng chỉ vì Chúa đoái lòng ban ơn nhận lễ rước của cậu em.'},
@@ -31,7 +31,7 @@ module.exports = [
     {answer:'GIANDU',clue:'Ngọn lửa ác cảm bùng cháy thiếu tự chủ, dễ dàng trút cơn thịnh nộ đay nghiến lăng mạ sỉ vả vào anh em đồng loại.',explanation:'Tội văng tục tức giận xua đuổi bình an trong tâm hồn. Chúa dạy dỗ tha phiến dặn dò: Ai ngoảnh mặt giận ghét chửi rủa anh em thì đáng bị quăng hỏa ngục lửa thêu.'},
     {answer:'LUOIBIENG',clue:'Sự trễ nải chểnh mảng ủ ê buông xuôi trong bổn phận, không thèm màng tới việc cày cấy ơn Chúa và xao nhãng việc tôn thờ.',explanation:'Lười biếng tâm linh là một căn bệnh liệt dương thiêng liêng chí mạng, khiến linh hồn chết mòn vì dửng dưng ủ rũ không thiết tha với tình yêu mãnh liệt của Chúa.'},
   ]},
-  {id:40,theme:'Loi Kinh Phung Vu',words:[
+  {id:40,theme:'Lời Kinh Phụng Vụ',words:[
     {answer:'VINHDANH',clue:'Bài ca thiên thần cất lên rầm rộ xé toạc bầu trời đêm Giáng Sinh, nay được Hội Thánh long trọng hát xướng vào thánh lễ.',explanation:'Kinh Vinh Danh (Gloria) mang tiết tấu vui mừng nhảy múa tột đỉnh, ngợi khen vinh quang bất tận của lòng thương xót Ba Ngôi ban bình an dưới thế cho người.'},
     {answer:'ALELUIA',clue:'Tiếng reo hò rộn rã bằng âm ngữ vùng Hê-bơ-rơ vang dậy trước khi công bố đoạn Phúc Âm, đòi hỏi thốt với tất cả hân hoan.',explanation:'Alleluia (Hãy ngợi khen Gia-vê) là đặc sản bất ngờ của niềm vui Tin Mừng Phục Sinh, thường xuyên bị cấm kỵ tắt tiếng trong suốt bốn mươi ngày ròng rã Mùa Chay.'},
     {answer:'NGOIKHEN',clue:'Bài ca lộng lẫy trổ hoa rực rỡ của Mẹ Ma-ri-a tuôn trào khi đứng trước mĩ cảnh bà Ê-li-xa-bét thai nghén vĩ đại.',explanation:'Kinh Magnificat lột tả chân thực quy luật trái khoáy kinh ngạc của Chúa đập tan ảo tưởng loài người: xua đuổi vứt bỏ kẻ kiêu căng, nâng dậy tôn phủ người đói nghèo.'},
@@ -39,4 +39,20 @@ module.exports = [
     {answer:'THUNHAN',clue:'Lời kinh ta thường đứng đấm ngực bình bịch ầm ầm thở than xưng nhận lỗi lầm tày đình rạch ròi trước khi cử hành Thánh Lễ.',explanation:'Nghi thức sám hối ở đầu giờ phút thiêng liêng nhắc nhở tình trạng rách rưới tội lỗi đầy rẫy yếu hèn của chúng ta đáng bị Thiên Chúa ném đi nhưng lại vớt vát.'},
     {answer:'KINHMUNG',clue:'Lời chào lịch sử vượt thời gian của Tổng lãnh thiên thần rớt xuống trần gian đem lại nụ cười hy vọng cho nhân thế.',explanation:'Sự kiện Gáp-ri-en rẽ mây tung cánh bay xuống cung bái chào Ave Maria đã phá nát lời nguyền độc hại khắt khe vô lý mà mụ yêu tinh E-và mang lại tự muôn thuở.'},
   ]},
+  { id: 113, theme: 'XH 13: Dâng Con Đầu Lòng', words: [
+    { answer: 'DAULONG', clue: 'Mọi con trai hay con đực sinh ra đầu tiên đều phải thánh hiến trọn vẹn dâng cho Đức Chúa.', explanation: 'Luật thánh hiến con đầu lòng là cách Israel ghi nhớ muôn đời rằng sự sống của họ đã được Chúa cứu qua đêm ở Ai Cập.' },
+    { answer: 'COTMAY', clue: 'Đám sương mù dày đặc kỳ diệu ngự phía trước để che bóng râm vạch đường đi ban ngày cho dân Chúa.', explanation: 'Cột mây là biểu hiện của sự đồng hành an ủi của Thiên Chúa, xoa dịu cái nóng rát bỏng của sa mạc ban ngày.' },
+    { answer: 'COTLUA', clue: 'Khối đỏ rực lung linh chiếu sáng uy nghi vạch trạm đi giữa sa mạc tăm tối lạnh lẽo vào ban đêm.', explanation: 'Cột lửa soi sáng bước chân vào ban đêm, giúp dân Israel có thể tiến công không ngừng nghỉ, trốn khỏi sự truy đuổi của Pharaô.' },
+    { answer: 'GIUSE', clue: 'Vị tổ phụ Ai Cập năm xưa, nay hài cốt của ông được Môsê vác theo để giữ đúng lời thề của đời trước.', explanation: 'Mang theo hài cốt Giuse là minh chứng cho sự bất diệt của niềm hy vọng, thực hiện lời hứa trở về miền đất hứa ngàn đời.' },
+    { answer: 'NGAY', clue: 'Thời điểm Thiên Chúa dùng đám mây dịu mát kỳ diệu che chở nắng nóng để dẫn dân hành trình.', explanation: 'Biến cố ngày và đêm luân chuyển nhưng sự bảo bọc của Chúa chưa từng rút lại mảy may một giây.' },
+    { answer: 'DEM', clue: 'Khung giờ tăm tối rợn ngợp giữa sa mạc nhưng dòng người vẫn băng băng tiến bước nhờ cột lửa chói lòa.', explanation: 'Dù ban ngày nóng nực hay ban đêm rét buốt cản trở, sự hiện diện của Thiên Chúa là sự che chở toàn bích tuyệt đối.' }
+  ]},
+  { id: 114, theme: 'XH 14: Vượt Biển Đỏ', words: [
+    { answer: 'BIENDO', clue: 'Khối nước vô tận sừng sững cản trở bước đường cùng, phía sau thì kỵ binh Ai Cập đang lốc cốc rượt theo sát.', explanation: 'Biển Đỏ không còn là đường cùng, mà là sân khấu vĩ đại cho quyền năng giải cứu tuyệt đối của Thiên Chúa hiện ra.' },
+    { answer: 'GIODONG', clue: 'Cơn gió mạnh mẽ phần phật được Chúa thổi tới suốt đêm lùa nước sang hai bên tạo thành lối đi.', explanation: 'Thủy triều và gió được Thiên Chúa sử dụng như công cụ quyền năng trong tay vạch ra con đường tẩu thoát sống còn.' },
+    { answer: 'COXE', clue: 'Cỗ máy chiến tranh đáng sợ của quân Ai Cập bị mắc kẹt bùn lầy rít rát giữa lòng biển gầm gào.', explanation: 'Chiến xa tự hào của đế chế Pharaô đâm ra vô dụng, trở thành nấm mồ chôn thân quân đội kiêu ngạo muốn làm trái ý Trời.' },
+    { answer: 'BIENKHOI', clue: 'Nơi chôn vùi dập dềnh hàng vạn quân tướng Ai Cập khi bức tường nước khổng lồ bất ngờ sụp xuống.', explanation: 'Cái chết của quân đội Ai Cập trong biển cả làm trọn vẹn tiếng khóc giải thoát tự do, biểu tượng cho việc dìm chết tội lỗi bằng Phép Rửa.' },
+    { answer: 'CHIM', clue: 'Số phận đáng buồn và ngộp thở của các chiến binh Pharaô bị dòng nước trào dâng vùi lấp mãi mãi.', explanation: 'Sự kiêu ngạo của binh đoàn Ai Cập đã phải trả giá khi vùng nước giải thoát Israel biến thành phán xét cho kẻ thù.' },
+    { answer: 'KHO', clue: 'Trạng thái đất nền dưới đáy biển dường như đã bốc hơi nước để dòng người Híp-ri chạy qua trơn tru.', explanation: 'Qua biển cả trên đất khô: hình ảnh tuyệt đẹp của sức mạnh Đức Tin, vượt qua cõi chết khô ráo bước tới miềm sống vinh quang.' }
+  ]}
 ];

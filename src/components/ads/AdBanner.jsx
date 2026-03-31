@@ -72,10 +72,23 @@ const AdBanner = ({ className = '', style = {} }) => {
     };
     const cfg = STATUS_CONFIG[adStatus] || STATUS_CONFIG.loading;
 
+    // Ẩn hoàn toàn container khi ad không load được (không chiếm không gian UI)
+    const isHidden = adStatus === 'failed' || adStatus === 'no-sdk';
+
     return (
         <div
             className={className}
-            style={{ width: '100%', overflow: 'hidden', minHeight: 60, position: 'relative', ...style }}
+            style={{
+                width: '100%',
+                overflow: 'hidden',
+                // Chỉ dành không gian khi đang load hoặc đã done;
+                // collapse về 0 nếu unfilled / no-sdk
+                minHeight: isHidden ? 0 : (adStatus === 'done' ? undefined : 60),
+                height: isHidden ? 0 : undefined,
+                position: 'relative',
+                transition: 'height 0.3s ease, min-height 0.3s ease',
+                ...style,
+            }}
         >
             {/* DEV-only status badge */}
             {IS_DEV && (

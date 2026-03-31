@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "theme": "Nguoi Thu Nhat - Tao Dung",
+    "theme": "Người Thứ Nhất - Tạo Dựng",
     "gridSize": {
       "rows": 6,
       "cols": 7
@@ -61,7 +61,7 @@
   },
   {
     "id": 2,
-    "theme": "To Phu Duc Tin",
+    "theme": "Tổ Phụ Đức Tin",
     "gridSize": {
       "rows": 10,
       "cols": 11
@@ -131,7 +131,7 @@
   },
   {
     "id": 3,
-    "theme": "Mose & Xuat Hanh",
+    "theme": "Môsê & Xuất Hành",
     "gridSize": {
       "rows": 9,
       "cols": 10
@@ -191,7 +191,7 @@
   },
   {
     "id": 4,
-    "theme": "Cac Thanh Tong Do",
+    "theme": "Các Thánh Tông Đồ",
     "gridSize": {
       "rows": 8,
       "cols": 7
@@ -261,7 +261,7 @@
   },
   {
     "id": 5,
-    "theme": "Phep La Cua Chua",
+    "theme": "Phép Lạ Của Chúa",
     "gridSize": {
       "rows": 11,
       "cols": 11
@@ -331,7 +331,7 @@
   },
   {
     "id": 6,
-    "theme": "Du Ngon Nuoc Troi",
+    "theme": "Dụ Ngôn Nước Trời",
     "gridSize": {
       "rows": 10,
       "cols": 12
@@ -401,7 +401,7 @@
   },
   {
     "id": 7,
-    "theme": "Cuoc Thuong Kho",
+    "theme": "Cuộc Thương Khó",
     "gridSize": {
       "rows": 10,
       "cols": 10
@@ -471,7 +471,7 @@
   },
   {
     "id": 8,
-    "theme": "Phuc Sinh Va Len Troi",
+    "theme": "Phục Sinh Và Lên Trời",
     "gridSize": {
       "rows": 9,
       "cols": 9
@@ -531,7 +531,7 @@
   },
   {
     "id": 9,
-    "theme": "Bay Bi Tich",
+    "theme": "Bảy Bí Tích",
     "gridSize": {
       "rows": 9,
       "cols": 14
@@ -601,7 +601,7 @@
   },
   {
     "id": 10,
-    "theme": "Duc Me La Vang",
+    "theme": "Đức Mẹ La Vang",
     "gridSize": {
       "rows": 12,
       "cols": 13
@@ -670,8 +670,138 @@
     ]
   },
   {
+    "id": 101,
+    "theme": "XH 1: Israel Bị Áp Bức",
+    "gridSize": {
+      "rows": 10,
+      "cols": 8
+    },
+    "words": [
+      {
+        "answer": "AICAP",
+        "clue": "Quốc gia nơi dân Israel phải chịu kiếp nô lệ cay đắng suốt hơn 400 năm trời ròng rã.",
+        "explanation": "Ai Cập là nơi Giuse từng làm tể tướng, nhưng vị vua mới lên ngôi không hề biết công lao dĩ vãng của ông.",
+        "direction": "down",
+        "row": 0,
+        "col": 2,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "BETRAI",
+        "clue": "Đối tượng mà vua Ai Cập ra lệnh phải nhẫn tâm ném hết xuống dòng sông để triệt hạ giống nòi.",
+        "explanation": "Lệnh tiêu diệt các bé trai sơ sinh là đỉnh điểm của sự tội lỗi chống lại sự sống và Giao ước của Thiên Chúa.",
+        "direction": "down",
+        "row": 1,
+        "col": 5,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "NOLE",
+        "clue": "Thân phận lao dịch khốn khổ, bị tước đoạt tự do mà dân Israel đã phải gánh chịu trên đất khách.",
+        "explanation": "Tiếng kêu than thống khổ của kiếp nô lệ đã thấu đến tai Thiên Chúa, khiến Ngài nhớ lại giao ước với tổ phụ.",
+        "direction": "down",
+        "row": 3,
+        "col": 7,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "PHARAO",
+        "clue": "Tước hiệu của vị vua tàn bạo đã ra lệnh đàn áp và bắt dân Chúa làm khổ sai cật lực.",
+        "explanation": "Pharaô Ai Cập lo sợ dân Israel sinh sôi nảy nở sẽ trở thành mối đe dọa an ninh, nên đã ra sức hành hạ họ.",
+        "direction": "across",
+        "row": 4,
+        "col": 2,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "HOSINH",
+        "clue": "Nghề nghiệp của hai bà Síp-ra và Pu-a, những người kính sợ Thiên Chúa hơn là sợ lệnh vua.",
+        "explanation": "Các bà đỡ (hộ sinh) người Híp-ri đã từ chối giết các bé trai vì họ kính sợ Thiên Chúa Hằng Sống.",
+        "direction": "down",
+        "row": 4,
+        "col": 3,
+        "num": 5,
+        "id": "5-down"
+      },
+      {
+        "answer": "GACH",
+        "clue": "Vật liệu xây dựng mà dân lao dịch phải cực nhọc nhào nặn bùn đất dưới đòn roi để xây các thành.",
+        "explanation": "Người Israel phải chịu đắng cay làm gạch, trộn bùn thao tác dưới thời tiết khắc nghiệt để xây kho tàng cho vua.",
+        "direction": "across",
+        "row": 9,
+        "col": 0,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 102,
+    "theme": "XH 2: Môsê Chào Đời",
+    "gridSize": {
+      "rows": 9,
+      "cols": 8
+    },
+    "words": [
+      {
+        "answer": "MIRIAM",
+        "clue": "Người chị gái dũng cảm núp từ xa để theo dõi chiếc nôi trôi dạt và khôn ngoan lên tiếng gọi nhũ mẫu.",
+        "explanation": "Lời gợi ý tinh tế của Mir-iam đã giúp chính mẹ đẻ của Môsê được quyền bồng bế và nuôi nấng cậu công khai.",
+        "direction": "down",
+        "row": 0,
+        "col": 7,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "MOSE",
+        "clue": "Tên của cậu bé được cứu khỏi nước, sau này trở thành vị lãnh tụ vĩ đại cất bước dẫn dắt dân Chúa.",
+        "explanation": "Tên Môsê theo tiếng Híp-ri có âm vang nghĩa là \"vớt ra khỏi nước\", báo trước sứ mạng cứu dân qua Biển Đỏ.",
+        "direction": "down",
+        "row": 3,
+        "col": 1,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "THUNG",
+        "clue": "Chiếc nôi tạm bợ được quét hắc ín dán nhựa chai gài người mẹ thả trôi trên dòng sông lách sậy.",
+        "explanation": "Chiếc thúng cói chứa đựng Môsê tựa như con tàu Nôê thu nhỏ, mang chở sự sống vượt qua làn nước tử thần.",
+        "direction": "down",
+        "row": 3,
+        "col": 5,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "CONGCHUA",
+        "clue": "Người phụ nữ hoàng tộc xuống tắm sông và chạnh lòng thương nhặt đứa bé đang khóc khàn cổ đem về nuôi.",
+        "explanation": "Chính con gái của Pharaô, kẻ thù của Israel, lại là người bảo bọc và nuôi nấng người sẽ lật đổ đế chế.",
+        "direction": "across",
+        "row": 4,
+        "col": 0,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "GIENG",
+        "clue": "Nơi Môsê dừng chân múc nước khi chạy trốn sang Ma-đi-an và ra tay nghĩa hiệp bênh vực bảy cô gái.",
+        "explanation": "Bên giếng nước, Môsê đã giúp đỡ các con gái của tư tế Gít-rô đánh đuổi bọn chăn chiên hung hăng.",
+        "direction": "down",
+        "row": 4,
+        "col": 3,
+        "num": 5,
+        "id": "5-down"
+      }
+    ]
+  },
+  {
     "id": 11,
-    "theme": "Mau Nhiem Giang Sinh",
+    "theme": "Mầu Nhiệm Giáng Sinh",
     "gridSize": {
       "rows": 10,
       "cols": 10
@@ -741,7 +871,7 @@
   },
   {
     "id": 12,
-    "theme": "Bai Giang Tren Nui",
+    "theme": "Bài Giảng Trên Núi",
     "gridSize": {
       "rows": 10,
       "cols": 12
@@ -811,7 +941,7 @@
   },
   {
     "id": 13,
-    "theme": "Mau Nhiem Ba Ngoi",
+    "theme": "Mầu Nhiệm Ba Ngôi",
     "gridSize": {
       "rows": 11,
       "cols": 12
@@ -881,7 +1011,7 @@
   },
   {
     "id": 14,
-    "theme": "Nam Phung Vu",
+    "theme": "Năm Phụng Vụ",
     "gridSize": {
       "rows": 12,
       "cols": 14
@@ -951,7 +1081,7 @@
   },
   {
     "id": 15,
-    "theme": "Doi Song Duc Tin",
+    "theme": "Đời Sống Đức Tin",
     "gridSize": {
       "rows": 10,
       "cols": 13
@@ -1020,8 +1150,128 @@
     ]
   },
   {
+    "id": 103,
+    "theme": "XH 3: Bụi Gai Bốc Lửa",
+    "gridSize": {
+      "rows": 7,
+      "cols": 8
+    },
+    "words": [
+      {
+        "answer": "CHAY",
+        "clue": "Hiện tượng ngọn lửa hừng hực bao trùm lấy bụi cây giữa sa mạc khiến Môsê tò mò tiến lại gần xem.",
+        "explanation": "Ánh lửa thu hút sự chú ý của Môsê, từ đó Thiên Chúa cất tiếng gọi ông thực hiện sứ mạng giải phóng dân tộc.",
+        "direction": "down",
+        "row": 0,
+        "col": 7,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "BUIGAI",
+        "clue": "Bụi cây kỳ lạ bốc cháy rừng rực trên núi nhưng ngọn lửa không hề thiêu rụi cành lá.",
+        "explanation": "Bụi gai cháy không tàn là hình ảnh biểu trưng cho sự hiện diện thiêng liêng và quyền năng không giới hạn của Thiên Chúa.",
+        "direction": "down",
+        "row": 1,
+        "col": 2,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "THANH",
+        "clue": "Mảnh đất linh thiêng dưới chân Môsê khiến ông phải nghe lệnh cởi bỏ ngay lập tức giày dép ra.",
+        "explanation": "Cởi dép là cử chỉ tôn kính tuyệt đối khi con người phàm trần được đứng trước sự hiện diện thánh thiện của Thiên Chúa.",
+        "direction": "down",
+        "row": 1,
+        "col": 5,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "DUCCHUA",
+        "clue": "Danh xưng uy lực mà Thiên Chúa tự xưng: \"Ta là Đấng Hiện Hữu\", nguồn gốc của mọi sự sống.",
+        "explanation": "Danh xưng YHWH (Gia-vê) khẳng định Thiên Chúa là Đấng tự hữu, hằng hữu và luôn hiện diện bên cạnh dân Ngài.",
+        "direction": "across",
+        "row": 2,
+        "col": 1,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "THAO",
+        "clue": "Hành động cởi mở đôi dép dưới chân để tỏ lòng tôn vinh Nhan Thánh Thiên Chúa đang ngự trị.",
+        "explanation": "Bỏ dép chăng rễ vào đất mẹ là dấu chỉ con người ý thức thân phận bụi tro trước uy linh cao thẳm của Đấng Tối Cao.",
+        "direction": "across",
+        "row": 5,
+        "col": 0,
+        "num": 5,
+        "id": "5-across"
+      }
+    ]
+  },
+  {
+    "id": 104,
+    "theme": "XH 4: Chúa Ban Quyền Năng",
+    "gridSize": {
+      "rows": 8,
+      "cols": 8
+    },
+    "words": [
+      {
+        "answer": "RAN",
+        "clue": "Loài bò sát đáng sợ mà cây gậy của Môsê hóa thành khi vứt xuống đất, khiến ông hốt hoảng bỏ chạy.",
+        "explanation": "Phép lạ hóa rắn giúp Môsê có thêm niềm tin vững vàng để thuyết phục dân Israel và đối đầu với các pháp sư Ai Cập.",
+        "direction": "down",
+        "row": 0,
+        "col": 3,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "AHARON",
+        "clue": "Người anh trai ruột thịt có tài ăn nói lưu loát được Chúa cắt cử làm người phát ngôn thay cho Môsê.",
+        "explanation": "Sự xuất hiện của Aharon bù đắp cho điểm yếu ăn nói ấp úng của Môsê, thể hiện Chúa luôn ban ơn trợ giúp người Ngài chọn.",
+        "direction": "down",
+        "row": 1,
+        "col": 1,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "KHEP",
+        "clue": "Động tác khép miệng, mở miệng đều do quyền năng tạo hóa của Thiên Chúa, Ngài phán hỏi Môsê như thế.",
+        "explanation": "Khi Môsê than phiền mình có tật nói ngọng, Chúa nhắc nhở Ngài mới là Đấng ban cho con người mọi giác quan.",
+        "direction": "down",
+        "row": 1,
+        "col": 5,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "TINHIEU",
+        "clue": "Ba phép lạ lớn được Chúa chỉ dạy để Môsê làm ra trước mặt toàn dân Israel nhằm chứng minh sứ mạng.",
+        "explanation": "Những dấu lạ (tín hiệu) này là bằng cớ không thể chối cãi để dân Israel tin rằng Thiên Chúa của cha ông đã thực sự hiện ra.",
+        "direction": "down",
+        "row": 1,
+        "col": 7,
+        "num": 4,
+        "id": "4-down"
+      },
+      {
+        "answer": "PHONGHUI",
+        "clue": "Căn bệnh đáng sợ nổi trắng toát trên bàn tay Môsê khi ông thọc tay vào ngực theo lệnh Thiên Chúa.",
+        "explanation": "Dấu lạ bàn tay bị phong hủi rồi lại lành lặn chứng tỏ quyền năng chữa lành và tha bổng sinh mạng của Thiên Chúa.",
+        "direction": "across",
+        "row": 2,
+        "col": 0,
+        "num": 5,
+        "id": "5-across"
+      }
+    ]
+  },
+  {
     "id": 16,
-    "theme": "Kinh Thanh Tan Uoc",
+    "theme": "Kinh Thánh Tân Ước",
     "gridSize": {
       "rows": 10,
       "cols": 9
@@ -1081,7 +1331,7 @@
   },
   {
     "id": 17,
-    "theme": "Kinh Thanh Cuu Uoc",
+    "theme": "Kinh Thánh Cựu Ước",
     "gridSize": {
       "rows": 9,
       "cols": 14
@@ -1151,7 +1401,7 @@
   },
   {
     "id": 18,
-    "theme": "Mau Nhiem Cuu Do",
+    "theme": "Mầu Nhiệm Cứu Độ",
     "gridSize": {
       "rows": 15,
       "cols": 12
@@ -1221,7 +1471,7 @@
   },
   {
     "id": 19,
-    "theme": "Vat Dung Phung Vu",
+    "theme": "Vật Dụng Phụng Vụ",
     "gridSize": {
       "rows": 12,
       "cols": 13
@@ -1291,7 +1541,7 @@
   },
   {
     "id": 20,
-    "theme": "Tuoc Hieu Chua Giesu",
+    "theme": "Tước Hiệu Chúa Giêsu",
     "gridSize": {
       "rows": 13,
       "cols": 8
@@ -1354,6 +1604,146 @@
         "direction": "down",
         "row": 6,
         "col": 4,
+        "num": 6,
+        "id": "6-down"
+      }
+    ]
+  },
+  {
+    "id": 105,
+    "theme": "XH 5: Pharaô Bắt Nạt",
+    "gridSize": {
+      "rows": 8,
+      "cols": 10
+    },
+    "words": [
+      {
+        "answer": "PHARAO",
+        "clue": "Vị vua kiêu ngạo của Ai Cập đã ngang ngược thách thức: \"Đức Chúa là ai mà ta phải nghe lời?\"",
+        "explanation": "Sự cứng lòng của Pharaô là đại diện cho sự mù quáng của quyền lực trần thế tước đoạt từ chối quyền tể trị của Thiên Chúa.",
+        "direction": "down",
+        "row": 0,
+        "col": 1,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "TUCHOI",
+        "clue": "Quyết định phũ phàng của vua Ai Cập khi không chịu phóng thích dân Israel đi tế lễ trong sa mạc.",
+        "explanation": "Quyết định từ chối này đã châm ngòi cho chuỗi mười tai ương kinh hoàng giáng trút xuống đất nước Ai Cập.",
+        "direction": "down",
+        "row": 1,
+        "col": 4,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "CAIQUAN",
+        "clue": "Viên chức quản đốc đánh đập những người đốc công Híp-ri vì họ không nộp đúng mức chỉ tiêu quy định.",
+        "explanation": "Sự áp bức của các viên cai quản phản ánh hệ thống nô lệ tàn độc tước đoạt nhân phẩm trọn vẹn của con người.",
+        "direction": "across",
+        "row": 2,
+        "col": 0,
+        "num": 3,
+        "id": "3-across"
+      },
+      {
+        "answer": "NANGNE",
+        "clue": "Trách nhiệm lao dịch thêm phần chồng chất khắc nghiệt giáng xuống đầu dân chúng sau khi Môsê ra mặt.",
+        "explanation": "Gánh nặng gia tăng khiến dân chúng ban đầu quay sang oán trách Môsê, đẩy ông vào một tình thế tuyệt vọng kêu cầu Chúa.",
+        "direction": "down",
+        "row": 2,
+        "col": 6,
+        "num": 4,
+        "id": "4-down"
+      },
+      {
+        "answer": "ROM",
+        "clue": "Vật liệu rơm rạ trộn đất mà bọn cai ngục không chịu cung cấp nữa, bắt dân phải tự đi nhặt lấy.",
+        "explanation": "Việc bắt dân tự đi kiếm rơm mà vẫn phải nộp đủ ngạch gạch là hình phạt tàn nhẫn nhằm dập tắt ý chí nổi dậy của họ.",
+        "direction": "across",
+        "row": 5,
+        "col": 0,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "GACH",
+        "clue": "Khối đất sét nung hình chữ nhật mà dân Israel phải khổ nhọc đóng khuôn mỗi ngày không thiếu một viên.",
+        "explanation": "Gạch là biểu tượng của sự lao động trĩu nặng mồ hôi nước mắt mà đế chế ngoại bang đè bẹp lên vai dân Chúa.",
+        "direction": "across",
+        "row": 5,
+        "col": 6,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 106,
+    "theme": "XH 6: Giao Ước Được Nhắc Lại",
+    "gridSize": {
+      "rows": 10,
+      "cols": 11
+    },
+    "words": [
+      {
+        "answer": "GIAOUOC",
+        "clue": "Lời thề hứa bền chặt mà Thiên Chúa đã lập ra để ban cho dân Đất Hứa làm gia nghiệp vĩnh viễn.",
+        "explanation": "Giao ước là văn bản tình yêu vô điều kiện: Ta sẽ nhận các ngươi làm dân Ta, và Ta sẽ là Thiên Chúa của các ngươi.",
+        "direction": "down",
+        "row": 0,
+        "col": 4,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "GIACOP",
+        "clue": "Vị tổ phụ mang tên mới là Israel, cha của mười hai chi tộc đang rên xiết dưới gánh nặng nô lệ.",
+        "explanation": "Danh xưng con cái Israel gợi lên niềm tự hào dân tộc và quyền lợi chính đáng thiêng liêng bảo vệ căn tính của họ trước Ai Cập.",
+        "direction": "down",
+        "row": 0,
+        "col": 7,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "GIAVE",
+        "clue": "Danh xưng thiêng liêng YHWH mà Thiên Chúa tuyên bố đã chưa từng tiết lộ cho các tổ phụ xưa kia.",
+        "explanation": "Danh Gia-vê mang ý nghĩa sự hiện diện giải phóng chủ động. Ngài không chỉ là Chúa tạo dựng mà còn là Chúa Cứu Chuộc.",
+        "direction": "down",
+        "row": 0,
+        "col": 9,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "ABRAHAM",
+        "clue": "Vị tổ phụ đầu tiên của đức tin được Chúa nhắc đến để khẳng định Ngài sẽ nhớ mãi giao ước lâu đời.",
+        "explanation": "Thiên Chúa của Abraham, Ixaac, Giacop bảo chứng rằng lịch sử gian truân của họ nằm gọn trong bàn tay yêu thương kế hoạch của Ngài.",
+        "direction": "across",
+        "row": 2,
+        "col": 4,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "IXAAC",
+        "clue": "Người con trai của lời hứa, được nhắc nhở tiếp nối dòng dõi được Thiên Chúa ban tặng đất hứa bao la.",
+        "explanation": "Việc nhắc tên Ixaac nối kết lời thề với các thế hệ quá khứ để làm điểm tựa vững chắc cho khát vọng tự do của hiện tại.",
+        "direction": "across",
+        "row": 6,
+        "col": 0,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "XUAT",
+        "clue": "Hành động đưa dân đi ra khỏi đất Ai Cập tăm tối bằng một cánh tay giơ cao uy quyền tuyệt đối.",
+        "explanation": "Cuộc Xuất (Hành) không chỉ là di dân vật lý mà là một hành trình thanh tẩy tâm linh để trở thành một dân thánh hiến.",
+        "direction": "down",
+        "row": 6,
+        "col": 1,
         "num": 6,
         "id": "6-down"
       }
@@ -1710,8 +2100,128 @@
     ]
   },
   {
+    "id": 107,
+    "theme": "XH 7: Gậy Rắn & Sông Máu",
+    "gridSize": {
+      "rows": 7,
+      "cols": 7
+    },
+    "words": [
+      {
+        "answer": "GAY",
+        "clue": "Chiếc gậy chăn chiên của Aharon được ném xuống điện các quan liền biến ngay thành con bò sát lớn.",
+        "explanation": "Chiếc gậy của Aharon đã nuốt chửng những chiếc gậy của các pháp sư Ai Cập, minh chứng quyền năng Thiên Chúa áp đảo mọi phép thuật.",
+        "direction": "down",
+        "row": 0,
+        "col": 6,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "AHARON",
+        "clue": "Người thực hiện việc vung gậy đập xuống mặt nước hồ để giáng đòn tai ương đầu tiên cho Ai Cập.",
+        "explanation": "Aharon thi hành lệnh của Môsê, báo hiệu sự khởi đầu của một cuộc chiến khốc liệt giữa Thiên Chúa và các thần linh Ai Cập giả tạo.",
+        "direction": "down",
+        "row": 1,
+        "col": 1,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "PHUTHUY",
+        "clue": "Những kẻ dùng ma thuật tà đạo của Ai Cập cũng bắt chước làm cho nước hóa máu đổi màu bằng bùa chú.",
+        "explanation": "Dù các phù thủy làm được y hệt, nhưng họ không thể giải trừ được tai ương, làm cho đất nước Ai Cập càng thêm khốn đốn.",
+        "direction": "across",
+        "row": 2,
+        "col": 0,
+        "num": 3,
+        "id": "3-across"
+      },
+      {
+        "answer": "RAN",
+        "clue": "Sinh vật bò sát trườn trên nền gạch do chiếc gậy rớt xuống biến thành trước mặt triều đình Pharaô.",
+        "explanation": "Rắn vốn là biểu tượng sức mạnh vương quyền của Pharaô, việc gậy Aharon nuốt chửng rắn Ai Cập là lời thách thức vương đạo.",
+        "direction": "across",
+        "row": 4,
+        "col": 1,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "NIN",
+        "clue": "Dòng sông vĩ đại tự hào của Ai Cập bỗng chốc biến đổi mùi hôi thối vì toàn bộ nước đã thành máu.",
+        "explanation": "Sông Nin bị hóa máu trực diện đánh đổ thần linh bảo hộ của người Ai Cập, cho thấy nguồn sống của họ phụ thuộc vào Thiên Chúa.",
+        "direction": "across",
+        "row": 6,
+        "col": 1,
+        "num": 5,
+        "id": "5-across"
+      }
+    ]
+  },
+  {
+    "id": 108,
+    "theme": "XH 8: Ếch, Muỗi, Ruồi",
+    "gridSize": {
+      "rows": 7,
+      "cols": 7
+    },
+    "words": [
+      {
+        "answer": "MUOI",
+        "clue": "Tai ương thứ ba đầy ngứa ngáy do cát bụi biến thành, khiến đám phù thủy Ai Cập bó tay không gọi ra được.",
+        "explanation": "Triệu hồi muỗi từ bụi đất phơi lộ sự bất lực của tà thuật. Các pháp sư buột miệng thú nhận: \"Đây là ngón tay của Thiên Chúa!\"",
+        "direction": "down",
+        "row": 0,
+        "col": 2,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "GOSEN",
+        "clue": "Vùng đất canh tác màu mỡ nơi dân Israel cư ngụ, hoàn toàn bình an vô sự vắng bóng lũ ruồi nhặng.",
+        "explanation": "Sự phân rẽ rạch ròi tại vùng Gô-sen cho thấy quyền kiểm soát không gian tuyệt đối của Chúa bảo vệ lãnh địa dân Ngài chọn.",
+        "direction": "down",
+        "row": 2,
+        "col": 4,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "TAIHOA",
+        "clue": "Chuỗi trừng phạt giáng xuống kiêu hãnh của vua Ai Cập ngày một tăng cấp nghiêm trọng về mức độ thiệt hại.",
+        "explanation": "Các tai họa tự nhiên nối tiếp nhau là lời cảnh báo đanh thép mời gọi ăn năn, nhưng vua Pharaô lại liên tục trở mặt lật lọng.",
+        "direction": "across",
+        "row": 3,
+        "col": 0,
+        "num": 3,
+        "id": "3-across"
+      },
+      {
+        "answer": "ECH",
+        "clue": "Loài lưỡng cư nhầy nhụa lúc nhúc bò lên bâu đầy giường chiếu và chui vào tận lò nướng của người Ai Cập.",
+        "explanation": "Ếch nhái là tai ương thứ hai. Cả nước tràn ngập xác ếch thối rữa, chứng tỏ các nữ thần tự nhiên của Ai Cập đã thất bại thảm hại.",
+        "direction": "across",
+        "row": 5,
+        "col": 4,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "NAN",
+        "clue": "Sự khốn đốn tràn lan đau khổ mà người Ai Cập hằng ngày hằng giờ phải chịu đựng vì án phạt từ trời.",
+        "explanation": "Kiếp nạn tồi tệ giáng xuống không chỉ phá vỡ sự no ấm vật chất mà còn tàn phá niềm tin vào thần minh bách chiến bách thắng của họ.",
+        "direction": "across",
+        "row": 6,
+        "col": 2,
+        "num": 5,
+        "id": "5-across"
+      }
+    ]
+  },
+  {
     "id": 26,
-    "theme": "Vua Davit",
+    "theme": "Vua Đavít",
     "gridSize": {
       "rows": 6,
       "cols": 9
@@ -1771,7 +2281,7 @@
   },
   {
     "id": 27,
-    "theme": "Hanh Trinh Phaolo",
+    "theme": "Hành Trình Phaolô",
     "gridSize": {
       "rows": 7,
       "cols": 8
@@ -1831,7 +2341,7 @@
   },
   {
     "id": 28,
-    "theme": "Cong Vu Tong Do",
+    "theme": "Công Vụ Tông Đồ",
     "gridSize": {
       "rows": 11,
       "cols": 9
@@ -1901,7 +2411,7 @@
   },
   {
     "id": 29,
-    "theme": "Kinh Thanh Loi Chua",
+    "theme": "Kinh Thánh Lời Chúa",
     "gridSize": {
       "rows": 9,
       "cols": 9
@@ -1951,7 +2461,7 @@
   },
   {
     "id": 30,
-    "theme": "Doi Song Phung Vu",
+    "theme": "Đời Sống Phụng Vụ",
     "gridSize": {
       "rows": 12,
       "cols": 9
@@ -2020,8 +2530,128 @@
     ]
   },
   {
+    "id": 109,
+    "theme": "XH 9: Dịch Súc Vật & Mưa Đá",
+    "gridSize": {
+      "rows": 9,
+      "cols": 7
+    },
+    "words": [
+      {
+        "answer": "MUADA",
+        "clue": "Trận mưa kinh hoàng chưa từng thấy trong lịch sử mang theo sấm sét thiêu rụi mọi thứ ngoài đồng trống.",
+        "explanation": "Cơn mưa đá rực lửa giáng xuống càn quét thảm khốc cây cối và súc vật, đánh gục hy vọng vào các thần linh thời tiết Ai Cập.",
+        "direction": "down",
+        "row": 0,
+        "col": 3,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "UNGNHOT",
+        "clue": "Những nốt mụn mủ ghê tởm sưng tấy lở loét nổi lên khắp mình mẩy người Ai Cập vì tai ương thứ sáu.",
+        "explanation": "Môsê ném tro bụi lên trời, bụi hóa thành ung nhọt. Dấu lạ này tấn công trực tiếp vào thân thể con người Ai Cập.",
+        "direction": "down",
+        "row": 2,
+        "col": 1,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "ONGDICH",
+        "clue": "Tai ương thứ năm làm chết sạch toàn bộ ngựa, lừa, lạc đà và gia súc của người Ai Cập ngoài đồng.",
+        "explanation": "Dịch bệnh tàn phá nguồn lực nông nghiệp và quân sự của Ai Cập, phơi bày sự mong manh của đế quốc kiêu hãnh.",
+        "direction": "across",
+        "row": 3,
+        "col": 0,
+        "num": 3,
+        "id": "3-across"
+      },
+      {
+        "answer": "CAYCO",
+        "clue": "Thực vật rách nát tả tơi vì bị những cục mưa cứng ngắc rớt xuống đập nát không thương tiếc.",
+        "explanation": "Mưa đá không chỉ giết người và vật mà còn tàn phá thảm thực vật, giáng đòn chí mạng vào nguồn lương thực của vua Pharaô.",
+        "direction": "down",
+        "row": 3,
+        "col": 5,
+        "num": 4,
+        "id": "4-down"
+      },
+      {
+        "answer": "TRO",
+        "clue": "Thứ bụi lấm lem Môsê lấy từ lò luyện được ném tung lên để gây ra căn bệnh mụn nhọt ngứa ngáy.",
+        "explanation": "Tro tàn bay trong gió, tưởng chừng vô hại nhưng dưới quyền năng Thiên Chúa lại trở thành mầm mống mụn nhọt ác tính.",
+        "direction": "across",
+        "row": 8,
+        "col": 1,
+        "num": 5,
+        "id": "5-across"
+      }
+    ]
+  },
+  {
+    "id": 110,
+    "theme": "XH 10: Châu Chấu Và Bóng Tối",
+    "gridSize": {
+      "rows": 6,
+      "cols": 8
+    },
+    "words": [
+      {
+        "answer": "SAMHOI",
+        "clue": "Hành động giả tạo của vua Ai Cập khi van xin Môsê tha thứ mỗi khi bị tai họa ép uổng quá mức.",
+        "explanation": "Sự ăn năn nông cạn chỉ cất lên khi gặp khốn cùng, sau khi tai họa đi qua thì Pharaô lại tiếp tục cứng lòng như cũ.",
+        "direction": "down",
+        "row": 0,
+        "col": 2,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "PHA",
+        "clue": "Hành động phá hoại tàn bạo của đám côn trùng dọn sạch sẽ cỏ cây trái trăng mà mưa đá chưa tàn phá hết.",
+        "explanation": "Sự phá hủy triệt để này cho thấy Thiên Chúa có thể dùng những sinh vật nhỏ yếu nhất để bẻ gãy mọi thành tựu kinh tế của Pharaô.",
+        "direction": "down",
+        "row": 0,
+        "col": 5,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "MUHET",
+        "clue": "Trạng thái tối tăm cản trở hoàn toàn tầm nhìn khiến người Ai Cập không ai dám rời khỏi chỗ mình ba ngày.",
+        "explanation": "Bóng tối dày đặc dường như có thể sờ thấy được mang đến sự tê liệt hoàn toàn cho đế chế từng một thời tự cao tự đại.",
+        "direction": "down",
+        "row": 0,
+        "col": 7,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "CHAUCHAU",
+        "clue": "Tai ương thứ tám kinh hoàng gồm hàng triệu côn trùng bay đến ăn sạch những gì mưa đá còn để sót lại.",
+        "explanation": "Bầy châu chấu đen kịt bầu trời ăn trụi mầm sống cuối cùng, chứng minh thiên nhiên hoàn toàn tùng phục Đức Chúa.",
+        "direction": "across",
+        "row": 1,
+        "col": 0,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "GOSEN",
+        "clue": "Vùng đệm an toàn nơi dân Chúa sinh sống, ngập tràn ánh sáng dù phần còn lại của Ai Cập tối tăm.",
+        "explanation": "Ánh sáng chiếu soi trên nhà người Israel giữa lúc bóng tối bủa vây là điềm báo Chúa cứu rỗi những kẻ tin thờ Ngài.",
+        "direction": "across",
+        "row": 4,
+        "col": 1,
+        "num": 5,
+        "id": "5-across"
+      }
+    ]
+  },
+  {
     "id": 31,
-    "theme": "Luan Ly Xa Hoi",
+    "theme": "Luân Lý Xã Hội",
     "gridSize": {
       "rows": 8,
       "cols": 13
@@ -2091,7 +2721,7 @@
   },
   {
     "id": 32,
-    "theme": "Nuoc Thien Chua",
+    "theme": "Nước Thiên Chúa",
     "gridSize": {
       "rows": 11,
       "cols": 11
@@ -2151,7 +2781,7 @@
   },
   {
     "id": 33,
-    "theme": "Tin Dieu Duc Me",
+    "theme": "Tín Điều Đức Mẹ",
     "gridSize": {
       "rows": 13,
       "cols": 11
@@ -2221,7 +2851,7 @@
   },
   {
     "id": 34,
-    "theme": "Nguon Mac Khai",
+    "theme": "Nguồn Mặc Khải",
     "gridSize": {
       "rows": 14,
       "cols": 11
@@ -2291,7 +2921,7 @@
   },
   {
     "id": 35,
-    "theme": "Chua Giesu Giang Day",
+    "theme": "Chúa Giêsu Giảng Dạy",
     "gridSize": {
       "rows": 8,
       "cols": 7
@@ -2350,8 +2980,148 @@
     ]
   },
   {
+    "id": 111,
+    "theme": "XH 11: Báo Tai Họa Cuối",
+    "gridSize": {
+      "rows": 9,
+      "cols": 9
+    },
+    "words": [
+      {
+        "answer": "TUTHAN",
+        "clue": "Sứ giả vô hình rảo khắp xóm làng Ai Cập gieo rắc sự mạng chung mang màu tang tóc.",
+        "explanation": "Thiên sứ tử thần bước qua các cửa không có vết máu, tước đoạt sinh mạng, khẳng định sự yếu đuối của con người trước thần linh.",
+        "direction": "down",
+        "row": 0,
+        "col": 1,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "BAC",
+        "clue": "Cùng với vàng, đây là thức trang sức quý giá mà dân Israel được dặn dò phải xin người Ai Cập.",
+        "explanation": "Việc lấy vàng bạc của người Ai Cập được coi là phần tiền công bồi thường chính đáng sau bao năm dân Chúa phải chịu lao dịch.",
+        "direction": "down",
+        "row": 1,
+        "col": 6,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "KHOCLOC",
+        "clue": "Tiếng rên rỉ than mếu đau thương dậy trời từ mọi mái nhà Ai Cập vì tang tóc bất thần giáng xuống.",
+        "explanation": "Tiếng khóc ai oán vì mất con của người Ai Cập là sự đáp trả công bình cho tiếng kêu cứu của người Híp-ri bao năm qua.",
+        "direction": "across",
+        "row": 3,
+        "col": 0,
+        "num": 3,
+        "id": "3-across"
+      },
+      {
+        "answer": "CONDAU",
+        "clue": "Bất cứ sinh linh nào đẻ ra trước tiên bằng xác phàm trong xứ Ai Cập đều sẽ phải chịu chung cái chết.",
+        "explanation": "Tai ương thứ mười, cái chết của các con đầu lòng, là đòn trừng phạt tối hậu giáng xuống sự ngoan cố vô phương cứu chữa của Pharaô.",
+        "direction": "down",
+        "row": 3,
+        "col": 3,
+        "num": 4,
+        "id": "4-down"
+      },
+      {
+        "answer": "NUADEM",
+        "clue": "Thời điểm đen tối tĩnh mịch vắng bóng người mà Đức Chúa phán sẽ can thiệp để giáng đòn vào Ai Cập.",
+        "explanation": "Nửa đêm tượng trưng cho giờ phút bất ngờ nhất, thình lình gieo rắc kinh hoàng cho toàn bộ đế quốc tàn bạo của Pharaô.",
+        "direction": "across",
+        "row": 5,
+        "col": 3,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "VANG",
+        "clue": "Kim loại quý giá lấp lánh mà dân Israel mang theo như một chiến lợi phẩm rời khỏi đất nô lệ.",
+        "explanation": "Mang theo vàng bạc Ai Cập, dân Israel không ra đi với đôi bàn tay trắng, mà như những chiến binh ca khúc khải hoàn.",
+        "direction": "across",
+        "row": 7,
+        "col": 2,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 112,
+    "theme": "XH 12: Lễ Vượt Qua",
+    "gridSize": {
+      "rows": 12,
+      "cols": 8
+    },
+    "words": [
+      {
+        "answer": "VUOTQUA",
+        "clue": "Danh từ chung thiêng liêng để chỉ về mầu nhiệm đêm sát tế chiên và giải cứu dân chạy thoát.",
+        "explanation": "Lễ Vượt Qua (Pesach) trở thành nền tảng của toàn bộ phụng vụ và thần học về cứu độ của người Do Thái và Kitô giáo.",
+        "direction": "down",
+        "row": 0,
+        "col": 5,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "MAU",
+        "clue": "Chất lỏng màu đỏ thẫm được cẩn thận lấy cành hương thảo nhúng bôi lên khung cửa nhà dân Híp-ri.",
+        "explanation": "Vết máu trên xà cửa là dấu hiệu cứu rỗi để thần chết \"vượt qua\" ngôi nhà đó mà không giáng đòn sát hại.",
+        "direction": "across",
+        "row": 1,
+        "col": 3,
+        "num": 2,
+        "id": "2-across"
+      },
+      {
+        "answer": "BANHKHO",
+        "clue": "Loại lương thực nướng vội bập bùng không có men nở, được dân Chúa mang theo làm hành trang gấp rút.",
+        "explanation": "Ăn bánh không men nhắc nhở về sự rời đi vội vã trong đêm, không đủ thời gian chờ bột nở dâng lên.",
+        "direction": "down",
+        "row": 5,
+        "col": 2,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "CHIEN",
+        "clue": "Con vật vô tì tích một năm tuổi mà mỗi gia đình Híp-ri phải bắt nhốt để sát tế vào lúc chập choạng tối.",
+        "explanation": "Con chiên Vượt Qua là hình ảnh tiên báo vĩ đại nhất về Chúa Giêsu, \"Chiên Thiên Chúa\", dập tắt mọi oán thù và giải thoát nhân loại.",
+        "direction": "down",
+        "row": 5,
+        "col": 7,
+        "num": 4,
+        "id": "4-down"
+      },
+      {
+        "answer": "XUATHANH",
+        "clue": "Cuộc trỗi dậy ra đi tập thể rầm rộ vĩ đại của sáu trăm ngàn người đàn ông Israel vào ban đêm.",
+        "explanation": "Cuộc Xuất Hành vĩ đại đánh dấu sự ra đời của Israel với tư cách là một dân tộc độc lập được Đức Chúa tự tay giải phóng.",
+        "direction": "across",
+        "row": 6,
+        "col": 0,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "NUONG",
+        "clue": "Phương thức dọn món thịt chiên vào đêm vượt qua, tuyệt đối không được ăn sống hay luộc sôi.",
+        "explanation": "Thịt phải được nướng nguyên con trên lửa, cho thấy bữa ăn mang tính hiệp thông thiêng liêng rực lửa, sẵn sàng cho hành trình sa mạc.",
+        "direction": "across",
+        "row": 11,
+        "col": 0,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
     "id": 36,
-    "theme": "Phan Xet Cuoi Cung",
+    "theme": "Phán Xét Cuối Cùng",
     "gridSize": {
       "rows": 11,
       "cols": 9
@@ -2411,7 +3181,7 @@
   },
   {
     "id": 37,
-    "theme": "Cac Nhan Duc",
+    "theme": "Các Nhân Đức",
     "gridSize": {
       "rows": 10,
       "cols": 13
@@ -2481,7 +3251,7 @@
   },
   {
     "id": 38,
-    "theme": "Nhan Vat Cuu Uoc",
+    "theme": "Nhân Vật Cựu Ước",
     "gridSize": {
       "rows": 7,
       "cols": 9
@@ -2541,7 +3311,7 @@
   },
   {
     "id": 39,
-    "theme": "Bay Moi Toi Dau",
+    "theme": "Bảy Mối Tội Đầu",
     "gridSize": {
       "rows": 12,
       "cols": 9
@@ -2611,7 +3381,7 @@
   },
   {
     "id": 40,
-    "theme": "Loi Kinh Phung Vu",
+    "theme": "Lời Kinh Phụng Vụ",
     "gridSize": {
       "rows": 11,
       "cols": 12
@@ -2680,8 +3450,148 @@
     ]
   },
   {
+    "id": 113,
+    "theme": "XH 13: Dâng Con Đầu Lòng",
+    "gridSize": {
+      "rows": 9,
+      "cols": 7
+    },
+    "words": [
+      {
+        "answer": "COTLUA",
+        "clue": "Khối đỏ rực lung linh chiếu sáng uy nghi vạch trạm đi giữa sa mạc tăm tối lạnh lẽo vào ban đêm.",
+        "explanation": "Cột lửa soi sáng bước chân vào ban đêm, giúp dân Israel có thể tiến công không ngừng nghỉ, trốn khỏi sự truy đuổi của Pharaô.",
+        "direction": "down",
+        "row": 0,
+        "col": 2,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "COTMAY",
+        "clue": "Đám sương mù dày đặc kỳ diệu ngự phía trước để che bóng râm vạch đường đi ban ngày cho dân Chúa.",
+        "explanation": "Cột mây là biểu hiện của sự đồng hành an ủi của Thiên Chúa, xoa dịu cái nóng rát bỏng của sa mạc ban ngày.",
+        "direction": "down",
+        "row": 3,
+        "col": 4,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "DAULONG",
+        "clue": "Mọi con trai hay con đực sinh ra đầu tiên đều phải thánh hiến trọn vẹn dâng cho Đức Chúa.",
+        "explanation": "Luật thánh hiến con đầu lòng là cách Israel ghi nhớ muôn đời rằng sự sống của họ đã được Chúa cứu qua đêm ở Ai Cập.",
+        "direction": "across",
+        "row": 4,
+        "col": 0,
+        "num": 3,
+        "id": "3-across"
+      },
+      {
+        "answer": "DEM",
+        "clue": "Khung giờ tăm tối rợn ngợp giữa sa mạc nhưng dòng người vẫn băng băng tiến bước nhờ cột lửa chói lòa.",
+        "explanation": "Dù ban ngày nóng nực hay ban đêm rét buốt cản trở, sự hiện diện của Thiên Chúa là sự che chở toàn bích tuyệt đối.",
+        "direction": "down",
+        "row": 4,
+        "col": 0,
+        "num": 4,
+        "id": "4-down"
+      },
+      {
+        "answer": "GIUSE",
+        "clue": "Vị tổ phụ Ai Cập năm xưa, nay hài cốt của ông được Môsê vác theo để giữ đúng lời thề của đời trước.",
+        "explanation": "Mang theo hài cốt Giuse là minh chứng cho sự bất diệt của niềm hy vọng, thực hiện lời hứa trở về miền đất hứa ngàn đời.",
+        "direction": "down",
+        "row": 4,
+        "col": 6,
+        "num": 5,
+        "id": "5-down"
+      },
+      {
+        "answer": "NGAY",
+        "clue": "Thời điểm Thiên Chúa dùng đám mây dịu mát kỳ diệu che chở nắng nóng để dẫn dân hành trình.",
+        "explanation": "Biến cố ngày và đêm luân chuyển nhưng sự bảo bọc của Chúa chưa từng rút lại mảy may một giây.",
+        "direction": "across",
+        "row": 8,
+        "col": 1,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 114,
+    "theme": "XH 14: Vượt Biển Đỏ",
+    "gridSize": {
+      "rows": 7,
+      "cols": 8
+    },
+    "words": [
+      {
+        "answer": "GIODONG",
+        "clue": "Cơn gió mạnh mẽ phần phật được Chúa thổi tới suốt đêm lùa nước sang hai bên tạo thành lối đi.",
+        "explanation": "Thủy triều và gió được Thiên Chúa sử dụng như công cụ quyền năng trong tay vạch ra con đường tẩu thoát sống còn.",
+        "direction": "down",
+        "row": 0,
+        "col": 1,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "CHIM",
+        "clue": "Số phận đáng buồn và ngộp thở của các chiến binh Pharaô bị dòng nước trào dâng vùi lấp mãi mãi.",
+        "explanation": "Sự kiêu ngạo của binh đoàn Ai Cập đã phải trả giá khi vùng nước giải thoát Israel biến thành phán xét cho kẻ thù.",
+        "direction": "down",
+        "row": 0,
+        "col": 5,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "BIENDO",
+        "clue": "Khối nước vô tận sừng sững cản trở bước đường cùng, phía sau thì kỵ binh Ai Cập đang lốc cốc rượt theo sát.",
+        "explanation": "Biển Đỏ không còn là đường cùng, mà là sân khấu vĩ đại cho quyền năng giải cứu tuyệt đối của Thiên Chúa hiện ra.",
+        "direction": "down",
+        "row": 0,
+        "col": 7,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "BIENKHOI",
+        "clue": "Nơi chôn vùi dập dềnh hàng vạn quân tướng Ai Cập khi bức tường nước khổng lồ bất ngờ sụp xuống.",
+        "explanation": "Cái chết của quân đội Ai Cập trong biển cả làm trọn vẹn tiếng khóc giải thoát tự do, biểu tượng cho việc dìm chết tội lỗi bằng Phép Rửa.",
+        "direction": "across",
+        "row": 1,
+        "col": 0,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "COXE",
+        "clue": "Cỗ máy chiến tranh đáng sợ của quân Ai Cập bị mắc kẹt bùn lầy rít rát giữa lòng biển gầm gào.",
+        "explanation": "Chiến xa tự hào của đế chế Pharaô đâm ra vô dụng, trở thành nấm mồ chôn thân quân đội kiêu ngạo muốn làm trái ý Trời.",
+        "direction": "across",
+        "row": 4,
+        "col": 0,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "KHO",
+        "clue": "Trạng thái đất nền dưới đáy biển dường như đã bốc hơi nước để dòng người Híp-ri chạy qua trơn tru.",
+        "explanation": "Qua biển cả trên đất khô: hình ảnh tuyệt đẹp của sức mạnh Đức Tin, vượt qua cõi chết khô ráo bước tới miềm sống vinh quang.",
+        "direction": "across",
+        "row": 5,
+        "col": 5,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
     "id": 41,
-    "theme": "Bay On Thanh Than",
+    "theme": "Bảy Ơn Thánh Thần",
     "gridSize": {
       "rows": 8,
       "cols": 13
@@ -2751,7 +3661,7 @@
   },
   {
     "id": 42,
-    "theme": "Lich Su Giao Hoi",
+    "theme": "Lịch Sử Giáo Hội",
     "gridSize": {
       "rows": 12,
       "cols": 15
@@ -2821,7 +3731,7 @@
   },
   {
     "id": 43,
-    "theme": "Mua Vong Giang Sinh",
+    "theme": "Mùa Vọng Giáng Sinh",
     "gridSize": {
       "rows": 9,
       "cols": 12
@@ -2891,7 +3801,7 @@
   },
   {
     "id": 44,
-    "theme": "Hon Nhan Cong Giao",
+    "theme": "Hôn Nhân Công Giáo",
     "gridSize": {
       "rows": 15,
       "cols": 13
@@ -2961,7 +3871,7 @@
   },
   {
     "id": 45,
-    "theme": "Long Thuong Xot",
+    "theme": "Lòng Thương Xót",
     "gridSize": {
       "rows": 9,
       "cols": 9
@@ -3030,8 +3940,128 @@
     ]
   },
   {
+    "id": 115,
+    "theme": "XH 15: Bài Ca Bờ Biển",
+    "gridSize": {
+      "rows": 4,
+      "cols": 8
+    },
+    "words": [
+      {
+        "answer": "MARA",
+        "clue": "Vùng đất cằn cỗi chua xót có mạch nước cay đắng, nơi dân chúng bắt đầu bực dọc than trách Môsê.",
+        "explanation": "Ma-ra mang nghĩa cay đắng. Cuộc hành trình từ vực sâu Ai Cập vừa được giải thoát thì vấp ngay thử thách thiếu thốn vật chất đầu tiên.",
+        "direction": "down",
+        "row": 0,
+        "col": 1,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "DANG",
+        "clue": "Vị của dòng suối ban đầu khiến dân gắt gỏng thất vọng nhưng được Môsê ném khúc gỗ vào thì hóa ngọt.",
+        "explanation": "Nước đắng hóa ngọt nhờ khúc gỗ: giáo phụ thường coi gỗ này là hình bóng Thánh Giá Chúa Giêsu mang ngọt ngào cứu sống đắng cay tủi buồn.",
+        "direction": "down",
+        "row": 0,
+        "col": 4,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "BAICA",
+        "clue": "Tiếng hát chiến thắng kiêu hùng mà Môsê và toàn dân Israel đồng thanh cất lên ngợi ca Gia-vê giải cứu.",
+        "explanation": "Bài ca bên bờ Biển Đỏ là khúc hùng ca đầu tiên, ca ngợi quyền năng Thiên Chúa tiêu diệt ngựa chiến kỵ binh kiêu căng.",
+        "direction": "across",
+        "row": 1,
+        "col": 0,
+        "num": 3,
+        "id": "3-across"
+      },
+      {
+        "answer": "NUOC",
+        "clue": "Thức uống cấp bách mà dân Israel khát cháy cổ trong sa mạc, châm ngòi cho hàng loạt sự phẫn nộ vô trớn.",
+        "explanation": "Nước - biểu tượng của sự sinh tồn mỏng manh - thử thách lòng kiên nhẫn và tin phó tận cùng của đám đông quen được sắp đặt của Ai Cập.",
+        "direction": "across",
+        "row": 2,
+        "col": 4,
+        "num": 4,
+        "id": "4-across"
+      }
+    ]
+  },
+  {
+    "id": 116,
+    "theme": "XH 16: Manna Và Chim Cút",
+    "gridSize": {
+      "rows": 9,
+      "cols": 7
+    },
+    "words": [
+      {
+        "answer": "SAMAC",
+        "clue": "Cảnh quan nóng cháy khô ráo xám xịt thuộc địa phận Xin, nơi dân bọc ba mươi lăm bắt đầu gào lên đói lả.",
+        "explanation": "Trái trêu thay, sau biến cố Biển Đỏ giải thoát tột cùng, sa mạc ngay lập tức trở thành lò luyện cay nghiệt đe dọa sinh tồn và vạch mặt lòng dạ yếu kém.",
+        "direction": "down",
+        "row": 0,
+        "col": 0,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "SABAT",
+        "clue": "Ngày thứ bảy bắt buộc thánh hiến, nghiêm cấm tuyệt đối nhặt bánh Manna để gìn giữ lệnh nghỉ ngơi tĩnh tâm.",
+        "explanation": "Lệnh nghỉ ngày Sa-bát gắn liền kinh tế tự chủ với đời sống thiêng liêng: tin rằng dù không ra nhặt, Chúa Trời vẫn đong no gấp đôi thứ sáu.",
+        "direction": "down",
+        "row": 0,
+        "col": 6,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "CHIMCUT",
+        "clue": "Loài chim thịt no tròn xà xuống phủ ngập doanh trại vào buổi chiều tối giải quyết cơn thèm thịt ồn ào.",
+        "explanation": "Thiên Chúa đã đáp lại lời phàn nàn oán trách về bữa cơm ở sa mạc bằng việc cho đàn chim cút vần vũ đến dư dưa cho dân.",
+        "direction": "across",
+        "row": 4,
+        "col": 0,
+        "num": 3,
+        "id": "3-across"
+      },
+      {
+        "answer": "MANNA",
+        "clue": "Những vạt bụi li ti nhỏ bé mỏng manh như sương đọng rơi xuống như bánh tuyết vào buổi sáng mai rạng rỡ.",
+        "explanation": "Manna (này là cái gì?) là Bánh bởi Trời được Chúa đong đo hàng ngày, báo trước về Bí Tích Thánh Thể lương thực hằng sống trường tồn.",
+        "direction": "down",
+        "row": 4,
+        "col": 3,
+        "num": 4,
+        "id": "4-down"
+      },
+      {
+        "answer": "SUONG",
+        "clue": "Thứ hơi nước bốc lên buổi sáng sớm mát lạnh mà dân Israel nhầm tưởng chỉ là hiện tượng ẩm ướt ở sa mạc.",
+        "explanation": "Dưới lớp áo mỏng sương mai lại cất giấu lương thực diệu kỳ. Ân huệ Chúa thường đến vô hình và ẩn náu dưới những vẻ giản đơn tinh mờ.",
+        "direction": "across",
+        "row": 6,
+        "col": 0,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "DAO",
+        "clue": "Ngày trước ngày nghỉ lễ, Chúa khuyên Môsê dặn dân hãy trữ gấp đôi số lượng Manna để không vi phạm luật lệ.",
+        "explanation": "Bài học dự báo: ân huệ của Chúa Trời luôn luôn đổ xuống dạt dào dư dật đủ cho chúng ta thu nhặt dựa dẫm một cách no say và tin tưởng.",
+        "direction": "across",
+        "row": 8,
+        "col": 2,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
     "id": 46,
-    "theme": "Chua Giesu Chua Lanh",
+    "theme": "Chúa Giêsu Chữa Lành",
     "gridSize": {
       "rows": 9,
       "cols": 14
@@ -3101,7 +4131,7 @@
   },
   {
     "id": 47,
-    "theme": "Tam Tinh Phuc Am",
+    "theme": "Tâm Tình Phúc Âm",
     "gridSize": {
       "rows": 10,
       "cols": 14
@@ -3171,7 +4201,7 @@
   },
   {
     "id": 48,
-    "theme": "Bi Tich Thanh The",
+    "theme": "Bí Tích Thánh Thể",
     "gridSize": {
       "rows": 7,
       "cols": 15
@@ -3241,7 +4271,7 @@
   },
   {
     "id": 49,
-    "theme": "Su Mang Truyen Giao",
+    "theme": "Sứ Mạng Truyền Giáo",
     "gridSize": {
       "rows": 9,
       "cols": 10
@@ -3301,7 +4331,7 @@
   },
   {
     "id": 50,
-    "theme": "Bieu Tuong Kinh Thanh",
+    "theme": "Biểu Tượng Kinh Thánh",
     "gridSize": {
       "rows": 8,
       "cols": 12
@@ -3370,8 +4400,148 @@
     ]
   },
   {
+    "id": 117,
+    "theme": "XH 17: Nước Từ Tảng Đá",
+    "gridSize": {
+      "rows": 9,
+      "cols": 8
+    },
+    "words": [
+      {
+        "answer": "NUOC",
+        "clue": "Thứ chất lỏng mát mẻ quý giá trào ra từ vách đá cứng giúp toàn bộ dân chúng và súc vật được giải cơn khát cồn cào.",
+        "explanation": "Dòng nước tuôn từ đá khô hạn là món quà sự sống hoàn toàn miễn phí, xoa dịu cơn giận dữ oán trách tột độ của Israel.",
+        "direction": "down",
+        "row": 0,
+        "col": 6,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "BATMAN",
+        "clue": "Cảm giác chán nản cùng cực của Môsê khi phải đối diện với khối ác cảm đòi ném đá tử hình mình từ đám đông khát nước.",
+        "explanation": "Sự bất mãn của dân chúng đẩy Môsê đến chỗ tuyệt vọng kêu cầu Chúa: \"Họ sắp ném đá con đến nơi rồi!\"",
+        "direction": "down",
+        "row": 2,
+        "col": 1,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "OANTRACH",
+        "clue": "Thái độ hằn học bực tức của dân Israel khi thiếu nước, đi xa tới mức chất vấn liệu Đức Chúa có đang ở giữa họ không.",
+        "explanation": "Sự oán trách không chỉ là kêu ca về thể xác mà là sự xói mòn niềm tin, phủ nhận sự đồng hành yêu thương của Thiên Chúa.",
+        "direction": "across",
+        "row": 3,
+        "col": 0,
+        "num": 3,
+        "id": "3-across"
+      },
+      {
+        "answer": "TANGDA",
+        "clue": "Khối đất đá cứng ngắc sần sùi ở Hô-rếp bị gậy Môsê đập trúng thì lập tức tuôn trào dòng nước mát lạnh.",
+        "explanation": "Tảng đá bị đập vỡ tuôn nước là hình ảnh của Đức Kitô bị đâm thâu để ban Mạch Nước Hằng Sống cho nhân loại khát khao.",
+        "direction": "down",
+        "row": 3,
+        "col": 3,
+        "num": 4,
+        "id": "4-down"
+      },
+      {
+        "answer": "GAY",
+        "clue": "Vật dụng thần kỳ mà Môsê từng dùng để rẽ Biển Đỏ, nay lại được lệnh cầm lên gõ mạnh vào mặt đá sỏi.",
+        "explanation": "Chiếc gậy không có phép thuật tự thân, nó chỉ có sức mạnh khi được vâng lời Thiên Chúa để thực thi quyền năng của Ngài.",
+        "direction": "across",
+        "row": 6,
+        "col": 3,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "MASA",
+        "clue": "Một trong hai cái tên mới được đặt cho địa danh này, có nghĩa là \"thử thách\", vì dân Chúa đã nhẫn tâm thử thách Ngài.",
+        "explanation": "Ma-xa và Mơ-ri-va trở thành biểu tượng buồn bã cho sự cứng lòng của con người trước những ân huệ hiển nhiên của Thiên Chúa.",
+        "direction": "across",
+        "row": 8,
+        "col": 2,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 118,
+    "theme": "XH 18: Gít-rô Khuyên Nhủ",
+    "gridSize": {
+      "rows": 13,
+      "cols": 10
+    },
+    "words": [
+      {
+        "answer": "GITRO",
+        "clue": "Người cha vợ khôn ngoan của Môsê, vốn là tư tế xứ Ma-đi-an, đã dắt vợ và hai con trai đến thăm ông.",
+        "explanation": "Sự xuất hiện của Gít-rô đánh dấu sự thừa nhận từ một tư tế dân ngoại về những việc kỳ diệu mà Thiên Chúa đã làm cho Israel.",
+        "direction": "down",
+        "row": 0,
+        "col": 1,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "CHIETEU",
+        "clue": "Hành động chia nhỏ đám đông thành các toán ngàn người, trăm người, năm mươi người để dễ bề quản lý và phân công.",
+        "explanation": "Việc chia tiểu đội theo cấu trúc kim tự tháp giúp thiết lập hệ thống tư pháp sơ khai hiệu quả đầu tiên trong lịch sử Israel.",
+        "direction": "down",
+        "row": 1,
+        "col": 7,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "VIPHAM",
+        "clue": "Hành vi làm trái lề luật mà dân chúng tranh cãi và thường kéo nhau đến chầu chực từ sáng tới chiều để nhờ Môsê phân xử.",
+        "explanation": "Tình trạng quá tải xét xử các vụ vi phạm phản ánh sự thiếu tổ chức của một cộng đồng mới hình thành chưa có lề lối rõ ràng.",
+        "direction": "across",
+        "row": 2,
+        "col": 4,
+        "num": 3,
+        "id": "3-across"
+      },
+      {
+        "answer": "LOIKHUYEN",
+        "clue": "Giải pháp quản lý nhân sự tuyệt vời mà Gít-rô đề xuất, khuyên Môsê nên chia sẻ gánh nặng với các cộng sự tài đức.",
+        "explanation": "Lời khuyên của Gít-rô là bài học quý giá về kỹ năng lãnh đạo: biết phân quyền, chọn người tài đức và chỉ giải quyết những ca khó nhất.",
+        "direction": "across",
+        "row": 4,
+        "col": 0,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "KHOELUYEN",
+        "clue": "Tiêu chuẩn hàng đầu để chọn thẩm phán mà Gít-rô gợi ý: phải tìm những người tài đức, kính sợ Thiên Chúa và ghét sự thanh toán hối lộ.",
+        "explanation": "Một nền tư pháp công bình cần những con người không chỉ có năng lực (khỏe luyện tài trí) mà phải có đạo đức, không tư lợi cá nhân.",
+        "direction": "down",
+        "row": 4,
+        "col": 3,
+        "num": 5,
+        "id": "5-down"
+      },
+      {
+        "answer": "XETXU",
+        "clue": "Công việc phân định đúng sai căng thẳng mệt mỏi mà Môsê ôm đồm làm một mình từ chói chang ban sớm đến mịt mù đêm đen.",
+        "explanation": "Việc Môsê một mình xét xử cho thấy lòng tận tụy, nhưng cũng bộc lộ nguy cơ kiệt sức do không biết san sẻ khối lượng công việc.",
+        "direction": "across",
+        "row": 11,
+        "col": 2,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
     "id": 51,
-    "theme": "Ngon Su Cuu Uoc",
+    "theme": "Ngôn Sứ Cựu Ước",
     "gridSize": {
       "rows": 7,
       "cols": 11
@@ -3441,7 +4611,7 @@
   },
   {
     "id": 52,
-    "theme": "Cac Phep La Cua Chua",
+    "theme": "Các Phép Lạ Của Chúa",
     "gridSize": {
       "rows": 12,
       "cols": 8
@@ -3511,7 +4681,7 @@
   },
   {
     "id": 53,
-    "theme": "Cau Nguyen Thieng Lieng",
+    "theme": "Cầu Nguyện Thiêng Liêng",
     "gridSize": {
       "rows": 11,
       "cols": 17
@@ -3581,7 +4751,7 @@
   },
   {
     "id": 54,
-    "theme": "Chuc Thanh Va Tu Tri",
+    "theme": "Chức Thánh Và Tu Trì",
     "gridSize": {
       "rows": 9,
       "cols": 11
@@ -3651,7 +4821,7 @@
   },
   {
     "id": 55,
-    "theme": "Thoi Ky Chinh Phuc",
+    "theme": "Thời Kỳ Chinh Phục",
     "gridSize": {
       "rows": 10,
       "cols": 10
@@ -3720,8 +4890,108 @@
     ]
   },
   {
+    "id": 119,
+    "theme": "XH 19: Đến Núi Si-nai",
+    "gridSize": {
+      "rows": 4,
+      "cols": 5
+    },
+    "words": [
+      {
+        "answer": "SINAI",
+        "clue": "Dãy núi đá thiêng hùng vĩ, nơi Đức Chúa phán hứa sẽ ngự xuống trong đám mây dày đặc để thiết lập giao ước.",
+        "explanation": "Si-nai không chỉ là một ngọn núi vật lý mà là ranh giới giao điểm linh thiêng, nơi Trời và Đất gặp gỡ để lập lề luật.",
+        "direction": "across",
+        "row": 0,
+        "col": 0,
+        "num": 1,
+        "id": "1-across"
+      },
+      {
+        "answer": "NHAT",
+        "clue": "Số ngày chuẩn bị mà Đức Chúa yêu cầu dân chúng phải tắm rửa giặt giũ quần áo thanh sạch để chờ đón Ngài nhậm mặt.",
+        "explanation": "Việc thanh tẩy giặt giũ hai ngày nhắc nhở người tín hữu phải chuẩn bị tâm hồn trong trắng trước khi bước vào sự hiệp thông thánh thiện.",
+        "direction": "down",
+        "row": 0,
+        "col": 2,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "RANH",
+        "clue": "Đường giới hạn cấm kỵ được vạch ra dưới chân núi để không một ai hay súc vật nào được léo hánh bước qua mà mất mạng.",
+        "explanation": "Lập ranh giới cho thấy sự thánh thiện tuyệt đối của Thiên Chúa không dung hòa với sự phàm tục tội lỗi của tự nhiên.",
+        "direction": "across",
+        "row": 2,
+        "col": 1,
+        "num": 3,
+        "id": "3-across"
+      }
+    ]
+  },
+  {
+    "id": 120,
+    "theme": "XH 20: Mười Điều Răn (1)",
+    "gridSize": {
+      "rows": 8,
+      "cols": 8
+    },
+    "words": [
+      {
+        "answer": "DANH",
+        "clue": "Tên gọi cực thánh của Thiên Chúa mà con người không bao giờ được phép đem ra kêu réo tuyên thề một cách bất xứng luyên thuyên.",
+        "explanation": "Tôn kính Danh Thánh là tôn trọng chính bản thể Thiên Chúa. Kêu tên Chúa vô cớ là coi thường quyền năng và dùng Ngài như một thứ bùa chú.",
+        "direction": "down",
+        "row": 0,
+        "col": 0,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "TUONG",
+        "clue": "Vật thể do tay người chạm trổ bằng gỗ đá, bị cấm tiệt quỳ lạy tôn kính thay cho Thiên Chúa Hằng Sống.",
+        "explanation": "Lệnh cấm tạc tượng bảo vệ sự siêu việt vô hình của Thiên Chúa, ngăn cản con người thao túng và giới hạn Ngài vào một hình hài chật hẹp.",
+        "direction": "down",
+        "row": 0,
+        "col": 6,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "THOTHAN",
+        "clue": "Hành động sùng bái các tượng thần giả tạo, bị chỉ đích danh và nghiêm cấm tuyệt đối ở ngay ngay điều răn đầu tiên.",
+        "explanation": "Thiên Chúa yêu cầu sự thờ phượng duy nhất và trọn vẹn, không chấp nhận việc chia sẻ vinh quang Ngài cho những thụ tạo vô tri.",
+        "direction": "down",
+        "row": 1,
+        "col": 2,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "NGHIKHOI",
+        "clue": "Hoạt động cấm kỵ duy nhất trong ngày Sa-bát, nhằm yêu cầu đình chỉ mọi công lao động để dốc lòng nghỉ ngơi thờ phượng.",
+        "explanation": "Đình chỉ công việc để nhắc nhớ rằng con người không phải cỗ máy sản xuất, mà sinh ra để chiêm ngưỡng hiến dâng và chung chia nghỉ ngơi với Chúa.",
+        "direction": "across",
+        "row": 2,
+        "col": 0,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "SABAT",
+        "clue": "Ngày lễ nghỉ thứ bảy thiêng liêng để khắc cốt ghi tâm công trình Sáng tạo và biến cố được giải tán phóng thích khỏi ách Ai Cập.",
+        "explanation": "Giữ ngày Sa-bát thánh thiện là dấu chỉ hữu hình của Giao Ước, bảo vệ quyền lợi nghỉ ngơi ngay cả cho kẻ nô lệ và loài súc vật.",
+        "direction": "across",
+        "row": 6,
+        "col": 1,
+        "num": 5,
+        "id": "5-across"
+      }
+    ]
+  },
+  {
     "id": 56,
-    "theme": "Bon Sach Tin Mung",
+    "theme": "Bốn Sách Tin Mừng",
     "gridSize": {
       "rows": 8,
       "cols": 7
@@ -3781,7 +5051,7 @@
   },
   {
     "id": 57,
-    "theme": "Tuan Thanh Kho Nan",
+    "theme": "Tuần Thánh Khổ Nạn",
     "gridSize": {
       "rows": 11,
       "cols": 11
@@ -3841,7 +5111,7 @@
   },
   {
     "id": 58,
-    "theme": "Giai Doan Sang The",
+    "theme": "Giai Đoạn Sáng Thế",
     "gridSize": {
       "rows": 10,
       "cols": 11
@@ -3911,7 +5181,7 @@
   },
   {
     "id": 59,
-    "theme": "Cac Thu Thanh Phaolo",
+    "theme": "Các Thư Thánh Phaolô",
     "gridSize": {
       "rows": 9,
       "cols": 12
@@ -3981,7 +5251,7 @@
   },
   {
     "id": 60,
-    "theme": "Hoi Thanh So Khai",
+    "theme": "Hội Thánh Sơ Khai",
     "gridSize": {
       "rows": 11,
       "cols": 11
@@ -4050,8 +5320,128 @@
     ]
   },
   {
+    "id": 121,
+    "theme": "XH 20: Mười Điều Răn (2)",
+    "gridSize": {
+      "rows": 9,
+      "cols": 9
+    },
+    "words": [
+      {
+        "answer": "CHA",
+        "clue": "Bậc sinh thành nam giới cốt nhục mà lề luật buộc con cái phải kính trọng vâng lời tận tụy nết na suốt đời.",
+        "explanation": "Điều răn thứ tư là điều răn duy nhất có đính kèm lời hứa ban phúc: \"Để tuổi thọ ngươi được kéo dài trên đất Chúa ban\".",
+        "direction": "down",
+        "row": 0,
+        "col": 3,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "CHUNGDOC",
+        "clue": "Hành vi thề gian dối làm hại người thân cận vô tội trước tòa án hay cộng đồng, vi phạm điều răn thứ tám răn cấm.",
+        "explanation": "Nói dối, vu khống làm rạn nứt niềm tin cộng đồng. Thiên Chúa là Sự Thật, yêu mến Ngài đòi hỏi một đời sống thành thực minh bạch.",
+        "direction": "down",
+        "row": 1,
+        "col": 8,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "NGOAITINH",
+        "clue": "Sự phản bội ô uế lời thề chung thủy hôn nhân, vi phạm giới răn thứ sáu nhằm bảo vệ tính toàn vẹn sự thánh khiết.",
+        "explanation": "Cấm ngoại tình là bảo vệ gia đình, nơi chốn đầu tiên ươm mầm ơn cứu độ, khỏi sự phá hủy ghê tởm của tính ích kỷ và nhục dục.",
+        "direction": "across",
+        "row": 2,
+        "col": 0,
+        "num": 3,
+        "id": "3-across"
+      },
+      {
+        "answer": "GIET",
+        "clue": "Hành động cấm kỵ đoạt mạng sống người khác cách bất công tàn bạo, vi phạm nghiêm trọng giới răn thứ năm thiêng liêng.",
+        "explanation": "Chỉ mình Thiên Chúa là chủ thể tuyệt đối của sự sống tử sinh. Cướp đi sinh mệnh tha nhân là tước đoạt quyền tối cao tự quyết của Ngài.",
+        "direction": "down",
+        "row": 2,
+        "col": 1,
+        "num": 4,
+        "id": "4-down"
+      },
+      {
+        "answer": "TROMCAP",
+        "clue": "Hành vi lén lút hay công khai chiếm đoạt tài sản vốn dĩ thuộc về người khác, được đề cập ở điều răn thứ bảy.",
+        "explanation": "Cấm trộm cắp là nền tảng của công bằng xã hội, bảo vệ quyền sở hữu tư nhân hợp pháp và chống lại lòng xảo quyệt tham lam.",
+        "direction": "down",
+        "row": 2,
+        "col": 5,
+        "num": 5,
+        "id": "5-down"
+      },
+      {
+        "answer": "ME",
+        "clue": "Người phụ nữ cưu mang chín tháng mười ngày, đồng vinh dự bình đẳng với người cha trong điều răn thảo kính đạo đức.",
+        "explanation": "Tôn trọng cha mẹ là tôn trọng chính Thiên Chúa, Đấng đã mượn bàn tay và vòng tay cha mẹ để thông ban hồng ân sự sống.",
+        "direction": "across",
+        "row": 5,
+        "col": 5,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 122,
+    "theme": "XH 21: Luật Về Quyền Lợi",
+    "gridSize": {
+      "rows": 7,
+      "cols": 10
+    },
+    "words": [
+      {
+        "answer": "XUXO",
+        "clue": "Hình thức bạo lực tàn phá làm người phụ nữ có thai sẩy thai, sẽ bị trừng hạt trả đũa bằng mạng đền mạng nếu gây tử vong.",
+        "explanation": "Vụ việc sẩy thai phản ánh quan điểm cứng rắn bảo vệ mầm sống trong bụng mẹ, không coi khinh bào thai là một khối máu thịt vô tri vô giác.",
+        "direction": "down",
+        "row": 0,
+        "col": 2,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "DATRAN",
+        "clue": "Vật thể lù lù rơi trúng đầu làm người nào đó chết bất thình lình, nhưng luật sẽ miễn tội cho người chủ đứng trên gác xép lỡ tay.",
+        "explanation": "Sự phân biệt rõ ràng giữa ngộ sát vô ý và cố ý giết người cho thấy một hệ thống luật pháp sâu sắc chú trọng vào động cơ hành vi.",
+        "direction": "down",
+        "row": 1,
+        "col": 5,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "PHONGTHICH",
+        "clue": "Hành động trao trả tự do cho người đang làm kiếp nô bộc nam giới Híp-ri khi họ đã hoàn mãn giới hạn hầu hạ phục vụ.",
+        "explanation": "Sự phóng thích năm thứ bảy gợi nhắc rằng toàn bộ người dân Híp-ri đã từng được Thiên Chúa tự mình phóng thích khỏi ngục tù Ai Cập.",
+        "direction": "across",
+        "row": 3,
+        "col": 0,
+        "num": 3,
+        "id": "3-across"
+      },
+      {
+        "answer": "NOLE",
+        "clue": "Tầng lớp lao dịch dưới đáy mà luật quy định chỉ được phép phục vụ tối đa sáu năm, năm thứ bảy phải phóng thích vô điều kiện.",
+        "explanation": "Dù dung túng cho chế độ nô lệ đương thời, luật Môsê mang tính đột phá nhân đạo chưa từng có khi giới hạn thời gian hầu hạ và bảo vệ thân thể họ.",
+        "direction": "down",
+        "row": 3,
+        "col": 3,
+        "num": 4,
+        "id": "4-down"
+      }
+    ]
+  },
+  {
     "id": 61,
-    "theme": "Cac Thu Tin Trong Tan Uoc",
+    "theme": "Các Thư Tín Trong Tân Ước",
     "gridSize": {
       "rows": 10,
       "cols": 9
@@ -4111,7 +5501,7 @@
   },
   {
     "id": 62,
-    "theme": "Loi Chua Trong Doi Song",
+    "theme": "Lời Chúa Trong Đời Sống",
     "gridSize": {
       "rows": 13,
       "cols": 9
@@ -4181,7 +5571,7 @@
   },
   {
     "id": 63,
-    "theme": "Trung Tam Hanh Huong",
+    "theme": "Trung Tâm Hành Hương",
     "gridSize": {
       "rows": 9,
       "cols": 12
@@ -4251,7 +5641,7 @@
   },
   {
     "id": 64,
-    "theme": "Khong Gian Phung Vu",
+    "theme": "Không Gian Phụng Vụ",
     "gridSize": {
       "rows": 9,
       "cols": 12
@@ -4311,7 +5701,7 @@
   },
   {
     "id": 65,
-    "theme": "Dong Lich Su Cuu Do",
+    "theme": "Dòng Lịch Sử Cứu Độ",
     "gridSize": {
       "rows": 8,
       "cols": 7
@@ -4370,8 +5760,148 @@
     ]
   },
   {
+    "id": 123,
+    "theme": "XH 22: Luật Về Tài Sản",
+    "gridSize": {
+      "rows": 11,
+      "cols": 9
+    },
+    "words": [
+      {
+        "answer": "XUCDON",
+        "clue": "Hành vi chóp chép sỉ nhục lăng đàm nguyền rủa các vị lãnh tụ đang cầm chịch hay đay nghiến phỉ báng Thiên Chúa đều bị trừng trị rát tay.",
+        "explanation": "Cấm xúc phạm lãnh đạo nhằm bảo vệ trật tự nhà nước ổn định sơ khai khỏi sự phiến loạn xúi giục ngông cuồng làm rã đám cộng đồng.",
+        "direction": "down",
+        "row": 0,
+        "col": 6,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "AOKHOAC",
+        "clue": "Tài sản cầm cố phòng thân duy nhất phải được mau chóng đem trả lại cho con nợ trước lúc mặt trời lặn cho họ còn đắp che thân.",
+        "explanation": "Quy tắc cầm áo khoác thể hiện lòng từ bi tuyệt đỉnh vì áo là vật dụng duy nhất che chở người nghèo khỏi cái lạnh buốt đêm sa mạc.",
+        "direction": "down",
+        "row": 3,
+        "col": 1,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "KHOANCAT",
+        "clue": "Hành vi cho người túng khấn bất bách vay mượn nhưng lại ác tâm kèm theo lãi suất cắt cổ, bị cấm tiệt trong dân Chúa.",
+        "explanation": "Cấm vay nặng lãi nhằm củng cố tình liên đới nội khối huynh đệ, không để người nghèo bị dồn vào cảnh bần cùng bán vợ đợ con.",
+        "direction": "down",
+        "row": 3,
+        "col": 4,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "BOITHUONG",
+        "clue": "Nghĩa vụ đền bù hao hụt gấp đôi gấp ba khi vô cớ làm thiệt hại súc vật hay thả rông gia súc sang ăn lúa ruộng đồng nước xóm.",
+        "explanation": "Đền bù công bằng nhằm khôi phục thiệt hại kinh tế gây ra cho nạn nhân, nhấn mạnh trách nhiệm bảo vệ an ninh cộng đồng.",
+        "direction": "across",
+        "row": 4,
+        "col": 0,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "GOABUA",
+        "clue": "Đối tượng phụ nữ mất chồng khốn nhùng yếu đuối, Chúa tuyệt đối nghiêm cấm việc bóc lột ức hiếp họ không thương tiếc.",
+        "explanation": "Cùng với trẻ mồ côi và ngoại kiều, góa phụ là những người thuộc diện ưu tiên bảo bọc của chính Đấng Tối Cao bênh vực.",
+        "direction": "down",
+        "row": 4,
+        "col": 8,
+        "num": 5,
+        "id": "5-down"
+      },
+      {
+        "answer": "TROM",
+        "clue": "Kẻ lén lút khoét vách ban đêm bưng đồ bị gia chủ bắt quả tang đánh chết thì chủ nhà sẽ được trắng án tha mạng tọi.",
+        "explanation": "Quy định này cho phép quyền phòng vệ chính đáng bảo vệ tài sản và tính mạng vào ban đêm khi khó phân biệt mức độ nguy hiểm.",
+        "direction": "across",
+        "row": 10,
+        "col": 4,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 124,
+    "theme": "XH 23: Luật Lễ Hội",
+    "gridSize": {
+      "rows": 10,
+      "cols": 9
+    },
+    "words": [
+      {
+        "answer": "BAYNAM",
+        "clue": "Định kỳ năm Thánh bắt buộc đất ruộng cày cấy phải được đình chỉ bỏ hoang nỏn nà không gặt hái nhằm cho người nghèo thu nhặt tự do.",
+        "explanation": "Năm nghỉ đất (Sabatical year) là thời gian đất đai phục hồi và người nghèo tận hưởng hoa màu tự sinh, phá bỏ sự tư hữu ích kỷ.",
+        "direction": "down",
+        "row": 0,
+        "col": 0,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "THIENTHAN",
+        "clue": "Sứ giả uy mãnh được Đức Chúa dặn phái đi trước mở đường canh gác dân Chúa tiến hùng hồn vào chiếm cứ xứ sở miền Đất Hứa cheo leo.",
+        "explanation": "Thiên thần đi trước là minh chứng sự hướng dẫn vô hình của Chúa vung kiếm giải quyết mọi khó nhọc trở ngại quân sự mà họ đang cuống cuồng lo sợ.",
+        "direction": "down",
+        "row": 1,
+        "col": 4,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "THIENTE",
+        "clue": "Việc thiên vị ác ý kẻ nghèo hèn tại phiên toà hay dua nịnh hùa theo đám đông vu oan làm chứng dối đều bị Chúa cấm kỵ.",
+        "explanation": "Công lý không thuộc phe số đông cũng không thiên vị sự nghèo khó. Công lý là sự mù lòa mù tịt xét xử trên sự thật trần trụi.",
+        "direction": "down",
+        "row": 1,
+        "col": 6,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "MUAGAT",
+        "clue": "Lễ dâng tiến hoa trái đầu mùa thơm ngọt ngào tươm mướt nhất của đồng ruộng mà Thiên Chúa thương ban sau vụ mùa bội thu.",
+        "explanation": "Lễ Các Tuần (Ngũ Tuần muộn màng) là lễ Tạ Ơn biểu thị lòng biết ơn vâng phục trước Đấng là chủ tể thực sự ban chồi nẩy lộc cho vùng đất.",
+        "direction": "down",
+        "row": 2,
+        "col": 8,
+        "num": 4,
+        "id": "4-down"
+      },
+      {
+        "answer": "NGOAIKIEU",
+        "clue": "Thành phần rách rưới tha hương dân lạ, được luật bắt dân Israel đối đãi nhân từ vì bản thân họ cũng từng lưu đày lang thang vất vưởng.",
+        "explanation": "Kinh nghiệm cay đắng nô lệ thời Ai Cập trở thành bài học đạo đức nền tảng để đối xử cảm thông tôn trọng với những di dân nhập nội.",
+        "direction": "across",
+        "row": 3,
+        "col": 0,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "BA",
+        "clue": "Số lượng các dịp đại lễ cốt lõi trong năm mà mọi người nam giới đêu phải khăn gói trẩy lên chầu chực nhan thánh Đức Chúa.",
+        "explanation": "Ba lễ lớn (Bánh Không Men, Mùa Gặt, Lều Tạm) là sợi dây thừng gắn kết cả chiều dài lịch sử tôn giáo và chu trình kinh tế thu hoạch nông nghiệp.",
+        "direction": "across",
+        "row": 8,
+        "col": 3,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
     "id": 66,
-    "theme": "Than Hoc Va Giao Phu",
+    "theme": "Thần Học Và Giáo Phụ",
     "gridSize": {
       "rows": 9,
       "cols": 10
@@ -4441,7 +5971,7 @@
   },
   {
     "id": 67,
-    "theme": "Ton Giao Va Khoa Hoc",
+    "theme": "Tôn Giáo Và Khoa Học",
     "gridSize": {
       "rows": 12,
       "cols": 10
@@ -4511,7 +6041,7 @@
   },
   {
     "id": 68,
-    "theme": "Canh Thuc Vuot Qua",
+    "theme": "Canh Thức Vượt Qua",
     "gridSize": {
       "rows": 15,
       "cols": 11
@@ -4581,7 +6111,7 @@
   },
   {
     "id": 69,
-    "theme": "Cac Cong Dong",
+    "theme": "Các Cộng Đoàn",
     "gridSize": {
       "rows": 15,
       "cols": 10
@@ -4651,7 +6181,7 @@
   },
   {
     "id": 70,
-    "theme": "Tam Moi Phuc That",
+    "theme": "Tám Mối Phúc Thật",
     "gridSize": {
       "rows": 11,
       "cols": 11
@@ -4720,8 +6250,148 @@
     ]
   },
   {
+    "id": 125,
+    "theme": "XH 24: Giao Ước",
+    "gridSize": {
+      "rows": 8,
+      "cols": 12
+    },
+    "words": [
+      {
+        "answer": "GIAOUOC",
+        "clue": "Bản hiệp ước linh thiêng đánh dấu sự gắn kết chính thức giữa Đức Chúa và toàn thể dân tộc Ít-ra-en tại chân núi.",
+        "explanation": "Giao ước Sinai không phải là hợp đồng mua bán, mà là mối tình phụ tử, trong đó Thiên Chúa nhận Ít-ra-en làm dân riêng.",
+        "direction": "down",
+        "row": 0,
+        "col": 3,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "VANGPHUC",
+        "clue": "Câu cửa miệng mà dân chúng đồng thanh đáp lại đến hai lần: \"Mọi lời Đức Chúa phán, chúng tôi xin thi hành\".",
+        "explanation": "Lời hứa vâng phục vội vã này sau đó sẽ phải trải qua thử thách nghiệt ngã khi Môsê vắng mặt trên núi quá lâu.",
+        "direction": "down",
+        "row": 0,
+        "col": 5,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "DOCLUAT",
+        "clue": "Hành động Môsê tường thuật trọn vẹn các chỉ thị và quyết định của Đức Chúa lớn tiếng cho cả đám đông nghe rõ.",
+        "explanation": "Lề luật phải được công bố công khai minh bạch để người dân hiểu rõ quyền lợi và nghĩa vụ trước khi thề hứa tuân giữ.",
+        "direction": "down",
+        "row": 0,
+        "col": 8,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "MUOIHAICOT",
+        "clue": "Những tảng đá được Môsê dựng lên dưới chân núi tượng trưng cho toàn bộ các chi tộc Ít-ra-en cùng tham gia thề nguyền.",
+        "explanation": "Mười hai cột đá là chứng nhân hữu hình cho sự hiện diện đầy đủ và lời cam kết đồng lòng của toàn dân.",
+        "direction": "across",
+        "row": 1,
+        "col": 0,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "MAYPHU",
+        "clue": "Hiện tượng siêu nhiên che khuất đỉnh núi suốt sáu ngày trước khi Đức Chúa lên tiếng gọi Môsê vào ngày thứ bảy.",
+        "explanation": "Đám mây vừa là dấu chỉ sự hiện diện vừa là sự che chở, dạy Môsê bài học kiên nhẫn chờ đợi tĩnh lặng trước Nhan Thánh.",
+        "direction": "down",
+        "row": 1,
+        "col": 0,
+        "num": 5,
+        "id": "5-down"
+      },
+      {
+        "answer": "HUYET",
+        "clue": "Chất lỏng màu đỏ được rảy một nửa lên bàn thờ và một nửa lên mình dân chúng để đóng ấn chuẩn y giao ước.",
+        "explanation": "Máu tượng trưng cho sự sống. Việc cùng chia sẻ chung một nguồn máu hiến tế cho thấy sự sống của Chúa và dân nay đã hòa quyện.",
+        "direction": "across",
+        "row": 4,
+        "col": 7,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 126,
+    "theme": "XH 25: Hòm Bia",
+    "gridSize": {
+      "rows": 14,
+      "cols": 12
+    },
+    "words": [
+      {
+        "answer": "TRUDEN",
+        "clue": "Chân đèn bảy nhánh đúc bằng vàng ròng, được trang trí tinh xảo mài giũa bằng các hình hoa nụ và cánh dập khuông.",
+        "explanation": "Cây đèn Menorah luôn cháy sáng là biểu tượng của Cây Sự Sống, báo hiệu ánh sáng rạng ngời của Thiên Chúa hiện diện sưởi ấm.",
+        "direction": "down",
+        "row": 0,
+        "col": 7,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "KERUBIM",
+        "clue": "Hai tượng thiên sứ có cánh dang rộng, chầu hai đầu nắp Hòm Bia để làm ngai cho Đức Chúa ngự trị vô hình.",
+        "explanation": "Dù cấm tạc tượng Thiên Chúa, nhưng tượng thiên sứ Kerubim được cho phép để diễn tả dáng vẻ chầu chực hầu hạ Đấng Tối Cao.",
+        "direction": "down",
+        "row": 0,
+        "col": 9,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "BANTIECLY",
+        "clue": "Chiếc bàn gỗ keo dùng để đặt bánh dâng tiến trước nhan Đức Chúa, luôn luôn có bánh chưng bày trên đó.",
+        "explanation": "Bàn Bánh Dâng Tiến thể hiện lòng biết ơn liên lỉ, nhận thức rằng mọi lương thực nuôi sống đều là nguồn lộc từ tay Thiên Chúa.",
+        "direction": "down",
+        "row": 4,
+        "col": 1,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "NAPHADENGIAO",
+        "clue": "Tấm che Hòm Bia đúc bằng vàng khối nguyên chất, nơi Đức Chúa sẽ hội ngộ và ban truyền các quyết định.",
+        "explanation": "Nắp Xá Tội này là tâm điểm của sự giao hòa, nơi máu con vật hiến tế sẽ được rảy lên để xin tha thứ lỗi lầm cho toàn dân.",
+        "direction": "across",
+        "row": 5,
+        "col": 0,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "HOMBIA",
+        "clue": "Chiếc rương gỗ keo bọc vàng ròng từ trong ra ngoài, vật dụng linh thiêng bậc nhất sẽ chứa đựng hai tấm bia chứng ước.",
+        "explanation": "Hòm Bia không chứa tượng Chúa mà chứa Lời Chúa, nhấn mạnh Thiên Chúa của Ít-ra-en là Đấng vô hình nhưng hiện diện qua Lề Luật.",
+        "direction": "down",
+        "row": 5,
+        "col": 3,
+        "num": 5,
+        "id": "5-down"
+      },
+      {
+        "answer": "DONKHIENG",
+        "clue": "Những thanh gỗ keo bọc vàng xỏ qua các khoen để khiêng Hòm Bia mà không bao giờ được rút ra khỏi khoen.",
+        "explanation": "Quy định không rút đòn khiêng hàm ý sự sẵn sàng lên đường. Thiên Chúa của Ít-ra-en luôn đồng hành xê dịch cùng dân Ngài.",
+        "direction": "down",
+        "row": 5,
+        "col": 5,
+        "num": 6,
+        "id": "6-down"
+      }
+    ]
+  },
+  {
     "id": 71,
-    "theme": "Luat Thieng Lieng",
+    "theme": "Luật Thiêng Liêng",
     "gridSize": {
       "rows": 14,
       "cols": 11
@@ -4791,7 +6461,7 @@
   },
   {
     "id": 72,
-    "theme": "Tinh Yeu Trong Kinh Thanh",
+    "theme": "Tình Yêu Trong Kinh Thánh",
     "gridSize": {
       "rows": 11,
       "cols": 9
@@ -4861,7 +6531,7 @@
   },
   {
     "id": 73,
-    "theme": "Kinh Nguyen Hang Ngay",
+    "theme": "Kinh Nguyện Hằng Ngày",
     "gridSize": {
       "rows": 14,
       "cols": 12
@@ -4931,7 +6601,7 @@
   },
   {
     "id": 74,
-    "theme": "Phung Vu Va Loi Chua",
+    "theme": "Phụng Vụ Và Lời Chúa",
     "gridSize": {
       "rows": 11,
       "cols": 13
@@ -5001,7 +6671,7 @@
   },
   {
     "id": 75,
-    "theme": "Tu Duc Linh Dao",
+    "theme": "Tu Đức Linh Đạo",
     "gridSize": {
       "rows": 14,
       "cols": 11
@@ -5070,8 +6740,148 @@
     ]
   },
   {
+    "id": 127,
+    "theme": "XH 26-27: Nhà Tạm",
+    "gridSize": {
+      "rows": 13,
+      "cols": 11
+    },
+    "words": [
+      {
+        "answer": "BUCMAN",
+        "clue": "Tấm rèm thêu họa tiết Kerubim sặc sỡ tinh xảo lộng lẫy, dùng để phân cách vách ngăn Nơi Thánh và Nơi Cực Thánh.",
+        "explanation": "Bức màn ngăn cách tượng trưng cho sự thánh thiện cách biệt không thể tùy tiện bước vào của Đức Chúa khi chưa được thanh tẩy.",
+        "direction": "down",
+        "row": 0,
+        "col": 9,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "BAMUOI",
+        "clue": "Số lượng các tấm ván bằng gỗ keo được dựng đứng sừng sững làm khung vách cứng cáp quây kín cho Nhà Tạm.",
+        "explanation": "Cấu trúc lắp ghép gỗ và các ngàm bạc cho thấy tính cơ động tuyệt vời, phù hợp với cuộc sống du mục di chuyển liên tục.",
+        "direction": "down",
+        "row": 2,
+        "col": 7,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "BANTHOHUONG",
+        "clue": "Chiếc bệ hương nơi tư tế lót lửa đốt ngun ngút hương thơm ngào ngạt dâng lên Thiên Chúa mỗi sáng ban mai và chập tối.",
+        "explanation": "Làn khói hương nghi ngút bay lên tượng trưng cho những lời cầu nguyện của dân Chúa bay thẳng đến ngai tòa thiên quốc.",
+        "direction": "across",
+        "row": 5,
+        "col": 0,
+        "num": 3,
+        "id": "3-across"
+      },
+      {
+        "answer": "BANTHOTE",
+        "clue": "Cấu trúc hình vuông rỗng ruột bọc đồng, đặt ngay giữa sân để thiêu đốt các lễ vật sát tế thượng tiến.",
+        "explanation": "Bàn Thờ Tế Lễ ngùn ngụt lửa chói là điểm giao thoa chuộc tội, nơi những con thú gánh thay tội lỗi của người dâng dập nát.",
+        "direction": "down",
+        "row": 5,
+        "col": 0,
+        "num": 4,
+        "id": "4-down"
+      },
+      {
+        "answer": "NHATAM",
+        "clue": "Ngôi đền di động làm bằng vải vóc và gỗ, là nơi Đức Chúa ngự giữa dân Ít-ra-en trong suốt thời gian lang bạt.",
+        "explanation": "Nhà Tạm (Lều Hội Ngộ) là nguyên mẫu thu nhỏ của công trình vũ trụ, nơi tái lập sự hòa hợp giữa con người với Tạo Hóa.",
+        "direction": "down",
+        "row": 5,
+        "col": 2,
+        "num": 5,
+        "id": "5-down"
+      },
+      {
+        "answer": "HANCHANG",
+        "clue": "Khu vực sân bao quanh Lều Tạm dài một trăm thước, rộng năm mươi thước, được quây bằng những tấm bạt gai mịn màng.",
+        "explanation": "Sân ngoài là nơi dân chúng có thể tụ họp và dâng thú vật hiến tế, thể hiện sự phân cấp trong việc đến gần nhan thánh Chúa.",
+        "direction": "down",
+        "row": 5,
+        "col": 4,
+        "num": 6,
+        "id": "6-down"
+      }
+    ]
+  },
+  {
+    "id": 128,
+    "theme": "XH 28-29: Phẩm Phục",
+    "gridSize": {
+      "rows": 10,
+      "cols": 13
+    },
+    "words": [
+      {
+        "answer": "PHEPXUCDAU",
+        "clue": "Nghi thức dội dầu lên đầu nức mùi thơm để thánh hiến tấn phong A-ha-ron và các con trai ông.",
+        "explanation": "Xức dầu là sự lựa chọn và thánh hóa ban Thánh Thần. Xức dầu thượng tế báo trước biến cố xức dầu tràn trề cho Đấng Cứu Thế.",
+        "direction": "down",
+        "row": 0,
+        "col": 4,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "AOPHUC",
+        "clue": "Những bộ y phục tế lễ rực rỡ lộng lẫy được dệt thêu nhằm làm tăng thêm vẻ uy nghi rạng rỡ cho vị thượng tế.",
+        "explanation": "Áo lễ không phải để khoe khoang phàm tục, mà là dấu hiệu của sự khoác lấy vinh quang hiền thánh khi nhân danh bề trên.",
+        "direction": "down",
+        "row": 0,
+        "col": 6,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "TAMKHAM",
+        "clue": "Một mảnh vải vuông thêu đeo ở ngực thượng tế, trên đó đính mười hai viên ngọc quý khác màu rạng ngời.",
+        "explanation": "Mỗi viên ngọc tạc khắc tên một chi tộc. Thượng tế mang Tấm Khảm trước ngực như mang toàn dân trong tim khi khẩn cầu Chúa.",
+        "direction": "down",
+        "row": 0,
+        "col": 10,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "CHUONGVANG",
+        "clue": "Những quả chuông nhỏ lủng lẳng đính ở gấu áo thượng tế, phát ra tiếng kêu leng keng nhịp nhàng khi ông di chuyển.",
+        "explanation": "Tiếng chuông ngân giúp dân chúng bên ngoài biết thượng tế đang cử hành lễ lạy sột soạt, và cảnh báo để ông không phạm húy phải chết.",
+        "direction": "across",
+        "row": 1,
+        "col": 3,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "EPHOD",
+        "clue": "Chiếc áo khoác ngắn mặc bên ngoài có dây đai gắn kết chặt ngực, là đặc điểm nổi bật nhất của phẩm phục thượng tế.",
+        "explanation": "Áo Ê-phốt gắn liền với U-rim và Tum-mim, những vật linh dùng để bốc thăm hỏi gạn ý muốn cặn kẽ của Thiên Chúa.",
+        "direction": "across",
+        "row": 7,
+        "col": 0,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "CHUC",
+        "clue": "Địa vị tư tế linh thiêng mà Đức Chúa rạch ròi ra lệnh tách riêng gia đình A-ha-ron lên đảm nhiệm chuyên lo phụng vụ.",
+        "explanation": "Thiết lập hàng ngũ tư tế riêng biệt là bước chuẩn bị để duy trì việc thờ phượng chuyên nghiệp và thường xuyên cho cộng đồng.",
+        "direction": "across",
+        "row": 9,
+        "col": 2,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
     "id": 76,
-    "theme": "Giao Hoi Viet Nam",
+    "theme": "Giáo Hội Việt Nam",
     "gridSize": {
       "rows": 10,
       "cols": 12
@@ -5141,7 +6951,7 @@
   },
   {
     "id": 77,
-    "theme": "Hien Tuong Sieu Nhien",
+    "theme": "Hiện Tượng Siêu Nhiên",
     "gridSize": {
       "rows": 11,
       "cols": 10
@@ -5211,7 +7021,7 @@
   },
   {
     "id": 78,
-    "theme": "Muoi Dieu Ran",
+    "theme": "Mười Điều Răn",
     "gridSize": {
       "rows": 11,
       "cols": 16
@@ -5281,7 +7091,7 @@
   },
   {
     "id": 79,
-    "theme": "Duong Thanh Gia",
+    "theme": "Đường Thánh Giá",
     "gridSize": {
       "rows": 9,
       "cols": 11
@@ -5351,7 +7161,7 @@
   },
   {
     "id": 80,
-    "theme": "Phuc Sinh Va Len Troi",
+    "theme": "Phục Sinh Và Lên Trời",
     "gridSize": {
       "rows": 9,
       "cols": 13
@@ -5420,8 +7230,128 @@
     ]
   },
   {
+    "id": 129,
+    "theme": "XH 30-31: Đồ Dùng Thờ Phượng",
+    "gridSize": {
+      "rows": 11,
+      "cols": 11
+    },
+    "words": [
+      {
+        "answer": "OHOLIAP",
+        "clue": "Người thợ khéo tay thuộc chi tộc Đan, được Chúa chỉ định làm cộng sự cho Bơ-txan-ên hoàn tất mỹ thuật của Nhà Tạm.",
+        "explanation": "Việc ghi nhớ tên tuổi các bác thợ điêu khắc chứng tỏ Thiên Chúa trân trọng công sức mồ hôi gọt giũa của người lao động.",
+        "direction": "down",
+        "row": 0,
+        "col": 5,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "BETXANEN",
+        "clue": "Nghệ nhân tài ba được Thiên Chúa ưu ái gọi tên đích danh và đổ đầy thần khí thông minh khéo tay để chế tác.",
+        "explanation": "Bơ-txan-ên là người đầu tiên trong Kinh Thánh được nhắc đến việc \"đong đầy Thần Khí\", cho thấy cả nghệ thuật thủ công cũng là ơn Chúa.",
+        "direction": "down",
+        "row": 3,
+        "col": 3,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "VAKDONG",
+        "clue": "Chiếc chậu rửa ráy bằng đồng lóng lánh đặt giữa Lều Tạm và bàn thờ để tư tế tự tẩy rửa trước khi dâng lễ vật.",
+        "explanation": "Tẩy rử tay chân biểu trưng cho nhu cầu gột rửa tội lỗi ô uế thường xuyên trước khi con phàm tục bước vào phụng hành việc thánh.",
+        "direction": "down",
+        "row": 4,
+        "col": 1,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "CHETIEU",
+        "clue": "Khoản thuế chuộc mạng bắt buộc mọi nam đinh từ hai mươi tuổi bất kể giàu nghèo đều phải nộp một nửa sê-ken bạc.",
+        "explanation": "Thuế đồng hạng cho thấy trước mặt Thiên Chúa, tính mạng của kẻ giàu sụ hay người nghèo khó đều có giá cả cứu chuộc ngang nhau.",
+        "direction": "down",
+        "row": 4,
+        "col": 7,
+        "num": 4,
+        "id": "4-down"
+      },
+      {
+        "answer": "DAUTHANH",
+        "clue": "Loại dầu thơm được điều chế hảo hạng dùng để xức hiến toàn bộ Nhà Tạm và mọi đồ đạc vật dụng bên trong đó.",
+        "explanation": "Sự xức dầu tách biệt các đồ vật bằng gỗ đá vô tri thành những khí cụ thiêng liêng giành riêng để Thiên Chúa độc chiếm ngự trị.",
+        "direction": "across",
+        "row": 5,
+        "col": 0,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "HUONG",
+        "clue": "Chất liệu thơm ngát đặc biệt được pha chế theo công thức độc quyền chuyên chỉ để dâng lên đốt đượm cho ngai tòa Đức Chúa.",
+        "explanation": "Tuyệt đối cấm pha chế hương liệu thánh này để dùng cho mục đích phàm tục như xức nước hoa, nhấn mạnh sự độc quyền hiến dâng.",
+        "direction": "across",
+        "row": 10,
+        "col": 6,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 130,
+    "theme": "XH 32: Con Bê Vàng",
+    "gridSize": {
+      "rows": 7,
+      "cols": 6
+    },
+    "words": [
+      {
+        "answer": "CHEDON",
+        "clue": "Tiếng hội hè múa hát ăn uống điên loạn reo hò ầm ĩ quanh tượng thần, được Môsê nghe thấy khi vác bia đá đi từ đỉnh núi ngó xuống.",
+        "explanation": "Tiệc tùng linh đình phản trắc biến cuộc hành hương sa mạc thành lễ hội tha thiết bái thần, đập nát lòng chung thủy với hôn ước Sinai.",
+        "direction": "down",
+        "row": 0,
+        "col": 1,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "BEVANG",
+        "clue": "Cỗ tượng hình thú ngạo nghễ đúc lõi bằng vàng tươm mà dân chúng yêu cầu làm ra để cung kính bái lạy giữa sa mạc.",
+        "explanation": "Con bê vàng đại diện cho khuynh hướng tôn giáo dễ dãi, muốn tạo ra một vị thần vật chất để dễ bề thao túng sờ bấu được.",
+        "direction": "across",
+        "row": 2,
+        "col": 0,
+        "num": 2,
+        "id": "2-across"
+      },
+      {
+        "answer": "AARON",
+        "clue": "Vị đứng đầu nhu nhược đã thu gom lột hết khuyên tai vàng của đám phụ nữ thanh niên để đúc lên pho tượng thú đồi bại.",
+        "explanation": "Sự nhượng bộ của A-ha-ron là một thất bại lãnh đạo thê thảm, khi ông lấy lòng dân thỏa hiệp với điều ác thay vì can đảm bảo vệ lề luật Đức Chúa.",
+        "direction": "down",
+        "row": 2,
+        "col": 3,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "BOTROI",
+        "clue": "Việc Môsê lấy tro từ con bê vàng bị đốt nghiền nát pha vào nước rồi bắt toàn bộ dân chúng phải dốc ngửa cổ uống.",
+        "explanation": "Uống thuốc đắng là hình phạt tủi nhục ép người dân tự nuốt lấy sản phẩm tội lỗi dơ dáy do chính tay mình màng muội tạo ra.",
+        "direction": "across",
+        "row": 4,
+        "col": 0,
+        "num": 4,
+        "id": "4-across"
+      }
+    ]
+  },
+  {
     "id": 81,
-    "theme": "Doi Song Tu Tri",
+    "theme": "Đời Sống Tu Trì",
     "gridSize": {
       "rows": 11,
       "cols": 10
@@ -5491,7 +7421,7 @@
   },
   {
     "id": 82,
-    "theme": "Du Ngon Nuoc Troi",
+    "theme": "Dụ Ngôn Nước Trời",
     "gridSize": {
       "rows": 10,
       "cols": 13
@@ -5561,7 +7491,7 @@
   },
   {
     "id": 83,
-    "theme": "Dac Ngu Kinh Thanh",
+    "theme": "Đặc Ngữ Kinh Thánh",
     "gridSize": {
       "rows": 8,
       "cols": 10
@@ -5631,7 +7561,7 @@
   },
   {
     "id": 84,
-    "theme": "Sung Kinh Va Ton Kinh",
+    "theme": "Sùng Kính Và Tôn Kính",
     "gridSize": {
       "rows": 13,
       "cols": 11
@@ -5701,7 +7631,7 @@
   },
   {
     "id": 85,
-    "theme": "Du Ngon Nuoc Troi Hai",
+    "theme": "Dụ Ngôn Nước Trời Hai",
     "gridSize": {
       "rows": 10,
       "cols": 12
@@ -5771,7 +7701,7 @@
   },
   {
     "id": 86,
-    "theme": "Boi Canh Cuu Uoc",
+    "theme": "Bối Cảnh Cựu Ước",
     "gridSize": {
       "rows": 9,
       "cols": 7
@@ -5841,7 +7771,7 @@
   },
   {
     "id": 87,
-    "theme": "Hinh Anh Ve Thien Chua",
+    "theme": "Hình Ảnh Về Thiên Chúa",
     "gridSize": {
       "rows": 13,
       "cols": 11
@@ -5911,7 +7841,7 @@
   },
   {
     "id": 88,
-    "theme": "Giao Hoi Va The Gioi",
+    "theme": "Giáo Hội Và Thế Giới",
     "gridSize": {
       "rows": 13,
       "cols": 14
@@ -5981,7 +7911,7 @@
   },
   {
     "id": 89,
-    "theme": "Tri Tue Kinh Thanh",
+    "theme": "Trí Tuệ Kinh Thánh",
     "gridSize": {
       "rows": 10,
       "cols": 9
@@ -6051,7 +7981,7 @@
   },
   {
     "id": 90,
-    "theme": "The Che Phuc Vu",
+    "theme": "Thể Chế Phục Vụ",
     "gridSize": {
       "rows": 13,
       "cols": 14
@@ -6120,8 +8050,338 @@
     ]
   },
   {
+    "id": 131,
+    "theme": "XH 33: Cầu Bầu Cho Dân",
+    "gridSize": {
+      "rows": 10,
+      "cols": 15
+    },
+    "words": [
+      {
+        "answer": "LOTRANG",
+        "clue": "Hành động đau buồn đấm ngực lột bỏ mọi trang sức lóng lánh quý giá trên người của dân Israel để bày tỏ nỗi ân hận tột bực.",
+        "explanation": "Từ bỏ trang sức phù phiếm mỏng manh là cuộc hoán cải hữu hình, lột xát từ trong cái bề ngoài hào nhoáng để tỏ lòng xé nát tơ vạc sám hối.",
+        "direction": "down",
+        "row": 0,
+        "col": 2,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "LEUHOINGO",
+        "clue": "Quán lề vải đóng tách biệt đứng cắm chốt xa khu trại, nơi Môsê thường lui tới để đàm đạo khẩn cầu đấng Thánh một cách thân thưa.",
+        "explanation": "Với tội lỗi xú uế bao vây, Lều Hội Ngộ không còn nằm ngay giữa trại mà bị dời đi. Nó chứng tỏ tội đứt xích cắt lìa Chúa và dân.",
+        "direction": "down",
+        "row": 1,
+        "col": 5,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "MATDOIMAT",
+        "clue": "Cách thức thâm tình rủ rỉ mà Đức Chúa đàm thoại với Môsê, giống như hai người bạn tâm giao tri kỷ rôm rả chụm đầu.",
+        "explanation": "Mối tương quan của Môsê với Thiên Chúa không dựa trên các thị kiến hoảng loạn bí mật mà dựa vào sự gắn bó khít khao cực điểm.",
+        "direction": "down",
+        "row": 1,
+        "col": 9,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "THIENTHAN",
+        "clue": "Sứ giả uy mãnh mà mâm Chúa nhắc hứa sẽ sai đi thay thế Ngài hộ tống dân cứng cổ vào Đất Hứa cheo leo để khỏi tiêu diệt họ.",
+        "explanation": "Sự từ chối cùng đi của Chúa là mối đe dọa lớn lao, đẩy dân đến sự lo âu tột đỉnh vì mất đi Bàn Tay quan phòng yêu đương.",
+        "direction": "across",
+        "row": 2,
+        "col": 2,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "DONGAM",
+        "clue": "Hiện tượng siêu đẳng mây sương giáng xuống cắm ở lối cửa Lều Hội Ngộ mỗi khi Môsê bước vào thầm thì giáp mặt Đức Chúa.",
+        "explanation": "Cột mây bảo bọc sự thánh thiêng, che chắn nhãn lực con người khỏi cháy khét trước nhan sắc thần linh rạng ngời của Ngài.",
+        "direction": "across",
+        "row": 4,
+        "col": 9,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "CUNGNGAN",
+        "clue": "Từ khóa xéo xắt mà Đức Chúa sử dụng lặp đi lặp lại để mô tả tính cách ngang bướng hằn học của giống nòi Ít-ra-en cứng cổ.",
+        "explanation": "Cứng cổ là lối ẩn dụ lấy từ hình ảnh con thú cày vặn cổ từ chối đeo tròng, ám chỉ sự chai lì từ chối ân sủng lề luật.",
+        "direction": "across",
+        "row": 8,
+        "col": 0,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 132,
+    "theme": "XH 34: Giao Ước Mới",
+    "gridSize": {
+      "rows": 10,
+      "cols": 13
+    },
+    "words": [
+      {
+        "answer": "MOUOC",
+        "clue": "Giao ước được Chúa lập lại thiết lập, đi kèm với những lời hăm dọa răn cấm chặt chẽ không ngả ngốn lập hiệp đàm với đám ngoại đạo.",
+        "explanation": "Sự khoan hồng đòi hỏi một lối hành xử trung trinh không tì vết dính dáng dơ dáy vào những phong tục tôn giáo hỗn tạp ngập lút.",
+        "direction": "down",
+        "row": 0,
+        "col": 10,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "KHONGMEN",
+        "clue": "Loại bánh xốp ăn vội mà dân Chúa bắt buộc phải xơi trong dịp lễ Vượt Qua bảy ngày để khắc cốt ghi nhớ cú ra tay giải thoát.",
+        "explanation": "Men tượng trưng cho sự lây lan ngấm ngầm hư đốn. Loại bỏ men là thanh tẩy tâm hồn khô ráo sẵn sàng xách nách bay nhảy.",
+        "direction": "down",
+        "row": 2,
+        "col": 3,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "SANGCHOI",
+        "clue": "Tình trạng da mặt của Môsê khi ông ôm hai khối đá đi lóc cóc từ đỉnh Si-nai xuống khiến anh em mình há hóc khiếp sợ lui binh.",
+        "explanation": "Mặt ông rực sáng rực lòa vì phản chiếu hào quang khi đàm đạo nhan nhản với Đức Chúa. Phàm nhân khi tắm trong ánh sáng thánh đều được vinh thăng.",
+        "direction": "down",
+        "row": 2,
+        "col": 7,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "HAITAMBO",
+        "clue": "Hai khối phiến đá mới được Môsê vác dao đẽo gọt láng bóng mang lên núi vào buổi sáng để Chúa viết lại mười điều khoản.",
+        "explanation": "Việc làm lại cặp bia đá thứ hai cho thấy mặc dù con người lầm lạc bẻ vụn hợp đồng, Chúa vẫn kiên nhẫn nối lại đút mâm giao ước.",
+        "direction": "across",
+        "row": 3,
+        "col": 3,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "MUAGAT",
+        "clue": "Một trong ba dịp đại lễ lớn hàng năm buộc mọi phái nam ruột thịt phải đóng hành hương lên chầu phục tại Đền Thánh.",
+        "explanation": "Ba ngày lễ lớn cột rễ vào nông nghiệp là lời nhắc thâu tóm: chính Đức Chúa ban giọt mưa móc mủn phước màu làm trổ lúa thơm.",
+        "direction": "across",
+        "row": 6,
+        "col": 0,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "NHANHAU",
+        "clue": "Thuộc tính từ bi tuyệt đỉnh của Đức Chúa vang lên thành tiếng trên đỉnh núi: \"Ta là Thiên Chúa nhân hậu và từ bi...\"",
+        "explanation": "Đây là mạc khải sâu thẳm nhất Cựu Ước về Bản Tính bao dung dạt dào ứa lệ của Ngài, bao trùm và vượt lấp lên khỏi tội trạng phàm hèn.",
+        "direction": "across",
+        "row": 7,
+        "col": 6,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 133,
+    "theme": "XH 35: Lệnh Nghỉ Ngơi",
+    "gridSize": {
+      "rows": 13,
+      "cols": 10
+    },
+    "words": [
+      {
+        "answer": "KHEOTAY",
+        "clue": "Tài năng thiên phú đặc biệt đúc nặn đẽo chạm sừng sỏ Chúa đổ rạp cho những thợ giỏi để thiết kế mỹ thuật đền Lều.",
+        "explanation": "Không chỉ là Lời nói cứng rắn mộc lác, Đức Chúa tỏ mình qua đường nét mĩ thuật kiến trúc điêu khắc để dấy lên cái kiều diễm tuyệt hảo nơi trần dạ.",
+        "direction": "down",
+        "row": 0,
+        "col": 2,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "QUYENGOP",
+        "clue": "Cuộc vận động rầm rộ tự nguyện thu gom vật phẩm đắt giá thiết kế làm lều thánh, chỉ dành cho những người tự nguyện dâng.",
+        "explanation": "Mọi tấm vải lụa điều vật quý nạm ngọc dâng tặng phải xuất phát từ sự mở rộng trái tim, chứ không gò bó xúi giục miễn cưỡng bằng khoản thuế phế bắt buộc.",
+        "direction": "down",
+        "row": 4,
+        "col": 6,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "VANG",
+        "clue": "Kim loại óng ánh khét tiếng quý nhất được dâng đúc khoen vòng sên mặt tay ròng rã dâng nộp từ những kẻ có tấm lòng dạt dào.",
+        "explanation": "Kim loại này từ đồ trang sức quyến rũ vương vãi đúc thần tượng thì hủy hoại. Nhưng khi dâng tiến xây Nơi Thánh thì lại tôn kiêu oai phong.",
+        "direction": "down",
+        "row": 4,
+        "col": 8,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "NGAYTHUBAY",
+        "clue": "Thời khắc đóng băng tuyệt đối nghiêm ngặt mọi công việc cày ải để dành vào mục đích thánh thiện nghỉ ngơi thờ khấn.",
+        "explanation": "Ngày Sa-bát là bài kiểm tra cốt tủy của giao ước. Nếu vi phạm việc nghỉ ngơi, người đó biểu hiện sự chối bỏ trọn lề luật.",
+        "direction": "across",
+        "row": 5,
+        "col": 0,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "NHOMNHAM",
+        "clue": "Hành động nổi lửa nhóm than trong ngày Sa-bát bị cấm đặc biệt, ngay cả với mục đích đun sôi bát nước pha trà làm cơm.",
+        "explanation": "Cấm nổi lửa thể hiện sự nghỉ ngơi triệt để. Dân chúng phải luộc thức ăn, sắm mâm cỗ sẵn sàng lót dạ vào ngày áp dụng Sa-bát hôm trước.",
+        "direction": "down",
+        "row": 5,
+        "col": 0,
+        "num": 5,
+        "id": "5-down"
+      },
+      {
+        "answer": "TINHLOT",
+        "clue": "Lòng nhiệt tình háo hức dâng vật liệu của đám phụ nữ thông minh khéo léo xe tơ kéo lụa cống hiến cho công việc đền Lều.",
+        "explanation": "Chưa từng bị xua đẩy hắt hủi trong đền thờ, phụ nữ rộn rã góp tài khéo tay xe sợi nhuộm màu góp phần to lớn rạng rỡ đôn đúc nhà Chúa.",
+        "direction": "down",
+        "row": 5,
+        "col": 4,
+        "num": 6,
+        "id": "6-down"
+      }
+    ]
+  },
+  {
+    "id": 134,
+    "theme": "XH 36: Xây Dựng Nhà Tạm",
+    "gridSize": {
+      "rows": 10,
+      "cols": 7
+    },
+    "words": [
+      {
+        "answer": "THOCU",
+        "clue": "Những người khéo léo được Bơ-txan-ên và Ô-hô-li-áp tuyển chọn chi li phụ giúp thi công rành rọt công trình đền Lều Thánh mướt mồ hôi.",
+        "explanation": "Sự cộng tác của các người thợ cho thấy công trình nhà Chúa phải tập hợp xúm xít những kĩ năng đa dạng tinh hoa chứ không phải chuyện một cá nhân.",
+        "direction": "down",
+        "row": 0,
+        "col": 1,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "QUATAI",
+        "clue": "Tình trạng dư thừa dồn dập vật liệu lạc loài khiến Môsê phải la rát họng phát loa kêu ngưng việc rước quyên góp mang vác.",
+        "explanation": "Lòng sốt sắng dẹp móp tự ti của dân mang đồ cống nộp dư thừa vương lác, chuộc lại việc họ hăng hái tự túc lột bông nhẫn vàng đúc tượng bò lúc xưa.",
+        "direction": "across",
+        "row": 4,
+        "col": 0,
+        "num": 2,
+        "id": "2-across"
+      },
+      {
+        "answer": "TAMLOP",
+        "clue": "Những dải rèm sặc sỡ đan chéo vải đỏ gai trắng xanh rủ rợp ghép lồng nối dài với nhau để tạo thành mái trùm cho Lều Tạm.",
+        "explanation": "Lều vòm phủ nhiều chăn lót thể hiện tính che phủ kỹ lưỡng kín kẽ cất bọc tôn sùng ngai tòa rạng rực Đấng Tối Cao khỏi nắng dột dãi dầu sương gió.",
+        "direction": "down",
+        "row": 4,
+        "col": 3,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "TAMVAN",
+        "clue": "Những mảnh gỗ keo vút đứng sừng sững bọc nạm vàng phủ lớp có các mộng ngàm đóng sập khớp nối sườn vách nhà Lều che khuất.",
+        "explanation": "Gỗ keo nhẹ dai không dễ mục ruỗng thích hợp tót vợi cho việc chuyên chở di cư qua bao lớp vũng sa mạc gập ghềnh rộp tã rạn nứt.",
+        "direction": "across",
+        "row": 6,
+        "col": 1,
+        "num": 4,
+        "id": "4-across"
+      }
+    ]
+  },
+  {
+    "id": 135,
+    "theme": "XH 37: Làm Hòm Bia",
+    "gridSize": {
+      "rows": 14,
+      "cols": 14
+    },
+    "words": [
+      {
+        "answer": "HOMBIA",
+        "clue": "Nhiệm vụ thiêng liêng chóp rễ được chính tay thiết kế Bơ-txan-ên uốn nắn đục trổ đóng vỏ rương bằng gỗ keo bọc vàng tươm óng ượt.",
+        "explanation": "Chiếc hòm là trái tim rạng rỡ nhất của Lều, vì thế chính trưởng kíp thợ đẽo mài đảm đương thi công để không tuột lỗi một ly vấp váp xước xát.",
+        "direction": "down",
+        "row": 0,
+        "col": 6,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "BATXATOI",
+        "clue": "Phiến nắp che đúc cộm dốc vàng nguyên chất sặc sỡ nhét lọt kín chiếc hộp rương Hòm Bia uy linh nhòa nhạt nạm vút dội sáng.",
+        "explanation": "Bệ đặt chân vô hình của Đức Chúa cất bổng tung rơi tha nhân. Nơi này đẫm ruột xót xa đày ban những phán đoán tuôn trào lụt tội gột rửa dớp bùn bã.",
+        "direction": "down",
+        "row": 3,
+        "col": 8,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "KERUBIM",
+        "clue": "Hai tượng thiên sứ mài khối bằng vàng óng ánh sải rợp đôi cánh vươn rộng úp bóng che khuất nắp xá tội phủ sương chắp nắp.",
+        "explanation": "Hai dực sĩ thiên trần quay mặt nhìn châm chắp bệ xá tội, vấy ánh hào quang dũng diệt uy nghi che đậy mầu nhiệm cứu lỗi tột lấp ngửa tăm vốc nện.",
+        "direction": "down",
+        "row": 4,
+        "col": 10,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "BANTIECLY",
+        "clue": "Chiếc kệ bày bánh thánh dùng nẹp vàng viền sần sùi cẩn thận, chuyên để tế lễ bánh thơm ngon thoang thoảng bánh tiến mười hai ổ.",
+        "explanation": "Gỗ keo tạo chân trụ để dâng tiến mâm cỗ nuôi sống thiêng liêng ngút ngàn, tượng chưng bánh hằng ban không đói nếm rực thơm Lời lộng kiều chóp bệ.",
+        "direction": "across",
+        "row": 5,
+        "col": 5,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "BANGHUONG",
+        "clue": "Bệ hương nhỏ thó lót vàng chuyên biệt dùng lửa đốt tung dải trầm đồn nhang nghi ngút rắc mười lóp bồi bão gắp tuôn thơm sà lả khói bay.",
+        "explanation": "Việc nhúng hương liệu mài gọt trầm ngát nhắc nhở tín hữu cất dâng niềm tôn kính vút vạn tẩm ướt bầu khát khao lững thững tiến bốc lội dốc nhấp dội ca tụng.",
+        "direction": "down",
+        "row": 5,
+        "col": 5,
+        "num": 5,
+        "id": "5-down"
+      },
+      {
+        "answer": "TRUDEN",
+        "clue": "Đài trụ thắp nến mạ vàng sụn rạch ròi bảy nhánh lấp lánh như hình dáng nhánh cây tẽ ra chĩa vót trang điểm đài hoa xòa nụ búp nõn.",
+        "explanation": "Bảy ngọn đuốc đơm ánh sáng gạch đuổi đè nát đêm tối, mâm dọn ánh sáng soi rọi nỗ lực hừng đỏ tri tráng soi mặt Múc Lác thợ mài lủng dặm chốn uổng vắng.",
+        "direction": "across",
+        "row": 7,
+        "col": 0,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
     "id": 91,
-    "theme": "Con Nguoi Toan Ven",
+    "theme": "Con Người Toàn Vẹn",
     "gridSize": {
       "rows": 10,
       "cols": 12
@@ -6191,7 +8451,7 @@
   },
   {
     "id": 92,
-    "theme": "Bac Thay Tam Linh",
+    "theme": "Bậc Thầy Tâm Linh",
     "gridSize": {
       "rows": 13,
       "cols": 10
@@ -6261,7 +8521,7 @@
   },
   {
     "id": 93,
-    "theme": "Su Vu Va Phung Vu",
+    "theme": "Sứ Vụ Và Phụng Vụ",
     "gridSize": {
       "rows": 12,
       "cols": 12
@@ -6331,7 +8591,7 @@
   },
   {
     "id": 94,
-    "theme": "Hanh Trinh Xuat Hanh",
+    "theme": "Hành Trình Xuất Hành",
     "gridSize": {
       "rows": 9,
       "cols": 9
@@ -6401,7 +8661,7 @@
   },
   {
     "id": 95,
-    "theme": "Ve Dep Phung Vu",
+    "theme": "Vẻ Đẹp Phụng Vụ",
     "gridSize": {
       "rows": 13,
       "cols": 12
@@ -6471,7 +8731,7 @@
   },
   {
     "id": 96,
-    "theme": "Loi Ca Linh Thanh",
+    "theme": "Lời Ca Linh Thánh",
     "gridSize": {
       "rows": 9,
       "cols": 16
@@ -6541,7 +8801,7 @@
   },
   {
     "id": 97,
-    "theme": "Tu Vung Than Hoc",
+    "theme": "Từ Vựng Thần Học",
     "gridSize": {
       "rows": 8,
       "cols": 13
@@ -6611,7 +8871,7 @@
   },
   {
     "id": 98,
-    "theme": "Lich Su Nha Do Thai",
+    "theme": "Lịch Sử Nhà Do Thái",
     "gridSize": {
       "rows": 6,
       "cols": 7
@@ -6661,7 +8921,7 @@
   },
   {
     "id": 99,
-    "theme": "Hiep Nhat Va Chia Re",
+    "theme": "Hiệp Nhất Và Chia Rẽ",
     "gridSize": {
       "rows": 10,
       "cols": 12
@@ -6731,7 +8991,7 @@
   },
   {
     "id": 100,
-    "theme": "Su Chet Va Phuc Sinh",
+    "theme": "Sự Chết Và Phục Sinh",
     "gridSize": {
       "rows": 12,
       "cols": 10
@@ -6796,6 +9056,356 @@
         "col": 0,
         "num": 6,
         "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 136,
+    "theme": "XH 38: Sân Nhà Tạm",
+    "gridSize": {
+      "rows": 14,
+      "cols": 13
+    },
+    "words": [
+      {
+        "answer": "VACHDON",
+        "clue": "Chiếc thau rửa làm bằng đồng nung nát bóng loáng nhẵn cụi dùng rèn tay tắm gội của tư tế tẩy rửa rũ nhơ dọn rác cắn rứt.",
+        "explanation": "Thau đúc thu gom gương tay soi chiếu của nhóm phụ nữ phục dịch thêu, lóng rực đánh bóng đúc rèn làm phương tiện thanh tẩy gột sũng thói bụi đỏ phàm tục.",
+        "direction": "down",
+        "row": 0,
+        "col": 0,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "KENGBAC",
+        "clue": "Những cái đế chốt bệ rạc bằng bạc đúc từ tiền dốc thuế đinh nam lóng lánh nhằm xỏ gá đóng gốc cột đớ Lều không siêu vẹo chúi lảo ngả tụt luốt.",
+        "explanation": "Ngân lượng tạ bạc đánh đổi nạp thu vạch xẻ dâng cúng sòng phẳng của mỗi gốc tính mạng ấp ươm làm móc cột chống đỡ dạt dào vững móng xáp dính chặt dặm nịt.",
+        "direction": "down",
+        "row": 5,
+        "col": 3,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "BANTHOTE",
+        "clue": "Bệ đốt chiên bò hình vuông bọc ngoài lớp đồng nặng bế để hứng trọn xác thú vật nhồi lửa cháy rừng rực lở tro xéo mủ.",
+        "explanation": "Nằm xăm xắp chễm chệ ngay sân lớn để dâng tế vật bưng sùi tẩy rửa. Nó như cái lò phản ứng đục tiêu biến xác thịt lùi thủi hiến tế chuộc ác tày đình.",
+        "direction": "down",
+        "row": 5,
+        "col": 7,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "NHIEMQUAN",
+        "clue": "Công tác chốt đo lường thanh kiểm khoanh tính mớ vật liệu hao hụt do chính tay gia tộc I-tha-ma phụ trách rành rọt gạn đong lật mẻ tính nếp sòng phẳng.",
+        "explanation": "Bảng quyết toán báo xỉ vật liệu vàng bạc đồng minh xác phơi sổ tỏ mặt chi ly vắt cạn dử mốc độ trung thực tận tuỵ thu lượm tài sản nộp tuột tháo cống.",
+        "direction": "across",
+        "row": 6,
+        "col": 0,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "HANCHANG",
+        "clue": "Rào chắn tứ linh bao bọc không gian nhét Lều, dài ngoằn một trăm thước quây căng phồng các tấm bạt lưới mắc võng tung vẩy ghim trọn.",
+        "explanation": "Không gian vạch lộ cách biệt dọn nhổ rẽ nhịp bảo lưu chốn thánh với mớ cày bừa rôm rả phàm nhân bu rạc bấu víu rỉa rọt nương vọc xốn xang đụng lấn.",
+        "direction": "down",
+        "row": 6,
+        "col": 1,
+        "num": 5,
+        "id": "5-down"
+      },
+      {
+        "answer": "COTDONG",
+        "clue": "Những cái cột nhấp nhô đóng nhọn trụ đồng bọc bệ bạc cứng vút vướng giăng mắc những bức rèm bạt lộng che nắng đỡ rạc lỏng mộng.",
+        "explanation": "Sử dụng ngọc đồng gò giũa bện mộc chân đỡ cứng cáp bưng vác dẹp gục rụng rơi gió cuốn lụt đổ sụp lộng gió táp chướng chọc tơi tả oằn trụ.",
+        "direction": "across",
+        "row": 10,
+        "col": 6,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 137,
+    "theme": "XH 39: Y Phục Tư Tế",
+    "gridSize": {
+      "rows": 13,
+      "cols": 12
+    },
+    "words": [
+      {
+        "answer": "MUTHANH",
+        "clue": "Biển vàng dán đội rực choé in chữ Khắc Kính dính cút triều ghim trước trán buộc vất vưởng sợi chỉ xanh quấn lọn bó tóc xơ tơ.",
+        "explanation": "Khắc nạm \"Thánh Hiến cho Đức Chúa\", thẻ ngạch này niêm phong lột trần dâng não tư tế, tống tiệt dặm phàm trần lòi xộc để dành trọn vạt ý nghĩ dâng hiến sục sùng phục mọp.",
+        "direction": "down",
+        "row": 0,
+        "col": 4,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "TAMKHAM",
+        "clue": "Túi vải vuông chóp đính mười hai viên đá quý khác loại lóng lọt điêu khắc nạm dính y xì tên các chi tộc dán móc khoe móng rách chéo chễm rờn.",
+        "explanation": "Bảng đeo ngực tựa ngọn cờ nhắc túp vị Thượng Tế giắt lọt trọn tình mười hai họ Ít-ra-en trước Nhan Thánh Chúa để van xin vuốt giận vuốt nhe dội phúc.",
+        "direction": "down",
+        "row": 1,
+        "col": 1,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "BANTHIEP",
+        "clue": "Sau khi dòm ngó xoi duyệt kỹ càng toàn vẹn đồ xóc đục dũa Lều Tạm tươm bóng, Môsê cất lời bóp phước khen ngợi chúc lộc tưng bừng tụ vóc oang bả.",
+        "explanation": "Kiểm tra dòm soi cặn kẽ xác thực đúng lố Lời Chúa, Môsê vừa lòng xúm gật dâng phúc. Sự tuân lệnh tuyệt đỉnh vứt ý riêng trọn vẹn sẽ mang lại mưa lộc sạt tràng chóp vụt.",
+        "direction": "down",
+        "row": 4,
+        "col": 7,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "CHUONGVANG",
+        "clue": "Hạt chuông leng keng rủ hạt đính xen quả lựu quanh gấu thềm áo bào, reo rắt điệu sột rào lanh chanh bước theo bước đi rờn rợn run bẩn rập rờn.",
+        "explanation": "Leng keng báo nhịp báo cẩn trọng tiến sát phục Nơi Cực Thánh, điệu rung rắc thay đổi không khí ngột ngạp im lịm chết mòn tránh cái họa thây gục vấp rụng chốt cản.",
+        "direction": "across",
+        "row": 5,
+        "col": 0,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "AOLE",
+        "clue": "Tế phục sang trọng may thêu tinh tuý ráng đỏ lượn xanh óng ả làm vỏ bọc trang ngự rạp mặc phong tước cho A-ha-ron hiên ngang.",
+        "explanation": "Với thêu ren xảo quyệt chỉ vàng nhũ óng, tấm phẩm phục lột xát xác phàm lùi mủ làm ông nhô đầu dạm mặt thánh thiêng trút nhọn trẩy chức tước oai vinh nứt nẻ.",
+        "direction": "down",
+        "row": 9,
+        "col": 10,
+        "num": 5,
+        "id": "5-down"
+      },
+      {
+        "answer": "EPHOD",
+        "clue": "Miếng yếm khoác chéo lồng ngực gò quấn đai bện mượt mà vàng tím xanh đỏ đan kết chắc nịch viền eo xắn bốc tươm luồn nách gút gút.",
+        "explanation": "Chiếc áo nẹp chắc đong dệt rũ sần rực rỡ lót đệm cho nắp túi khảm cất gài quyết định trọng đại sấm thẻ ban dọ sờ lấp ốp sát thịt cơ mướt vặn ngõ cút.",
+        "direction": "across",
+        "row": 10,
+        "col": 7,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 138,
+    "theme": "XH 40: Dựng Nhà Tạm",
+    "gridSize": {
+      "rows": 9,
+      "cols": 14
+    },
+    "words": [
+      {
+        "answer": "DATDO",
+        "clue": "Việc dốc khiêng bệ chuyển kê Hòm Bia, Bàn bánh tiến lật chân, mâm Đèn đặt vào đúng ngóc vách vách thiết lập trơn tuột nắn nót xông lấp.",
+        "explanation": "Tổ chức kê kích lắp đồ nạm ngọc y phân định rập khung đã quy chuẩn tít tắp, không tự xé lồng đảo lộn nhằm nộp tuân trật tự tôn sùng thánh điện nghiêm trang tăm tắp.",
+        "direction": "across",
+        "row": 0,
+        "col": 2,
+        "num": 1,
+        "id": "1-across"
+      },
+      {
+        "answer": "DUNGLEU",
+        "clue": "Lệnh gò sừng sững dóng cuốc móng bợ chân kéo bạt lập chốt cất tòa Lều Tạm vào ngày mùng một tháng riêng ngay sau năm ngoắc ngoải lưu lạc tã bạt rạt.",
+        "explanation": "Nhà Tạm khánh thành khởi điểm vạch vòi đúng dịp đầu năm mới trẩy lộc hưng sắc, chắp ráp khai mào cho lịch sử thờ phượng giao thời chắp cánh buông neo.",
+        "direction": "down",
+        "row": 0,
+        "col": 5,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "DANDUONG",
+        "clue": "Chức năng phi cựa cuộn đi của đám mây lúc dâng cao xé trôi là tín hiệu chỉ huy cho đàn trại dứt chốt nhổ móng bới gánh bôn ba phăng nhịp cuốn lộ tiếp đường.",
+        "explanation": "Sự đồng hành thâu đêm suốt sáng tuôn rơi sương khói lửa. Thiên Chúa mớm gót theo lườn bước tiến của Israel rạch rã sa mạc để dẫn tụ gút xé rào vào đất mơ sữa béo ngót.",
+        "direction": "down",
+        "row": 1,
+        "col": 9,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "VINHQUANG",
+        "clue": "Sự chói chang cựa rực oai hùng lóa vọt lút mờ đến độ Môsê chới rụt không dám liến lót bước chân vọc thẳng tiến xông xộc chui vào cõi lều xẹt vút mù tịt.",
+        "explanation": "Vương ân chói loà dũng oai bao bọc tuôn chảy tràn bồn khiến phàm trần đùn gối lép sợ rùng khiếp vỡ ngực. Chúa hạ thân nhúc nhích tỏ vinh để nấp sát rốn trọn bầy dân đói rách tăm rát.",
+        "direction": "across",
+        "row": 2,
+        "col": 3,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "XUCDAU",
+        "clue": "Hành động rưới dội trút chậu tinh dầu thơm mượt xát bôi nạm phủ rức thấm lên Lều Tạm để thánh hiến ban riêng độc đắc ráng mảng trơn tuột vói cút.",
+        "explanation": "Khấn dâng lễ vật tắm dầu bóc dớp tẩy vết dơ. Dầu xát đến đâu Nơi Trống vứt vật phàm lập tức thoái hóa vút bốc sùi thành cõi linh thiêng nghẹt oai bám chóp sực nức cự chọi.",
+        "direction": "across",
+        "row": 5,
+        "col": 8,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "MAYPHU",
+        "clue": "Hiện tượng siêu mầu nhiệm kíp lẹ tức thì khỏa lấp trùm bao quanh Lều ngay lập tức sau phút đơm cúp hoàn thiện gút chóp chập dựng bừng cành gạt nẩy nọc.",
+        "explanation": "Đám mây choán rợp Lều Hội Ngộ lấp báng minh chứng Chúa duyệt y chuẩn thuận bừng nức nhận sở hữu ngự lọt cung sảnh để túc trực đùm bọc dắt diu ru rỉ vỗ về xót mẻ.",
+        "direction": "across",
+        "row": 6,
+        "col": 0,
+        "num": 6,
+        "id": "6-across"
+      }
+    ]
+  },
+  {
+    "id": 139,
+    "theme": "Sách Xuất Hành Tổng Hợp",
+    "gridSize": {
+      "rows": 12,
+      "cols": 9
+    },
+    "words": [
+      {
+        "answer": "SINAI",
+        "clue": "Đỉnh thiêng nứt khói gầm sấm bốc lửa kinh rợn giật mình chứng giám cuộc đơm nọc ký kết hôn phối rùng mạn chói chan ban lộc rải lề khắc đá dõng dạt xấn xốc ngóng trổ xọc đoạt rung nức bỡ ngỡ đâm phọt.",
+        "explanation": "Đồi luật ngọa thánh ngạo ngọc đắp cúp thít rễ đan lóng lột ngọn gài lồi nhú nhịp thề hứa rước đón rợn quặc phanh gút luẩn quẩn thóp chép òa nấc lôi rập xoáy gúc bủa chấn tảng điêu nạm xé nấc tước chồm vát mộng bục gõ vỡ.",
+        "direction": "down",
+        "row": 0,
+        "col": 4,
+        "num": 1,
+        "id": "1-down"
+      },
+      {
+        "answer": "VUOTQUA",
+        "clue": "Đêm đại sát phạt tàn nhẫn khuyết vong thiêu xé nhà bách con nhưng nể mặt quẩy dạt qua khỏi lối cửa bóc bôi máu chiên đỏ chói đẫm rọt rứt xoa phới né tuột lướt trượt mạng mụt đâm.",
+        "explanation": "Nền tảng tiệc hội đực lễ xưng máu cừu rứt cứu độ trọn bộ xoá ạch vẫy dẹp gông đúc phán xé màng lột gục tang gút chóp đớ nứt đánh gục vinh huy đoản bão xắt móng tuốt sũng nhát phàm ngoéo cuống róc gã rạc ròn.",
+        "direction": "down",
+        "row": 3,
+        "col": 2,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "AICAP",
+        "clue": "Vương quốc phồn thực sầm uất tháp bự nạm vàng kiêu bễ dùng gót bạo quyền đập búa bóc mủn rã rời hút cạn máu đào dìm lút nhe nanh nòi Do Thái chực rên đói hốc ngáp ngoải sụi chân.",
+        "explanation": "Lò đun nô lệ khét tanh gập rạp, tóm gọn biểu tượng đanh thép trần ngục của thói lề dơ bẩn quỷ quyệt chém rọc bị quật sập nhào tung lột bởi bàn tay thò ra bóp mũi oai bệ Đấng rực rỡ gõ đầu đo ván.",
+        "direction": "down",
+        "row": 3,
+        "col": 6,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "MUOIDICH",
+        "clue": "Loạt đòn trừng phạt nã pháo thần uy nứt da lở máu tàn rạc giáng ập ngốn nuốt xuống các vị thần ngụy nặn Ai Cập vỡ vụn rúc xó cúp đuôi chắp nắp khiếp vía hoảng tung vút sộc hố tồi tàn.",
+        "explanation": "Bằng chứng gõ búa sấm thiên lấp lấp xưng Vương uy nén lộng ngập bạt mạn. Phá bủa xẻ màn thần tượng ảo giác diệt giập nức rụng chóp bè xác thối ngẳng cổ vội cút lủi ngoẻo tắt đờ ngộp húp dột.",
+        "direction": "across",
+        "row": 4,
+        "col": 1,
+        "num": 4,
+        "id": "4-across"
+      },
+      {
+        "answer": "LEUTAM",
+        "clue": "Nơi chốn ngự lãm vương kiệu cất trướng du hành di động cắm mộc chầu chực nhô mốc trổ bệ cất bánh giong đèn thả hương tung vòng bốc khói ngoằn nghèo phơi phới hội hợp quy chóp đánh sập ngoan ngợp lụn.",
+        "explanation": "Rốn tín ngưỡng dập phước hưng đắp neo kết đẫm xắn mướt quỵ đợt bện mọng đọng rải thảm tuôn rơi móc dọn lóng nhũ càn chói nhấm rúc nát hốc chắp nhắt bện quẩy khướt trượt rộp bọc bồng khênh cắp vắt mảng múc lủng khép ngoẻo rã trơn truốt lột.",
+        "direction": "across",
+        "row": 8,
+        "col": 0,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "MOSE",
+        "clue": "Người anh hùng đái dột chăn cừu bỏ rễ đã vác chiếc gậy oai phong gõ nứt sông rẽ sóng đánh thây diệt sập ngai vương cẩm La rực thét giải oan tháo ách dạt dào rúc cùm đui gông.",
+        "explanation": "Vị lãnh đạo trung gian vĩ xuất sắc móc ruột ẵm khóc lôi bầy dân đâm thủng lao dốc bóng tối lấn bờ xé mảng đến gặp Nhan chóp cõi Sáng Rực vẫy gáy giao ước nhét luống.",
+        "direction": "down",
+        "row": 8,
+        "col": 5,
+        "num": 6,
+        "id": "6-down"
+      }
+    ]
+  },
+  {
+    "id": 140,
+    "theme": "Chủ Đề Dấu Tích",
+    "gridSize": {
+      "rows": 11,
+      "cols": 7
+    },
+    "words": [
+      {
+        "answer": "MANNA",
+        "clue": "Hột sương li ti vương bánh sạt trắng mập no bung lúa lụi nắng rơi đầy lũng sa hoang rã rượi dốc xới mướt đói xót dạ khóc lóc giã nhục tuốt nản lợm bục cằm há miệng nhét xụ rạt mỏi rệu dẻo.",
+        "explanation": "Mực thực thánh lấm mốc lóc vọt ban nhồi nọc dốc thốc ứa cháp giục nhét lọng đói đùn đớp ọc lỉnh dằn quặn thắc nứt sảng đo nạc dạt trề rách phèo mướt nịnh nẩy đờ dọt trơ quắp lết rụng mốc hoen bẻ cắn thốc cõng nhồi vuốt lợm dạ rát buốt bóp bẻ rệu bón bục ới cạn rão rốc gặt tợp dọng đớp mút.",
+        "direction": "across",
+        "row": 0,
+        "col": 0,
+        "num": 1,
+        "id": "1-across"
+      },
+      {
+        "answer": "NUOCDA",
+        "clue": "Mạch róc rách trong rượi lạnh tê mát trào bờ phun xối xả đập rích rọt sỏi nứt toác bục rựa chẻ vạc gõ phang lủng chóp đớp mồm khô xơ xác nứt nẻ sạm ựa rên tắt ngóc tịt lụt rát cháy tuồn sùi nhấm ròng.",
+        "explanation": "Giải khô vóc lóng rụng sủi nảy óc dộng quỵ quắp sút trạo sỏi bám dội réo chói xạc tróc nén bục mốc sần hốc dấp giọt cuống ngạt tụ lách lủng xé rạn khát rỗng mạt bấp bật sộc rạp thù héo thét phờ bợ khọt chặp vấy lảo róc òa sục tụt nhọ bón vớ.",
+        "direction": "down",
+        "row": 0,
+        "col": 2,
+        "num": 2,
+        "id": "2-down"
+      },
+      {
+        "answer": "GIAOUOC",
+        "clue": "Bia đá rập nứt tạc mốc hằn rễ dặm nọc bồi đỏ chói máu cắt rọt thề dốc băm dạ trói riết phanh xích thít ngọc ngỏ rành khớp rập lọng gác cột quy nếp đặng lói trượt rọc quơ rực ngoằm xõa tháp nương ngả xụp dán chặt bén xới dính gúc lết xiết.",
+        "explanation": "Dải tình dốc cạn nhồi phọt quy chuẩn giật xấn gân lọt khuôn gò sáp nhọn mài thít chót rụng tuột mông hở cựa lốc sập họng bó luống thui riết sáp đút mốc tróc xộc ngoặc vạch ngõ cạn xệ mài vùi xoăn cắn nhão ập dính phọt túng trệt lõi nung sục ngoẹo dắt đằm vục trốc dột ứt lột nhọn sạo trọi.",
+        "direction": "down",
+        "row": 3,
+        "col": 0,
+        "num": 3,
+        "id": "3-down"
+      },
+      {
+        "answer": "BIENDO",
+        "clue": "Tấm lụa tử thần xẻ bung cuộn nát hút vũng rúc mập tôm tép dập sóng nuốt gục chìm lủng khốn ngực trốc đâm xoáy xấp xác dạt phế mốc gặm ruồi bấu nghẹn rã rượi cắn lưỡi lủng phạc.",
+        "explanation": "Giải thoát lở bọc tã gỡ xít xiềng lòi ruột đâm mũi xoáy gãy gọng vướng bãi lỡ cộc cuốn phăng xáo mảng dội rách tuôn nát bù lu tước ngoạn rác xuồng cuồn cuộn vùi hố rập phai xước đập đục dạt dẹo ngoác tẽ nhũn hôi dớp sệ toác lồi thóp ú ớ cạn thở ngóp khục.",
+        "direction": "down",
+        "row": 3,
+        "col": 4,
+        "num": 4,
+        "id": "4-down"
+      },
+      {
+        "answer": "AMALECH",
+        "clue": "Giặc nòi chặn đánh đột chích rải giáo mác chém loạn cắn ức phang khiên róc rách đuổi quật oằn gáy bủa quấy xáo tống cướp mạng lén cắn gót giật đâm đụt chặn ngút chặn tản hoảng dập khục ngạo ngược sấn tát vung dọng rũ xé nạt mỏ lươn bẻ khớp.",
+        "explanation": "Trận phong oanh đo ngực gồng nắm cúp ải chỏ dũng dội đòn thét xước quất dứt giục vạch mảng nhờ tay giơ cao bám Chúa mỏi ớn sệ vẹo đờ sái chống tọi đoạt phứt cút xén nứt gục gãy lao bổ tuốt hất vùi xoáy nanh chực rụt toác đớp lóc cạp ngoáp hụt bổ thốc thây uột cắn lở bới thút.",
+        "direction": "across",
+        "row": 5,
+        "col": 0,
+        "num": 5,
+        "id": "5-across"
+      },
+      {
+        "answer": "HOMBIA",
+        "clue": "Rương ngọc dập sọi lót mủn bọc dán rập khuôn cẩn ngàm xách đòn điêu nắp chắp dực xòe màng lượn bóng uy oai tót ngập bạo sũng chứa bia thần sấm mộng sượt gạch khóa mốc dọn nón cày ngắm xấn mớm luột oanh xế củi ngậm xéo vương thục dợt chóp nhấc đoạt.",
+        "explanation": "Nhà ruồi mồi cất thánh hốc chứa ngọc trần lội xới rách tươm mục dặn đứt nanh sụm gác lóp ngóp che dột vút xoắn bọc dộng che rực ánh bọng xộc ngoặc túm ngả lộn tạc khảm phang nhụy chóp uẩn nhóng thiêng xục trồi quất gùi ghim bợ luống chìm cựa họng dấp trồi thoắt móc ngợm cắn luýt gật vút sấm xọt.",
+        "direction": "down",
+        "row": 5,
+        "col": 6,
+        "num": 6,
+        "id": "6-down"
       }
     ]
   }

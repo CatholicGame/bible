@@ -1,5 +1,5 @@
 module.exports = [
-  {id:31,theme:'Luan Ly Xa Hoi',words:[
+  {id:31,theme:'Luân Lý Xã Hội',words:[
     {answer:'CONGBANG',clue:'Nhân đức trụ cột đòi hỏi ý chí kiên định phải trả lại cho mỗi người những gì gia sản họ xứng đáng.',explanation:'Công Bằng là nền tảng của trật tự xã hội. Kinh Thánh luôn mạnh mẽ lên án việc bóc lột người nghèo và đòi hỏi sự công bằng trong giao hoán và phân phối.'},
     {answer:'BOTRO',clue:'Nguyên tắc yêu cầu cấp quản lý cao hơn không được can thiệp đoạt quyền những việc cá nhân tự làm được.',explanation:'Nguyên tắc Bổ Trợ (Subsidiarity) bảo vệ trách nhiệm cá nhân: hãy để cấp thấp nhất xử lý vấn đề của họ, cấp cao chỉ can thiệp để hỗ trợ khi cần thiết.'},
     {answer:'GIADINH',clue:'Tế bào căn bản đầu tiên và là trường học đạo đức quan trọng bậc nhất của đời sống hiệp thông thế nhân.',explanation:'Gia đình là "Hội Thánh tại gia", nơi đón nhận sự sống và giáo dục con cái yêu mến Thiên Chúa. Mọi chính sách xã hội phải nhắm tới việc bảo vệ gia đình.'},
@@ -7,7 +7,7 @@ module.exports = [
     {answer:'LIENDOI',clue:'Đức hạnh Kitô giáo thôi thúc chia sẻ gánh nặng với người nghèo khổ và gắn bó cùng ích lợi chung tập thể.',explanation:'Cả nhân loại là một đại gia đình. Liên đới không phải là thứ tình cảm mơ hồ xót thương, mà là sự dấn thân hành động thiết thực cho người anh em túng thiếu.'},
     {answer:'BACAI',clue:'Nhân đức siêu nhiên cao trọng nhất, đòi hỏi chúng ta yêu mến tha nhân vô vị lợi như chính bản thân mình.',explanation:'Bác ái (Caritas) là trái tim của đạo lý. Vào ngày phán xét, chúng ta sẽ không bị tra vấn về bằng cấp hay tài sản, mà chỉ bị xét hỏi về tình yêu bác ái chí tình.'},
   ]},
-  {id:32,theme:'Nuoc Thien Chua',words:[
+  {id:32,theme:'Nước Thiên Chúa',words:[
     {answer:'NUOCTROI',clue:'Thực tại vĩ đại mà Chúa Giêsu không ngừng rao giảng, tựa như hạt cải nhỏ mọn rồi sẽ mọc thành cây to.',explanation:'Nước Trời không phải là một vương quốc mang tính chính trị lật đổ vương quyền, mà là sự thống trị êm ái của tình yêu Thiên Chúa trong trái tim nhân loại.'},
     {answer:'LAYCHA',clue:'Bản kinh do chính môi miệng Chúa truyền dạy, trong đó có lời thiết tha cầu xin cho vương quốc Ngài trị đến.',explanation:'Mỗi lần thốt lên câu "Nước Cha trị đến", chúng ta mong mỏi công lý và hòa bình của Thiên Chúa sẽ cắm rễ sâu vào một thế giới đang ngập ngụa điêu tàn tội lỗi.'},
     {answer:'CANHCHUNG',clue:'Giai đoạn lịch sử cuối cùng khi vạn vật đến hồi viên mãn kết thúc và Chúa Kitô rạng ngời quang lâm.',explanation:'Thời cánh chung (Eschatology) đã mở ra từ lúc Chúa thăng thiên. Giáo Hội mang tính lữ hành, vượt qua gian lao thử thách để tiến về quê hương đích thực.'},
@@ -15,7 +15,7 @@ module.exports = [
     {answer:'LUYENNGUC',clue:'Nơi thanh luyện tạm thời rát buốt xót xa của linh hồn vương vấn đợi ngày sạch tì vết bước vào Nước Chúa.',explanation:'Sự thánh thiện của Chúa là ngọn lửa tiệt trừ mọi vết uế. Việc thanh luyện là một hành trình đau đớn nhưng tràn ngập hy vọng vì chắn chắn được rỗi linh hồn.'},
     {answer:'THIENDANG',clue:'Niềm hạnh phúc tột bậc không định lượng biên giới khi được chiêm ngắm hưởng dung nhan Ba Ngôi đời đời.',explanation:'Thiên Đàng là trạng thái hiệp thông tròn đầy nhất với Đấng Tạo Hóa, nơi không còn than van khóc lóc, đau đớn hay chia ly mà chỉ còn niềm vui ca hát muôn đời.'},
   ]},
-  {id:33,theme:'Tin Dieu Duc Me',words:[
+  {id:33,theme:'Tín Điều Đức Mẹ',words:[
     {answer:'VONHIEM',clue:'Đặc ân độc nhất vô nhị tuyệt diệu giữ cho tâm hồn Mẹ tinh tuyền không mảy may một tì vết tội nguyên tổ.',explanation:'Tín điều Vô Nhiễm Nguyên Tội khẳng định Đức Maria được đặc cách hưởng ơn cứu chuộc sớm nhất thế gian, để dọn chỗ tươm tất dọn lòng cưu mang Đấng Thánh.'},
     {answer:'DONGTRINH',clue:'Trạng thái khiết tịnh trọn vẹn của thân xác Mẹ trước, trong và mãi mãi ngay cả sau khi sinh Đấng Cứu Thế.',explanation:'Hội Thánh tuyên xưng Mẹ Maria là Đấng Trọn Đời Đồng Trinh. Chúa Giêsu sinh ra mà không làm thay đổi hay xâm phạm đến tính vẹn toàn khiết trinh của Mẹ.'},
     {answer:'MONGTRIEU',clue:'Đặc ân vinh hiển kết thúc cõi trần được thiên sứ cất rước tung hô lên ngai vàng bằng cả linh hồn hồn xác.',explanation:'Đức Mẹ Lên Trời uy nghi minh chứng chiến thắng của Chúa Kitô trên sự chết đã áp dụng trọn vẹn cho thân mẫu của Ngài, người vốn hoàn toàn sạch án tử hình.'},
@@ -23,7 +23,7 @@ module.exports = [
     {answer:'XINVANG',clue:'Hai tiếng thưa ngoan ngoãn phó thác nhẹ nhàng tuyệt đối đã mở tung cánh cửa lịch sử đón ơn Cứu Độ vào đời.',explanation:'Tiếng thưa Fiat êm đềm của Mẹ tại làng Na-da-rét bé nhỏ đã bẻ lái toàn bộ định mệnh khốn cùng của nhân loại, đảo ngược tác hại kiêu ngạo từ tổ tông E-và.'},
     {answer:'MANCOI',clue:'Tràng hạt sương mai đan kết những lời kinh Kính Mừng mà Mẹ nhiều lần hiện ra khẩn thiết dặn dò phải đọc.',explanation:'"Hãy siêng năng lần hạt Mân Côi" là điệp khúc không mỏi ở Lộ Đức lẫn Fa-ti-ma. Đây là cuốn Phúc Âm thu gọn dễ hiểu nhất nhưng mang sức mạnh cải hóa vạn năng.'},
   ]},
-  {id:34,theme:'Nguon Mac Khai',words:[
+  {id:34,theme:'Nguồn Mặc Khải',words:[
     {answer:'TINKINH',clue:'Bản kinh xướng lên rầm rộ giữa triều Thánh Lễ, là kho tàng đúc kết rực rỡ toàn bộ chân lý đức tin súc tích.',explanation:'Kinh Tin Kính (Nixêa - Constantinôpôn) là bản tóm lược hùng hồn các tín điều cốt lõi. Cộng đoàn đồng thanh tuyên xưng để chống lại mọi tà thuyết nhị nguyên.'},
     {answer:'GIAOLY',clue:'Hệ thống kho tàng đức tin và luân lý hướng dẫn của Hội Thánh, là sách gối đầu giường để học hỏi thông suốt.',explanation:'Sách Giáo Lý Hội Thánh Công Giáo trình bày một bức tranh toàn diện và hữu cơ về những gì người tín hữu cần phải tin, cử hành, sống và cầu nguyện hằng ngày.'},
     {answer:'THANHTRUYEN',clue:'Nguồn mặc khải linh thánh truyền miệng sống động từ thời các tông đồ song hành vô giá cùng với Kinh Thánh.',explanation:'Đức tin không chỉ đóng khung trong mặt chữ Kinh Thánh, mà còn lưu truyền rực rỡ qua phụng vụ, giáo phụ và truyền thống sống động của Giáo Hội hai ngàn năm.'},
@@ -31,7 +31,7 @@ module.exports = [
     {answer:'VONGO',clue:'Đặc tính không thể sai lầm của Đức Giáo Hoàng khi ngài long trọng dùng quyền tối cao định tín về luân lý.',explanation:'Ơn Bất Khả Ngộ không có nghĩa là Giáo Hoàng là một con người không bao giờ phạm tội, mà là ơn Thánh Thần giữ cho ngài không công bố tà thuyết dối lừa.'},
     {answer:'LINHHUNG',clue:'Tác động siêu nhiên của Chúa Thánh Thần soi sáng để tác giả con người viết đúng trút đầy những gì Chúa muốn.',explanation:'Thiên Chúa là tác giả chính của Kinh Thánh, Ngài vận dụng trọn vẹn văn phong, khả năng nghệ thuật của tác giả nhân loại để ký thác thông điệp chân lý ngàn đời.'},
   ]},
-  {id:35,theme:'Chua Giesu Giang Day',words:[
+  {id:35,theme:'Chúa Giêsu Giảng Dạy',words:[
     {answer:'DUNGON',clue:'Những mẩu chuyện ẩn dụ lấy từ đời sống thôn quê giản dị nhưng chứa đựng toàn bộ bí quyết thâm sâu Nước Trời.',explanation:'Từ người gieo hạt, nấm men đến đồng bạc rơi, Chúa dùng hình ảnh đời thường dung dị nhất để mạc khải chân lý cao siêu mà dân chúng không thể tự suy luận.'},
     {answer:'RAPBI',clue:'Danh xưng đầy kính trọng mà dân Do Thái thường dùng để gọi thưa tôn xưng những vị thầy đứng lớp giảng dạy.',explanation:'Biệt danh Ráp-bi cho thấy Chúa Giêsu uy quyền thu hút đám đông kỳ lạ. Khác với các kinh sư luật sĩ, Ngài giảng dạy bằng uy quyền do chính Ngài định đoạt.'},
     {answer:'BATPHUC',clue:'Tám lời chúc mừng hoàn toàn ngược đời so với tiêu chuẩn rạng danh tiền tài vinh quang mù quáng của thế gian.',explanation:'Bản Mười Điều Răn của Cựu Ước có vẻ thiên về cấm đoán (đừng làm), còn Hiến chương Nước Trời (Bát Phúc) là cánh cửa tích cực tiến tới hạnh phúc đích thực.'},
@@ -39,4 +39,20 @@ module.exports = [
     {answer:'TABO',clue:'Dãy núi chót vót chứng kiến vinh quang chói lòa của Đấng Cứu Thế hiển dung đàm đạo bên cạnh Mô-sê và Ê-li-a.',explanation:'Sự kiện trên núi Ta-bô củng cố niềm tin nhỏ nhoi của ba môn đệ trụ cột bằng một tia sáng le lói vinh quang thiên đàng, chuẩn bị tinh thần bước vào cuộc Thương Khó.'},
     {answer:'SAMARIA',clue:'Ngôi làng của người nữ nhiều đời chồng bên bờ giếng sâu được Chúa đon đả xin nước ban tặng Nguồn Nước Hằng Sống.',explanation:'Xóa nhòa bức màn thù hận sắc tộc giữa Do Thái và Sa-ma-ri-a, Chúa Giêsu bẽ gãy các lề thói cũ kỹ, mặc khải chính Ngài là dòng suối dạt dào giải cơn khát tâm linh.'},
   ]},
+  { id: 111, theme: 'XH 11: Báo Tai Họa Cuối', words: [
+    { answer: 'CONDAU', clue: 'Bất cứ sinh linh nào đẻ ra trước tiên bằng xác phàm trong xứ Ai Cập đều sẽ phải chịu chung cái chết.', explanation: 'Tai ương thứ mười, cái chết của các con đầu lòng, là đòn trừng phạt tối hậu giáng xuống sự ngoan cố vô phương cứu chữa của Pharaô.' },
+    { answer: 'NUADEM', clue: 'Thời điểm đen tối tĩnh mịch vắng bóng người mà Đức Chúa phán sẽ can thiệp để giáng đòn vào Ai Cập.', explanation: 'Nửa đêm tượng trưng cho giờ phút bất ngờ nhất, thình lình gieo rắc kinh hoàng cho toàn bộ đế quốc tàn bạo của Pharaô.' },
+    { answer: 'KHOCLOC', clue: 'Tiếng rên rỉ than mếu đau thương dậy trời từ mọi mái nhà Ai Cập vì tang tóc bất thần giáng xuống.', explanation: 'Tiếng khóc ai oán vì mất con của người Ai Cập là sự đáp trả công bình cho tiếng kêu cứu của người Híp-ri bao năm qua.' },
+    { answer: 'TUTHAN', clue: 'Sứ giả vô hình rảo khắp xóm làng Ai Cập gieo rắc sự mạng chung mang màu tang tóc.', explanation: 'Thiên sứ tử thần bước qua các cửa không có vết máu, tước đoạt sinh mạng, khẳng định sự yếu đuối của con người trước thần linh.' },
+    { answer: 'BAC', clue: 'Cùng với vàng, đây là thức trang sức quý giá mà dân Israel được dặn dò phải xin người Ai Cập.', explanation: 'Việc lấy vàng bạc của người Ai Cập được coi là phần tiền công bồi thường chính đáng sau bao năm dân Chúa phải chịu lao dịch.' },
+    { answer: 'VANG', clue: 'Kim loại quý giá lấp lánh mà dân Israel mang theo như một chiến lợi phẩm rời khỏi đất nô lệ.', explanation: 'Mang theo vàng bạc Ai Cập, dân Israel không ra đi với đôi bàn tay trắng, mà như những chiến binh ca khúc khải hoàn.' }
+  ]},
+  { id: 112, theme: 'XH 12: Lễ Vượt Qua', words: [
+    { answer: 'CHIEN', clue: 'Con vật vô tì tích một năm tuổi mà mỗi gia đình Híp-ri phải bắt nhốt để sát tế vào lúc chập choạng tối.', explanation: 'Con chiên Vượt Qua là hình ảnh tiên báo vĩ đại nhất về Chúa Giêsu, "Chiên Thiên Chúa", dập tắt mọi oán thù và giải thoát nhân loại.' },
+    { answer: 'MAU', clue: 'Chất lỏng màu đỏ thẫm được cẩn thận lấy cành hương thảo nhúng bôi lên khung cửa nhà dân Híp-ri.', explanation: 'Vết máu trên xà cửa là dấu hiệu cứu rỗi để thần chết "vượt qua" ngôi nhà đó mà không giáng đòn sát hại.' },
+    { answer: 'BANHKHO', clue: 'Loại lương thực nướng vội bập bùng không có men nở, được dân Chúa mang theo làm hành trang gấp rút.', explanation: 'Ăn bánh không men nhắc nhở về sự rời đi vội vã trong đêm, không đủ thời gian chờ bột nở dâng lên.' },
+    { answer: 'XUATHANH', clue: 'Cuộc trỗi dậy ra đi tập thể rầm rộ vĩ đại của sáu trăm ngàn người đàn ông Israel vào ban đêm.', explanation: 'Cuộc Xuất Hành vĩ đại đánh dấu sự ra đời của Israel với tư cách là một dân tộc độc lập được Đức Chúa tự tay giải phóng.' },
+    { answer: 'VUOTQUA', clue: 'Danh từ chung thiêng liêng để chỉ về mầu nhiệm đêm sát tế chiên và giải cứu dân chạy thoát.', explanation: 'Lễ Vượt Qua (Pesach) trở thành nền tảng của toàn bộ phụng vụ và thần học về cứu độ của người Do Thái và Kitô giáo.' },
+    { answer: 'NUONG', clue: 'Phương thức dọn món thịt chiên vào đêm vượt qua, tuyệt đối không được ăn sống hay luộc sôi.', explanation: 'Thịt phải được nướng nguyên con trên lửa, cho thấy bữa ăn mang tính hiệp thông thiêng liêng rực lửa, sẵn sàng cho hành trình sa mạc.' }
+  ]}
 ];

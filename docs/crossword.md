@@ -70,3 +70,24 @@ Score = (số từ đúng × 10) + floor(thời gian còn lại / 10)
 
 - Chơi Lại giữ nguyên chi phí hint (20/50 🪙)
 - Chơi Mới quay về màn intro với puzzle mới
+
+---
+
+## 4. Quy Tắc Tạo Dữ Liệu Crossword
+
+Để đảm bảo tính nhất quán và dễ tiếp cận cho người chơi phổ thông, mọi bộ puzzle mới phải tuân thủ các quy tắc sau:
+
+### 4.1. Định Dạng Đáp Án (`answer`)
+- **Toàn chữ in hoa ASCII**: Không dấu, không khoảng trắng (vd: `THIENCHUA`, `MUOI`, `GIAVE`).
+- **Độ dài**: Tối thiểu 3 ký tự.
+- **Số lượng**: 5–6 từ mỗi bộ puzzle (để đảm bảo bảng ô chữ không quá lớn hoặc quá nhỏ).
+
+### 4.2. Nguyên Tắc Lựa Chọn Từ Vựng
+- **Phiên âm chuẩn KTCG**: Các tên riêng phải bám sát bản dịch của Nhóm Phiên Dịch Các Giờ Kinh Phụng Vụ (CGKPV) (ví dụ: `MOSE`, `GITRO`, `IXAAC`, `KHOREP`).
+- **Phổ thông & Dễ hiểu**: Tuyệt đối **không** sử dụng các tên riêng ít phổ biến, quá khó nhớ đối với giáo dân bình thường (ví dụ: Amalếch, Bơ-txan-ên, Ô-hô-li-áp, Kê-ru-bim).
+- **Xử lý từ khó**: Nếu một chương Kinh Thánh chỉ tập trung vào các nhân vật khó nhớ, hãy thay thế bằng các danh từ chung, sự kiện, hoặc đồ vật quen thuộc biểu trưng cho câu chuyện đó (ví dụ: dùng chữ `NUOC` / `KHAT` thay cho `AMALECH`; `THOKHEO` thay cho `BOTXANEN`, v.v.).
+
+### 4.3. Nội Dung Gợi Ý (`clue`)
+- **Tiếng Việt chuẩn**: Gợi ý dùng ngôn ngữ tự nhiên, có dấu đầy đủ.
+- **Không chứa đáp án**: Không bao giờ để lộ trực tiếp đáp án trong câu gợi ý.
+- **Tính tự sự**: Gợi ý nên giống như việc tóm tắt/hoặc mô tả lại một đoạn Kinh Thánh, giúp người chơi vừa giải trí vừa ôn tập lại Lời Chúa.

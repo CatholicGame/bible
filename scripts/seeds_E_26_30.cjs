@@ -1,5 +1,5 @@
 module.exports = [
-  {id:26,theme:'Vua Davit',words:[
+  {id:26,theme:'Vua Đavít',words:[
     {answer:'DAVIT',clue:'Vị vua xuất thân là cậu bé chăn chiên bé nhỏ, gảy đàn hạc và sáng tác vô số bài hát tuyệt hay cho Chúa.',explanation:'Đavít là vị vua vĩ đại nhất của Israel, dù gánh vác tội lỗi yếu đuối nhưng luôn biết thật lòng khóc lóc ăn năn xin Chúa thứ tha.'},
     {answer:'GOLIAT',clue:'Tên khổng lồ võ trang đầy mình kiêu ngạo thách thức đạo binh Israel, rốt cục ngã lăn đùng bởi một viên sỏi.',explanation:'Trận chiến giữa Đavít và Gôliát là bài học kinh điển: Chúa không cần vũ khí gươm giáo khổng lồ để đánh bại sự kiêu căng.'},
     {answer:'SALOMON',clue:'Vị vua bề thế là con trai của Đavít, lừng danh thiên hạ vì sự khôn ngoan giải xử kiện tụng và xây cất đền thờ.',explanation:'Vua Salômon kế vị cha rực rỡ, nhưng cuối đời lại sa ngã vì chiều lòng các bà vợ ngoại giáo mà quay sang thờ lạy bái thần tượng.'},
@@ -7,7 +7,7 @@ module.exports = [
     {answer:'SAUN',clue:'Vị vua đầu tiên của dân Israel có vóc dáng cao to lực lưỡng, nhưng sau bị Chúa quay lưng vì kiêu ngạo tự phụ.',explanation:'Vua Saun ban đầu được xức dầu tuyển chọn, nhưng vì ghen tị điên cuồng với tài năng của Đavít mà tự chuốc lấy thảm kịch gươm đao.'},
     {answer:'GIESE',clue:'Người cha hiền lành có tám cậu con trai ở Bêlem, từ gốc rễ nhà này đã nảy sinh mầm non Đấng Cứu Thế.',explanation:'Từ gốc Giêsê, một mầm non sẽ vươn lên. Lời tiên tri Isaia ám chỉ Chúa Giêsu sẽ xuất thân từ hoàng tộc Đavít, con trai thứ tám của Giêsê.'},
   ]},
-  {id:27,theme:'Hanh Trinh Phaolo',words:[
+  {id:27,theme:'Hành Trình Phaolô',words:[
     {answer:'PHAOLO',clue:'Vị tông đồ xuất chúng của dân ngoại, từng là kẻ bắt đạo cuồng nhiệt bỗng ngã ngựa biến đổi rực rỡ.',explanation:'Phaolô không thuộc Nhóm Mười Hai, nhưng với kiến thức uyên bác và nhiệt huyết bừng cháy, ngài đã đem Tin Mừng vượt khỏi ranh giới Do Thái.'},
     {answer:'DAMAT',clue:'Tên thành phố nơi Phaolô đang hầm hầm trên đường đi tróc nã thì bị ánh sáng từ trời đánh gục mù lòa.',explanation:'Cú ngã ngựa ở Đa-mát là bước ngoặt vĩ đại nhất của Giáo Hội sơ khai, biến một kẻ bắt đạo khát máu thành vị tông đồ nhiệt thành nhất.'},
     {answer:'BANABA',clue:'Người bạn đồng hành nhân hậu mang biệt danh là con của sự an ủi, đã dũng cảm bảo lãnh Phaolô với Giáo hội.',explanation:'Ông Banaba đã bán đất đem tiền nộp Hội Thánh, và cũng là người dìu dắt Phaolô trong chặng đường truyền giáo gian nan đầu tiên.'},
@@ -15,7 +15,7 @@ module.exports = [
     {answer:'CORINTO',clue:'Thành phố cảng sầm uất đầy cạm bẫy nơi Phaolô từng nắn nót viết bức thư nổi tiếng về ngợi ca tình yêu.',explanation:'Tại Côrintô, Phaolô vừa dệt lều kiếm sống vừa rao giảng. Bức thư ngài gửi cho họ chứa đựng tuyệt chương về tình yêu không phai.'},
     {answer:'ROMA',clue:'Điểm đến cuối cùng oanh liệt trong chuỗi ngày gông cùm tù đày, nơi ngài bị trảm quyết làm chứng nhân.',explanation:'Roma là trái tim đế quốc La Mã. Phaolô khao khát đến đây để tử đạo cùng với Phêrô, tưới máu mình gieo hạt giống đức tin cho cả Âu Châu.'},
   ]},
-  {id:28,theme:'Cong Vu Tong Do',words:[
+  {id:28,theme:'Công Vụ Tông Đồ',words:[
     {answer:'LUCA',clue:'Vị bác sĩ uyên bác đã đặt bút viết cuốn sách thiêng liêng ghi lại những chặng đường tiên khởi của Hội Thánh.',explanation:'Sách Công Vụ Tông Đồ do Thánh Luca chép lại tựa như cuốn phim tài liệu vô giá về các bước chân gian truân truyền giáo thuở ban đầu.'},
     {answer:'PHERO',clue:'Vị giáo hoàng đầu tiên đứng ra giảng thuyết dõng dạc trong ngày Lễ Ngũ Tuần thu phục hàng ngàn tâm hồn.',explanation:'Nhờ ơn Thánh Thần, một Phêrô chối Chúa yếu hèn bỗng chốc trở thành tảng đá kiên cường, mở toang cửa hội đường đi rao giảng không sợ hãi.'},
     {answer:'TEPHANO',clue:'Vị phó tế đầu tiên anh dũng tử đạo dưới cơn mưa đá ác nghiệt, miệng vẫn xin Chúa tha cho kẻ giết mình.',explanation:'Gương tử đạo của Têphanô rớt xuống nền đất khô cằn nhưng lại nảy mầm rực rỡ nơi tâm hồn của chàng thanh niên Saolô đang đứng giữ áo.'},
@@ -23,7 +23,7 @@ module.exports = [
     {answer:'ANTIOKHIA',clue:'Thành phố sầm uất đầu tiên mà các tín hữu của Chúa Giêsu được người đời gọi bằng danh xưng Kitô hữu.',explanation:'Antiôkhia là trung tâm truyền giáo xuất phát điểm của Phaolô, nơi ranh giới giữa người Do Thái và dân ngoại bị phá vỡ hoàn toàn.'},
     {answer:'PHILIPHE',clue:'Vị phó tế vâng lời Thánh Thần chạy theo chiếc xe ngựa để giải nghĩa Kinh Thánh và làm phép rửa cho viên thái giám.',explanation:'Câu chuyện Phó tế Philípphê gặp thái giám thành Êtiôpi minh chứng rõ nét Thánh Thần luôn chủ động bắt rễ đức tin vào tâm hồn người khao khát.'},
   ]},
-  {id:29,theme:'Kinh Thanh Loi Chua',words:[
+  {id:29,theme:'Kinh Thánh Lời Chúa',words:[
     {answer:'KINHTHANH',clue:'Bộ sách vĩ đại nhất lịch sử nhân loại gồm bảy mươi ba cuốn, được Thiên Chúa linh hứng cho con người chép lại.',explanation:'Kinh Thánh không phải là một cuốn sách rơi từ trên trời xuống, mà là Lời Chúa được diễn đạt bằng ngôn ngữ và bối cảnh văn hóa của loài người.'},
     {answer:'CUUUOC',clue:'Phần sách mang nặng tính dọn đường và lời thề hứa, gồm bốn mươi sáu cuốn kể chuyện từ lúc tạo dựng vũ trụ.',explanation:'Cựu Ước ghi lại hành trình Thiên Chúa kiên nhẫn giáo dục dân Israel qua lề luật và ngôn sứ, dọn lối cho mặt trời công chính xuất hiện.'},
     {answer:'TANUOC',clue:'Phần sách cốt lõi đúc kết trong hai mươi bảy cuốn, chép lại hành trình cứu chuộc của Đức Kitô vinh quang.',explanation:'Tân Ước là bản tóm lược trọn vẹn Giao Ước Mới được ký kết bằng chính Máu Chúa Giêsu, khép lại toàn bộ thời kỳ mặc khải.'},
@@ -31,7 +31,7 @@ module.exports = [
     {answer:'LINHHUNG',clue:'Sự soi sáng êm ái vô hình của Chúa Thánh Thần tác động để tác giả con người viết đúng những gì Chúa muốn.',explanation:'Chúa dùng các tác giả nhân loại như những cây đàn. Dù tiếng vang mang đậm âm sắc cá nhân, nhưng giai điệu hòa tấu lại là ý định của Thiên Chúa.'},
     {answer:'GIAOHUAN',clue:'Quyền bính giải thích thông điệp Lời Chúa cách chính thức và không sai lầm thuộc về vị nào trong Hội Thánh?',explanation:'Ta không thể tự do cắt xén diễn dịch Kinh Thánh theo ý riêng. Quyền Giáo Huấn của các Đức Giáo Hoàng bảo vệ sự trong sáng của nền tảng đức tin.'},
   ]},
-  {id:30,theme:'Doi Song Phung Vu',words:[
+  {id:30,theme:'Đời Sống Phụng Vụ',words:[
     {answer:'GIOKINH',clue:'Lời kinh nguyện xoay vần suốt ngày đêm để thánh hóa thời gian không ngừng nghỉ, nổi bật là Kinh Sáng và Kinh Chiều.',explanation:'Phụng vụ Giờ Kinh không chỉ dành cho tu sĩ mà còn là tiếng ca hoan hỉ của toàn thể Hội Thánh dâng lên Chúa đan xen giữa nhịp làm việc.'},
     {answer:'THANHCA',clue:'Những bài hát oai hùng du dương rập khuôn theo phụng vụ, được cất lên để nâng tâm hồn hòa điệu cùng Chúa.',explanation:'Hát hay là cầu nguyện hai lần. Thánh ca đích thực không vỗ về cảm xúc cá nhân thụy mị mà phải mang đậm tính long trọng ca ngợi Đấng Tối Cao.'},
     {answer:'DANGLE',clue:'Hành vi thượng đỉnh của linh mục khi dâng bánh rượu lên bàn thờ hội thông cùng hiến tế đồi Canvê.',explanation:'Khi dâng lễ vật, linh mục đại diện toàn thể cọng đoàn mang bao đau khổ nước mắt và vui mừng gom gộp lại vào chén thánh đưa lên Nhan Chúa.'},
@@ -39,4 +39,20 @@ module.exports = [
     {answer:'KIENGTHIT',clue:'Luật lệ thực hành hãm mình của Hội Thánh yêu cầu tín hữu trên mười bốn tuổi phải giữ vào Thứ Sáu Tuần Thánh.',explanation:'Kiêng thịt không nằm ở chuyện ăn cá hay đồ biển ngon hơn, mà là hy sinh khước từ món ăn quen thuộc để gắn bó với ngày Chúa chịu chết.'},
     {answer:'ANCHAY',clue:'Việc ép xác giảm bớt ăn uống nhịn nhục để hiệp thông với bốn mươi ngày ròng rã của Chúa Giêsu trong sa mạc.',explanation:'Luật giữ chay áp dụng hẹp hơn (từ 18 đến 60 tuổi) chỉ với 2 ngày Thứ Tư Lễ Tro và Thứ Sáu Tuần Thánh, nhằm thanh lọc dạ dày nhường chỗ ơn thánh.'},
   ]},
+  { id: 109, theme: 'XH 9: Dịch Súc Vật & Mưa Đá', words: [
+    { answer: 'ONGDICH', clue: 'Tai ương thứ năm làm chết sạch toàn bộ ngựa, lừa, lạc đà và gia súc của người Ai Cập ngoài đồng.', explanation: 'Dịch bệnh tàn phá nguồn lực nông nghiệp và quân sự của Ai Cập, phơi bày sự mong manh của đế quốc kiêu hãnh.' },
+    { answer: 'UNGNHOT', clue: 'Những nốt mụn mủ ghê tởm sưng tấy lở loét nổi lên khắp mình mẩy người Ai Cập vì tai ương thứ sáu.', explanation: 'Môsê ném tro bụi lên trời, bụi hóa thành ung nhọt. Dấu lạ này tấn công trực tiếp vào thân thể con người Ai Cập.' },
+    { answer: 'MUADA', clue: 'Trận mưa kinh hoàng chưa từng thấy trong lịch sử mang theo sấm sét thiêu rụi mọi thứ ngoài đồng trống.', explanation: 'Cơn mưa đá rực lửa giáng xuống càn quét thảm khốc cây cối và súc vật, đánh gục hy vọng vào các thần linh thời tiết Ai Cập.' },
+    { answer: 'CAYCO', clue: 'Thực vật rách nát tả tơi vì bị những cục mưa cứng ngắc rớt xuống đập nát không thương tiếc.', explanation: 'Mưa đá không chỉ giết người và vật mà còn tàn phá thảm thực vật, giáng đòn chí mạng vào nguồn lương thực của vua Pharaô.' },
+    { answer: 'TRO', clue: 'Thứ bụi lấm lem Môsê lấy từ lò luyện được ném tung lên để gây ra căn bệnh mụn nhọt ngứa ngáy.', explanation: 'Tro tàn bay trong gió, tưởng chừng vô hại nhưng dưới quyền năng Thiên Chúa lại trở thành mầm mống mụn nhọt ác tính.' },
+    { answer: 'NGUA', clue: 'Loài vật quan trọng làm sức kéo cho chiến xa của Ai Cập đã lăn ra chết hàng loạt vì dịch bệnh.', explanation: 'Sự sụp đổ của lực lượng kỵ mã Ai Cập làm suy yếu sức mạnh quân sự đáng gờm nhất của vương triều Pharaô tàn bạo.' }
+  ]},
+  { id: 110, theme: 'XH 10: Châu Chấu Và Bóng Tối', words: [
+    { answer: 'CHAUCHAU', clue: 'Tai ương thứ tám kinh hoàng gồm hàng triệu côn trùng bay đến ăn sạch những gì mưa đá còn để sót lại.', explanation: 'Bầy châu chấu đen kịt bầu trời ăn trụi mầm sống cuối cùng, chứng minh thiên nhiên hoàn toàn tùng phục Đức Chúa.' },
+    { answer: 'BONGTOI', clue: 'Màn đêm đặc quánh đáng sợ bao phủ toàn cõi Ai Cập suốt ba ngày đêm đen như mực.', explanation: 'Bóng tối là tai ương thứ chín, đánh bại thần Mặt Trời Ra tối cao nhất của người Ai Cập, nhấn chìm họ vào sợ hãi cực độ.' },
+    { answer: 'GOSEN', clue: 'Vùng đệm an toàn nơi dân Chúa sinh sống, ngập tràn ánh sáng dù phần còn lại của Ai Cập tối tăm.', explanation: 'Ánh sáng chiếu soi trên nhà người Israel giữa lúc bóng tối bủa vây là điềm báo Chúa cứu rỗi những kẻ tin thờ Ngài.' },
+    { answer: 'SAMHOI', clue: 'Hành động giả tạo của vua Ai Cập khi van xin Môsê tha thứ mỗi khi bị tai họa ép uổng quá mức.', explanation: 'Sự ăn năn nông cạn chỉ cất lên khi gặp khốn cùng, sau khi tai họa đi qua thì Pharaô lại tiếp tục cứng lòng như cũ.' },
+    { answer: 'MUHET', clue: 'Trạng thái tối tăm cản trở hoàn toàn tầm nhìn khiến người Ai Cập không ai dám rời khỏi chỗ mình ba ngày.', explanation: 'Bóng tối dày đặc dường như có thể sờ thấy được mang đến sự tê liệt hoàn toàn cho đế chế từng một thời tự cao tự đại.' },
+    { answer: 'PHA', clue: 'Hành động phá hoại tàn bạo của đám côn trùng dọn sạch sẽ cỏ cây trái trăng mà mưa đá chưa tàn phá hết.', explanation: 'Sự phá hủy triệt để này cho thấy Thiên Chúa có thể dùng những sinh vật nhỏ yếu nhất để bẻ gãy mọi thành tựu kinh tế của Pharaô.' }
+  ]}
 ];

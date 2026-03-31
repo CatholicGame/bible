@@ -1,5 +1,5 @@
 module.exports = [
-  {id:71,theme:'Luat Thieng Lieng',words:[
+  {id:71,theme:'Luật Thiêng Liêng',words:[
     {answer:'MUOIDIEURAN',clue:'Bản giao ước kỳ diệu được khắc trên hai bia đá tại núi Sinai, là đại cương luân lý cho toàn thể dân Chúa.',explanation:'Mười Điều Răn (Decalogue) ban cho Môsê là nền tảng đạo đức. Chúa Giêsu đã tóm tắt lại thành giới răn kép: mến Chúa và yêu người.'},
     {answer:'LUATMOI',clue:'Giáo huấn tuyệt đỉnh của Chúa Giêsu trong Bài Giảng Trên Núi: không bãi bỏ quy định cũ mà đưa lên tầm cao của tình yêu tuyệt đối.',explanation:'Luật Mới không phá bỏ Lề Luật Cũ (Torah) mà kiện toàn nó bằng tinh thần của đức ái, đi sâu vào thanh lọc nội tâm thay vì chỉ giữ lệ bề ngoài.'},
     {answer:'LUONGTAM',clue:'Tiếng nói thầm kín bên trong mỗi người, nơi ta hiện diện một mình với Thiên Chúa để tự phán đoán điều thiện ác.',explanation:'Lương tâm là cung thánh sâu thẳm của con người, nơi vang vọng tiếng nói của Thiên Chúa hướng dẫn họ làm lành lánh dữ (GLHTCG 1776).'},
@@ -7,7 +7,7 @@ module.exports = [
     {answer:'NHANDUC',clue:'Những thói quen tốt lành và bền vững giúp con người kiên trì hành động hướng thiện, nổi bật nhất là Tin, Cậy, Mến.',explanation:'Nhân đức là xu hướng kiên cố để làm điều thiện. Bao gồm nhân đức đối thần (hướng về Chúa) và nhân đức bản cốt (định hướng đời sống luân lý).'},
     {answer:'TUDO',clue:'Đặc ân cao quý Thiên Chúa ban cho con người quyền tự quyết định, không bị ép buộc để có thể tự nguyện chọn yêu mến Ngài.',explanation:'Tự do là khả năng bắt nguồn từ lý trí và ý chí để hành động hay không hành động. Tự do đích thực là khi con người dùng nó để hướng về điều thiện.'},
   ]},
-  {id:72,theme:'Tinh Yeu Trong Kinh Thanh',words:[
+  {id:72,theme:'Tình Yêu Trong Kinh Thánh',words:[
     {answer:'TINHYEU',clue:'Bản chất sâu thẳm của Thiên Chúa. Thánh Phaolô đã cất lên một bài ca tuyệt đẹp ở thư 1 Côrintô chương 13 để định nghĩa nó.',explanation:'"Thiên Chúa là tình yêu" (1 Ga 4:8). Tình yêu Kitô giáo (Agape) là sự hiến thân vô vị lợi, không đòi đền đáp, chịu đựng muôn sự.'},
     {answer:'DIEMCA',clue:'Một cuốn sách thi ca tuyệt đẹp trong Cựu Ước, chứa đựng những khúc hát say đắm tượng trưng cho tiếng gọi giữa Thiên Chúa và dân Ngài.',explanation:'Sách Diễm Ca dùng hình ảnh tình yêu lứa đôi rực rỡ để diễn tả tình yêu mầu nhiệm và say đắm giữa Thiên Chúa và Hội Thánh.'},
     {answer:'YEUTHU',clue:'Lệnh truyền khó thực thi nhất của Chúa Giêsu: không chỉ tha thứ mà còn phải làm điều này cho kẻ bách hại mình.',explanation:'Yêu kẻ thù (Mt 5:44) là điểm cốt lõi tạo nên sự khác biệt của luân lý Kitô giáo, vượt qua sự công bằng sòng phẳng mắt đền mắt.'},
@@ -15,7 +15,7 @@ module.exports = [
     {answer:'BACAI',clue:'Việc trao ly nước mát hay nhường cái áo ấm cho người đang khốn khó, vì nhận ra chính khuôn mặt Chúa nơi họ.',explanation:'Bác ái không chỉ là làm từ thiện đơn thuần, mà là hành động yêu thương tha nhân trong Chúa Kitô ("Mỗi lần các ngươi làm cho người bé mọn...").'},
     {answer:'PHUCVU',clue:'Bài học sống động nhất Chúa Giêsu để lại trong Bữa Tiệc Ly khi thắt lưng quỳ xuống rửa chân cho môn đệ.',explanation:'Chúa Giêsu đảo lộn trật tự thế gian: làm lớn không phải để thống trị mà để phục vụ anh em mình cách khiêm nhường.'},
   ]},
-  {id:73,theme:'Kinh Nguyen Hang Ngay',words:[
+  {id:73,theme:'Kinh Nguyện Hằng Ngày',words:[
     {answer:'KINHLAYCHA',clue:'Lời kinh hoàn hảo nhất do chính Chúa Giêsu truyền dạy khi các môn đệ nài xin: "Thưa Thầy, xin dạy chúng con cầu nguyện...".',explanation:'Kinh Lạy Cha là diễn tả bản tóm lược toàn bộ Tin Mừng. Lời nguyện này kết hợp cả việc tôn vinh Chúa và xin những nhu cầu thiết yếu.'},
     {answer:'KINHKINHMUNG',clue:'Bài ca dịu dàng khơi nguồn từ lời chào của thiên sứ Gabriel và tiếng reo vui của bà Êlisabét dành cho Đức Mẹ.',explanation:'Phần đầu là lời Kinh Thánh (Lc 1:28, 42), phần sau là lời Hội Thánh cầu xin Mẹ chuyển cầu. Đây là lời kinh cốt lõi của Tràng Hạt Mân Côi.'},
     {answer:'KINHSANGDANH',clue:'Câu tụng ca vắn tắt thường được cất lên để kết thúc mỗi chục kinh Mân Côi, nhằm ngợi khen Ba Ngôi từ muôn đời.',explanation:'Kinh Sáng Danh (Gloria Patri) là lời vinh tụng ca ngắn khẳng định niềm tin Ba Ngôi và sự vĩnh cửu của Thiên Chúa.'},
@@ -23,7 +23,7 @@ module.exports = [
     {answer:'KINHTINKINH',clue:'Bản xưng xưng đức tin tóm lược toàn bộ lịch sử cứu độ, được cọng đoàn xướng lên cách long trọng trong Thánh Lễ Chúa Nhật.',explanation:'Kinh Tin Kính (Credo) là biểu thức đức tin quy tụ các tín điều căn bản. Hội Thánh thường dùng Kinh Tin Kính các Tông đồ hoặc Công đồng Nixêa-Cônstantinôpôn.'},
     {answer:'KINHVUCSAU',clue:'Lấy âm hưởng từ Thánh Vịnh 130, bài kinh mang tiếng kêu nài xin lòng Chúa thương xót giải thoát các linh hồn nơi luyện ngục.',explanation:'Kinh Vực Sâu (De Profundis) thường được đọc nhều nhất vào tháng 11 để dâng niềm hy vọng, xin cho các Đẳng linh hồn sớm được hưởng Tôn Nhan Chúa.'},
   ]},
-  {id:74,theme:'Phung Vu Va Loi Chua',words:[
+  {id:74,theme:'Phụng Vụ Và Lời Chúa',words:[
     {answer:'LOICHUA',clue:'Bàn tiệc thứ nhất trong Thánh Lễ, nơi tín hữu được lắng nghe sự điệp cứu độ thấm thía trước khi bước sang bàn tiệc Thánh Thể.',explanation:'Phụng Vụ Lời Chúa là phần không thể thiếu của Thánh Lễ. Cộng đoàn lắng nghe Chúa phán dạy qua các bản văn Cựu Ước, Thư Tín và Tin Mừng.'},
     {answer:'DOCSACH',clue:'Tác vụ của người giáo dân bước lên bục giảng để công bố các thư tín của Thánh Phaolô hay các tiên tri Cựu Ước.',explanation:'Thừa tác viên đọc sách đóng vai trò làm loa phát thanh cho Lời Chúa. Đây là sự tham gia tích cực của giáo dân vào phụng vụ thánh.'},
     {answer:'DAPCA',clue:'Bài Thánh Vịnh được xướng lên giữa hai bài đọc, để cộng đoàn cùng hát vang đồng thanh đáp lời Thiên Chúa.',explanation:'Đáp Ca không chỉ là bài hát xen kẽ mà là chính lời tạ ơn hay suy niệm của cộng đoàn dâng lên phản hồi lại bài Kinh Thánh đã nghe.'},
@@ -31,7 +31,7 @@ module.exports = [
     {answer:'NAMPHUNGVU',clue:'Chu kỳ thời gian xoay quanh các mầu nhiệm cuộc đời Chúa Kitô, khởi đầu bằng Mùa Vọng và kết thúc bằng Lễ Chúa Kitô Vua.',explanation:'Năm Phụng Vụ giúp Hội Thánh sống lại toàn bộ mầu nhiệm cứu độ: Nhập Thể (Mùa Vọng-Giáng Sinh), Vượt Qua (Mùa Chay-Phục Sinh) và Thường Niên.'},
     {answer:'GIAOLY',clue:'Các lớp học vỡ lòng nhằm trang bị hành trang đức tin cho người sắp lãnh nhận bí tích Rửa Tội, Rước Lễ hoặc Thêm Sức.',explanation:'Giáo Lý không chỉ truyền đạt lớp học kiến thức mà là con đường huấn luyện toàn diện để một người gặp gỡ, hiểu biết và quyết tâm theo Chúa Kitô.'},
   ]},
-  {id:75,theme:'Tu Duc Linh Dao',words:[
+  {id:75,theme:'Tu Đức Linh Đạo',words:[
     {answer:'CAUNGUYEN',clue:'Hơi thở của linh hồn Kitô hữu, là việc nâng tâm trí lên cùng Thiên Chúa để trò chuyện, ngợi khen, tạ ơn hay dâng lời than van.',explanation:'Theo Thánh nữ Têrêsa, cầu nguyện là một cái nhìn hướng lên trời, là lời tri ân trong cơn thử thách. Đó là mối tương quan sống động nhất với Chúa.'},
     {answer:'TINHTAM',clue:'Khoảng thời gian đặc biệt người Kitô hữu lui về nơi vắng vẻ, tạm lánh xô bồ để kiểm điểm đời sống và lắng nghe tiếng Chúa.',explanation:'Tĩnh tâm noi gương Chúa Giêsu hay lui vào hoang địa. Những ngày này rất cần thiết để nạp lại nguồn năng lượng thiêng liêng rèn giũa tâm hồn.'},
     {answer:'ANCHAY',clue:'Thực hành từ chối những tiệc tùng no nê tưng bừng, được Hội Thánh nhắc nhở đặc biệt vào Thứ Tư Lễ Tro và Thứ Sáu Tuần Thánh.',explanation:'Ăn Chay (Fasting) giúp con người nhạy bén hơn với phần hồn, san sẻ phần đói khát với Chúa Kitô khổ nạn và tiết kiệm để bố thí cho người nghèo.'},
@@ -39,4 +39,20 @@ module.exports = [
     {answer:'PHANDINH',clue:'Nghệ thuật nhạy bén lắng nghe sự thúc đẩy của Chúa Thánh Thần để mạnh mẽ đưa ra quyết định đúng đắn giữa muôn vàn chọn lựa.',explanation:'Phân Định giúp ta nhận biết "thần khí" nào đang hướng dẫn mình: thần lành dẫn tới bình an Thánh Ý, thần dữ xui dại sự bất an nổi loạn.'},
     {answer:'CHIEMNIEM',clue:'Trạng thái cầu nguyện kín múc sâu thẳm, khi linh hồn dường như ngây ngất chìm đắm trong sự hiện diện của Chúa không vướng bận.',explanation:'Cầu nguyện chiêm niệm là cái nhìn đức tin chăm chú vào Chúa Kitô. Không cần nhiều lời, chỉ cần trái tim cháy bỏng khao khát yêu mến Ngài.'},
   ]},
+  { id: 127, theme: 'XH 26-27: Nhà Tạm', words: [
+    { answer: 'NHATAM', clue: 'Ngôi đền di động làm bằng vải vóc và gỗ, là nơi Đức Chúa ngự giữa dân Ít-ra-en trong suốt thời gian lang bạt.', explanation: 'Nhà Tạm (Lều Hội Ngộ) là nguyên mẫu thu nhỏ của công trình vũ trụ, nơi tái lập sự hòa hợp giữa con người với Tạo Hóa.' },
+    { answer: 'BAMUOI', clue: 'Số lượng các tấm ván bằng gỗ keo được dựng đứng sừng sững làm khung vách cứng cáp quây kín cho Nhà Tạm.', explanation: 'Cấu trúc lắp ghép gỗ và các ngàm bạc cho thấy tính cơ động tuyệt vời, phù hợp với cuộc sống du mục di chuyển liên tục.' },
+    { answer: 'BUCMAN', clue: 'Tấm rèm thêu họa tiết Kerubim sặc sỡ tinh xảo lộng lẫy, dùng để phân cách vách ngăn Nơi Thánh và Nơi Cực Thánh.', explanation: 'Bức màn ngăn cách tượng trưng cho sự thánh thiện cách biệt không thể tùy tiện bước vào của Đức Chúa khi chưa được thanh tẩy.' },
+    { answer: 'BANTHOHUONG', clue: 'Chiếc bệ hương nơi tư tế lót lửa đốt ngun ngút hương thơm ngào ngạt dâng lên Thiên Chúa mỗi sáng ban mai và chập tối.', explanation: 'Làn khói hương nghi ngút bay lên tượng trưng cho những lời cầu nguyện của dân Chúa bay thẳng đến ngai tòa thiên quốc.' },
+    { answer: 'HANCHANG', clue: 'Khu vực sân bao quanh Lều Tạm dài một trăm thước, rộng năm mươi thước, được quây bằng những tấm bạt gai mịn màng.', explanation: 'Sân ngoài là nơi dân chúng có thể tụ họp và dâng thú vật hiến tế, thể hiện sự phân cấp trong việc đến gần nhan thánh Chúa.' },
+    { answer: 'BANTHOTE', clue: 'Cấu trúc hình vuông rỗng ruột bọc đồng, đặt ngay giữa sân để thiêu đốt các lễ vật sát tế thượng tiến.', explanation: 'Bàn Thờ Tế Lễ ngùn ngụt lửa chói là điểm giao thoa chuộc tội, nơi những con thú gánh thay tội lỗi của người dâng dập nát.' }
+  ]},
+  { id: 128, theme: 'XH 28-29: Phẩm Phục', words: [
+    { answer: 'CHUC', clue: 'Địa vị tư tế linh thiêng mà Đức Chúa rạch ròi ra lệnh tách riêng gia đình A-ha-ron lên đảm nhiệm chuyên lo phụng vụ.', explanation: 'Thiết lập hàng ngũ tư tế riêng biệt là bước chuẩn bị để duy trì việc thờ phượng chuyên nghiệp và thường xuyên cho cộng đồng.' },
+    { answer: 'AOPHUC', clue: 'Những bộ y phục tế lễ rực rỡ lộng lẫy được dệt thêu nhằm làm tăng thêm vẻ uy nghi rạng rỡ cho vị thượng tế.', explanation: 'Áo lễ không phải để khoe khoang phàm tục, mà là dấu hiệu của sự khoác lấy vinh quang hiền thánh khi nhân danh bề trên.' },
+    { answer: 'TAMKHAM', clue: 'Một mảnh vải vuông thêu đeo ở ngực thượng tế, trên đó đính mười hai viên ngọc quý khác màu rạng ngời.', explanation: 'Mỗi viên ngọc tạc khắc tên một chi tộc. Thượng tế mang Tấm Khảm trước ngực như mang toàn dân trong tim khi khẩn cầu Chúa.' },
+    { answer: 'EPHOD', clue: 'Chiếc áo khoác ngắn mặc bên ngoài có dây đai gắn kết chặt ngực, là đặc điểm nổi bật nhất của phẩm phục thượng tế.', explanation: 'Áo Ê-phốt gắn liền với U-rim và Tum-mim, những vật linh dùng để bốc thăm hỏi gạn ý muốn cặn kẽ của Thiên Chúa.' },
+    { answer: 'CHUONGVANG', clue: 'Những quả chuông nhỏ lủng lẳng đính ở gấu áo thượng tế, phát ra tiếng kêu leng keng nhịp nhàng khi ông di chuyển.', explanation: 'Tiếng chuông ngân giúp dân chúng bên ngoài biết thượng tế đang cử hành lễ lạy sột soạt, và cảnh báo để ông không phạm húy phải chết.' },
+    { answer: 'PHEPXUCDAU', clue: 'Nghi thức dội dầu lên đầu nức mùi thơm để thánh hiến tấn phong A-ha-ron và các con trai ông.', explanation: 'Xức dầu là sự lựa chọn và thánh hóa ban Thánh Thần. Xức dầu thượng tế báo trước biến cố xức dầu tràn trề cho Đấng Cứu Thế.' }
+  ]}
 ];
