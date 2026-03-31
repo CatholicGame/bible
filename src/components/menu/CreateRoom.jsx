@@ -49,6 +49,7 @@ const CreateRoom = ({ gameName, gameType = 'quiz', onBack, onRoomCreated }) => {
     const { coins: userCoins, globalScore } = usePlayFabStore();
     const [roomType, setRoomType] = useState('private');
     const [loading, setLoading] = useState(false);
+    const [insufficientCoins, setInsufficientCoins] = useState(false); // popup không đủ coin
 
     // Bet system
     const minBet = 100;
@@ -109,6 +110,11 @@ const CreateRoom = ({ gameName, gameType = 'quiz', onBack, onRoomCreated }) => {
 
     const handleCreate = async () => {
         if (loading) return;
+        // Kiểm tra coin trước khi tạo phòng
+        if ((userCoins ?? 0) < betCoins) {
+            setInsufficientCoins(true);
+            return;
+        }
         setLoading(true);
         try {
             const pin = await createRoom(gameType, betCoins);
@@ -119,6 +125,95 @@ const CreateRoom = ({ gameName, gameType = 'quiz', onBack, onRoomCreated }) => {
             setLoading(false);
         }
     };
+
+    // ── POPUP "KHÔNG ĐỦ COIN" ──
+    if (insufficientCoins) {
+        const needed = betCoins - (userCoins ?? 0);
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div className="absolute inset-0 -z-10">
+                    <img src={bgImage} alt="" className="w-full h-full object-cover" style={{ filter: 'blur(18px) brightness(0.3)', transform: 'scale(1.1)' }} />
+                </div>
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.85, y: 30 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+                    className="relative w-full max-w-sm overflow-hidden text-center"
+                    style={{
+                        borderRadius: 28,
+                        background: 'linear-gradient(180deg, #7f1d1d, #991b1b)',
+                        border: '4px solid #b91c1c',
+                        boxShadow: '0 10px 0 #7f1d1d, 0 20px 40px rgba(0,0,0,0.6)',
+                    }}>
+                    <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/8 pointer-events-none rounded-t-3xl" />
+                    <div className="relative px-6 pt-8 pb-7 flex flex-col items-center gap-4">
+                        {/* Icon */}
+                        <motion.div
+                            initial={{ scale: 0 }} animate={{ scale: 1 }}
+                            transition={{ type: 'spring', stiffness: 400, damping: 18, delay: 0.1 }}
+                            className="w-20 h-20 rounded-full flex items-center justify-center"
+                            style={{ background: 'rgba(255,255,255,0.12)', border: '4px solid rgba(255,255,255,0.25)' }}>
+                            <img src={iconCoin} alt="coin" className="w-10 h-10 opacity-70 grayscale" />
+                        </motion.div>
+
+                        <div>
+                            <h2 className="text-white font-black text-2xl uppercase tracking-widest mb-1"
+                                style={{ textShadow: '0 2px 6px rgba(0,0,0,0.5)' }}>Không đủ coin!</h2>
+                            <p className="text-red-200 text-sm font-semibold">
+                                Cần ít nhất <strong className="text-white">{betCoins.toLocaleString()} 💰</strong> để tạo phòng này
+                            </p>
+                        </div>
+
+                        {/* Coin comparison */}
+                        <div className="w-full rounded-2xl overflow-hidden"
+                            style={{ background: 'rgba(0,0,0,0.3)', border: '2px solid rgba(255,255,255,0.12)' }}>
+                            <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+                                <span className="text-red-200 text-xs font-bold uppercase tracking-wide">Cược tạo phòng</span>
+                                <span className="text-white font-black text-base flex items-center gap-1">
+                                    <img src={iconCoin} alt="" className="w-4 h-4" />
+                                    {betCoins.toLocaleString()}
+                                </span>
+                            </div>
+                            <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+                                <span className="text-red-200 text-xs font-bold uppercase tracking-wide">Coin của bạn</span>
+                                <span className="text-red-300 font-black text-base flex items-center gap-1">
+                                    <img src={iconCoin} alt="" className="w-4 h-4 grayscale opacity-60" />
+                                    {(userCoins ?? 0).toLocaleString()}
+                                </span>
+                            </div>
+                            <div className="flex items-center justify-between px-4 py-3">
+                                <span className="text-red-200 text-xs font-bold uppercase tracking-wide">Còn thiếu</span>
+                                <span className="text-yellow-300 font-black text-base flex items-center gap-1">
+                                    <img src={iconCoin} alt="" className="w-4 h-4" />
+                                    {needed.toLocaleString()}
+                                </span>
+                            </div>
+                        </div>
+
+                        <p className="text-red-200/70 text-xs font-semibold leading-relaxed">
+                            Hãy chơi solo để kiếm thêm coin, hoặc chọn số cược thấp hơn số coin bạn đang có.
+                        </p>
+
+                        <div className="flex gap-3 w-full">
+                            <motion.button whileTap={{ scale: 0.97 }}
+                                onClick={() => setInsufficientCoins(false)}
+                                className="flex-1 py-3.5 rounded-full font-black text-white text-sm uppercase"
+                                style={{ background: 'rgba(255,255,255,0.15)', border: '3px solid rgba(255,255,255,0.2)' }}>
+                                Chỉnh lại
+                            </motion.button>
+                            <motion.button whileTap={{ scale: 0.97 }}
+                                onClick={onBack}
+                                className="flex-1 py-3.5 rounded-full font-black text-[#7f1d1d] text-sm uppercase relative overflow-hidden"
+                                style={{ background: 'linear-gradient(180deg,#fbbf24,#f59e0b)', border: '3px solid #b45309', boxShadow: '0 4px 0 #b45309' }}>
+                                <div className="absolute top-0 left-0 w-full h-1/2 bg-white/25 pointer-events-none rounded-t-full" />
+                                <span className="relative z-10">Chơi Solo</span>
+                            </motion.button>
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
+        );
+    }
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
