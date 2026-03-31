@@ -10,6 +10,7 @@ import UserAvatar from '../common/UserAvatar';
 import RankRoadmap from '../profile/RankRoadmap';
 import SettingsModal from '../common/SettingsModal';
 import RosaryOfferingModal from '../rosary/RosaryOfferingModal';
+import AdBanner from '../ads/AdBanner';
 import bgImage from '../../assets/common/common_background.png';
 import iconCoin from '../../assets/common/coin.png';
 import iconTrophy from '../../assets/common/trophy.png';
@@ -527,6 +528,13 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* AdBanner — chỉ hiện ở portrait/desktop menu, ẩn trên landscape */}
+            {!isLandscape && !showModes && (
+                <div className="relative z-10 flex-shrink-0 w-full">
+                    <AdBanner style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(8px)' }} />
+                </div>
+            )}
 
             {/* BODY */}
             <motion.div layout className={`relative z-10 flex-1 min-h-0 flex flex-col items-center ${isLandscape ? 'pt-1 pb-0 gap-1' : 'pt-5 pb-3 gap-3'}`}>

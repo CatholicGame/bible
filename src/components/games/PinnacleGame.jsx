@@ -7,6 +7,7 @@ import { usePlayFabStore } from '../../store/playfabStore';
 import { getRankByScore, getRankLevel } from '../../utils/ranks';
 import { useSoundManager } from '../../utils/soundManager';
 import SettingsModal from '../common/SettingsModal';
+import AdBanner from '../ads/AdBanner';
 import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.png';
 import mcAvatar from '../../assets/pinnacle/MC.png';
 import pointUpSfx from '../../assets/games/SFX/point_up.wav';
@@ -511,6 +512,16 @@ const PinnacleGame = ({ onLeaveGame }) => {
     const [introPhase, setIntroPhase] = useState(4); // 0=start, 1=ladder, 2=lifelines, 3=MC, 4=question/timer
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
+
+    // ── Ad overlays ──
+    // showCheckpointAd: hiện Display Ad sau khi vượt checkpoint Q5/Q10
+    const [showCheckpointAd, setShowCheckpointAd] = useState(false);
+    const [checkpointAdCountdown, setCheckpointAdCountdown] = useState(6);
+    // showGameOverAd: hiện Display Ad trước khi chuyển sang màn kết quả
+    const [showGameOverAd, setShowGameOverAd] = useState(false);
+    const [gameOverAdCountdown, setGameOverAdCountdown] = useState(6);
+    // Pending end-game params khi đang hiện GameOver Ad
+    const pendingEndRef = useRef(null);
     const [selectedOption, setSelectedOption] = useState(null);
     const [isAnswerRevealed, setIsAnswerRevealed] = useState(false);
     const [hiddenOptions, setHiddenOptions] = useState([]);
@@ -867,7 +878,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
 
             // Trigger confetti + dramatic spotlight swing at checkpoint milestones (Q5 = idx 4, Q10 = idx 9)
             if (currentQuestionIndex === 4 || currentQuestionIndex === 9) {
-                // Checkpoint SFX — swing lasts the duration of checkpoint audio
+                // Checkpoint SFX
                 playAudio('checkpoint', 0.8, (durationMs) => {
                     setSpotlightSwing(prev => prev + 1);
                 });
@@ -877,6 +888,12 @@ const PinnacleGame = ({ onLeaveGame }) => {
                     setShowGameConfetti(true);
                 }, 300);
                 setTimeout(() => setShowGameConfetti(false), 5000);
+
+                // Hiện Checkpoint Ad sau 2.2s (đủ thời gian animation cheer)
+                setTimeout(() => {
+                    setCheckpointAdCountdown(6);
+                    setShowCheckpointAd(true);
+                }, 2200);
             }
 
             // Trigger MC correct logic
@@ -941,6 +958,18 @@ const PinnacleGame = ({ onLeaveGame }) => {
     };
 
     const triggerEndGame = (levelIndex, isQ15Complete = false) => {
+        // Lưu params để dùng sau khi GameOver Ad đóng
+        pendingEndRef.current = { levelIndex, isQ15Complete };
+        // Hiện GameOver Ad overlay 6s trước khi vào màn kết quả
+        setGameOverAdCountdown(6);
+        setShowGameOverAd(true);
+    };
+
+    // Sau khi GameOver Ad kết thúc → thực sự chuyển sang finished
+    const commitEndGame = useCallback(() => {
+        const { levelIndex, isQ15Complete } = pendingEndRef.current || {};
+        if (levelIndex === undefined) return;
+        setShowGameOverAd(false);
         setGameState('finished');
         if (MC_MESSAGES_AFTER_FINISH[levelIndex]) {
             setEndMessage(MC_MESSAGES_AFTER_FINISH[levelIndex]);
@@ -948,8 +977,8 @@ const PinnacleGame = ({ onLeaveGame }) => {
             setTimeout(() => setShowEndMessage(false), 8000);
         }
         savePinnacleCompositeScore(levelIndex, isQ15Complete);
-        trackPinnaclePlay(); // đếm unique player + cập nhật count
-    };
+        trackPinnaclePlay();
+    }, [savePinnacleCompositeScore, trackPinnaclePlay]);
 
     const handleNextQuestion = () => {
         // Cho ẩn khung giải thích trước để UI reset layout về vị trí cũ một nhịp
@@ -1250,8 +1279,122 @@ const PinnacleGame = ({ onLeaveGame }) => {
         setLifelines(prev => ({ ...prev, [type]: true }));
     };
 
+    // ── Checkpoint Ad countdown ──
+    useEffect(() => {
+        if (!showCheckpointAd) return;
+        if (checkpointAdCountdown <= 0) { setShowCheckpointAd(false); return; }
+        const t = setTimeout(() => setCheckpointAdCountdown(prev => prev - 1), 1000);
+        return () => clearTimeout(t);
+    }, [showCheckpointAd, checkpointAdCountdown]);
+
+    // ── GameOver Ad countdown ──
+    useEffect(() => {
+        if (!showGameOverAd) return;
+        if (gameOverAdCountdown <= 0) { commitEndGame(); return; }
+        const t = setTimeout(() => setGameOverAdCountdown(prev => prev - 1), 1000);
+        return () => clearTimeout(t);
+    }, [showGameOverAd, gameOverAdCountdown, commitEndGame]);
+
     return (
         <div className="w-full min-h-full h-full relative flex flex-col items-center z-10 bg-[#020617] overflow-y-auto overflow-x-hidden font-sans text-slate-100">
+            {/* ── Checkpoint Ad Overlay (Q5 / Q10) ── */}
+            {createPortal(
+                <AnimatePresence>
+                    {showCheckpointAd && (
+                        <motion.div
+                            key="checkpoint-ad"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-[500] flex flex-col items-center justify-center bg-black/75 backdrop-blur-md px-4"
+                        >
+                            <motion.div
+                                initial={{ scale: 0.88, y: 30 }}
+                                animate={{ scale: 1, y: 0 }}
+                                exit={{ scale: 0.92, y: 20 }}
+                                transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+                                className="w-full max-w-md"
+                            >
+                                {/* Header */}
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-2xl">🏆</span>
+                                        <span className="font-black text-yellow-300 text-lg tracking-wide" style={{ textShadow: '0 2px 0 #78350f' }}>
+                                            Vượt Mốc An Toàn!
+                                        </span>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowCheckpointAd(false)}
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black text-sm text-white/70 hover:text-white transition-colors"
+                                        style={{ background: 'rgba(255,255,255,0.1)', border: '1.5px solid rgba(255,255,255,0.2)' }}
+                                    >
+                                        Bỏ qua <span className="text-yellow-300">{checkpointAdCountdown}s</span>
+                                    </button>
+                                </div>
+                                {/* Ad slot */}
+                                <div className="rounded-2xl overflow-hidden" style={{ border: '2px solid rgba(255,255,255,0.15)' }}>
+                                    <AdBanner />
+                                </div>
+                                {/* Footer hint */}
+                                <p className="text-center text-white/40 text-xs mt-2 font-semibold">
+                                    Quảng cáo hỗ trợ phát triển ứng dụng · Tự đóng sau {checkpointAdCountdown}s
+                                </p>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
+
+            {/* ── Game Over Ad Overlay (trước màn kết quả) ── */}
+            {createPortal(
+                <AnimatePresence>
+                    {showGameOverAd && (
+                        <motion.div
+                            key="gameover-ad"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-[500] flex flex-col items-center justify-center bg-black/80 backdrop-blur-md px-4"
+                        >
+                            <motion.div
+                                initial={{ scale: 0.88, y: 30 }}
+                                animate={{ scale: 1, y: 0 }}
+                                exit={{ scale: 0.92, y: 20 }}
+                                transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+                                className="w-full max-w-md"
+                            >
+                                {/* Header */}
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-2xl">📊</span>
+                                        <span className="font-black text-blue-200 text-lg tracking-wide">
+                                            Đang tải kết quả...
+                                        </span>
+                                    </div>
+                                    <button
+                                        onClick={commitEndGame}
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black text-sm text-white/70 hover:text-white transition-colors"
+                                        style={{ background: 'rgba(255,255,255,0.1)', border: '1.5px solid rgba(255,255,255,0.2)' }}
+                                    >
+                                        Bỏ qua <span className="text-yellow-300">{gameOverAdCountdown}s</span>
+                                    </button>
+                                </div>
+                                {/* Ad slot */}
+                                <div className="rounded-2xl overflow-hidden" style={{ border: '2px solid rgba(255,255,255,0.15)' }}>
+                                    <AdBanner />
+                                </div>
+                                {/* Footer hint */}
+                                <p className="text-center text-white/40 text-xs mt-2 font-semibold">
+                                    Quảng cáo hỗ trợ phát triển ứng dụng · Tự đóng sau {gameOverAdCountdown}s
+                                </p>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
+
             {/* Settings Modal — portal to body */}
             {createPortal(
                 <AnimatePresence>
