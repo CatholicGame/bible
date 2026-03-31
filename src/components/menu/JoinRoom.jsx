@@ -1,7 +1,9 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, LogIn, AlertCircle } from 'lucide-react';
+import { ArrowLeft, LogIn, AlertCircle, Coins } from 'lucide-react';
 import { useRoom } from '../../hooks/useRoom';
+import { usePlayFabStore } from '../../store/playfabStore';
+import iconCoin from '../../assets/common/coin.png';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -12,15 +14,22 @@ const container = {
   visible: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
 };
 
+/**
+ * JoinRoom — nhập PIN, kiểm tra coin cược trước khi vào phòng.
+ * Nếu không đủ coin → hiện màn "Không đủ coin" và KHÔNG ghi vào phòng.
+ */
 export default function JoinRoom({ onBack, onJoined, initialPin = '' }) {
   const { joinRoom } = useRoom();
+  const { coins: userCoins } = usePlayFabStore();
+
   const [digits, setDigits] = useState(() => {
-    // Pre-fill nếu có initialPin từ MainMenu
     const chars = initialPin.replace(/\D/g, '').slice(0, 6).split('');
     return [...chars, ...Array(6 - chars.length).fill('')];
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [loading, setLoading]           = useState(false);
+  const [error, setError]               = useState(null);
+  // Màn "không đủ coin" — KHÔNG cho join
+  const [insufficientCoins, setInsufficientCoins] = useState(null); // { wager, myCoins }
   const inputRefs = useRef([]);
 
   const pin = digits.join('');
@@ -45,10 +54,16 @@ export default function JoinRoom({ onBack, onJoined, initialPin = '' }) {
     if (!pinFull || loading) return;
     setLoading(true);
     setError(null);
-    const result = await joinRoom(pin);
+    setInsufficientCoins(null);
+
+    const result = await joinRoom(pin, userCoins ?? 0);
     setLoading(false);
+
     if (result.success) {
       onJoined?.(pin);
+    } else if (result.error === 'insufficient_coins') {
+      // Không đủ coin — không ghi vào phòng, hiện màn reject
+      setInsufficientCoins({ wager: result.wager, myCoins: result.myCoins });
     } else {
       setError(result.error);
       setDigits(['', '', '', '', '', '']);
@@ -56,6 +71,97 @@ export default function JoinRoom({ onBack, onJoined, initialPin = '' }) {
     }
   };
 
+  // ── MÀNN "KHÔNG ĐỦ COIN" ──
+  if (insufficientCoins) {
+    const { wager, myCoins } = insufficientCoins;
+    const needed = wager - myCoins;
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)' }}>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.85, y: 30 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+          className="relative w-full max-w-sm overflow-hidden text-center"
+          style={{
+            borderRadius: 28,
+            background: 'linear-gradient(180deg, #7f1d1d, #991b1b)',
+            border: '4px solid #b91c1c',
+            boxShadow: '0 10px 0 #7f1d1d, 0 20px 40px rgba(0,0,0,0.6)',
+          }}>
+          {/* Top shine */}
+          <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/8 pointer-events-none rounded-t-3xl" />
+
+          <div className="relative px-6 pt-8 pb-7 flex flex-col items-center gap-4">
+            {/* Icon */}
+            <motion.div
+              initial={{ scale: 0 }} animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 18, delay: 0.1 }}
+              className="w-20 h-20 rounded-full flex items-center justify-center"
+              style={{ background: 'rgba(255,255,255,0.12)', border: '4px solid rgba(255,255,255,0.25)' }}>
+              <img src={iconCoin} alt="coin" className="w-10 h-10 opacity-70 grayscale" />
+            </motion.div>
+
+            <div>
+              <h2 className="text-white font-black text-2xl uppercase tracking-widest mb-1"
+                style={{ textShadow: '0 2px 6px rgba(0,0,0,0.5)' }}>
+                Không đủ coin!
+              </h2>
+              <p className="text-red-200 text-sm font-semibold">
+                Phòng này yêu cầu cược <strong className="text-white">{wager.toLocaleString()} 💰</strong> để tham gia
+              </p>
+            </div>
+
+            {/* Coin comparison */}
+            <div className="w-full rounded-2xl overflow-hidden"
+              style={{ background: 'rgba(0,0,0,0.3)', border: '2px solid rgba(255,255,255,0.12)' }}>
+              <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+                <span className="text-red-200 text-xs font-bold uppercase tracking-wide">Coin cần cược</span>
+                <span className="text-white font-black text-base flex items-center gap-1">
+                  <img src={iconCoin} alt="" className="w-4 h-4" />
+                  {wager.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+                <span className="text-red-200 text-xs font-bold uppercase tracking-wide">Coin của bạn</span>
+                <span className="text-red-300 font-black text-base flex items-center gap-1">
+                  <img src={iconCoin} alt="" className="w-4 h-4 grayscale opacity-60" />
+                  {(myCoins ?? 0).toLocaleString()}
+                </span>
+              </div>
+              <div className="flex items-center justify-between px-4 py-3">
+                <span className="text-red-200 text-xs font-bold uppercase tracking-wide">Còn thiếu</span>
+                <span className="text-yellow-300 font-black text-base flex items-center gap-1">
+                  <img src={iconCoin} alt="" className="w-4 h-4" />
+                  {needed.toLocaleString()}
+                </span>
+              </div>
+            </div>
+
+            <p className="text-red-200/70 text-xs font-semibold leading-relaxed">
+              Hãy kiếm thêm coin bằng cách chơi solo hoặc tham gia trận đấu khác rồi thử lại.
+            </p>
+
+            {/* Close button */}
+            <motion.button
+              whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97, y: 4 }}
+              onClick={onBack}
+              className="w-full py-4 rounded-full font-black text-[#7f1d1d] text-base uppercase tracking-widest relative overflow-hidden"
+              style={{
+                background: 'linear-gradient(180deg, #fbbf24, #f59e0b)',
+                border: '4px solid #b45309',
+                boxShadow: '0 6px 0 #b45309',
+              }}>
+              <div className="absolute top-0 left-0 w-full h-1/2 bg-white/25 pointer-events-none rounded-t-full" />
+              <span className="relative z-10">Đóng</span>
+            </motion.button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // ── MÀN NHẬP PIN ──
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)' }}>
@@ -95,9 +201,16 @@ export default function JoinRoom({ onBack, onJoined, initialPin = '' }) {
             style={{ color: '#fbbf24', textShadow: '0 3px 0 #b45309', WebkitTextStroke: '1px #92400e' }}>
             VÀO PHÒNG
           </motion.h2>
-          <motion.p variants={fadeUp} className="text-center text-purple-200 text-xs font-semibold mb-5">
+          <motion.p variants={fadeUp} className="text-center text-purple-200 text-xs font-semibold mb-1">
             Nhập mã PIN 6 số từ bạn bè
           </motion.p>
+          {/* Coin hiện tại — nhắc nhở người chơi */}
+          <motion.div variants={fadeUp} className="flex items-center justify-center gap-1.5 mb-4">
+            <img src={iconCoin} alt="" className="w-3.5 h-3.5" />
+            <span className="text-purple-200 text-xs font-bold">
+              Coin của bạn: <strong className="text-yellow-300">{(userCoins ?? 0).toLocaleString()}</strong>
+            </span>
+          </motion.div>
 
           {/* PIN Input */}
           <motion.div variants={fadeUp}
@@ -138,7 +251,6 @@ export default function JoinRoom({ onBack, onJoined, initialPin = '' }) {
                     const newDigits = [...nums.split(''), ...Array(6 - nums.length).fill('')];
                     setDigits(newDigits);
                     setError(null);
-                    // Focus ô tiếp theo chưa điền
                     const nextEmpty = nums.length < 6 ? nums.length : 5;
                     inputRefs.current[nextEmpty]?.focus();
                   }

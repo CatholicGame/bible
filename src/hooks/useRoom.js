@@ -16,10 +16,11 @@ export function useRoom() {
 
   /**
    * Tạo phòng mới (Host)
-   * @param {string} gameType - 'quiz' | 'crossword' | 'sorting' | ...
+   * @param {string} gameType
+   * @param {number} wager - số coin cược (mỗi bên phải có ít nhất số này để vào phòng)
    * @returns {string} PIN 6 số
    */
-  const createRoom = async (gameType) => {
+  const createRoom = async (gameType, wager = 100) => {
     const pin = generatePin();
     const roomRef = ref(db, `rooms/${pin}`);
 
@@ -28,6 +29,7 @@ export function useRoom() {
       mode: 'p2p',
       isPrivate: true,
       status: 'waiting',
+      wager,                          // ← lưu số coin cược
       hostUid: uid,
       guestUid: null,
       createdAt: Date.now(),
@@ -43,7 +45,6 @@ export function useRoom() {
       result: null,
     });
 
-    // onDisconnect: xóa phòng nếu Host disconnect khi đang waiting
     onDisconnect(ref(db, `rooms/${pin}/players/${uid}/isOnline`)).set(false);
 
     setRoom(pin, 'host');
@@ -52,10 +53,12 @@ export function useRoom() {
 
   /**
    * Vào phòng bằng PIN (Guest)
+   * Check coin BEFORE writing — nếu guests không đủ coin sẽ không ghi vào phòng.
    * @param {string} pin
-   * @returns {{ success: boolean, error?: string, roomData?: object }}
+   * @param {number} myCoins - số coin hiện tại của guest (từ playfabStore)
+   * @returns {{ success: boolean, error?: string, roomData?: object, wager?: number }}
    */
-  const joinRoom = async (pin) => {
+  const joinRoom = async (pin, myCoins = 0) => {
     const roomRef = ref(db, `rooms/${pin}`);
     const snap = await get(roomRef);
 
@@ -66,6 +69,13 @@ export function useRoom() {
     if (room.status === 'finished') return { success: false, error: 'Phòng này đã kết thúc.' };
     if (room.guestUid) return { success: false, error: 'Phòng đã có người.' };
     if (room.hostUid === uid) return { success: false, error: 'Bạn là chủ phòng này.' };
+
+    // ── Kiểm tra coin cược ──
+    const wager = room.wager ?? 0;
+    if (wager > 0 && myCoins < wager) {
+      // Trả về insufficient_coins — không ghi vào phòng
+      return { success: false, error: 'insufficient_coins', wager, myCoins };
+    }
 
     // Ghi guest vào phòng
     await update(roomRef, {
@@ -81,7 +91,7 @@ export function useRoom() {
     onDisconnect(ref(db, `rooms/${pin}/players/${uid}/isOnline`)).set(false);
 
     setRoom(pin, 'guest');
-    return { success: true, roomData: room };
+    return { success: true, roomData: room, wager };
   };
 
   /**
@@ -139,19 +149,69 @@ export function useRoom() {
 
   /**
    * Rời phòng / cleanup
+   * @param {boolean} forfeit - true nếu bỏ cuộc giữa chừng (thua)
    */
-  const leaveRoom = async (roomId, myRole) => {
+  const leaveRoom = async (roomId, myRole, forfeit = false) => {
+    if (forfeit) {
+      // Ghi forfeit signal để đối thủ biết bạn bỏ cuộc
+      try {
+        await update(ref(db, `rooms/${roomId}`), {
+          forfeit: { uid, nickname: nickname || 'Người chơi', timestamp: Date.now() },
+        });
+      } catch (_) {}
+      // Ngắn delay để Firebase kịp ghi trước khi xóa
+      await new Promise(r => setTimeout(r, 300));
+    }
     if (myRole === 'host') {
-      // Host rời → xóa cả phòng
       await remove(ref(db, `rooms/${roomId}`));
     } else {
-      // Guest rời → xóa mình khỏi phòng
       await update(ref(db, `rooms/${roomId}`), {
         guestUid: null,
         [`players/${uid}`]: null,
       });
     }
     resetRoom();
+  };
+
+  /**
+   * Gửi lời mời chơi tiếp (rematch)
+   * @param {string} roomId
+   * @param {string} toUid - uid đối thủ
+   * @param {number} puzzleId - câu đố mới
+   */
+  const requestRematch = async (roomId, toUid, puzzleId) => {
+    await update(ref(db, `rooms/${roomId}`), {
+      rematchRequest: {
+        fromUid: uid,
+        fromName: nickname || 'Người chơi',
+        toUid,
+        status: 'pending',
+        puzzleId,
+        timestamp: Date.now(),
+      },
+    });
+  };
+
+  /**
+   * Chấp nhận rematch — reset phòng, chọn puzzle mới
+   */
+  const acceptRematch = async (roomId, puzzleId) => {
+    await update(ref(db, `rooms/${roomId}`), {
+      status: 'playing',
+      puzzleId,
+      progress: {},
+      forfeit: null,
+      'rematchRequest/status': 'accepted',
+    });
+  };
+
+  /**
+   * Từ chối rematch
+   */
+  const declineRematch = async (roomId) => {
+    await update(ref(db, `rooms/${roomId}`), {
+      'rematchRequest/status': 'declined',
+    });
   };
 
   /**
@@ -166,5 +226,5 @@ export function useRoom() {
     });
   };
 
-  return { createRoom, joinRoom, setReady, startGame, leaveRoom, watchRoom };
+  return { createRoom, joinRoom, setReady, startGame, leaveRoom, watchRoom, requestRematch, acceptRematch, declineRematch };
 }

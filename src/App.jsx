@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { signInAnonymously } from 'firebase/auth';
+import { ref, update, onValue } from 'firebase/database';
+import { db } from './config/firebase';
 import MainMenu from './components/menu/MainMenu';
 import LandingScreen from './components/LandingScreen';
 import PinnacleGame from './components/games/PinnacleGame';
@@ -68,9 +70,16 @@ function App() {
   const [initialPin, setInitialPin] = useState('');
   const [showProfileRoadmap, setShowProfileRoadmap] = useState(false);
 
+  // P2P crossword state
+  const [opponentProgress, setOpponentProgress] = useState(null);   // real-time opponent data
+  const [myP2PProfile, setMyP2PProfile] = useState(null);
+  const [opponentP2PProfile, setOpponentP2PProfile] = useState(null);
+  const p2pUnsubRef = useRef(null);
+
   const { setUser } = useUserStore();
-  const { resetRoom } = useRoomStore();
+  const { roomId, myRole, roomData, resetRoom } = useRoomStore();
   const playfabLogin = usePlayFabStore(state => state.login);
+  const { nickname: myNickname, globalScore: myScore } = usePlayFabStore();
 
   // ── Firebase Anonymous Auth (chạy background, chỉ cập nhật UID) ──
   useEffect(() => {
@@ -146,12 +155,55 @@ function App() {
     setCurrentView('waiting_room');
   };
   // Game bắt đầu (từ WaitingRoom)
-  const handleGameStart = (roomData) => {
-    setActiveGameType(roomData?.gameType || activeGameType);
+  const handleGameStart = (startRoomData) => {
+    const gameType = startRoomData?.gameType || activeGameType;
+    setActiveGameType(gameType);
+
+    // Nếu là crossword P2P — bắt đầu lắng nghe progress real-time
+    if (gameType === 'crossword' && roomId) {
+      const curRoomData = startRoomData ?? roomData;
+      const players = curRoomData?.players ?? {};
+      const uid = auth.currentUser?.uid;
+      const opponentUid = Object.keys(players).find(k => k !== uid);
+
+      // Build profiles
+      setMyP2PProfile({ nickname: myNickname || 'Bạn', uid });
+      setOpponentP2PProfile({
+        nickname: players[opponentUid]?.nickname || 'Đối thủ',
+        uid: opponentUid,
+      });
+
+      // Unsubscribe old listener
+      p2pUnsubRef.current?.();
+
+      // Watch opponent progress
+      if (opponentUid) {
+        const progRef = ref(db, `rooms/${roomId}/progress/${opponentUid}`);
+        p2pUnsubRef.current = onValue(progRef, snap => {
+          setOpponentProgress(snap.val() ?? null);
+        });
+      }
+    }
+
     setCurrentView('playing');
   };
 
+  // Gửi progress lên Firebase (P2P crossword)
+  const handleCrosswordProgressUpdate = useCallback(async (progress) => {
+    if (!roomId) return;
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+    try {
+      await update(ref(db, `rooms/${roomId}/progress/${uid}`), progress);
+    } catch (_) {}
+  }, [roomId]);
+
   const handleLeaveGame = () => {
+    p2pUnsubRef.current?.();
+    p2pUnsubRef.current = null;
+    setOpponentProgress(null);
+    setMyP2PProfile(null);
+    setOpponentP2PProfile(null);
     setActiveGameType(null);
     setActiveMode(null);
     resetRoom();
@@ -325,7 +377,15 @@ function App() {
             <motion.div key="view-crossword"
               initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }}
               className="w-full h-full z-10 relative">
-              <CrosswordGame onLeaveGame={handleLeaveGame} onGameComplete={(xp) => handleGameComplete('crossword', xp)} />
+              <CrosswordGame
+                onLeaveGame={handleLeaveGame}
+                onGameComplete={(xp) => handleGameComplete('crossword', xp)}
+                opponentProgress={activeMode === 'solo' ? null : opponentProgress}
+                myProfile={activeMode === 'solo' ? null : myP2PProfile}
+                opponentProfile={activeMode === 'solo' ? null : opponentP2PProfile}
+                onProgressUpdate={activeMode === 'solo' ? null : handleCrosswordProgressUpdate}
+                onFinish={activeMode === 'solo' ? null : handleCrosswordProgressUpdate}
+              />
             </motion.div>
           ) : (
             <motion.div key="view-playing"

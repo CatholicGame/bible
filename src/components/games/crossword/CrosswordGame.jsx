@@ -5,6 +5,8 @@ import { ArrowLeft, Clock, Trophy, Star, Check, RotateCcw, Zap, Eye, Lightbulb, 
 import { usePlayFabStore } from '../../../store/playfabStore';
 import { getRankByScore } from '../../../utils/ranks';
 import { useRoomStore } from '../../../store/roomStore';
+import { useUserStore } from '../../../store/userStore';
+import { useRoom } from '../../../hooks/useRoom';
 import bgCrossword from '../../../assets/common/bg_crossword.png';
 import resultBanner from '../../../assets/common/result_banner.png';
 import iconCoin from '../../../assets/common/coin.png';
@@ -102,9 +104,98 @@ const VirtualKeyboard = ({ onKey, onBackspace, compact = false }) => (
 );
 
 /* ══════════════════════════════════════════════════════════════
-   PROGRESS BAR (P2P)
+   P2P RACE BAR — avatar racing along a progress track
    ══════════════════════════════════════════════════════════════ */
 
+const P2PRaceBar = ({ myLabel, myPercent, myColor, opponentLabel, opponentPercent, opponentColor, compact = false }) => {
+  const clampedMy  = Math.min(100, Math.max(0, myPercent));
+  const clampedOpp = Math.min(100, Math.max(0, opponentPercent));
+  const AV = compact ? 22 : 28;
+
+  // A single horizontal track with a sliding avatar
+  const Track = ({ label, percent, color }) => (
+    <div style={{ position: 'relative', flex: 1, height: AV + (compact ? 2 : 4) }}>
+      {/* Track bg */}
+      <div style={{
+        position: 'absolute', top: '50%', transform: 'translateY(-50%)',
+        left: AV / 2, right: AV / 2,
+        height: compact ? 5 : 6, borderRadius: 99,
+        background: 'rgba(255,255,255,0.13)',
+        border: '1px solid rgba(255,255,255,0.09)',
+      }}>
+        {/* Fill */}
+        <motion.div
+          style={{ height: '100%', borderRadius: 99, background: color, originX: 0 }}
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: percent / 100 }}
+          transition={{ type: 'spring', stiffness: 120, damping: 18 }}
+        />
+      </div>
+
+      {/* Avatar circle — slides along track */}
+      <motion.div
+        style={{
+          position: 'absolute', top: '50%',
+          left: `calc(${AV / 2}px + (100% - ${AV}px) * ${percent / 100})`,
+          transform: 'translate(-50%, -50%)',
+          width: AV, height: AV, borderRadius: '50%',
+          background: `linear-gradient(135deg, ${color}cc, ${color})`,
+          border: `2px solid ${color}`,
+          boxShadow: `0 2px 6px ${color}77, 0 0 0 2px rgba(255,255,255,0.2)`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontWeight: 900, fontSize: compact ? 10 : 12, color: '#fff',
+          textShadow: '0 1px 2px rgba(0,0,0,0.7)',
+          zIndex: 2,
+        }}
+        animate={{ left: `calc(${AV / 2}px + (100% - ${AV}px) * ${percent / 100})` }}
+        transition={{ type: 'spring', stiffness: 140, damping: 20 }}
+      >
+        {label?.[0]?.toUpperCase() || '?'}
+      </motion.div>
+
+      {/* Name + % label above track */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0,
+        display: 'flex', alignItems: 'center', gap: 3,
+        transform: 'translateY(-2px)', pointerEvents: 'none',
+      }}>
+        <span style={{ fontSize: 8, fontWeight: 900, color, textShadow: '0 1px 2px rgba(0,0,0,0.9)', maxWidth: compact ? 60 : 80, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</span>
+        <span style={{ fontSize: 8, fontWeight: 700, color: 'rgba(255,255,255,0.65)' }}>{Math.round(percent)}%</span>
+      </div>
+    </div>
+  );
+
+  if (compact) {
+    // Landscape: 2 tracks side-by-side separated by a finish-flag icon
+    return (
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 8,
+        padding: '8px 0 4px',
+      }}>
+        <Track label={myLabel} percent={clampedMy} color={myColor} />
+        <span style={{ fontSize: 14, flexShrink: 0, opacity: 0.6 }}>🏁</span>
+        <Track label={opponentLabel} percent={clampedOpp} color={opponentColor} />
+      </div>
+    );
+  }
+
+  // Portrait: 2 tracks stacked vertically with a header
+  return (
+    <div style={{ padding: '8px 0 4px' }}>
+      <div style={{ display: 'flex', gap: 4, alignItems: 'center', marginBottom: 4 }}>
+        <span style={{ fontSize: 9, fontWeight: 900, color: 'rgba(255,255,255,0.45)', letterSpacing: 1, textTransform: 'uppercase' }}>Tiến độ</span>
+        <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.08)' }} />
+        <span style={{ fontSize: 11 }}>🏁</span>
+      </div>
+      <Track label={myLabel} percent={clampedMy} color={myColor} />
+      <div style={{ height: 10 }} />
+      <Track label={opponentLabel} percent={clampedOpp} color={opponentColor} />
+    </div>
+  );
+};
+
+
+/* Simple bar used in result overlay */
 const ProgressBar = ({ label, percent, color, avatar }) => (
   <div className="flex items-center gap-2 w-full">
     <div className="w-7 h-7 rounded-full flex items-center justify-center font-black text-xs text-white shrink-0"
@@ -139,6 +230,9 @@ const CrosswordFinishedOverlay = ({
   earnedXP, earnedCoins,
   myProfile, opponentProfile, myPercent, opponentPercent,
   onReplay, onNewGame, onLeaveGame,
+  onRequestRematch = null,   // P2P only
+  canAffordRematch = true,   // P2P only
+  rematchStatus = null,      // 'waiting'|'declined'
 }) => {
   const { globalScore, coins: profileCoins, nickname } = usePlayFabStore();
   const rankName = getRankByScore(globalScore || 0);
@@ -384,6 +478,34 @@ const CrosswordFinishedOverlay = ({
 
               {/* Buttons */}
               <div className="flex flex-col gap-2 relative z-10 w-full max-w-md mx-auto mt-1 pb-4">
+                {/* P2P: Chơi tiếp */}
+                {isP2P && onRequestRematch && !rematchStatus && (
+                  <button onClick={onRequestRematch}
+                    disabled={!canAffordRematch}
+                    className="w-full font-black uppercase tracking-widest text-sm py-4 rounded-full border-4 transition-all flex justify-center items-center relative overflow-hidden"
+                    style={canAffordRematch
+                      ? { background: '#22c55e', color: '#fff', borderColor: '#14532d', boxShadow: '0 6px 0 #14532d' }
+                      : { background: '#94a3b8', color: '#fff', borderColor: '#475569', boxShadow: '0 4px 0 #475569', cursor: 'not-allowed' }}>
+                    <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full" />
+                    <span className="relative z-10">
+                      {canAffordRematch ? '⚔️ Chơi Tiếp' : `Cần ${20} 💰 để chơi tiếp`}
+                    </span>
+                  </button>
+                )}
+                {/* Đang chờ đối thủ phản hồi */}
+                {isP2P && rematchStatus === 'waiting' && (
+                  <div className="w-full py-3.5 rounded-full border-4 flex items-center justify-center gap-2"
+                    style={{ background: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.7)' }}>
+                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
+                      className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white" />
+                    <span className="text-sm font-bold">Đang chờ đối thủ...</span>
+                  </div>
+                )}
+                {/* Đối thủ từ chối */}
+                {isP2P && rematchStatus === 'declined' && (
+                  <p className="text-center text-red-300 text-sm font-semibold py-2">Đối thủ đã từ chối chơi tiếp</p>
+                )}
+
                 {(onReplay || onNewGame) && (
                   <div className="flex flex-row gap-2">
                     {onReplay && (
@@ -431,17 +553,25 @@ const CrosswordGame = ({
   onProgressUpdate = null,
   onFinish = null,
 }) => {
-  // Game state: 'intro' → 'playing' → 'finished'
-  const [gameState, setGameState] = useState('intro');
+  // Game state: 'intro' | 'matchSetup' | 'playing' | 'finished'
+  // P2P bắt đầu từ 'matchSetup' (countdown) thay vì 'intro'
+  const isP2PMode = myProfile != null; // khai báo đầu để dùng trong useState init
+  const [gameState, setGameState] = useState(() => isP2PMode ? 'matchSetup' : 'intro');
+  const [countdown, setCountdown] = useState(3);   // 3-2-1 countdown
   const [confirmQuit, setConfirmQuit] = useState(false);
 
   // Store — MUST be declared before puzzle state so lazy initialisers can use them
   const { addXP, addCoins, coins: userCoins, playedCrosswordIds, markCrosswordPlayed, globalScore, nickname, giaoxu } = usePlayFabStore();
-  const { roomData } = useRoomStore();
+  const { roomData, roomId, myRole } = useRoomStore();
+  const { uid: storeUid } = useUserStore();
+  const { leaveRoom, requestRematch, acceptRematch, declineRematch } = useRoom();
+  const myUid = storeUid;
+  const REMATCH_MIN_COINS = 20;
+  const FORFEIT_BONUS = 30;
 
-  // Puzzle — solo: theo thứ tự; P2P: từ roomData.puzzleId
+  // Puzzle — solo: theo thứ tự; P2P: từ roomData.puzzleId (set bởi host trước khi game start)
   const [puzzle, setPuzzle] = useState(() => {
-    if (opponentProgress != null && roomData?.puzzleId) {
+    if (isP2PMode && roomData?.puzzleId) {
       return PUZZLES.find(p => p.id === roomData.puzzleId) ?? PUZZLES[0];
     }
     return pickNextPuzzle(PUZZLES, playedCrosswordIds);
@@ -467,10 +597,16 @@ const CrosswordGame = ({
   const [score, setScore] = useState(0);
 
   // Hints (solo only)
-  const isSolo = opponentProgress == null;
-  const [hintUsed, setHintUsed] = useState(false);     // whether any hint was used
-  const [hintsSpent, setHintsSpent] = useState(0);      // total coins spent on hints
+  const isSolo = !isP2PMode;
+  const [hintUsed, setHintUsed] = useState(false);
+  const [hintsSpent, setHintsSpent] = useState(0);
   const [showHintMenu, setShowHintMenu] = useState(false);
+
+  // P2P: forfeit + rematch state
+  const [forfeitWin, setForfeitWin]           = useState(null);  // { name } khi đối thủ bỏ cuộc
+  const [rematchIncoming, setRematchIncoming] = useState(null);  // { fromName, puzzleId }
+  const [rematchStatus, setRematchStatus]     = useState(null);  // 'waiting'|'declined'
+  const [rematchHandled, setRematchHandled]   = useState(false); // tránh xử lý 2 lần
 
   // Earned rewards (set at finish for display)
   const [earnedXP, setEarnedXP] = useState(null);
@@ -994,9 +1130,10 @@ const CrosswordGame = ({
     }
   };
 
-  /* ── P2P: sync puzzle từ roomData khi host đã chọn ── */
+  /* ── P2P: sync puzzle từ roomData khi host đã chọn ──
+     Chạy ngay khi puzzleId thay đổi, không chờ opponentProgress ── */
   useEffect(() => {
-    if (opponentProgress == null) return;
+    if (!isP2PMode) return;
     if (!roomData?.puzzleId) return;
     const p = PUZZLES.find(pp => pp.id === roomData.puzzleId);
     if (p && p.id !== puzzle.id) {
@@ -1004,9 +1141,66 @@ const CrosswordGame = ({
       resetGameState(p);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomData?.puzzleId]);
+  }, [roomData?.puzzleId, isP2PMode]);
 
-  /* ── Reset game state (shared by replay & new game) ── */
+  /* ── P2P matchSetup countdown: 3-2-1 → auto-start ── */
+  useEffect(() => {
+    if (gameState !== 'matchSetup') return;
+    if (countdown <= 0) {
+      setGameState('playing');
+      markCrosswordPlayed(puzzle.id);
+      const firstWord = puzzle.words[0];
+      if (firstWord) {
+        setSelectedCell({ row: firstWord.row, col: firstWord.col });
+        setDirection(firstWord.direction);
+        setActiveWordId(firstWord.id);
+      }
+      return;
+    }
+    const t = setTimeout(() => setCountdown(c => c - 1), 1000);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameState, countdown]);
+
+  /* ── P2P: watch forfeit (opponent bỏ cuộc giữa chừ́ng) ── */
+  useEffect(() => {
+    if (!isP2PMode || !roomData) return;
+    if (gameState !== 'playing' && gameState !== 'matchSetup') return;
+    const f = roomData.forfeit;
+    if (f && f.uid !== myUid) {
+      clearInterval(timerRef.current);
+      setForfeitWin({ name: f.nickname || 'Đối thủ' });
+    }
+  }, [roomData?.forfeit?.timestamp, gameState, isP2PMode, myUid]);
+
+  /* ── P2P: watch rematch request từ đối thủ ── */
+  useEffect(() => {
+    if (!isP2PMode || !roomData?.rematchRequest) return;
+    const req = roomData.rematchRequest;
+    // Đối thủ mời mình chơi tiếp
+    if (req.toUid === myUid && req.status === 'pending' && !rematchHandled) {
+      setRematchIncoming({ fromName: req.fromName || 'Đối thủ', puzzleId: req.puzzleId });
+    }
+    // Đối thủ từ chối lời mời của mình
+    if (req.fromUid === myUid && req.status === 'declined') {
+      setRematchStatus('declined');
+    }
+    // Cả 2 đồng ý rematch — reset game
+    if (req.status === 'accepted' && !rematchHandled) {
+      setRematchHandled(true);
+      setRematchIncoming(null);
+      setRematchStatus(null);
+      setForfeitWin(null);
+      setCountdown(3);
+      // puzzle sẽ được cập nhật bởi effect roomData?.puzzleId
+      resetGameState(puzzle);
+      setGameState('matchSetup');
+      // Reset rematchHandled sau 1s để tránh chạy lại
+      setTimeout(() => setRematchHandled(false), 2000);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomData?.rematchRequest?.status, roomData?.rematchRequest?.timestamp]);
+
   const resetGameState = (targetPuzzle) => {
     const { rows, cols } = targetPuzzle.gridSize;
     setUserGrid(Array.from({ length: rows }, () => Array.from({ length: cols }, () => '')));
@@ -1230,30 +1424,168 @@ const CrosswordGame = ({
     );
   }
 
+  // ── MATCH SETUP SCREEN (P2P only: 3-2-1 countdown) ──
+  if (gameState === 'matchSetup') {
+    const myLabel   = myProfile?.nickname   || 'Bạn';
+    const oppLabel  = opponentProfile?.nickname || 'Đối thủ';
+    const myInitial = myLabel[0]?.toUpperCase()  || '?';
+    const oppInitial = oppLabel[0]?.toUpperCase() || '?';
+
+    const countdownLabel  = countdown > 0 ? String(countdown) : 'GO!';
+    const countdownColor  = countdown > 0
+      ? ['#fbbf24', '#f97316', '#ef4444'][3 - countdown] ?? '#fbbf24'
+      : '#22c55e';
+
+    return (
+      <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden select-none"
+        style={{ ...BG_STYLE }}>
+        <div className="absolute inset-0" style={{ background: 'rgba(5,10,25,0.85)' }} />
+
+        {/* Ambient pulses */}
+        <motion.div animate={{ scale: [1,1.3,1] }} transition={{ duration: 2, repeat: Infinity }}
+          className="absolute inset-0 rounded-full pointer-events-none"
+          style={{ background: `radial-gradient(ellipse at 50% 50%, ${countdownColor}22 0%, transparent 70%)` }} />
+
+        {/* ── Landscape: profiles at top corners, countdown center ── */}
+        {isLandscape ? (
+          <>
+            {/* My profile — top-left */}
+            <motion.div initial={{ x: -40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+              className="absolute top-3 left-4 flex items-center gap-2 z-10">
+              <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#3b82f6,#1d4ed8)', border: '3px solid #93c5fd', boxShadow: '0 0 12px #3b82f688', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, fontSize:16, color:'#fff' }}>
+                {myInitial}
+              </div>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 900, color: '#93c5fd', maxWidth: 120, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{myLabel}</div>
+                <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)' }}>Bạn · Xanh</div>
+              </div>
+            </motion.div>
+
+            {/* Opponent profile — top-right */}
+            <motion.div initial={{ x: 40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+              className="absolute top-3 right-4 flex items-center gap-2 z-10 flex-row-reverse">
+              <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#ef4444,#b91c1c)', border: '3px solid #fca5a5', boxShadow: '0 0 12px #ef444488', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, fontSize:16, color:'#fff' }}>
+                {oppInitial}
+              </div>
+              <div className="text-right">
+                <div style={{ fontSize: 11, fontWeight: 900, color: '#fca5a5', maxWidth: 120, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{oppLabel}</div>
+                <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)' }}>Đối thủ · Đỏ</div>
+              </div>
+            </motion.div>
+
+            {/* Center: countdown + puzzle info */}
+            <div className="relative z-10 flex flex-col items-center gap-3">
+              <AnimatePresence mode="wait">
+                <motion.div key={countdownLabel}
+                  initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 1.6, opacity: 0 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+                  style={{ fontSize: 96, fontWeight: 900, color: countdownColor, textShadow: `0 0 40px ${countdownColor}`, lineHeight: 1 }}>
+                  {countdownLabel}
+                </motion.div>
+              </AnimatePresence>
+              <div style={{ fontSize: 12, fontWeight: 900, color: 'rgba(255,255,255,0.6)', letterSpacing: 3, textTransform: 'uppercase' }}>
+                {countdown > 0 ? 'Chuẩn bị...' : 'Bắt đầu!'}
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12, padding: '6px 16px', textAlign: 'center' }}>
+                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', fontWeight: 700 }}>Chủ đề</div>
+                <div style={{ fontSize: 13, color: '#fbbf24', fontWeight: 900 }}>{puzzle.theme}</div>
+                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>{totalWords} từ cần tìm</div>
+              </div>
+            </div>
+          </>
+        ) : (
+          /* ── Portrait: VS layout center ── */
+          <div className="relative z-10 flex flex-col items-center gap-4 px-6 w-full max-w-sm">
+            {/* VS row */}
+            <div className="flex items-center gap-4 w-full">
+              {/* My avatar */}
+              <motion.div initial={{ x: -30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                className="flex flex-col items-center gap-1 flex-1">
+                <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'linear-gradient(135deg,#3b82f6,#1d4ed8)', border: '3px solid #93c5fd', boxShadow: '0 0 20px #3b82f688', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, fontSize:22, color:'#fff' }}>
+                  {myInitial}
+                </div>
+                <div style={{ fontSize: 11, fontWeight: 900, color: '#93c5fd', maxWidth: 80, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', textAlign:'center' }}>{myLabel}</div>
+              </motion.div>
+
+              {/* VS */}
+              <div style={{ fontSize: 22, fontWeight: 900, color: 'rgba(255,255,255,0.4)', letterSpacing: 2, flexShrink: 0 }}>VS</div>
+
+              {/* Opponent avatar */}
+              <motion.div initial={{ x: 30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                className="flex flex-col items-center gap-1 flex-1">
+                <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'linear-gradient(135deg,#ef4444,#b91c1c)', border: '3px solid #fca5a5', boxShadow: '0 0 20px #ef444488', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, fontSize:22, color:'#fff' }}>
+                  {oppInitial}
+                </div>
+                <div style={{ fontSize: 11, fontWeight: 900, color: '#fca5a5', maxWidth: 80, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', textAlign:'center' }}>{oppLabel}</div>
+              </motion.div>
+            </div>
+
+            {/* Countdown */}
+            <AnimatePresence mode="wait">
+              <motion.div key={countdownLabel}
+                initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 1.6, opacity: 0 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+                style={{ fontSize: 80, fontWeight: 900, color: countdownColor, textShadow: `0 0 30px ${countdownColor}`, lineHeight: 1 }}>
+                {countdownLabel}
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Puzzle info */}
+            <div style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 14, padding: '8px 20px', textAlign: 'center', width: '100%' }}>
+              <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>Câu đố • {totalWords} từ</div>
+              <div style={{ fontSize: 15, color: '#fbbf24', fontWeight: 900, marginTop: 2 }}>{puzzle.theme}</div>
+            </div>
+
+            {/* Quit link */}
+            <button onClick={onLeaveGame}
+              style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>
+              Thoát trận
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   // ── FINISHED SCREEN ──
   if (gameState === 'finished') {
-    const isP2P = opponentProgress != null;
+    const isP2P = isP2PMode;
     const myWordsCount = solvedWords.size;
     const oppWordsCount = opponentProgress?.completedItems?.length || 0;
     const isWinner = isP2P ? myWordsCount > oppWordsCount : false;
     const isDraw = isP2P ? myWordsCount === oppWordsCount : false;
     const isPerfect = solvedWords.size === totalWords;
-    return <CrosswordFinishedOverlay
-      isPerfect={isPerfect}
-      isP2P={isP2P} isWinner={isWinner} isDraw={isDraw}
-      solvedWords={solvedWords} totalWords={totalWords}
-      timeLeft={timeLeft} earnedXP={earnedXP} earnedCoins={earnedCoins}
-      hintsSpent={hintsSpent} score={score}
-      myProfile={myProfile} opponentProfile={opponentProfile}
-      myPercent={myPercent} opponentPercent={opponentPercent}
-      onReplay={isSolo ? handleReplay : undefined}
-      onNewGame={isSolo ? handleNewGame : undefined}
-      onLeaveGame={onLeaveGame}
-    />;
+    // Tính xem đối thủ còn online không (để hiện nút "Chơi tiếp")
+    const opponentUid = Object.keys(roomData?.players ?? {}).find(k => k !== myUid);
+    const opponentStillOnline = roomData?.players?.[opponentUid]?.isOnline !== false;
+    const handleRequestRematch = async () => {
+      if (!canAffordRematch || !roomId || !opponentUid) return;
+      const nextPuzzle = pickNextPuzzle(PUZZLES, playedCrosswordIds);
+      setRematchStatus('waiting');
+      await requestRematch(roomId, opponentUid, nextPuzzle.id);
+    };
+
+    return <>
+      <CrosswordFinishedOverlay
+        isPerfect={isPerfect}
+        isP2P={isP2P} isWinner={isWinner} isDraw={isDraw}
+        solvedWords={solvedWords} totalWords={totalWords}
+        timeLeft={timeLeft} earnedXP={earnedXP} earnedCoins={earnedCoins}
+        hintsSpent={hintsSpent} score={score}
+        myProfile={myProfile} opponentProfile={opponentProfile}
+        myPercent={myPercent} opponentPercent={opponentPercent}
+        onReplay={isSolo ? handleReplay : undefined}
+        onNewGame={isSolo ? handleNewGame : undefined}
+        onLeaveGame={onLeaveGame}
+        onRequestRematch={isP2P && opponentStillOnline ? handleRequestRematch : null}
+        canAffordRematch={canAffordRematch}
+        rematchStatus={rematchStatus}
+      />
+    </>;
   }
 
   // ── PLAYING SCREEN ──
-  const isP2P = opponentProgress != null;
+  const isP2P = isP2PMode;
   const acrossClues = puzzle.words.filter(w => w.direction === 'across');
   const downClues = puzzle.words.filter(w => w.direction === 'down');
 
@@ -1326,11 +1658,20 @@ const CrosswordGame = ({
         </motion.button>
       </div>
 
-      {/* ── P2P PROGRESS ── */}
-      {isP2P && (
-        <div className="relative z-10 flex-shrink-0 px-3 py-2 flex gap-3" style={{ background: 'rgba(0,0,0,0.3)' }}>
-          <ProgressBar label={myProfile?.nickname || 'Bạn'} percent={myPercent} color="#3b82f6" avatar={(myProfile?.nickname || 'B')[0]} />
-          <ProgressBar label={opponentProfile?.nickname || 'Đối thủ'} percent={opponentPercent} color="#ef4444" avatar={(opponentProfile?.nickname || 'Đ')[0]} />
+
+      {/* ── P2P RACE BAR (landscape only — full-width strip between header & body) ── */}
+      {isP2P && isLandscape && (
+        <div className="relative z-10 flex-shrink-0 px-3"
+          style={{ background: 'rgba(10,15,30,0.85)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+          <P2PRaceBar
+            myLabel={myProfile?.nickname || 'Bạn'}
+            myPercent={myPercent}
+            myColor="#3b82f6"
+            opponentLabel={opponentProfile?.nickname || 'Đối thủ'}
+            opponentPercent={opponentPercent}
+            opponentColor="#ef4444"
+            compact
+          />
         </div>
       )}
 
@@ -1434,7 +1775,7 @@ const CrosswordGame = ({
         {/* ── RIGHT PANE (landscape: hints + clues stacked vertically) ── */}
         {isLandscape ? (
           <div className="flex-shrink-0 flex flex-col gap-2" style={{ width: 220 }}>
-            {/* Hint buttons */}
+           {/* Hint buttons */}
             {isSolo && (
               <div className="flex flex-col gap-2">
                 <motion.button whileTap={{ scale: 0.93, y: 2 }}
@@ -1505,6 +1846,25 @@ const CrosswordGame = ({
         ) : (
           /* Portrait: hints as a row above clues, clues in a short panel */
           <div className="flex-shrink-0 flex flex-col gap-2" style={{ maxHeight: '38vh' }}>
+            {/* P2P Race Bar — portrait, sits above clues */}
+            {isP2P && (
+              <div style={{
+                background: 'rgba(10,15,30,0.85)',
+                borderRadius: 12,
+                padding: '0 10px',
+                border: '1px solid rgba(255,255,255,0.08)',
+                flexShrink: 0,
+              }}>
+                <P2PRaceBar
+                  myLabel={myProfile?.nickname || 'Bạn'}
+                  myPercent={myPercent}
+                  myColor="#3b82f6"
+                  opponentLabel={opponentProfile?.nickname || 'Đối thủ'}
+                  opponentPercent={opponentPercent}
+                  opponentColor="#ef4444"
+                />
+              </div>
+            )}
             {/* Hint buttons row */}
             {isSolo && (
               <div className="flex gap-2 flex-shrink-0">
@@ -1594,7 +1954,11 @@ const CrosswordGame = ({
               className="rounded-3xl p-6 max-w-sm w-full text-center space-y-4"
               style={{ background: 'linear-gradient(180deg, #1e293b, #0f172a)', border: '3px solid rgba(255,255,255,0.15)' }}>
               <p className="text-white font-black text-xl">Thoát game?</p>
-              <p className="text-white/60 text-sm">Tiến trình sẽ không được lưu</p>
+              {isP2PMode && gameState === 'playing' ? (
+                <p className="text-red-400 text-sm font-semibold">⚠️ Bỏ cuộc giữa chừng sẽ xử thua — coin thuộc về đối thủ!</p>
+              ) : (
+                <p className="text-white/60 text-sm">Tiến trình sẽ không được lưu</p>
+              )}
               <div className="flex gap-3">
                 <motion.button whileTap={{ scale: 0.95, y: 2 }}
                   onClick={() => setConfirmQuit(false)}
@@ -1603,10 +1967,109 @@ const CrosswordGame = ({
                   Ở lại
                 </motion.button>
                 <motion.button whileTap={{ scale: 0.95, y: 2 }}
-                  onClick={onLeaveGame}
+                  onClick={async () => {
+                    setConfirmQuit(false);
+                    if (isP2PMode && gameState === 'playing' && roomId && myRole) {
+                      await leaveRoom(roomId, myRole, true); // forfeit = true
+                    }
+                    onLeaveGame?.();
+                  }}
                   className="flex-1 py-3 rounded-xl font-black text-white"
                   style={{ background: 'linear-gradient(180deg, #ef4444, #b91c1c)', border: '2px solid #991b1b', boxShadow: '0 3px 0 #7f1d1d' }}>
                   Thoát
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── FORFEIT WIN OVERLAY ── */}
+      <AnimatePresence>
+        {forfeitWin && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <motion.div initial={{ scale: 0.85, y: 30 }} animate={{ scale: 1, y: 0 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+              className="rounded-3xl p-6 max-w-sm w-full text-center space-y-4"
+              style={{ background: 'linear-gradient(180deg, #1e3a8a, #1e40af)', border: '4px solid #60a5fa', boxShadow: '0 10px 0 #1e3a8a, 0 20px 40px rgba(0,0,0,0.5)' }}>
+              <div className="text-5xl">🏆</div>
+              <p className="text-yellow-300 font-black text-2xl uppercase tracking-widest"
+                style={{ textShadow: '0 3px 0 #78350f' }}>Bạn Thắng!</p>
+              <p className="text-blue-200 text-sm font-semibold">
+                <span className="text-white font-black">"{forfeitWin.name}"</span> đã rời phòng giữa chừng.
+              </p>
+              <div className="flex justify-center">
+                <div className="px-5 py-2.5 rounded-2xl font-black text-amber-300 text-xl"
+                  style={{ background: 'rgba(251,191,36,0.15)', border: '2px solid rgba(251,191,36,0.4)' }}>
+                  +{FORFEIT_BONUS} 💰
+                </div>
+              </div>
+              <motion.button whileTap={{ scale: 0.97, y: 2 }}
+                onClick={() => {
+                  addCoins(FORFEIT_BONUS);
+                  setForfeitWin(null);
+                  onLeaveGame?.();
+                }}
+                className="w-full py-3.5 rounded-2xl font-black text-[#1e3a8a] text-lg uppercase"
+                style={{ background: 'linear-gradient(180deg, #fbbf24, #f59e0b)', border: '4px solid #b45309', boxShadow: '0 5px 0 #b45309' }}>
+                OK — Nhận coin
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── REMATCH INCOMING POPUP ── */}
+      <AnimatePresence>
+        {rematchIncoming && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+            <motion.div initial={{ scale: 0.85, y: 30 }} animate={{ scale: 1, y: 0 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+              className="rounded-3xl p-6 max-w-sm w-full text-center space-y-4"
+              style={{ background: 'linear-gradient(180deg, #1e3a8a, #1e40af)', border: '4px solid #fbbf24', boxShadow: '0 10px 0 #1e3a8a, 0 20px 40px rgba(0,0,0,0.5)' }}>
+              <div className="text-4xl">⚔️</div>
+              <p className="text-white font-black text-xl">
+                <span className="text-yellow-300">"{rematchIncoming.fromName}"</span><br />
+                muốn chơi tiếp!
+              </p>
+              {userCoins < REMATCH_MIN_COINS ? (
+                <p className="text-red-300 text-sm font-semibold">
+                  ⚠️ Bạn cần ít nhất {REMATCH_MIN_COINS} 💰 để tiếp tục.<br />
+                  Hiện tại: {userCoins} 💰
+                </p>
+              ) : (
+                <p className="text-blue-200 text-xs">Bạn có {userCoins} 💰 — Đủ để chơi tiếp</p>
+              )}
+              <div className="flex gap-3">
+                <motion.button whileTap={{ scale: 0.95 }}
+                  onClick={async () => {
+                    setRematchHandled(true);
+                    setRematchIncoming(null);
+                    if (roomId && myRole) await declineRematch(roomId);
+                    onLeaveGame?.();
+                  }}
+                  className="flex-1 py-3 rounded-xl font-black text-white text-sm"
+                  style={{ background: 'rgba(255,255,255,0.1)', border: '2px solid rgba(255,255,255,0.2)' }}>
+                  Từ chối
+                </motion.button>
+                <motion.button whileTap={{ scale: 0.95 }}
+                  disabled={userCoins < REMATCH_MIN_COINS}
+                  onClick={async () => {
+                    if (userCoins < REMATCH_MIN_COINS) return;
+                    setRematchHandled(true);
+                    setRematchIncoming(null);
+                    if (roomId) await acceptRematch(roomId, rematchIncoming.puzzleId);
+                  }}
+                  className="flex-1 py-3 rounded-xl font-black text-[#1e3a8a] text-sm"
+                  style={{
+                    background: userCoins < REMATCH_MIN_COINS ? '#94a3b8' : 'linear-gradient(180deg, #fbbf24, #f59e0b)',
+                    border: '3px solid #b45309',
+                    boxShadow: userCoins < REMATCH_MIN_COINS ? 'none' : '0 3px 0 #b45309',
+                    cursor: userCoins < REMATCH_MIN_COINS ? 'not-allowed' : 'pointer',
+                  }}>
+                  Đồng ý ⚔️
                 </motion.button>
               </div>
             </motion.div>

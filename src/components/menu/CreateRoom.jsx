@@ -111,7 +111,7 @@ const CreateRoom = ({ gameName, gameType = 'quiz', onBack, onRoomCreated }) => {
         if (loading) return;
         setLoading(true);
         try {
-            const pin = await createRoom(gameType);
+            const pin = await createRoom(gameType, betCoins);
             onRoomCreated?.(pin);
         } catch (e) {
             console.error('Tạo phòng thất bại:', e);
