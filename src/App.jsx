@@ -242,7 +242,7 @@ function App() {
   };
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-[#020617]">
+    <div className="relative w-full overflow-hidden bg-[#020617]" style={{ height: '100dvh' }}>
       <SpeedInsights />
       <BackgroundAnimations />
 
