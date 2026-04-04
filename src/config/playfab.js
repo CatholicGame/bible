@@ -8,13 +8,13 @@
 const TITLE_ID = '15C4E5';
 const BASE_URL = `https://${TITLE_ID}.playfabapi.com`;
 
-// Session ticket — set after login, persisted to sessionStorage to survive Vite HMR
-let sessionTicket = sessionStorage.getItem('pf_session') || null;
+// Session ticket — set after login, persisted to localStorage to survive Vite HMR
+let sessionTicket = localStorage.getItem('pf_session') || null;
 
 // Entity token — for PlayFab v2 Statistics & Leaderboard API
-let entityToken = sessionStorage.getItem('pf_entity_token') || null;
-let entityId    = sessionStorage.getItem('pf_entity_id')    || null;
-let entityType  = sessionStorage.getItem('pf_entity_type')  || null;
+let entityToken = localStorage.getItem('pf_entity_token') || null;
+let entityId    = localStorage.getItem('pf_entity_id')    || null;
+let entityType  = localStorage.getItem('pf_entity_type')  || null;
 
 /**
  * Generic PlayFab API call
@@ -85,15 +85,15 @@ export async function loginWithCustomID(customId) {
   }, false); // Auth not needed for login
 
   sessionTicket = data.SessionTicket;
-  sessionStorage.setItem('pf_session', sessionTicket);
+  localStorage.setItem('pf_session', sessionTicket);
   // Store entity token for v2 APIs
   if (data.EntityToken) {
     entityToken = data.EntityToken.EntityToken;
     entityId = data.EntityToken.Entity?.Id;
     entityType = data.EntityToken.Entity?.Type;
-    sessionStorage.setItem('pf_entity_token', entityToken);
-    sessionStorage.setItem('pf_entity_id', entityId || '');
-    sessionStorage.setItem('pf_entity_type', entityType || '');
+    localStorage.setItem('pf_entity_token', entityToken);
+    localStorage.setItem('pf_entity_id', entityId || '');
+    localStorage.setItem('pf_entity_type', entityType || '');
   }
   return data;
 }
@@ -108,14 +108,14 @@ export async function registerWithEmail(email, password, displayName) {
   }, false);
 
   sessionTicket = data.SessionTicket;
-  sessionStorage.setItem('pf_session', sessionTicket);
+  localStorage.setItem('pf_session', sessionTicket);
   if (data.EntityToken) {
     entityToken = data.EntityToken.EntityToken;
     entityId = data.EntityToken.Entity?.Id;
     entityType = data.EntityToken.Entity?.Type;
-    sessionStorage.setItem('pf_entity_token', entityToken);
-    sessionStorage.setItem('pf_entity_id', entityId || '');
-    sessionStorage.setItem('pf_entity_type', entityType || '');
+    localStorage.setItem('pf_entity_token', entityToken);
+    localStorage.setItem('pf_entity_id', entityId || '');
+    localStorage.setItem('pf_entity_type', entityType || '');
   }
   return data;
 }
@@ -134,14 +134,14 @@ export async function loginWithEmail(email, password) {
   }, false);
 
   sessionTicket = data.SessionTicket;
-  sessionStorage.setItem('pf_session', sessionTicket);
+  localStorage.setItem('pf_session', sessionTicket);
   if (data.EntityToken) {
     entityToken = data.EntityToken.EntityToken;
     entityId = data.EntityToken.Entity?.Id;
     entityType = data.EntityToken.Entity?.Type;
-    sessionStorage.setItem('pf_entity_token', entityToken);
-    sessionStorage.setItem('pf_entity_id', entityId || '');
-    sessionStorage.setItem('pf_entity_type', entityType || '');
+    localStorage.setItem('pf_entity_token', entityToken);
+    localStorage.setItem('pf_entity_id', entityId || '');
+    localStorage.setItem('pf_entity_type', entityType || '');
   }
   return data;
 }
@@ -160,14 +160,14 @@ export async function loginWithGoogleAccount(accessToken) {
   }, false);
 
   sessionTicket = data.SessionTicket;
-  sessionStorage.setItem('pf_session', sessionTicket);
+  localStorage.setItem('pf_session', sessionTicket);
   if (data.EntityToken) {
     entityToken = data.EntityToken.EntityToken;
     entityId = data.EntityToken.Entity?.Id;
     entityType = data.EntityToken.Entity?.Type;
-    sessionStorage.setItem('pf_entity_token', entityToken);
-    sessionStorage.setItem('pf_entity_id', entityId || '');
-    sessionStorage.setItem('pf_entity_type', entityType || '');
+    localStorage.setItem('pf_entity_token', entityToken);
+    localStorage.setItem('pf_entity_id', entityId || '');
+    localStorage.setItem('pf_entity_type', entityType || '');
   }
   return data;
 }
@@ -313,8 +313,8 @@ export function forgetCredentials() {
   entityToken = null;
   entityId = null;
   entityType = null;
-  sessionStorage.removeItem('pf_session');
-  sessionStorage.removeItem('pf_entity_token');
-  sessionStorage.removeItem('pf_entity_id');
-  sessionStorage.removeItem('pf_entity_type');
+  localStorage.removeItem('pf_session');
+  localStorage.removeItem('pf_entity_token');
+  localStorage.removeItem('pf_entity_id');
+  localStorage.removeItem('pf_entity_type');
 }

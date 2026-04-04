@@ -1,7 +1,8 @@
-import { ref, set, update, get, onValue, remove, onDisconnect } from 'firebase/database';
+import { ref, set, update, get, onValue, remove, push, onDisconnect } from 'firebase/database';
 import { db, auth } from '../config/firebase';
 import { useRoomStore } from '../store/roomStore';
 import { useUserStore } from '../store/userStore';
+import { usePlayFabStore } from '../store/playfabStore';
 import RAW_PUZZLES from '../data/crossword_puzzles.json';
 
 export function useRoom() {
@@ -9,6 +10,8 @@ export function useRoom() {
   // Fallback: lấy uid từ Firebase Auth trực tiếp nếu store chưa kịp sync
   const uid = storeUid || auth.currentUser?.uid;
   const { setRoom, setRoomData, resetRoom } = useRoomStore();
+  // Lấy avatarUrl từ playfabStore (Google photo URL)
+  const avatarUrl = usePlayFabStore.getState().avatarUrl || null;
 
   // Sinh mã PIN 6 số ngẫu nhiên
   const generatePin = () =>
@@ -24,6 +27,7 @@ export function useRoom() {
     const pin = generatePin();
     const roomRef = ref(db, `rooms/${pin}`);
 
+    const myAvatarUrl = usePlayFabStore.getState().avatarUrl || null;
     await set(roomRef, {
       gameType,
       mode: 'p2p',
@@ -36,6 +40,8 @@ export function useRoom() {
       players: {
         [uid]: {
           nickname: nickname || 'Khách',
+          avatarUrl: myAvatarUrl,     // ← lưu avatar để đối thủ hiển thị
+          coins: usePlayFabStore.getState().coins ?? 0,
           isReady: false,
           isOnline: true,
           lastSeen: Date.now(),
@@ -65,23 +71,27 @@ export function useRoom() {
     if (!snap.exists()) return { success: false, error: 'Mã phòng không hợp lệ.' };
 
     const room = snap.val();
-    if (room.status === 'playing') return { success: false, error: 'Trận đấu đã bắt đầu.' };
+    if (room.locked)           return { success: false, error: 'Phòng đã khoá (2 người đã vào phòng).' };
+    if (room.status === 'playing')  return { success: false, error: 'Trận đấu đã bắt đầu.' };
     if (room.status === 'finished') return { success: false, error: 'Phòng này đã kết thúc.' };
-    if (room.guestUid) return { success: false, error: 'Phòng đã có người.' };
-    if (room.hostUid === uid) return { success: false, error: 'Bạn là chủ phòng này.' };
+    if (room.guestUid)         return { success: false, error: 'Phòng đã có người.' };
+    if (room.hostUid === uid)  return { success: false, error: 'Bạn là chủ phòng này.' };
 
     // ── Kiểm tra coin cược ──
     const wager = room.wager ?? 0;
     if (wager > 0 && myCoins < wager) {
-      // Trả về insufficient_coins — không ghi vào phòng
       return { success: false, error: 'insufficient_coins', wager, myCoins };
     }
 
-    // Ghi guest vào phòng
+    // Ghi guest vào phòng + khoá phòng ngay lập tức
+    const myAvatarUrl = usePlayFabStore.getState().avatarUrl || null;
     await update(roomRef, {
       guestUid: uid,
+      locked: true,          // ← khoá phòng — không cho ai khác join
       [`players/${uid}`]: {
         nickname: nickname || 'Khách',
+        avatarUrl: myAvatarUrl,     // ← lưu avatar để đối thủ hiển thị
+        coins: myCoins,             // lưu số dư xu hiện tại
         isReady: false,
         isOnline: true,
         lastSeen: Date.now(),
@@ -148,28 +158,84 @@ export function useRoom() {
   };
 
   /**
-   * Rời phòng / cleanup
-   * @param {boolean} forfeit - true nếu bỏ cuộc giữa chừng (thua)
+   * Trừ coin cược từ player hiện tại (idempotent — check betCharged trước)
+   * @param {string} roomId
+   * @param {number} wager - số coin cần trừ
    */
-  const leaveRoom = async (roomId, myRole, forfeit = false) => {
-    if (forfeit) {
-      // Ghi forfeit signal để đối thủ biết bạn bỏ cuộc
-      try {
-        await update(ref(db, `rooms/${roomId}`), {
-          forfeit: { uid, nickname: nickname || 'Người chơi', timestamp: Date.now() },
-        });
-      } catch (_) {}
-      // Ngắn delay để Firebase kịp ghi trước khi xóa
-      await new Promise(r => setTimeout(r, 300));
-    }
-    if (myRole === 'host') {
-      await remove(ref(db, `rooms/${roomId}`));
-    } else {
+  const chargeBet = async (roomId, wager) => {
+    if (!wager || wager <= 0) return;
+    // Idempotent: nếu đã charge rồi thì bỏ qua
+    const chargedSnap = await get(ref(db, `rooms/${roomId}/players/${uid}/betCharged`));
+    if (chargedSnap.val() === true) return;
+    // Trừ coin
+    const { addCoins } = usePlayFabStore.getState();
+    await addCoins(-wager);
+    // Đánh dấu đã charge trong Firebase
+    await update(ref(db, `rooms/${roomId}/players/${uid}`), { betCharged: true });
+  };
+
+  /**
+   * Ghi kết quả + award pot cho winner
+   * @param {string} roomId
+   * @param {string} winnerUid - uid của người thắng (hoặc 'draw')
+   * @param {number} pot - tổng coin thưởng
+   * @param {boolean} isDraw - nếu hòa thì true
+   */
+  const awardWinner = async (roomId, winnerUid, pot, isDraw = false) => {
+    try {
       await update(ref(db, `rooms/${roomId}`), {
-        guestUid: null,
-        [`players/${uid}`]: null,
+        status: 'finished',
+        result: {
+          winner: isDraw ? 'draw' : winnerUid,
+          pot,
+          draw: isDraw,
+          timestamp: Date.now(),
+        },
       });
+    } catch (_) {}
+  };
+
+  /**
+   * Rời phòng / cleanup
+   * — Forfeit: chỉ ghi signal, không xóa room, để đối thủ nhận được.
+   * — Thoát bình thường: đánh dấu leftAt, chỉ xóa room khi người cuối cùng ra đi.
+   */
+  const leaveRoom = async (roomId, myRole, forfeit = false, opponentUid = null, pot = 0) => {
+    if (forfeit) {
+      // Ghi forfeit signal để đối thủ biết — sau đó chỉ thoát local, KHÔNG xóa room.
+      // Việc cleanup room do đối thủ (winner) thực hiện sau khi họ nhận thông báo.
+      try {
+        const updates = {
+          forfeit: { uid, nickname: nickname || 'Người chơi', timestamp: Date.now() },
+        };
+        if (opponentUid && pot > 0) {
+          updates.status = 'finished';
+          updates.result = { winner: opponentUid, pot, draw: false, timestamp: Date.now() };
+        }
+        await update(ref(db, `rooms/${roomId}`), updates);
+      } catch (_) {}
+      // Chỉ reset local state, không đụng Firebase room
+      resetRoom();
+      return;
     }
+
+    // ── Thoát bình thường: đánh dấu leftAt cho player này ──
+    try {
+      await update(ref(db, `rooms/${roomId}/players/${uid}`), {
+        leftAt: Date.now(),
+        isOnline: false,
+      });
+
+      // Kiểm tra xem tất cả player đã thoát chưa — nếu vậy mới xóa room
+      const snap = await get(ref(db, `rooms/${roomId}/players`));
+      const players = snap.val() || {};
+      const allLeft = Object.values(players).every(p => p.leftAt);
+
+      if (allLeft) {
+        await remove(ref(db, `rooms/${roomId}`));
+      }
+    } catch (_) {}
+
     resetRoom();
   };
 
@@ -215,6 +281,25 @@ export function useRoom() {
   };
 
   /**
+   * Gửi emoji reaction cho đối thủ
+   * @param {string} roomId
+   * @param {string} emoji  - ký tự emoji
+   * @param {string} label  - câu hiển thị
+   */
+  const sendReaction = async (roomId, emoji, label) => {
+    const reactionsRef = ref(db, `rooms/${roomId}/reactions`);
+    const newRef = push(reactionsRef);
+    await set(newRef, {
+      fromUid: uid,
+      emoji,
+      label,
+      timestamp: Date.now(),
+    });
+    // Tự xóa sau 4 giây để tránh tích lũy data
+    setTimeout(() => remove(newRef), 4000);
+  };
+
+  /**
    * Lắng nghe toàn bộ room real-time
    * @returns unsubscribe function
    */
@@ -226,5 +311,5 @@ export function useRoom() {
     });
   };
 
-  return { createRoom, joinRoom, setReady, startGame, leaveRoom, watchRoom, requestRematch, acceptRematch, declineRematch };
+  return { createRoom, joinRoom, setReady, startGame, leaveRoom, watchRoom, requestRematch, acceptRematch, declineRematch, sendReaction, chargeBet, awardWinner };
 }

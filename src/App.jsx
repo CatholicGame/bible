@@ -20,6 +20,7 @@ import { useRoomStore } from './store/roomStore';
 import { usePlayFabStore } from './store/playfabStore';
 import { auth } from './config/firebase';
 import { getRankByScore } from './utils/ranks';
+import { usePendingRefund } from './hooks/usePendingRefund';
 
 // ── Fullscreen helpers ──
 const enterFullscreen = () => {
@@ -81,20 +82,34 @@ function App() {
   const playfabLogin = usePlayFabStore(state => state.login);
   const { nickname: myNickname, globalScore: myScore } = usePlayFabStore();
 
-  // ── Firebase Anonymous Auth (chạy background, chỉ cập nhật UID) ──
+  // Tự động refund nếu còn pending bet từ session trước (disconnect)
+  usePendingRefund();
+
+  // ── Firebase Auth Watcher ──
   useEffect(() => {
-    signInAnonymously(auth).then(({ user }) => {
-      const saved = localStorage.getItem('guestSession');
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          const nickname = parsed.name || 'Khách Vô Danh';
-          setUser({ uid: user.uid, nickname });
-        } catch { /* ignore */ }
+    const unsub = auth.onAuthStateChanged((user) => {
+      exportSessionToPlayfab(user);
+    });
+    
+    async function exportSessionToPlayfab(user) {
+      if (user) {
+        const saved = localStorage.getItem('guestSession');
+        let nickname = user.displayName || 'Khách Vô Danh';
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (parsed.name) nickname = parsed.name;
+          } catch { /* ignore */ }
+        }
+        setUser({ uid: user.uid, nickname });
+        // Restore playfab session
+        playfabLogin().catch(console.error);
+      } else {
+        signInAnonymously(auth).catch(console.error);
       }
-      // PlayFab login (dùng device ID)
-      playfabLogin().catch(console.error);
-    }).catch(console.error);
+    }
+    
+    return () => unsub();
   }, []);
 
   // ── Handlers ──
@@ -166,11 +181,22 @@ function App() {
       const uid = auth.currentUser?.uid;
       const opponentUid = Object.keys(players).find(k => k !== uid);
 
-      // Build profiles
-      setMyP2PProfile({ nickname: myNickname || 'Bạn', uid });
+      // Build profiles — coins + avatarUrl included so matchSetup shows real avatar
+      const myCoins = usePlayFabStore.getState().coins ?? 0;
+      const myAvatarUrl = usePlayFabStore.getState().avatarUrl || null;
+      setMyP2PProfile({
+        nickname: myNickname || 'Bạn',
+        uid,
+        coins: myCoins,
+        avatarUrl: myAvatarUrl,
+      });
       setOpponentP2PProfile({
         nickname: players[opponentUid]?.nickname || 'Đối thủ',
         uid: opponentUid,
+        // coins đối thủ không biết exact, hiển thị ? (chỉ biết họ đủ điều kiện vào phòng)
+        coins: null,
+        // Lấy avatarUrl của đối thủ từ Firebase room data (đã được sync khi join)
+        avatarUrl: players[opponentUid]?.avatarUrl || null,
       });
 
       // Unsubscribe old listener
@@ -277,7 +303,7 @@ function App() {
           <motion.div key="view-menu"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="w-full h-full flex justify-center items-start z-10 relative overflow-y-auto overflow-x-hidden">
+            className="absolute inset-0 z-10 overflow-hidden">
             <MainMenu
               user={user}
               returnToGame={activeGameType}
@@ -305,7 +331,7 @@ function App() {
           <motion.div key="view-profile"
             initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }}
             transition={{ duration: 0.3 }}
-            className="w-full h-full z-10 relative">
+            className="absolute inset-0 z-10">
             <ProfileScreen
               user={user}
               onBack={() => setCurrentView('menu')}
@@ -330,14 +356,18 @@ function App() {
         {currentView === 'create_room' && (
           <motion.div key="view-create-room"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="w-full h-full z-10 relative">
+            className="absolute inset-0 z-10">
             <CreateRoom
               gameName={activeGameType}
               gameType={activeGameType}
-              onBack={() => setCurrentView('menu')}
+              onBack={() => {
+                // Reset cả activeGameType + activeMode để home hiển thị đúng
+                setActiveGameType(null);
+                setActiveMode(null);
+                setCurrentView('menu');
+              }}
               onRoomCreated={handleRoomCreated}
               onPlaySolo={() => {
-                // Về menu trước để reset state, rồi trigger solo play
                 setActiveMode('solo');
                 setCurrentView('playing');
               }}
@@ -349,7 +379,7 @@ function App() {
         {currentView === 'join_room' && (
           <motion.div key="view-join-room"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="w-full h-full z-10 relative">
+            className="absolute inset-0 z-10">
             <JoinRoom
               initialPin={initialPin}
               onBack={() => setCurrentView('menu')}
@@ -362,7 +392,7 @@ function App() {
         {currentView === 'waiting_room' && (
           <motion.div key="view-waiting-room"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="w-full h-full z-10 relative">
+            className="absolute inset-0 z-10">
             <WaitingRoom
               onLeave={handleLeaveGame}
               onGameStart={handleGameStart}
@@ -375,13 +405,13 @@ function App() {
           activeGameType === 'millionaire' ? (
             <motion.div key="view-pinnacle"
               initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }}
-              className="w-full h-full flex justify-center items-center z-10 relative overflow-y-auto">
+              className="absolute inset-0 z-10 overflow-y-auto">
               <PinnacleGame onLeaveGame={handleLeaveGame} onGameComplete={(xp) => handleGameComplete('millionaire', xp)} />
             </motion.div>
           ) : activeGameType === 'crossword' ? (
             <motion.div key="view-crossword"
               initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }}
-              className="w-full h-full z-10 relative">
+              className="absolute inset-0 z-10">
               <CrosswordGame
                 onLeaveGame={handleLeaveGame}
                 onGameComplete={(xp) => handleGameComplete('crossword', xp)}
@@ -392,19 +422,7 @@ function App() {
                 onFinish={activeMode === 'solo' ? null : handleCrosswordProgressUpdate}
               />
             </motion.div>
-          ) : (
-            <motion.div key="view-playing"
-              initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.2 }}
-              className="z-10 bg-white p-8 rounded-3xl shadow-xl text-center max-w-md w-full">
-              <h2 className="text-3xl font-bold mb-4 text-kahoot-green">Game Started!</h2>
-              <div className="bg-gray-100 p-4 rounded-xl mb-6 text-left space-y-2">
-                <p><strong>Loại game:</strong> {activeGameType || 'N/A'}</p>
-                <p><strong>Chế độ:</strong> {activeMode || 'N/A'}</p>
-              </div>
-              <p className="text-gray-500 mb-8">Đây sẽ là nơi render GameEngine.jsx</p>
-              <button onClick={handleLeaveGame} className="bg-kahoot-red text-white font-bold px-6 py-3 rounded-xl w-full">Thoát Game</button>
-            </motion.div>
-          )
+          ) : null
         )}
 
       </AnimatePresence>

@@ -7,6 +7,9 @@ import { getRankByScore } from '../../../utils/ranks';
 import { useRoomStore } from '../../../store/roomStore';
 import { useUserStore } from '../../../store/userStore';
 import { useRoom } from '../../../hooks/useRoom';
+import { setPendingRefund, clearPendingRefund } from '../../../hooks/usePendingRefund';
+import EmojiReactionPanel from '../EmojiReactionPanel';
+import UserAvatar from '../../common/UserAvatar';
 import bgCrossword from '../../../assets/common/bg_crossword.png';
 import resultBanner from '../../../assets/common/result_banner.png';
 import iconCoin from '../../../assets/common/coin.png';
@@ -22,7 +25,8 @@ const BG_STYLE = {
 /* ══════════════════════════════════════════════════════════════
    PUZZLE DATA — load từ crossword_puzzles.json
    ══════════════════════════════════════════════════════════════ */
-const PUZZLES = RAW_PUZZLES;
+const MIN_WORDS = 6; // puzzle phải có ít nhất 6 từ mới đưa vào chơi
+const PUZZLES = RAW_PUZZLES.filter(p => p.words.length >= MIN_WORDS);
 
 /* ── Helper: chọn puzzle tiếp theo theo thứ tự ── */
 function pickNextPuzzle(allPuzzles, playedIds, exclude = null) {
@@ -86,13 +90,14 @@ const VirtualKeyboard = ({ onKey, onBackspace, compact = false }) => (
               width: k === '⌫' ? (compact ? 38 : 46) : (compact ? 30 : 34),
               height: compact ? 32 : 38,
               fontSize: k === '⌫' ? (compact ? 15 : 18) : (compact ? 13 : 15),
-              color: k === '⌫' ? '#ffffff' : '#fef08a',  /* yellow-200 for letters */
+              color: k === '⌫' ? '#fff' : '#1e293b',
               background: k === '⌫'
-                ? 'linear-gradient(180deg, #ef4444 0%, #b91c1c 100%)'
-                : 'linear-gradient(180deg, #38bdf8 0%, #0ea5e9 100%)',
-              border: k === '⌫' ? '2px solid #991b1b' : '2px solid #7dd3fc',
-              boxShadow: k === '⌫' ? '0 2px 0 #7f1d1d' : '0 2px 0 #0369a1',
-              textShadow: k === '⌫' ? 'none' : '0 1px 2px rgba(0,0,0,0.5)',
+                ? 'linear-gradient(180deg, #f43f5e 0%, #e11d48 100%)'
+                : 'rgba(255,255,255,0.92)',
+              border: k === '⌫' ? '1.5px solid #be123c' : '1.5px solid rgba(0,0,0,0.10)',
+              boxShadow: k === '⌫'
+                ? '0 2px 0 #9f1239, 0 1px 4px rgba(0,0,0,0.18)'
+                : '0 2px 0 rgba(0,0,0,0.14), 0 1px 3px rgba(0,0,0,0.08)',
             }}
           >
             {k}
@@ -104,92 +109,106 @@ const VirtualKeyboard = ({ onKey, onBackspace, compact = false }) => (
 );
 
 /* ══════════════════════════════════════════════════════════════
-   P2P RACE BAR — avatar racing along a progress track
+   P2P RACE BAR — fighting-game style
+   Layout: [bar] [avatar] ⚔️ [avatar] [bar]
+   Bar fill từ ngoài vo hướng vào avatar ở giữa
    ══════════════════════════════════════════════════════════════ */
 
-const P2PRaceBar = ({ myLabel, myPercent, myColor, opponentLabel, opponentPercent, opponentColor, compact = false }) => {
+const P2PRaceBar = ({ myLabel, myPercent, myColor, opponentLabel, opponentPercent, opponentColor, compact = false, opponentAvatarRef }) => {
   const clampedMy  = Math.min(100, Math.max(0, myPercent));
   const clampedOpp = Math.min(100, Math.max(0, opponentPercent));
-  const AV = compact ? 22 : 28;
+  // compact = landscape strip, !compact = portrait panel
+  const AV   = compact ? 34 : 44;
+  const BAR  = compact ? 7  : 10;
+  const FONT_NAME = compact ? 11 : 13;
+  const FONT_PCT  = compact ? 10 : 12;
+  const isMyLeading  = clampedMy  > clampedOpp;
+  const isOppLeading = clampedOpp > clampedMy;
 
-  // A single horizontal track with a sliding avatar
-  const Track = ({ label, percent, color }) => (
-    <div style={{ position: 'relative', flex: 1, height: AV + (compact ? 2 : 4) }}>
-      {/* Track bg */}
-      <div style={{
-        position: 'absolute', top: '50%', transform: 'translateY(-50%)',
-        left: AV / 2, right: AV / 2,
-        height: compact ? 5 : 6, borderRadius: 99,
-        background: 'rgba(255,255,255,0.13)',
-        border: '1px solid rgba(255,255,255,0.09)',
-      }}>
-        {/* Fill */}
-        <motion.div
-          style={{ height: '100%', borderRadius: 99, background: color, originX: 0 }}
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: percent / 100 }}
-          transition={{ type: 'spring', stiffness: 120, damping: 18 }}
-        />
-      </div>
-
-      {/* Avatar circle — slides along track */}
+  /* ── Avatar + name block (reused) ── */
+  const Avatar = ({ label, color, isLeading, dataAttr, pct, domRef }) => (
+    <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
       <motion.div
+        ref={domRef}
+        data-p2p-avatar={dataAttr}
+        animate={{ scale: isLeading ? [1, 1.15, 1] : 1 }}
+        transition={{ duration: 0.5 }}
         style={{
-          position: 'absolute', top: '50%',
-          left: `calc(${AV / 2}px + (100% - ${AV}px) * ${percent / 100})`,
-          transform: 'translate(-50%, -50%)',
           width: AV, height: AV, borderRadius: '50%',
           background: `linear-gradient(135deg, ${color}cc, ${color})`,
-          border: `2px solid ${color}`,
-          boxShadow: `0 2px 6px ${color}77, 0 0 0 2px rgba(255,255,255,0.2)`,
+          border: `2.5px solid ${color}`,
+          boxShadow: `0 0 0 2px rgba(255,255,255,0.18), 0 0 ${isLeading ? 18 : 10}px ${color}aa`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontWeight: 900, fontSize: compact ? 10 : 12, color: '#fff',
-          textShadow: '0 1px 2px rgba(0,0,0,0.7)',
-          zIndex: 2,
+          fontWeight: 900, fontSize: Math.round(AV * 0.42), color: '#fff',
+          textShadow: '0 1px 3px rgba(0,0,0,0.9)',
         }}
-        animate={{ left: `calc(${AV / 2}px + (100% - ${AV}px) * ${percent / 100})` }}
-        transition={{ type: 'spring', stiffness: 140, damping: 20 }}
       >
         {label?.[0]?.toUpperCase() || '?'}
       </motion.div>
-
-      {/* Name + % label above track */}
-      <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0,
-        display: 'flex', alignItems: 'center', gap: 3,
-        transform: 'translateY(-2px)', pointerEvents: 'none',
-      }}>
-        <span style={{ fontSize: 8, fontWeight: 900, color, textShadow: '0 1px 2px rgba(0,0,0,0.9)', maxWidth: compact ? 60 : 80, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</span>
-        <span style={{ fontSize: 8, fontWeight: 700, color: 'rgba(255,255,255,0.65)' }}>{Math.round(percent)}%</span>
-      </div>
+      <span style={{
+        fontSize: FONT_NAME, fontWeight: 900, color: '#1e293b',
+        textShadow: '0 1px 0 rgba(255,255,255,0.6)',
+        maxWidth: compact ? 64 : 82,
+        overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+        textAlign: 'center',
+      }}>{label}</span>
+      <span style={{ fontSize: FONT_PCT, fontWeight: 800, color, marginTop: -1 }}>
+        {Math.round(pct)}%
+      </span>
     </div>
   );
 
-  if (compact) {
-    // Landscape: 2 tracks side-by-side separated by a finish-flag icon
-    return (
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: 8,
-        padding: '8px 0 4px',
-      }}>
-        <Track label={myLabel} percent={clampedMy} color={myColor} />
-        <span style={{ fontSize: 14, flexShrink: 0, opacity: 0.6 }}>🏁</span>
-        <Track label={opponentLabel} percent={clampedOpp} color={opponentColor} />
-      </div>
-    );
-  }
-
-  // Portrait: 2 tracks stacked vertically with a header
   return (
-    <div style={{ padding: '8px 0 4px' }}>
-      <div style={{ display: 'flex', gap: 4, alignItems: 'center', marginBottom: 4 }}>
-        <span style={{ fontSize: 9, fontWeight: 900, color: 'rgba(255,255,255,0.45)', letterSpacing: 1, textTransform: 'uppercase' }}>Tiến độ</span>
-        <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.08)' }} />
-        <span style={{ fontSize: 11 }}>🏁</span>
+    <div style={{
+      display: 'flex', alignItems: 'center',
+      gap: compact ? 8 : 12,
+      padding: compact ? '6px 0 4px' : '10px 0 8px',
+      width: '100%',
+    }}>
+
+      {/* ── LEFT BAR: fill từ cạnh TRÁI vào phía avatar (edge → center) ── */}
+      <div style={{ flex: 1, position: 'relative', height: BAR, borderRadius: 99, overflow: 'hidden',
+        background: 'rgba(0,0,0,0.10)', border: '1px solid rgba(0,0,0,0.07)', minWidth: 0 }}>
+        <motion.div
+          style={{
+            position: 'absolute', top: 0, left: 0, bottom: 0,
+            background: `linear-gradient(to right, ${myColor}, ${myColor}77)`,
+            borderRadius: 99, boxShadow: `0 0 10px ${myColor}77`,
+          }}
+          initial={{ width: '0%' }}
+          animate={{ width: `${clampedMy}%` }}
+          transition={{ type: 'spring', stiffness: 90, damping: 18 }}
+        />
       </div>
-      <Track label={myLabel} percent={clampedMy} color={myColor} />
-      <div style={{ height: 10 }} />
-      <Track label={opponentLabel} percent={clampedOpp} color={opponentColor} />
+
+      {/* ── MY AVATAR (left of center) ── */}
+      <Avatar label={myLabel} color={myColor} isLeading={isMyLeading} dataAttr="my" pct={clampedMy} />
+
+      {/* ── CENTER ⚔️ ── */}
+      <motion.div
+        animate={{ scale: [1, 1.12, 1] }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+        style={{ flexShrink: 0, fontSize: compact ? 16 : 20, lineHeight: 1 }}
+      >⚔️</motion.div>
+
+      {/* ── OPP AVATAR (right of center) ── */}
+      <Avatar label={opponentLabel} color={opponentColor} isLeading={isOppLeading} dataAttr="opponent" pct={clampedOpp} domRef={opponentAvatarRef} />
+
+      {/* ── RIGHT BAR: fill từ cạnh PHẢI vào phía avatar (edge → center) ── */}
+      <div style={{ flex: 1, position: 'relative', height: BAR, borderRadius: 99, overflow: 'hidden',
+        background: 'rgba(0,0,0,0.10)', border: '1px solid rgba(0,0,0,0.07)', minWidth: 0 }}>
+        <motion.div
+          style={{
+            position: 'absolute', top: 0, right: 0, bottom: 0,
+            background: `linear-gradient(to left, ${opponentColor}, ${opponentColor}77)`,
+            borderRadius: 99, boxShadow: `0 0 10px ${opponentColor}77`,
+          }}
+          initial={{ width: '0%' }}
+          animate={{ width: `${clampedOpp}%` }}
+          transition={{ type: 'spring', stiffness: 90, damping: 18 }}
+        />
+      </div>
+
     </div>
   );
 };
@@ -470,8 +489,8 @@ const CrosswordFinishedOverlay = ({
                     Số Từ Tìm Được
                   </div>
                   <div className="px-4 py-3 flex flex-col gap-2">
-                    <ProgressBar label={myProfile?.nickname || 'Bạn'} percent={myPercent} color="#3b82f6" avatar={(myProfile?.nickname || 'B')[0]} />
-                    <ProgressBar label={opponentProfile?.nickname || 'Đối thủ'} percent={opponentPercent} color="#ef4444" avatar={(opponentProfile?.nickname || 'Đ')[0]} />
+                    <ProgressBar label={myProfile?.nickname || myFBName || 'Bạn'} percent={myPercent} color="#3b82f6" avatar={(myProfile?.nickname || myFBName || 'B')[0]} />
+                    <ProgressBar label={opponentProfile?.nickname || oppFBName || 'Đối thủ'} percent={opponentPercent} color="#ef4444" avatar={(opponentProfile?.nickname || oppFBName || 'Đ')[0]} />
                   </div>
                 </div>
               )}
@@ -564,10 +583,27 @@ const CrosswordGame = ({
   const { addXP, addCoins, coins: userCoins, playedCrosswordIds, markCrosswordPlayed, globalScore, nickname, giaoxu } = usePlayFabStore();
   const { roomData, roomId, myRole } = useRoomStore();
   const { uid: storeUid } = useUserStore();
-  const { leaveRoom, requestRematch, acceptRematch, declineRematch } = useRoom();
+  const { leaveRoom, requestRematch, acceptRematch, declineRematch, chargeBet, awardWinner } = useRoom();
   const myUid = storeUid;
+  // Lấy opponentUid từ roomData players (ngoại trừ myUid)
+  const opponentUid = useMemo(() => {
+    if (!roomData?.players || !myUid) return opponentProfile?.uid ?? null;
+    return Object.keys(roomData.players).find(k => k !== myUid) ?? opponentProfile?.uid ?? null;
+  }, [roomData?.players, myUid, opponentProfile?.uid]);
   const REMATCH_MIN_COINS = 20;
-  const FORFEIT_BONUS = 30;
+  const FORFEIT_BONUS = 30; // fallback khi không có wager
+  const wager = roomData?.wager ?? 0;
+  const pot = wager * 2; // tổng coin cược của 2 player cộng lại
+
+  // ── Tên người chơi: luôn đọc từ Firebase roomData (single source of truth) ──
+  // Cả 2 client đọc cùng 1 nguồn → tên luôn nhất quán giữa 2 màn hình
+  const hostUid  = roomData?.hostUid;
+  const guestUid = roomData?.guestUid;
+  const p2pHostName  = roomData?.players?.[hostUid]?.nickname  || myProfile?.nickname  || 'Host';
+  const p2pGuestName = roomData?.players?.[guestUid]?.nickname || opponentProfile?.nickname || 'Guest';
+  // Đặt tên cho "tôi" và "đối thủ" dựa theo role
+  const myFBName  = myRole === 'host' ? p2pHostName  : p2pGuestName;
+  const oppFBName = myRole === 'host' ? p2pGuestName : p2pHostName;
 
   // Puzzle — solo: theo thứ tự; P2P: từ roomData.puzzleId (set bởi host trước khi game start)
   const [puzzle, setPuzzle] = useState(() => {
@@ -603,10 +639,20 @@ const CrosswordGame = ({
   const [showHintMenu, setShowHintMenu] = useState(false);
 
   // P2P: forfeit + rematch state
-  const [forfeitWin, setForfeitWin]           = useState(null);  // { name } khi đối thủ bỏ cuộc
+  const [forfeitWin, setForfeitWin]           = useState(null);  // { name, coinReward } khi đối thủ bỏ cuộc
   const [rematchIncoming, setRematchIncoming] = useState(null);  // { fromName, puzzleId }
   const [rematchStatus, setRematchStatus]     = useState(null);  // 'waiting'|'declined'
   const [rematchHandled, setRematchHandled]   = useState(false); // tránh xử lý 2 lần
+
+  // Bet animation state (matchSetup)
+  const [betAnimDone, setBetAnimDone] = useState(false);   // cho phép countdown chạy sau anim
+  const [betParticles, setBetParticles] = useState([]);    // coin particles bay vào pot
+  const [potGlow, setPotGlow] = useState(false);           // pot bừng sáng sau khi coin tụ
+  const [displayPot, setDisplayPot] = useState(0);         // số dư pot đang hiển thị
+  const betChargedRef = useRef(false);                     // tránh charge 2 lần (StrictMode)
+  const potRef = useRef(null);                             // ref tới pot element để lấy vị trí
+  const myAvatarRef  = useRef(null);                       // ref avatar bản thân (trong matchSetup)
+  const oppAvatarRef2 = useRef(null);                      // ref avatar đối thủ (trong matchSetup)
 
   // Earned rewards (set at finish for display)
   const [earnedXP, setEarnedXP] = useState(null);
@@ -615,6 +661,9 @@ const CrosswordGame = ({
   // Timer
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
   const timerRef = useRef(null);
+
+  // Ref to opponent avatar DOM element (used by EmojiReactionPanel for bubble positioning)
+  const opponentAvatarRef = useRef(null);
 
   // Celebration
   const [showCelebration, setShowCelebration] = useState(false);
@@ -1015,7 +1064,7 @@ const CrosswordGame = ({
       e.preventDefault();
       const nr = sel.row + 1;
       if (nr < puzzle.gridSize.rows && gridMap[nr]?.[sel.col]?.isCell) {
-        setSelectedCell({ row: nr, col: sel.col });
+        setSelectedCell({ row: sel.row, col: sel.col });
         setDirection('down');
       }
       return;
@@ -1118,6 +1167,33 @@ const CrosswordGame = ({
     });
   }, [solvedWords, timeLeft, onFinish, hintUsed, hintsSpent, totalWords, isSolo, addXP, addCoins, isReplay]);
 
+  /* ── P2P: distribute pot khi game kết thúc bình thường ── */
+  useEffect(() => {
+    if (!isP2PMode || gameState !== 'finished') return;
+    const myWordsCount  = solvedWords.size;
+    const oppWordsCount = opponentProgress?.completedItems?.length || 0;
+    const isDraw = myWordsCount === oppWordsCount;
+    const iWon  = myWordsCount > oppWordsCount;
+
+    if (pot <= 0) { clearPendingRefund(); return; } // không có wager
+
+    if (isDraw) {
+      // Hòa: refund wager cho cả 2
+      addCoins(wager);
+      awardWinner(roomId, 'draw', pot, true);
+    } else if (iWon) {
+      // Ta thắng: nhận toàn bộ pot
+      addCoins(pot);
+      awardWinner(roomId, myUid, pot, false);
+    } else {
+      // Ta thua: đối thủ thắng, ghi result nhưng không award chính mình
+      awardWinner(roomId, opponentUid, pot, false);
+    }
+    clearPendingRefund();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameState]);
+
+
   /* ── Start game ── */
   const handleStart = () => {
     setGameState('playing');
@@ -1143,9 +1219,10 @@ const CrosswordGame = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomData?.puzzleId, isP2PMode]);
 
-  /* ── P2P matchSetup countdown: 3-2-1 → auto-start ── */
+  /* ── P2P matchSetup countdown: 3-2-1 → auto-start — chứ bet animation xong ── */
   useEffect(() => {
     if (gameState !== 'matchSetup') return;
+    if (!betAnimDone) return; // đợi animation coin bay xong
     if (countdown <= 0) {
       setGameState('playing');
       markCrosswordPlayed(puzzle.id);
@@ -1160,7 +1237,101 @@ const CrosswordGame = ({
     const t = setTimeout(() => setCountdown(c => c - 1), 1000);
     return () => clearTimeout(t);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameState, countdown]);
+  }, [gameState, countdown, betAnimDone]);
+
+  /* ── Charge bet + spawn coin animation khi bắt đầu matchSetup ── */
+  useEffect(() => {
+    if (gameState !== 'matchSetup') return;
+    if (betChargedRef.current) return;
+    betChargedRef.current = true;
+
+    if (!wager || wager <= 0) {
+      // Không có wager → bỏ qua animation, bắt đầu luôn
+      setBetAnimDone(true);
+      return;
+    }
+
+    // Bắt đầu animation ngay lập tức để tránh UI bị treo khi đợi mạng chậm
+    spawnBetParticles();
+    
+    // Đếm số pot tăng dần 0 -> pot
+    const targetPot = (wager || 0) * 2;
+    const duration = 1400;
+    const startTime = Date.now();
+    const intervalId = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      if (elapsed >= duration) {
+        setDisplayPot(targetPot);
+        clearInterval(intervalId);
+      } else {
+        setDisplayPot(Math.floor((elapsed / duration) * targetPot));
+      }
+    }, 40);
+
+    const tAnim = setTimeout(() => {
+      setPotGlow(true);
+      setTimeout(() => setBetAnimDone(true), 400);
+    }, 1400);
+
+    // Trừ coin và lưu pending refund chạy ngầm
+    chargeBet(roomId, wager)
+      .then(() => {
+        setPendingRefund({ roomId, uid: myUid, amount: wager });
+      })
+      .catch(err => {
+        console.warn('[BetCharge] Failed:', err);
+      });
+
+    return () => {
+      clearTimeout(tAnim);
+      clearInterval(intervalId);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameState]);
+
+  /* ── Spawn coin fly particles từ 2 avatar vào pot ── */
+  const spawnBetParticles = useCallback(() => {
+    const potEl = potRef.current;
+    if (!potEl) { setBetAnimDone(true); return; }
+    const potRect = potEl.getBoundingClientRect();
+    const tx = potRect.left + potRect.width  / 2;
+    const ty = potRect.top  + potRect.height / 2;
+
+    // Lấy vị trí thực tế từ DOM avatar refs
+    const myRect  = myAvatarRef.current?.getBoundingClientRect();
+    const oppRect = oppAvatarRef2.current?.getBoundingClientRect();
+
+    // Fallback nếu refs chưa mount
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const myX  = myRect  ? myRect.left  + myRect.width  / 2 : vw * 0.2;
+    const myY  = myRect  ? myRect.top   + myRect.height / 2 : vh * 0.3;
+    const oppX = oppRect ? oppRect.left + oppRect.width  / 2 : vw * 0.8;
+    const oppY = oppRect ? oppRect.top  + oppRect.height / 2 : vh * 0.3;
+
+    // Số lượng coin bay ra
+    const count = 30; // 30 coin từ mỗi bên (tổng 60)
+    const items = [];
+    for (let i = 0; i < count; i++) {
+      const isMine = i % 2 === 0;
+      const ox = isMine ? myX : oppX;
+      const oy = isMine ? myY : oppY;
+      items.push({
+        id: `bet-${Date.now()}-${i}`,
+        ox: ox + (Math.random() - 0.5) * 24,
+        oy: oy + (Math.random() - 0.5) * 16,
+        bx: (Math.random() - 0.5) * 60,
+        by: -(Math.random() * 40 + 20),
+        tx,
+        ty,
+        delay: i * 0.03,
+      });
+    }
+    setBetParticles(items);
+    setTimeout(() => setBetParticles([]), 2000);
+  }, []);
+
+
 
   /* ── P2P: watch forfeit (opponent bỏ cuộc giữa chừ́ng) ── */
   useEffect(() => {
@@ -1218,6 +1389,12 @@ const CrosswordGame = ({
     setTimeLeft(300);
     setShowCelebration(false);
     clearInterval(timerRef.current);
+    
+    // Reset matchSetup states for Rematch
+    setBetAnimDone(false);
+    setPotGlow(false);
+    setDisplayPot(0);
+    betChargedRef.current = false;
   };
 
   /* ── Replay same puzzle (0 XP, reduced coins) ── */
@@ -1426,13 +1603,27 @@ const CrosswordGame = ({
 
   // ── MATCH SETUP SCREEN (P2P only: 3-2-1 countdown) ──
   if (gameState === 'matchSetup') {
-    const myLabel   = myProfile?.nickname   || 'Bạn';
-    const oppLabel  = opponentProfile?.nickname || 'Đối thủ';
-    const myInitial = myLabel[0]?.toUpperCase()  || '?';
-    const oppInitial = oppLabel[0]?.toUpperCase() || '?';
+    // Host luôn bên trái (xanh), guest luôn bên phải (đỏ) — nhất quán trên cả 2 client
+    const amHost       = myRole === 'host';
+    const leftLabel    = p2pHostName;                          // host luôn trái
+    const rightLabel   = p2pGuestName;                         // guest luôn phải
+    const leftInitial  = leftLabel[0]?.toUpperCase()  || '?';
+    const rightInitial = rightLabel[0]?.toUpperCase() || '?';
 
-    const countdownLabel  = countdown > 0 ? String(countdown) : 'GO!';
-    const countdownColor  = countdown > 0
+    // Avatar URLs: đọc từ roomData (Firebase) — single source of truth
+    const hostAvatarUrl  = roomData?.players?.[hostUid]?.avatarUrl  || null;
+    const guestAvatarUrl = roomData?.players?.[guestUid]?.avatarUrl || null;
+    const leftAvatarUrl  = hostAvatarUrl;   // host = trái
+    const rightAvatarUrl = guestAvatarUrl;  // guest = phải
+
+    // Lấy số coin hiện tại của cả 2 từ Firebase để tránh sai lệch hiển thị
+    const hostCoins  = amHost ? userCoins : (roomData?.players?.[hostUid]?.coins ?? 0);
+    const guestCoins = !amHost ? userCoins : (roomData?.players?.[guestUid]?.coins ?? 0);
+    const leftCoins  = hostCoins;
+    const rightCoins = guestCoins;
+
+    const countdownLabel = countdown > 0 ? String(countdown) : 'GO!';
+    const countdownColor = countdown > 0
       ? ['#fbbf24', '#f97316', '#ef4444'][3 - countdown] ?? '#fbbf24'
       : '#22c55e';
 
@@ -1449,43 +1640,95 @@ const CrosswordGame = ({
         {/* ── Landscape: profiles at top corners, countdown center ── */}
         {isLandscape ? (
           <>
-            {/* My profile — top-left */}
+            {/* My profile — top-left (host) */}
             <motion.div initial={{ x: -40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-              className="absolute top-3 left-4 flex items-center gap-2 z-10">
-              <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#3b82f6,#1d4ed8)', border: '3px solid #93c5fd', boxShadow: '0 0 12px #3b82f688', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, fontSize:16, color:'#fff' }}>
-                {myInitial}
-              </div>
+              className="absolute top-3 left-4 flex items-center gap-2 z-10"
+              ref={amHost ? myAvatarRef : oppAvatarRef2}>
+              <UserAvatar
+                name={leftLabel}
+                photoURL={leftAvatarUrl}
+                size={36}
+                style={{ border: '3px solid #93c5fd', boxShadow: '0 0 12px #3b82f688', flexShrink: 0 }}
+              />
               <div>
-                <div style={{ fontSize: 11, fontWeight: 900, color: '#93c5fd', maxWidth: 120, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{myLabel}</div>
-                <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)' }}>Bạn · Xanh</div>
+                <div style={{ fontSize: 11, fontWeight: 900, color: '#93c5fd', maxWidth: 120, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{leftLabel}</div>
+                <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)' }}>Host · Xanh</div>
+                {/* Coin balance trước khi trừ */}
+                {wager > 0 && (
+                  <div style={{ display:'flex', alignItems:'center', gap:3, background:'rgba(59,130,246,0.2)', border:'1px solid rgba(59,130,246,0.4)', borderRadius:99, padding:'1px 6px', marginTop: 2, width: 'fit-content' }}>
+                    <img src={iconCoin} alt="" style={{ width:10, height:10 }} />
+                    <span style={{ fontSize:10, fontWeight:800, color:'#bfdbfe' }}>
+                      {leftCoins.toLocaleString()}
+                    </span>
+                  </div>
+                )}
               </div>
             </motion.div>
 
-            {/* Opponent profile — top-right */}
+            {/* Opponent profile — top-right (guest) */}
             <motion.div initial={{ x: 40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-              className="absolute top-3 right-4 flex items-center gap-2 z-10 flex-row-reverse">
-              <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#ef4444,#b91c1c)', border: '3px solid #fca5a5', boxShadow: '0 0 12px #ef444488', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, fontSize:16, color:'#fff' }}>
-                {oppInitial}
-              </div>
-              <div className="text-right">
-                <div style={{ fontSize: 11, fontWeight: 900, color: '#fca5a5', maxWidth: 120, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{oppLabel}</div>
-                <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)' }}>Đối thủ · Đỏ</div>
+              className="absolute top-3 right-4 flex items-center gap-2 z-10 flex-row-reverse"
+              ref={amHost ? oppAvatarRef2 : myAvatarRef}>
+              <UserAvatar
+                name={rightLabel}
+                photoURL={rightAvatarUrl}
+                size={36}
+                style={{ border: '3px solid #fca5a5', boxShadow: '0 0 12px #ef444488', flexShrink: 0 }}
+              />
+              <div className="text-right flex flex-col items-end">
+                <div style={{ fontSize: 11, fontWeight: 900, color: '#fca5a5', maxWidth: 120, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{rightLabel}</div>
+                <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)' }}>Guest · Đỏ</div>
+                {/* Coin balance trước khi trừ */}
+                {wager > 0 && (
+                  <div style={{ display:'flex', alignItems:'center', gap:3, background:'rgba(239,68,68,0.2)', border:'1px solid rgba(239,68,68,0.4)', borderRadius:99, padding:'1px 6px', marginTop: 2, width: 'fit-content' }}>
+                    <img src={iconCoin} alt="" style={{ width:10, height:10 }} />
+                    <span style={{ fontSize:10, fontWeight:800, color:'#fecaca' }}>
+                      {rightCoins.toLocaleString()}
+                    </span>
+                  </div>
+                )}
               </div>
             </motion.div>
 
-            {/* Center: countdown + puzzle info */}
+            {/* Center: countdown + pot + puzzle info */}
             <div className="relative z-10 flex flex-col items-center gap-3">
               <AnimatePresence mode="wait">
-                <motion.div key={countdownLabel}
+                <motion.div key={betAnimDone ? countdownLabel : 'bet'}
                   initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 1.6, opacity: 0 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-                  style={{ fontSize: 96, fontWeight: 900, color: countdownColor, textShadow: `0 0 40px ${countdownColor}`, lineHeight: 1 }}>
-                  {countdownLabel}
+                  style={{ fontSize: 96, fontWeight: 900, color: betAnimDone ? countdownColor : '#fbbf24', textShadow: `0 0 40px ${betAnimDone ? countdownColor : '#fbbf24'}`, lineHeight: 1 }}>
+                  {betAnimDone ? countdownLabel : '⏳'}
                 </motion.div>
               </AnimatePresence>
               <div style={{ fontSize: 12, fontWeight: 900, color: 'rgba(255,255,255,0.6)', letterSpacing: 3, textTransform: 'uppercase' }}>
-                {countdown > 0 ? 'Chuẩn bị...' : 'Bắt đầu!'}
+                {!betAnimDone ? 'Đang tập hợp coin...' : (countdown > 0 ? 'Chuẩn bị...' : 'Bắt đầu!')}
               </div>
+
+              {/* Pot display */}
+              {wager > 0 && (
+                <motion.div
+                  ref={potRef}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: potGlow ? [1, 1.15, 1] : 1, opacity: 1 }}
+                  transition={{ duration: potGlow ? 0.5 : 0.3 }}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    background: potGlow
+                      ? 'linear-gradient(135deg, #f59e0b, #d97706)'
+                      : 'rgba(251,191,36,0.15)',
+                    border: `2px solid ${potGlow ? '#fef08a' : 'rgba(251,191,36,0.4)'}`,
+                    borderRadius: 14, padding: '7px 16px',
+                    boxShadow: potGlow ? '0 0 24px rgba(251,191,36,0.7)' : 'none',
+                    transition: 'all 0.3s',
+                  }}>
+                  <img src={iconCoin} alt="" style={{ width: 20, height: 20 }} />
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: 8, color: potGlow ? '#fff' : 'rgba(255,255,255,0.5)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>Giải thưởng</div>
+                    <div style={{ fontSize: 18, fontWeight: 900, color: potGlow ? '#fff' : '#fbbf24', lineHeight: 1.1 }}>{displayPot} 💰</div>
+                  </div>
+                </motion.div>
+              )}
+
               <div style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12, padding: '6px 16px', textAlign: 'center' }}>
                 <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', fontWeight: 700 }}>Chủ đề</div>
                 <div style={{ fontSize: 13, color: '#fbbf24', fontWeight: 900 }}>{puzzle.theme}</div>
@@ -1496,39 +1739,106 @@ const CrosswordGame = ({
         ) : (
           /* ── Portrait: VS layout center ── */
           <div className="relative z-10 flex flex-col items-center gap-4 px-6 w-full max-w-sm">
-            {/* VS row */}
+            {/* VS row: host (left, blue) vs guest (right, red) */}
             <div className="flex items-center gap-4 w-full">
-              {/* My avatar */}
+              {/* Host avatar — left */}
               <motion.div initial={{ x: -30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 20 }}
                 className="flex flex-col items-center gap-1 flex-1">
-                <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'linear-gradient(135deg,#3b82f6,#1d4ed8)', border: '3px solid #93c5fd', boxShadow: '0 0 20px #3b82f688', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, fontSize:22, color:'#fff' }}>
-                  {myInitial}
-                </div>
-                <div style={{ fontSize: 11, fontWeight: 900, color: '#93c5fd', maxWidth: 80, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', textAlign:'center' }}>{myLabel}</div>
+                <motion.div
+                  ref={amHost ? myAvatarRef : oppAvatarRef2}
+                  animate={{ scale: 1 }}
+                  style={{ flexShrink: 0 }}
+                >
+                  <UserAvatar
+                    name={leftLabel}
+                    photoURL={leftAvatarUrl}
+                    size={56}
+                    style={{
+                      border: '3px solid #93c5fd',
+                      boxShadow: '0 0 20px #3b82f688',
+                    }}
+                  />
+                </motion.div>
+                <div style={{ fontSize: 11, fontWeight: 900, color: '#93c5fd', maxWidth: 90, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', textAlign:'center' }}>{leftLabel}</div>
+                {/* Coin balance trước khi trừ */}
+                {wager > 0 && (
+                  <div style={{ display:'flex', alignItems:'center', gap:3, background:'rgba(59,130,246,0.2)', border:'1px solid rgba(59,130,246,0.4)', borderRadius:99, padding:'2px 7px' }}>
+                    <img src={iconCoin} alt="" style={{ width:11, height:11 }} />
+                    <span style={{ fontSize:10, fontWeight:800, color:'#bfdbfe' }}>
+                      {leftCoins.toLocaleString()}
+                    </span>
+                  </div>
+                )}
               </motion.div>
 
               {/* VS */}
               <div style={{ fontSize: 22, fontWeight: 900, color: 'rgba(255,255,255,0.4)', letterSpacing: 2, flexShrink: 0 }}>VS</div>
 
-              {/* Opponent avatar */}
+              {/* Guest avatar — right */}
               <motion.div initial={{ x: 30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 20 }}
                 className="flex flex-col items-center gap-1 flex-1">
-                <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'linear-gradient(135deg,#ef4444,#b91c1c)', border: '3px solid #fca5a5', boxShadow: '0 0 20px #ef444488', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, fontSize:22, color:'#fff' }}>
-                  {oppInitial}
-                </div>
-                <div style={{ fontSize: 11, fontWeight: 900, color: '#fca5a5', maxWidth: 80, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', textAlign:'center' }}>{oppLabel}</div>
+                <motion.div
+                  ref={amHost ? oppAvatarRef2 : myAvatarRef}
+                  animate={{ scale: 1 }}
+                  style={{ flexShrink: 0 }}
+                >
+                  <UserAvatar
+                    name={rightLabel}
+                    photoURL={rightAvatarUrl}
+                    size={56}
+                    style={{
+                      border: '3px solid #fca5a5',
+                      boxShadow: '0 0 20px #ef444488',
+                    }}
+                  />
+                </motion.div>
+                <div style={{ fontSize: 11, fontWeight: 900, color: '#fca5a5', maxWidth: 90, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', textAlign:'center' }}>{rightLabel}</div>
+                {/* Coin balance trước khi trừ */}
+                {wager > 0 && (
+                  <div style={{ display:'flex', alignItems:'center', gap:3, background:'rgba(239,68,68,0.2)', border:'1px solid rgba(239,68,68,0.4)', borderRadius:99, padding:'2px 7px' }}>
+                    <img src={iconCoin} alt="" style={{ width:11, height:11 }} />
+                    <span style={{ fontSize:10, fontWeight:800, color:'#fecaca' }}>
+                      {rightCoins.toLocaleString()}
+                    </span>
+                  </div>
+                )}
               </motion.div>
             </div>
 
             {/* Countdown */}
             <AnimatePresence mode="wait">
-              <motion.div key={countdownLabel}
+              <motion.div key={betAnimDone ? countdownLabel : 'bet'}
                 initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 1.6, opacity: 0 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-                style={{ fontSize: 80, fontWeight: 900, color: countdownColor, textShadow: `0 0 30px ${countdownColor}`, lineHeight: 1 }}>
-                {countdownLabel}
+                style={{ fontSize: 80, fontWeight: 900, color: betAnimDone ? countdownColor : '#fbbf24', textShadow: `0 0 30px ${betAnimDone ? countdownColor : '#fbbf24'}`, lineHeight: 1 }}>
+                {betAnimDone ? countdownLabel : '⏳'}
               </motion.div>
             </AnimatePresence>
+
+            {/* Pot display — phía trên puzzle info */}
+            {wager > 0 && (
+              <motion.div
+                ref={potRef}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: potGlow ? [1, 1.18, 1] : 1, opacity: 1 }}
+                transition={{ duration: potGlow ? 0.5 : 0.3 }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  background: potGlow
+                    ? 'linear-gradient(135deg, #f59e0b, #d97706)'
+                    : 'rgba(251,191,36,0.15)',
+                  border: `2px solid ${potGlow ? '#fef08a' : 'rgba(251,191,36,0.4)'}`,
+                  borderRadius: 14, padding: '8px 18px',
+                  boxShadow: potGlow ? '0 0 24px rgba(251,191,36,0.7)' : 'none',
+                  transition: 'all 0.3s',
+                }}>
+                <img src={iconCoin} alt="" style={{ width: 22, height: 22 }} />
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 9, color: potGlow ? '#fff' : 'rgba(255,255,255,0.5)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>Giải thưởng</div>
+                  <div style={{ fontSize: 20, fontWeight: 900, color: potGlow ? '#fff' : '#fbbf24', lineHeight: 1.1 }}>{pot} 💰</div>
+                </div>
+              </motion.div>
+            )}
 
             {/* Puzzle info */}
             <div style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 14, padding: '8px 20px', textAlign: 'center', width: '100%' }}>
@@ -1542,7 +1852,21 @@ const CrosswordGame = ({
               Thoát trận
             </button>
           </div>
-        )}
+          )}
+
+        {/* ── Bet coin fly particles (portal) ── */}
+        {betParticles.map(p => createPortal(
+          <motion.img
+            key={p.id}
+            src={iconCoin}
+            alt=""
+            initial={{ x: p.ox, y: p.oy, scale: 1, opacity: 1 }}
+            animate={{ x: [p.ox, p.ox + p.bx, p.tx], y: [p.oy, p.oy + p.by, p.ty], scale: [1, 1.3, 0.5], opacity: [1, 1, 0] }}
+            transition={{ duration: 0.95, delay: p.delay, ease: 'easeInOut', times: [0, 0.45, 1] }}
+            style={{ position: 'fixed', top: 0, left: 0, width: 28, height: 28, zIndex: 10000, pointerEvents: 'none', filter: 'drop-shadow(0 2px 6px rgba(251,191,36,0.8))' }}
+          />,
+          document.body
+        ))}
       </div>
     );
   }
@@ -1592,8 +1916,9 @@ const CrosswordGame = ({
   return (
     <div className="w-full h-full flex flex-col relative overflow-hidden select-none"
       style={{ ...BG_STYLE }}>
-      {/* Dark overlay */}
-      <div className="absolute inset-0 pointer-events-none z-0" style={{ background: 'rgba(10,15,30,0.70)' }} />
+      {/* Subtle light overlay — giảm tối, tăng độ trong */}
+      <div className="absolute inset-0 pointer-events-none z-0"
+        style={{ background: 'rgba(255,255,255,0.18)' }} />
 
       {/* Hidden input for physical keyboard + IME — inputMode="none" prevents native mobile keyboard */}
       <input
@@ -1618,42 +1943,48 @@ const CrosswordGame = ({
 
       {/* ── HEADER ── */}
       <div className="relative z-10 flex-shrink-0 flex items-center gap-2 px-3 py-2"
-        style={{ background: '#1e3a8a', borderBottom: '3px solid #172554' }}>
+        style={{
+          background: 'rgba(255,255,255,0.82)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderBottom: '1px solid rgba(0,0,0,0.08)',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.10)',
+        }}>
 
         {/* Quit */}
         <motion.button whileTap={{ scale: 0.9 }} onClick={() => setConfirmQuit(true)}
           className="w-8 h-8 rounded-full flex items-center justify-center"
-          style={{ background: 'rgba(255,255,255,0.15)', border: '2px solid rgba(255,255,255,0.3)' }}>
-          <ArrowLeft size={16} className="text-white" />
+          style={{ background: 'rgba(0,0,0,0.07)', border: '1.5px solid rgba(0,0,0,0.12)' }}>
+          <ArrowLeft size={16} className="text-slate-700" />
         </motion.button>
 
         {/* Title */}
-        <span className="font-black text-white text-sm md:text-base flex-1 truncate" style={{ textShadow: '0 1px 0 #172554' }}>
-          Giải ô chữ <span className="font-semibold text-blue-200 text-xs ml-1 opacity-80">· {puzzle.theme}</span>
+        <span className="font-black text-slate-800 text-sm md:text-base flex-1 truncate">
+          Giải ô chữ <span className="font-semibold text-slate-500 text-xs ml-1">· {puzzle.theme}</span>
         </span>
 
         {/* Timer */}
         <div className="flex items-center gap-1 px-2.5 py-1 rounded-full font-black text-xs"
           style={{
-            background: timeLeft <= 30 ? 'rgba(239,68,68,0.3)' : 'rgba(0,0,0,0.4)',
-            border: `2px solid ${timeLeft <= 30 ? '#ef4444' : 'rgba(255,255,255,0.2)'}`,
-            color: timeLeft <= 30 ? '#fca5a5' : '#93c5fd',
+            background: timeLeft <= 30 ? 'rgba(239,68,68,0.12)' : 'rgba(0,0,0,0.07)',
+            border: `1.5px solid ${timeLeft <= 30 ? '#ef4444' : 'rgba(0,0,0,0.12)'}`,
+            color: timeLeft <= 30 ? '#dc2626' : '#334155',
           }}>
           <Clock size={13} />
           {formatTime(timeLeft)}
         </div>
 
         {/* Score */}
-        <div className="flex items-center gap-1 px-2.5 py-1 rounded-full font-black text-xs text-amber-200"
-          style={{ background: 'rgba(0,0,0,0.4)', border: '2px solid rgba(251,191,36,0.3)' }}>
-          <Star size={13} className="text-amber-400" />
+        <div className="flex items-center gap-1 px-2.5 py-1 rounded-full font-black text-xs text-amber-700"
+          style={{ background: 'rgba(251,191,36,0.15)', border: '1.5px solid rgba(251,191,36,0.4)' }}>
+          <Star size={13} className="text-amber-500" />
           {score}
         </div>
 
         {/* Check button */}
         <motion.button whileTap={{ scale: 0.9 }} onClick={handleCheckAll}
           className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl font-black text-xs text-white"
-          style={{ background: 'linear-gradient(180deg, #10b981, #059669)', border: '2px solid #047857', boxShadow: '0 2px 0 #047857' }}>
+          style={{ background: 'linear-gradient(180deg, #10b981, #059669)', border: '1.5px solid #047857', boxShadow: '0 2px 0 #047857' }}>
           <Check size={13} /> Kiểm tra
         </motion.button>
       </div>
@@ -1662,14 +1993,20 @@ const CrosswordGame = ({
       {/* ── P2P RACE BAR (landscape only — full-width strip between header & body) ── */}
       {isP2P && isLandscape && (
         <div className="relative z-10 flex-shrink-0 px-3"
-          style={{ background: 'rgba(10,15,30,0.85)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+          style={{
+            background: 'rgba(255,255,255,0.75)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            borderBottom: '1px solid rgba(0,0,0,0.08)',
+          }}>
           <P2PRaceBar
-            myLabel={myProfile?.nickname || 'Bạn'}
-            myPercent={myPercent}
+            myLabel={p2pHostName}
+            myPercent={myRole === 'host' ? myPercent : opponentPercent}
             myColor="#3b82f6"
-            opponentLabel={opponentProfile?.nickname || 'Đối thủ'}
-            opponentPercent={opponentPercent}
+            opponentLabel={p2pGuestName}
+            opponentPercent={myRole === 'host' ? opponentPercent : myPercent}
             opponentColor="#ef4444"
+            opponentAvatarRef={myRole === 'host' ? opponentAvatarRef : undefined}
             compact
           />
         </div>
@@ -1849,19 +2186,23 @@ const CrosswordGame = ({
             {/* P2P Race Bar — portrait, sits above clues */}
             {isP2P && (
               <div style={{
-                background: 'rgba(10,15,30,0.85)',
-                borderRadius: 12,
+                background: 'rgba(255,255,255,0.80)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                borderRadius: 14,
                 padding: '0 10px',
-                border: '1px solid rgba(255,255,255,0.08)',
+                border: '1px solid rgba(0,0,0,0.08)',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
                 flexShrink: 0,
               }}>
                 <P2PRaceBar
-                  myLabel={myProfile?.nickname || 'Bạn'}
-                  myPercent={myPercent}
+                  myLabel={myRole === 'host' ? (myProfile?.nickname || 'Bạn') : (opponentProfile?.nickname || 'Đối thủ')}
+                  myPercent={myRole === 'host' ? myPercent : opponentPercent}
                   myColor="#3b82f6"
-                  opponentLabel={opponentProfile?.nickname || 'Đối thủ'}
-                  opponentPercent={opponentPercent}
+                  opponentLabel={myRole === 'host' ? (opponentProfile?.nickname || 'Đối thủ') : (myProfile?.nickname || 'Bạn')}
+                  opponentPercent={myRole === 'host' ? opponentPercent : myPercent}
                   opponentColor="#ef4444"
+                  opponentAvatarRef={myRole === 'host' ? opponentAvatarRef : undefined}
                 />
               </div>
             )}
@@ -1890,10 +2231,16 @@ const CrosswordGame = ({
             )}
             {/* Clues panel — short, scrollable */}
             <div className="flex-1 min-h-0 overflow-y-auto rounded-xl p-2 space-y-2 scrollbar-hide"
-              style={{ background: '#0f1b2d', border: '1px solid rgba(255,255,255,0.12)' }}>
+              style={{
+                background: 'rgba(255,255,255,0.82)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(0,0,0,0.08)',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+              }}>
               <div className="flex gap-3">
                 <div className="flex-1">
-                  <p className="text-amber-400 font-black text-[10px] uppercase tracking-widest mb-1 px-1">→ Ngang</p>
+                  <p className="text-orange-600 font-black text-[10px] uppercase tracking-widest mb-1 px-1">→ Ngang</p>
                   {acrossClues.map(w => {
                     const solved = solvedWords.has(w.id);
                     const wrong = wrongWords.has(w.id);
@@ -1902,18 +2249,18 @@ const CrosswordGame = ({
                       <motion.button key={w.id}
                         onClick={() => selectWordFromClue(w.id)}
                         className={`w-full text-left px-2 py-1 rounded-lg text-[10px] transition-colors mb-0.5 flex items-center gap-1
-                          ${active ? 'bg-amber-500/20' : solved ? 'bg-green-500/10' : wrong ? 'bg-red-500/10' : 'hover:bg-white/5'}`}
-                        style={{ border: active ? '1px solid rgba(245,158,11,0.4)' : solved ? '1px solid rgba(34,197,94,0.3)' : wrong ? '1px solid rgba(239,68,68,0.3)' : '1px solid transparent' }}>
-                        <span className={`font-black mr-1 ${solved ? 'text-green-400' : wrong ? 'text-red-400' : 'text-amber-300'}`}>{w.num}.</span>
-                        <span className={`font-semibold flex-1 ${solved ? 'text-green-300/70 line-through' : wrong ? 'text-red-300/80' : 'text-white/80'}`}>{w.clue}</span>
-                        {solved && <span className="text-green-400 text-xs font-black shrink-0">✓</span>}
-                        {wrong && <span className="text-red-400 text-xs font-black shrink-0">✗</span>}
+                          ${active ? 'bg-amber-100' : solved ? 'bg-green-50' : wrong ? 'bg-red-50' : 'hover:bg-black/5'}`}
+                        style={{ border: active ? '1px solid rgba(245,158,11,0.5)' : solved ? '1px solid rgba(34,197,94,0.4)' : wrong ? '1px solid rgba(239,68,68,0.4)' : '1px solid transparent' }}>
+                        <span className={`font-black mr-1 ${solved ? 'text-green-600' : wrong ? 'text-red-500' : 'text-orange-500'}`}>{w.num}.</span>
+                        <span className={`font-semibold flex-1 ${solved ? 'text-green-600/70 line-through' : wrong ? 'text-red-500' : 'text-slate-700'}`}>{w.clue}</span>
+                        {solved && <span className="text-green-500 text-xs font-black shrink-0">✓</span>}
+                        {wrong && <span className="text-red-500 text-xs font-black shrink-0">✗</span>}
                       </motion.button>
                     );
                   })}
                 </div>
                 <div className="flex-1">
-                  <p className="text-blue-400 font-black text-[10px] uppercase tracking-widest mb-1 px-1">↓ Dọc</p>
+                  <p className="text-blue-600 font-black text-[10px] uppercase tracking-widest mb-1 px-1">↓ Dọc</p>
                   {downClues.map(w => {
                     const solved = solvedWords.has(w.id);
                     const wrong = wrongWords.has(w.id);
@@ -1922,12 +2269,12 @@ const CrosswordGame = ({
                       <motion.button key={w.id}
                         onClick={() => selectWordFromClue(w.id)}
                         className={`w-full text-left px-2 py-1 rounded-lg text-[10px] transition-colors mb-0.5 flex items-center gap-1
-                          ${active ? 'bg-blue-500/20' : solved ? 'bg-green-500/10' : wrong ? 'bg-red-500/10' : 'hover:bg-white/5'}`}
-                        style={{ border: active ? '1px solid rgba(59,130,246,0.4)' : solved ? '1px solid rgba(34,197,94,0.3)' : wrong ? '1px solid rgba(239,68,68,0.3)' : '1px solid transparent' }}>
-                        <span className={`font-black mr-1 ${solved ? 'text-green-400' : wrong ? 'text-red-400' : 'text-blue-300'}`}>{w.num}.</span>
-                        <span className={`font-semibold flex-1 ${solved ? 'text-green-300/70 line-through' : wrong ? 'text-red-300/80' : 'text-white/80'}`}>{w.clue}</span>
-                        {solved && <span className="text-green-400 text-xs font-black shrink-0">✓</span>}
-                        {wrong && <span className="text-red-400 text-xs font-black shrink-0">✗</span>}
+                          ${active ? 'bg-blue-100' : solved ? 'bg-green-50' : wrong ? 'bg-red-50' : 'hover:bg-black/5'}`}
+                        style={{ border: active ? '1px solid rgba(59,130,246,0.5)' : solved ? '1px solid rgba(34,197,94,0.4)' : wrong ? '1px solid rgba(239,68,68,0.4)' : '1px solid transparent' }}>
+                        <span className={`font-black mr-1 ${solved ? 'text-green-600' : wrong ? 'text-red-500' : 'text-blue-600'}`}>{w.num}.</span>
+                        <span className={`font-semibold flex-1 ${solved ? 'text-green-600/70 line-through' : wrong ? 'text-red-500' : 'text-slate-700'}`}>{w.clue}</span>
+                        {solved && <span className="text-green-500 text-xs font-black shrink-0">✓</span>}
+                        {wrong && <span className="text-red-500 text-xs font-black shrink-0">✗</span>}
                       </motion.button>
                     );
                   })}
@@ -1945,7 +2292,18 @@ const CrosswordGame = ({
         </div>
       )}
 
-      {/* ── QUIT CONFIRM ── */}
+      {/* ── EMOJI REACTION PANEL (P2P only, khi đang chơi) ── */}
+      {isP2P && gameState === 'playing' && roomId && (
+        <EmojiReactionPanel
+          roomId={roomId}
+          myUid={myUid}
+          opponentUid={opponentUid}
+          opponentName={oppFBName}
+          isLandscape={isLandscape}
+          opponentAvatarRef={opponentAvatarRef}
+        />
+      )}
+
       <AnimatePresence>
         {confirmQuit && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -1969,8 +2327,10 @@ const CrosswordGame = ({
                 <motion.button whileTap={{ scale: 0.95, y: 2 }}
                   onClick={async () => {
                     setConfirmQuit(false);
-                    if (isP2PMode && gameState === 'playing' && roomId && myRole) {
-                      await leaveRoom(roomId, myRole, true); // forfeit = true
+                    if (isP2PMode && (gameState === 'playing' || gameState === 'matchSetup') && roomId && myRole) {
+                      // Forfeit: đối thủ nhận pot, ta mất bet
+                      clearPendingRefund(); // ta đã forfeit, không refund
+                      await leaveRoom(roomId, myRole, true, opponentUid, pot);
                     }
                     onLeaveGame?.();
                   }}
@@ -2002,18 +2362,23 @@ const CrosswordGame = ({
               <div className="flex justify-center">
                 <div className="px-5 py-2.5 rounded-2xl font-black text-amber-300 text-xl"
                   style={{ background: 'rgba(251,191,36,0.15)', border: '2px solid rgba(251,191,36,0.4)' }}>
-                  +{FORFEIT_BONUS} 💰
+                  +{forfeitWin.coinReward} 💰
                 </div>
               </div>
               <motion.button whileTap={{ scale: 0.97, y: 2 }}
-                onClick={() => {
-                  addCoins(FORFEIT_BONUS);
+                onClick={async () => {
+                  addCoins(forfeitWin.coinReward);
+                  clearPendingRefund(); // nhận thưởng xong, clear pending
                   setForfeitWin(null);
+                  // Winner cleanup room (người thoát không xóa room để winner nhận được signal)
+                  if (roomId && myRole) {
+                    await leaveRoom(roomId, myRole, false);
+                  }
                   onLeaveGame?.();
                 }}
                 className="w-full py-3.5 rounded-2xl font-black text-[#1e3a8a] text-lg uppercase"
                 style={{ background: 'linear-gradient(180deg, #fbbf24, #f59e0b)', border: '4px solid #b45309', boxShadow: '0 5px 0 #b45309' }}>
-                OK — Nhận coin
+                OK — Nhận {forfeitWin.coinReward} 💰
               </motion.button>
             </motion.div>
           </motion.div>

@@ -85,24 +85,11 @@ export const usePlayFabStore = create((set, get) => ({
     // Guard: skip if already logged-in state is set or login is in progress
     const s = get();
     if (s.isLoggedIn || s.isLoading) return true;
-    // Guard: skip if sessionTicket already exists in sessionStorage (survives Vite HMR)
-    if (sessionStorage.getItem('pf_session')) {
-      // Tokens restored — just re-trigger login silently to refresh user data
-      // but debounce: avoid double-calling within 10 seconds
-      const lastLogin = sessionStorage.getItem('pf_last_login');
-      const now = Date.now();
-      if (lastLogin && now - parseInt(lastLogin) < 10_000) {
-        // Already logged in recently — restore state from next login
-        // (let the full login proceed on next hard reload instead)
-        console.log('[PlayFab] Skipping duplicate login within 10s');
-        return true;
-      }
-    }
 
     set({ isLoading: true, error: null });
     try {
       const deviceId = getDeviceId();
-      sessionStorage.setItem('pf_last_login', String(Date.now()));
+      localStorage.setItem('pf_last_login', String(Date.now()));
       const data = await loginWithCustomID(deviceId);
 
       const playFabId = data.PlayFabId;
@@ -177,6 +164,57 @@ export const usePlayFabStore = create((set, get) => ({
     } catch (error) {
       set({ isLoading: false, error: error?.errorMessage || 'Login failed' });
       console.error('[PlayFab] Login failed', error);
+      return false;
+    }
+  },
+
+  // ── Restore Session ──
+  restoreSession: async () => {
+    const s = get();
+    if (s.isLoggedIn || s.isLoading) return true;
+    const ticket = localStorage.getItem('pf_session');
+    if (!ticket) return false;
+
+    set({ isLoading: true, error: null });
+    try {
+      const [profileReq, dataReq] = await Promise.all([
+        getPlayerProfile(),
+        getUserData()
+      ]);
+      const data = dataReq.Data || {};
+      let answeredQuestions = [];
+      if (data.AnsweredQuestions?.Value) {
+        try { answeredQuestions = JSON.parse(data.AnsweredQuestions.Value); } catch (_) {}
+      }
+      let playedCrosswordIds = [];
+      if (data.PlayedCrosswordIds?.Value) {
+        try { playedCrosswordIds = JSON.parse(data.PlayedCrosswordIds.Value); } catch (_) {}
+      }
+      const giaoxu = data.GiaoXu?.Value || null;
+      const hat = data.Hat?.Value || null;
+      const giaophan = data.GiaoPhan?.Value || null;
+      const tinhthanh = data.TinhThanh?.Value || null;
+      const globalScore = parseInt(data.GlobalScore?.Value) || 0;
+      const coins = parseInt(data.Coins?.Value) || 0;
+      const nickname = profileReq.PlayerProfile?.DisplayName || 'Người chơi';
+      const playFabId = profileReq.PlayerProfile?.PlayerId;
+      const avatarUrl = profileReq.PlayerProfile?.AvatarUrl || null;
+
+      set({
+        isLoggedIn: true, isLoading: false,
+        playFabId, nickname, authMethod: 'restored',
+        answeredQuestions, playedCrosswordIds,
+        globalScore, coins, rank: getRankByScore(globalScore),
+        giaoxu, hat, giaophan, tinhthanh, avatarUrl,
+        error: null,
+      });
+
+      console.log(`[PlayFab] Session restored: ${playFabId}, XP: ${globalScore}, coins: ${coins}`);
+      return true;
+    } catch (error) {
+      console.warn('[PlayFab] Restore failed, token may be expired', error);
+      forgetCredentials();
+      set({ isLoading: false });
       return false;
     }
   },

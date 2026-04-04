@@ -8,7 +8,6 @@ import { getRankByScore, getRankLevel } from '../../utils/ranks';
 import { useSoundManager } from '../../utils/soundManager';
 import SettingsModal from '../common/SettingsModal';
 import AdBanner from '../ads/AdBanner';
-import AdArticle from '../ads/AdArticle';
 import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.png';
 import mcAvatar from '../../assets/pinnacle/MC.png';
 import pointUpSfx from '../../assets/games/SFX/point_up.wav';
@@ -1510,13 +1509,6 @@ const PinnacleGame = ({ onLeaveGame }) => {
                                         <span>{mcMessage}</span>
                                     )}
                                 </div>
-
-                                {/* In-article Ad */}
-                                {answerStep === 'explained' && (
-                                    <div style={{ width: '100%', marginTop: 12, borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(96,165,250,0.2)' }}>
-                                        <AdArticle />
-                                    </div>
-                                )}
 
                                 {/* Next / End button */}
                                 {answerStep === 'explained' && currentQuestionIndex < currentQuestions.length - 1 && (

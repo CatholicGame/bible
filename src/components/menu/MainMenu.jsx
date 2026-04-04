@@ -263,7 +263,11 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
             if (!el) return;
             const w = el.offsetWidth;
             const h = el.offsetHeight;
-            if (!w || !h) return;
+            if (!w || !h) {
+                // DOM chưa paint xong — thử lại sau 1 frame
+                requestAnimationFrame(measure);
+                return;
+            }
 
             // In landscape (h < 380px) shrink cards so they actually fit in the area.
             // Divide by MAX_SC so even the center card (scaled up 12%) doesn't overflow.
@@ -282,9 +286,14 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
             dragX.set(centerX);
             setReady(true);
         };
+        // Lần đầu chạy ngay + 1 lần sau 1 frame để chắc chắn DOM đã render
         measure();
+        const raf = requestAnimationFrame(measure);
         window.addEventListener('resize', measure);
-        return () => window.removeEventListener('resize', measure);
+        return () => {
+            cancelAnimationFrame(raf);
+            window.removeEventListener('resize', measure);
+        };
     }, [dragX]);
 
     /* navigate: dragX = centerX - idx*step */

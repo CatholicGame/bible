@@ -6,6 +6,7 @@ import { usePresence } from '../../hooks/usePresence';
 import { useRoomStore } from '../../store/roomStore';
 import { useUserStore } from '../../store/userStore';
 import { usePlayFabStore } from '../../store/playfabStore';
+import UserAvatar from '../common/UserAvatar';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -23,12 +24,20 @@ export default function WaitingRoom({ onLeave, onGameStart }) {
   const { playedCrosswordIds, authMethod } = usePlayFabStore();
   const [opponentOffline, setOpponentOffline] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [opponentLeftToast, setOpponentLeftToast] = useState(null); // { name }
 
   // Lắng nghe toàn bộ phòng real-time
   useEffect(() => {
     if (!roomId) return;
     const unsub = watchRoom(roomId, (data) => {
-      if (!data) return;
+      if (!data) {
+        // Room bị xóa (host thoát) → guest về menu
+        if (myRole === 'guest') {
+          setOpponentLeftToast({ name: 'Chủ phòng' });
+          setTimeout(() => onLeave?.(), 2500);
+        }
+        return;
+      }
       // Host nhận tín hiệu status = 'playing' → vào game
       if (data.status === 'playing') onGameStart?.(data);
     });
@@ -43,8 +52,22 @@ export default function WaitingRoom({ onLeave, onGameStart }) {
     if (!roomData) return;
     const players = roomData.players ?? {};
     const opponent = Object.entries(players).find(([pUid]) => pUid !== uid);
-    if (opponent?.[1]?.isOnline) setOpponentOffline(false);
+    if (opponent?.[1]?.isOnline) {
+      setOpponentOffline(false);
+      setOpponentLeftToast(null); // dismiss toast nếu họ quay lại
+    } else if (opponent && opponent[1]?.isOnline === false) {
+      // Vừa offline → show toast
+      const name = opponent[1]?.nickname || 'Đối thủ';
+      setOpponentLeftToast({ name });
+    }
   }, [roomData, uid]);
+
+  // Auto-dismiss toast sau 4s
+  useEffect(() => {
+    if (!opponentLeftToast) return;
+    const t = setTimeout(() => setOpponentLeftToast(null), 4000);
+    return () => clearTimeout(t);
+  }, [opponentLeftToast]);
 
   if (!roomData || !roomId) return null;
 
@@ -71,6 +94,34 @@ export default function WaitingRoom({ onLeave, onGameStart }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)' }}>
+
+      {/* ── Toast: đối thủ thoát phòng ── */}
+      <AnimatePresence>
+        {opponentLeftToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -24, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -16, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+            className="fixed top-5 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3 px-5 py-3 rounded-2xl"
+            style={{
+              background: 'linear-gradient(135deg, #7f1d1d, #991b1b)',
+              border: '2px solid #fca5a5',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+              minWidth: 240, maxWidth: 320,
+            }}>
+            <span style={{ fontSize: 22 }}>🚪</span>
+            <div>
+              <p className="font-black text-white text-sm leading-tight">
+                {opponentLeftToast.name} đã rời phòng!
+              </p>
+              <p className="text-red-200 text-xs font-semibold mt-0.5">
+                {myRole === 'guest' ? 'Đang về trang chủ...' : 'Chờ người chơi khác vào'}
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.88, y: 30 }}
@@ -163,16 +214,36 @@ export default function WaitingRoom({ onLeave, onGameStart }) {
               { pUid: opponentUid, data: opponentData, isMe: false },
             ].map(({ pUid, data, isMe }) => (
               <div key={pUid ?? 'empty'} className="flex items-center gap-2.5 mb-2 last:mb-0">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm flex-shrink-0"
-                  style={data
-                    ? { background: isMe ? '#fbbf24' : '#a78bfa', border: `2px solid ${isMe ? '#b45309' : '#6d28d9'}`, color: isMe ? '#1e3a8a' : '#fff' }
-                    : { background: '#f1f5f9', border: '2px dashed #cbd5e1' }}>
-                  {data ? (isMe ? <Crown size={16} /> : (opponentOffline ? <WifiOff size={16} /> : <Wifi size={16} />)) : (
+                {/* Avatar slot */}
+                {data ? (
+                  <div className="relative flex-shrink-0">
+                    <UserAvatar
+                      name={data.nickname || '?'}
+                      photoURL={data.avatarUrl || null}
+                      size={40}
+                      style={{
+                        border: `2px solid ${isMe ? '#b45309' : (opponentOffline ? '#ef4444' : '#6d28d9')}`,
+                        borderRadius: '0.75rem',
+                        boxShadow: `0 2px 0 ${isMe ? '#92400e' : '#4c1d95'}`,
+                      }}
+                    />
+                    {/* Crown badge for me, wifi for opponent */}
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center"
+                      style={{ background: isMe ? '#fbbf24' : (opponentOffline ? '#ef4444' : '#a78bfa'), border: '1.5px solid white' }}>
+                      {isMe
+                        ? <Crown size={9} className="text-amber-900" />
+                        : (opponentOffline ? <WifiOff size={9} className="text-white" /> : <Wifi size={9} className="text-white" />)
+                      }
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm flex-shrink-0"
+                    style={{ background: '#f1f5f9', border: '2px dashed #cbd5e1' }}>
                     <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity }}>
                       <Users size={16} className="text-slate-300" />
                     </motion.div>
-                  )}
-                </div>
+                  </div>
+                )}
                 <div className="flex-1 min-w-0">
                   {data ? (
                     <>
