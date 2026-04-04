@@ -507,7 +507,7 @@ const CrosswordFinishedOverlay = ({
                       : { background: '#94a3b8', color: '#fff', borderColor: '#475569', boxShadow: '0 4px 0 #475569', cursor: 'not-allowed' }}>
                     <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full" />
                     <span className="relative z-10">
-                      {canAffordRematch ? '⚔️ Chơi Tiếp' : `Cần ${20} 💰 để chơi tiếp`}
+                      {canAffordRematch ? '⚔️ Chơi Tiếp' : <>Cần 20 <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /> để chơi tiếp</>}
                     </span>
                   </button>
                 )}
@@ -578,9 +578,10 @@ const CrosswordGame = ({
   const [gameState, setGameState] = useState(() => isP2PMode ? 'matchSetup' : 'intro');
   const [countdown, setCountdown] = useState(3);   // 3-2-1 countdown
   const [confirmQuit, setConfirmQuit] = useState(false);
+  const [hintEffects, setHintEffects] = useState([]);
 
   // Store — MUST be declared before puzzle state so lazy initialisers can use them
-  const { addXP, addCoins, coins: userCoins, playedCrosswordIds, markCrosswordPlayed, globalScore, nickname, giaoxu } = usePlayFabStore();
+  const { addXP, addCoins, coins: userCoins, playedCrosswordIds, markCrosswordPlayed, globalScore, nickname, giaoxu, avatarUrl } = usePlayFabStore();
   const { roomData, roomId, myRole } = useRoomStore();
   const { uid: storeUid } = useUserStore();
   const { leaveRoom, requestRematch, acceptRematch, declineRematch, chargeBet, awardWinner } = useRoom();
@@ -915,7 +916,7 @@ const CrosswordGame = ({
   }, [solvedWords, puzzle.words, userGrid, checkWord, isWordFilled, onProgressUpdate]);
 
   /* ── Hint: Reveal one letter ── */
-  const handleRevealLetter = useCallback(() => {
+  const handleRevealLetter = useCallback((e) => {
     if (!selectedCell || gameState !== 'playing' || !isSolo) return;
     const { row, col } = selectedCell;
     const cell = gridMap[row]?.[col];
@@ -928,6 +929,7 @@ const CrosswordGame = ({
     setHintUsed(true);
     setHintsSpent(prev => prev + 20);
     addCoins(-20); // deduct coins live
+    if (e && e.clientX && e.clientY) { setHintEffects(prev => [...prev, { id: Date.now() + Math.random(), amt: 20, x: e.clientX, y: e.clientY }]); }
     const newGrid = userGrid.map(r => [...r]);
     newGrid[row][col] = cell.letter;
     setUserGrid(newGrid);
@@ -955,7 +957,7 @@ const CrosswordGame = ({
   }, [selectedCell, gameState, isSolo, gridMap, userGrid, solvedWords, checkWord, isWordFilled, moveToNext, direction, onProgressUpdate]);
 
   /* ── Hint: Reveal entire word ── */
-  const handleRevealWord = useCallback(() => {
+  const handleRevealWord = useCallback((e) => {
     if (!activeWordId || gameState !== 'playing' || !isSolo) return;
     const w = puzzle.words.find(ww => ww.id === activeWordId);
     if (!w) return;
@@ -965,6 +967,7 @@ const CrosswordGame = ({
     setHintUsed(true);
     setHintsSpent(prev => prev + 50);
     addCoins(-50); // deduct coins live
+    if (e && e.clientX && e.clientY) { setHintEffects(prev => [...prev, { id: Date.now() + Math.random(), amt: 50, x: e.clientX, y: e.clientY }]); }
     const newGrid = userGrid.map(r => [...r]);
     const letters = [...w.answer];
     letters.forEach((ch, i) => {
@@ -1535,7 +1538,7 @@ const CrosswordGame = ({
               {[
                 { icon: '📝', text: 'Điền chữ theo gợi ý' },
                 { icon: '⏱️', text: '5 phút' },
-                { icon: '💡', text: 'Hint: 20-50 💰' },
+                { icon: '💡', text: <>Hint: 20-50 <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /></> },
               ].map(({ icon, text }) => (
                 <span key={text} className="text-[11px] font-semibold px-2.5 py-1 rounded-full text-blue-100"
                   style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
@@ -1548,7 +1551,7 @@ const CrosswordGame = ({
             <div className="flex justify-center gap-3 mt-3 pt-3 border-t border-white/10">
               <span className="text-[11px] font-bold text-purple-300">⭐ +3 XP/từ</span>
               <span className="text-white/30 text-[11px]">·</span>
-              <span className="text-[11px] font-bold text-amber-300">💰 +5 Coin/từ</span>
+              <span className="text-[11px] font-bold text-amber-300"><img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /> +5 Coin/từ</span>
               <span className="text-white/30 text-[11px]">·</span>
               <span className="text-[11px] font-bold text-yellow-300">🏆 Bonus 100%</span>
             </div>
@@ -1579,7 +1582,7 @@ const CrosswordGame = ({
               <div className="flex items-center gap-2">
                 <span className="text-[11px] text-blue-200 font-semibold">🏆 {(globalScore || 0).toLocaleString()} XP</span>
                 <span className="text-blue-400/60 text-[10px]">·</span>
-                <span className="text-[11px] text-blue-200 font-semibold">💰 {(userCoins || 0).toLocaleString()}</span>
+                <span className="text-[11px] text-blue-200 font-semibold"><img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /> {(userCoins || 0).toLocaleString()}</span>
                 {giaoxu && <><span className="text-blue-400/60 text-[10px]">·</span><span className="text-[11px] text-blue-200 font-semibold truncate">⛪ {giaoxu}</span></>}
               </div>
             </div>
@@ -1724,7 +1727,7 @@ const CrosswordGame = ({
                   <img src={iconCoin} alt="" style={{ width: 20, height: 20 }} />
                   <div style={{ textAlign: 'center' }}>
                     <div style={{ fontSize: 8, color: potGlow ? '#fff' : 'rgba(255,255,255,0.5)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>Giải thưởng</div>
-                    <div style={{ fontSize: 18, fontWeight: 900, color: potGlow ? '#fff' : '#fbbf24', lineHeight: 1.1 }}>{displayPot} 💰</div>
+                    <div style={{ fontSize: 18, fontWeight: 900, color: potGlow ? '#fff' : '#fbbf24', lineHeight: 1.1 }}>{displayPot} <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /></div>
                   </div>
                 </motion.div>
               )}
@@ -1835,7 +1838,7 @@ const CrosswordGame = ({
                 <img src={iconCoin} alt="" style={{ width: 22, height: 22 }} />
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: 9, color: potGlow ? '#fff' : 'rgba(255,255,255,0.5)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>Giải thưởng</div>
-                  <div style={{ fontSize: 20, fontWeight: 900, color: potGlow ? '#fff' : '#fbbf24', lineHeight: 1.1 }}>{pot} 💰</div>
+                  <div style={{ fontSize: 20, fontWeight: 900, color: potGlow ? '#fff' : '#fbbf24', lineHeight: 1.1 }}>{pot} <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /></div>
                 </div>
               </motion.div>
             )}
@@ -1974,19 +1977,33 @@ const CrosswordGame = ({
           {formatTime(timeLeft)}
         </div>
 
-        {/* Score */}
-        <div className="flex items-center gap-1 px-2.5 py-1 rounded-full font-black text-xs text-amber-700"
-          style={{ background: 'rgba(251,191,36,0.15)', border: '1.5px solid rgba(251,191,36,0.4)' }}>
-          <Star size={13} className="text-amber-500" />
-          {score}
-        </div>
+        {/* User Profile (Avatar + XP + Coins) */}
+        <div className="flex items-center gap-2 px-1 py-1 rounded-full bg-slate-900/10 border-[1.5px] border-slate-900/10 backdrop-blur-sm pr-3">
+          {/* Avatar */}
+          <div className="w-6 h-6 rounded-full overflow-hidden border border-white/40 shadow-sm shrink-0">
+            {avatarUrl ? (
+              <img src={avatarUrl} alt="" className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full bg-slate-300 flex items-center justify-center text-xs font-bold text-slate-500">
+                {nickname?.[0]?.toUpperCase() || '?'}
+              </div>
+            )}
+          </div>
+          
+          {/* Value XP */}
+          <div className="flex items-center gap-1">
+            <Star size={11} className="text-amber-500" />
+            <span className="font-black text-xs text-slate-700">{globalScore?.toLocaleString() || 0}</span>
+          </div>
 
-        {/* Check button */}
-        <motion.button whileTap={{ scale: 0.9 }} onClick={handleCheckAll}
-          className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl font-black text-xs text-white"
-          style={{ background: 'linear-gradient(180deg, #10b981, #059669)', border: '1.5px solid #047857', boxShadow: '0 2px 0 #047857' }}>
-          <Check size={13} /> Kiểm tra
-        </motion.button>
+          <div className="w-px h-3 bg-slate-900/15 mx-0.5" />
+
+          {/* Value Coin */}
+          <div className="flex items-center gap-1">
+            <img src={iconCoin} alt="C" className="w-3.5 h-3.5" />
+            <span className="font-black text-xs text-slate-700">{userCoins?.toLocaleString() || 0}</span>
+          </div>
+        </div>
       </div>
 
 
@@ -2122,7 +2139,7 @@ const CrosswordGame = ({
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Eye size={13} className="relative z-10" />
                   <span className="relative z-10">Mở 1 chữ</span>
-                  <span className="relative z-10 text-amber-300 text-[10px] font-bold ml-auto">20💰</span>
+                  <span className="relative z-10 text-amber-300 text-[10px] font-bold ml-auto"><div className="flex items-center gap-0.5 relative z-10 text-amber-300 text-[10px] font-bold ml-auto">20<img src={iconCoin} alt="C" className="w-3.5 h-3.5" /></div></span>
                 </motion.button>
                 <motion.button whileTap={{ scale: 0.93, y: 2 }}
                   onClick={handleRevealWord}
@@ -2131,7 +2148,7 @@ const CrosswordGame = ({
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Lightbulb size={13} className="relative z-10" />
                   <span className="relative z-10">Mở cả từ</span>
-                  <span className="relative z-10 text-white/80 text-[10px] font-bold ml-auto">50💰</span>
+                  <span className="relative z-10 text-white/80 text-[10px] font-bold ml-auto"><div className="flex items-center gap-0.5 relative z-10 text-white/80 text-[10px] font-bold ml-auto">50<img src={iconCoin} alt="C" className="w-3.5 h-3.5" /></div></span>
                 </motion.button>
               </div>
             )}
@@ -2216,7 +2233,7 @@ const CrosswordGame = ({
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Eye size={13} className="relative z-10" />
                   <span className="relative z-10">Mở 1 chữ</span>
-                  <span className="relative z-10 text-amber-300 text-[10px] font-bold">20💰</span>
+                  <span className="relative z-10 text-amber-300 text-[10px] font-bold"><div className="flex items-center gap-0.5 relative z-10 text-amber-300 text-[10px] font-bold ml-auto">20<img src={iconCoin} alt="C" className="w-3.5 h-3.5" /></div></span>
                 </motion.button>
                 <motion.button whileTap={{ scale: 0.93, y: 2 }}
                   onClick={handleRevealWord}
@@ -2225,7 +2242,7 @@ const CrosswordGame = ({
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Lightbulb size={13} className="relative z-10" />
                   <span className="relative z-10">Mở cả từ</span>
-                  <span className="relative z-10 text-white/80 text-[10px] font-bold">50💰</span>
+                  <span className="relative z-10 text-white/80 text-[10px] font-bold"><div className="flex items-center gap-0.5 relative z-10 text-white/80 text-[10px] font-bold ml-auto">50<img src={iconCoin} alt="C" className="w-3.5 h-3.5" /></div></span>
                 </motion.button>
               </div>
             )}
@@ -2362,7 +2379,7 @@ const CrosswordGame = ({
               <div className="flex justify-center">
                 <div className="px-5 py-2.5 rounded-2xl font-black text-amber-300 text-xl"
                   style={{ background: 'rgba(251,191,36,0.15)', border: '2px solid rgba(251,191,36,0.4)' }}>
-                  +{forfeitWin.coinReward} 💰
+                  +{forfeitWin.coinReward} <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} />
                 </div>
               </div>
               <motion.button whileTap={{ scale: 0.97, y: 2 }}
@@ -2378,7 +2395,7 @@ const CrosswordGame = ({
                 }}
                 className="w-full py-3.5 rounded-2xl font-black text-[#1e3a8a] text-lg uppercase"
                 style={{ background: 'linear-gradient(180deg, #fbbf24, #f59e0b)', border: '4px solid #b45309', boxShadow: '0 5px 0 #b45309' }}>
-                OK — Nhận {forfeitWin.coinReward} 💰
+                OK — Nhận {forfeitWin.coinReward} <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} />
               </motion.button>
             </motion.div>
           </motion.div>
@@ -2401,11 +2418,11 @@ const CrosswordGame = ({
               </p>
               {userCoins < REMATCH_MIN_COINS ? (
                 <p className="text-red-300 text-sm font-semibold">
-                  ⚠️ Bạn cần ít nhất {REMATCH_MIN_COINS} 💰 để tiếp tục.<br />
-                  Hiện tại: {userCoins} 💰
+                  ⚠️ Bạn cần ít nhất {REMATCH_MIN_COINS} <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /> để tiếp tục.<br />
+                  Hiện tại: {userCoins} <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} />
                 </p>
               ) : (
-                <p className="text-blue-200 text-xs">Bạn có {userCoins} 💰 — Đủ để chơi tiếp</p>
+                <p className="text-blue-200 text-xs">Bạn có {userCoins} <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /> — Đủ để chơi tiếp</p>
               )}
               <div className="flex gap-3">
                 <motion.button whileTap={{ scale: 0.95 }}
@@ -2440,6 +2457,25 @@ const CrosswordGame = ({
             </motion.div>
           </motion.div>
         )}
+      </AnimatePresence>
+{/* ── Coin Drop Animation ── */}
+      <AnimatePresence>
+        {hintEffects.map(p => createPortal(
+          <motion.div
+            key={p.id}
+            initial={{ opacity: 1, y: p.y - 10, x: p.x - 20, scale: 0.5 }}
+            animate={{ opacity: 0, y: p.y - 90, scale: 1.5 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            onAnimationComplete={() => setHintEffects(prev => prev.filter(e => e.id !== p.id))}
+            className="fixed pointer-events-none z-[10000] flex items-center gap-1 font-black"
+            style={{ left: 0, top: 0, color: '#ef4444', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
+          >
+            -{p.amt}
+            <img src={iconCoin} alt="C" className="w-5 h-5" />
+          </motion.div>,
+          document.body
+        ))}
       </AnimatePresence>
     </div>
   );

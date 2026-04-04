@@ -355,11 +355,11 @@ const EmojiReactionPanel = ({ roomId, myUid, opponentUid, opponentName = 'Đối
     setIsOpen(false);
     startCooldown();
     try {
-      await sendReaction(roomId, emoji, label);
+      await sendReaction(roomId, emoji, label, myUid);
     } catch (e) {
       console.warn('sendReaction error:', e);
     }
-  }, [cooldownLeft, roomId, sendReaction, startCooldown]);
+  }, [cooldownLeft, roomId, sendReaction, startCooldown, myUid]);
 
   /* ── Remove shown incoming reaction ── */
   const removeIncoming = useCallback((id) => {

@@ -659,23 +659,27 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                 <span className="font-black text-white/80 text-sm">Đấu Online · {GAMES.find(g => g.id === selectedGame)?.title}</span>
                             </div>
 
-                            {/* AUTO MATCH */}
-                            <motion.button
+                            {/* AUTO MATCH (Coming Soon) */}
+                            <motion.div
                                 initial={{ opacity: 0, x: 40 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.35, delay: 0, ease: [0.25, 0.46, 0.45, 0.94] }}
-                                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97, y: 2 }}
-                                onClick={() => { enterFullscreen(); handleModeSelect('auto_match'); }}
-                                className="relative flex items-center gap-3 px-4 py-3.5 rounded-2xl w-full text-left group overflow-hidden"
-                                style={{ background: '#d97706', border: '2px solid #92400e', boxShadow: '0 4px 0 #92400e' }}>
-                                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <div className="w-11 h-11 rounded-xl bg-amber-300 flex items-center justify-center shrink-0 border-2 border-black/20 text-xl">🎯</div>
-                                <div className="flex-1 z-10">
-                                    <p className="font-black text-lg text-white" style={{ textShadow: '0 2px 0 #92400e' }}>Auto Match</p>
-                                    <p className="text-amber-100 text-xs font-semibold">Tự động tìm đối thủ · Bot nếu không có ai</p>
+                                className="relative flex items-center gap-3 px-4 py-3.5 rounded-2xl w-full text-left overflow-hidden cursor-not-allowed opacity-90"
+                                style={{ background: '#94a3b8', border: '2px solid #64748b', boxShadow: '0 4px 0 #64748b' }}>
+                                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20"
+                                     style={{ background: 'rgba(15,23,42,0.45)', backdropFilter: 'blur(1.5px)' }}>
+                                     <span className="px-3 py-1 rounded-full font-black uppercase tracking-widest shadow-md"
+                                         style={{ fontSize: '10px', background: 'linear-gradient(135deg,#fbbf24,#f59e0b)', color: '#7c2d12', border: '2px solid #b45309', boxShadow: '0 2px 0 #b45309' }}>
+                                         Coming Soon
+                                     </span>
                                 </div>
-                                <ChevronRight size={20} strokeWidth={3} className="text-white/60 group-hover:text-white z-10" />
-                            </motion.button>
+                                <div className="w-11 h-11 rounded-xl bg-slate-300 flex items-center justify-center shrink-0 border-2 border-black/20 text-xl grayscale blur-[1px]">🎯</div>
+                                <div className="flex-1 z-10 grayscale blur-[0.5px]">
+                                    <p className="font-black text-lg text-white" style={{ textShadow: '0 2px 0 #64748b' }}>Đấu Tự Động</p>
+                                    <p className="text-slate-100 text-xs font-semibold">Tự động tìm đối thủ ghép cặp</p>
+                                </div>
+                                <ChevronRight size={20} strokeWidth={3} className="text-white/40 z-10" />
+                            </motion.div>
 
                             {/* DIVIDER */}
                             <motion.div
@@ -700,8 +704,8 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                 <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 <div className="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center shrink-0 border-2 border-white/20 text-xl">🔑</div>
                                 <div className="flex-1 z-10">
-                                    <p className="font-black text-lg text-white">Join With PIN</p>
-                                    <p className="text-white/50 text-xs font-semibold">Nhập mã PIN 6 số để vào phòng bạn bè</p>
+                                    <p className="font-black text-lg text-white">Vào Phòng</p>
+                                    <p className="text-white/60 text-xs font-semibold">Nhập mã PIN 6 số để vào phòng bạn bè</p>
                                 </div>
                                 <ChevronRight size={20} strokeWidth={3} className="text-white/30 group-hover:text-white/70 z-10" />
                             </motion.button>
@@ -718,8 +722,8 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                 <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 <div className="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center shrink-0 border-2 border-white/20 text-xl">🏠</div>
                                 <div className="flex-1 z-10">
-                                    <p className="font-black text-lg text-white">Create Room</p>
-                                    <p className="text-white/50 text-xs font-semibold">Tạo phòng riêng · Chia sẻ PIN cho bạn bè</p>
+                                    <p className="font-black text-lg text-white">Tạo Phòng</p>
+                                    <p className="text-white/60 text-xs font-semibold">Tạo phòng riêng · Chia sẻ PIN cho bạn bè</p>
                                 </div>
                                 <ChevronRight size={20} strokeWidth={3} className="text-white/30 group-hover:text-white/70 z-10" />
                             </motion.button>

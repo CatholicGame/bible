@@ -42,6 +42,7 @@ export function useRoom() {
           nickname: nickname || 'Khách',
           avatarUrl: myAvatarUrl,     // ← lưu avatar để đối thủ hiển thị
           coins: usePlayFabStore.getState().coins ?? 0,
+          rank: usePlayFabStore.getState().rank || 'Tân Binh',
           isReady: false,
           isOnline: true,
           lastSeen: Date.now(),
@@ -92,6 +93,7 @@ export function useRoom() {
         nickname: nickname || 'Khách',
         avatarUrl: myAvatarUrl,     // ← lưu avatar để đối thủ hiển thị
         coins: myCoins,             // lưu số dư xu hiện tại
+        rank: usePlayFabStore.getState().rank || 'Tân Binh',
         isReady: false,
         isOnline: true,
         lastSeen: Date.now(),
@@ -285,17 +287,19 @@ export function useRoom() {
    * @param {string} roomId
    * @param {string} emoji  - ký tự emoji
    * @param {string} label  - câu hiển thị
+   * @param {string} explicitUid
    */
-  const sendReaction = async (roomId, emoji, label) => {
+  const sendReaction = async (roomId, emoji, label, explicitUid) => {
+    const senderUid = explicitUid || uid;
     const reactionsRef = ref(db, `rooms/${roomId}/reactions`);
     const newRef = push(reactionsRef);
     await set(newRef, {
-      fromUid: uid,
+      fromUid: senderUid,
       emoji,
       label,
       timestamp: Date.now(),
     });
-    // Tự xóa sau 4 giây để tránh tích lũy data
+    // Tự xóa sau 4 giây để tránh tích luỹ data
     setTimeout(() => remove(newRef), 4000);
   };
 

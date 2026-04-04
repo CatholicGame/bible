@@ -72,8 +72,8 @@ const AdBanner = ({ className = '', style = {} }) => {
     };
     const cfg = STATUS_CONFIG[adStatus] || STATUS_CONFIG.loading;
 
-    // Ẩn hoàn toàn container khi ad chưa done hoặc không load được (không chiếm không gian UI)
-    const isHidden = adStatus !== 'done';
+    // Ẩn hoàn toàn container khi ad không load được (để không thả rỗng khoảng trống UI)
+    const isHidden = adStatus === 'failed' || adStatus === 'no-sdk';
 
     return (
         <div
