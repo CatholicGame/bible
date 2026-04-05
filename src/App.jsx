@@ -95,17 +95,47 @@ function App() {
     
     async function exportSessionToPlayfab(user) {
       if (user) {
-        const saved = localStorage.getItem('guestSession');
-        let nickname = user.displayName || 'Khách Vô Danh';
-        if (saved) {
-          try {
-            const parsed = JSON.parse(saved);
-            if (parsed.name) nickname = parsed.name;
-          } catch { /* ignore */ }
+        const pfState = usePlayFabStore.getState();
+
+        // Nếu PlayFab đã đăng nhập bằng Google/Email/Restored → không can thiệp, giữ nguyên session
+        if (pfState.isLoggedIn && (pfState.authMethod === 'google' || pfState.authMethod === 'email' || pfState.authMethod === 'restored')) {
+          // Chỉ sync uid vào userStore nếu chưa có
+          const { uid: storeUid } = useUserStore.getState();
+          if (!storeUid) {
+            setUser({ uid: user.uid, nickname: pfState.nickname || user.displayName || 'Người chơi' });
+          }
+          return;
         }
+
+        // Kiểm tra guestSession để xem auth method
+        const saved = localStorage.getItem('guestSession');
+        let savedSession = null;
+        try { savedSession = saved ? JSON.parse(saved) : null; } catch { /* ignore */ }
+        const savedAuthMethod = savedSession?.authMethod;
+
+        // Nếu session cũ là Google/Email nhưng PlayFab chưa restore (app reload)
+        // → KHÔNG gọi playfabLogin() device. Google user phải đăng nhập lại đúng cách.
+        if (savedAuthMethod === 'google' || savedAuthMethod === 'email') {
+          setUser({ uid: user.uid, nickname: savedSession?.name || user.displayName || 'Người chơi' });
+          // Thử restore PlayFab session từ cached token (nếu có)
+          const restored = await usePlayFabStore.getState().restoreSession().catch(() => false);
+          if (!restored) {
+            // Token hết hạn → clear session, redirect về login
+            localStorage.removeItem('guestSession');
+            setCurrentView('login');
+          }
+          return;
+        }
+
+        // Guest / Anonymous login: lấy nickname từ guestSession
+        let nickname = user.displayName || 'Khách Vô Danh';
+        if (savedSession?.name) nickname = savedSession.name;
         setUser({ uid: user.uid, nickname });
-        // Restore playfab session
-        playfabLogin().catch(console.error);
+
+        // Chỉ gọi playfabLogin() (device-based) nếu chưa đăng nhập PlayFab
+        if (!pfState.isLoggedIn && !pfState.isLoading) {
+          playfabLogin().catch(console.error);
+        }
       } else {
         signInAnonymously(auth).catch(console.error);
       }

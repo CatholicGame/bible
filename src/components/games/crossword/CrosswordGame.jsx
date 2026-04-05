@@ -273,6 +273,7 @@ const CrosswordFinishedOverlay = ({
   solvedWords, totalWords, timeLeft, score,
   earnedXP, earnedCoins,
   myProfile, opponentProfile, myPercent, opponentPercent,
+  myFBName = 'Bạn', oppFBName = 'Đối thủ',
   onReplay, onNewGame, onLeaveGame,
   onRequestRematch = null,   // P2P only
   canAffordRematch = true,   // P2P only
@@ -698,6 +699,7 @@ const CrosswordGame = ({
   const [potGlow, setPotGlow] = useState(false);           // pot bừng sáng sau khi coin tụ
   const [displayPot, setDisplayPot] = useState(0);         // số dư pot đang hiển thị
   const betChargedRef = useRef(false);                     // tránh charge 2 lần (StrictMode)
+  const finishCalledRef = useRef(false);                   // tránh gọi finishGame 2 lần
   const potRef = useRef(null);                             // ref tới pot element để lấy vị trí
   const myAvatarRef  = useRef(null);                       // ref avatar bản thân (trong matchSetup)
   const oppAvatarRef2 = useRef(null);                      // ref avatar đối thủ (trong matchSetup)
@@ -1194,12 +1196,17 @@ const CrosswordGame = ({
   useEffect(() => {
     if (gameState === 'playing' && solvedWords.size === totalWords) {
       setShowCelebration(true);
-      setTimeout(() => finishGame(), 2000);
+      const t = setTimeout(() => finishGame(), 2000);
+      return () => clearTimeout(t);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [solvedWords.size, totalWords, gameState]);
 
   /* ── Finish game ── */
   const finishGame = useCallback(() => {
+    // Guard: chỉ chạy 1 lần, tránh double-call từ timer + auto-finish
+    if (finishCalledRef.current) return;
+    finishCalledRef.current = true;
     clearInterval(timerRef.current);
 
     if (isReplay) {
@@ -1330,10 +1337,10 @@ const CrosswordGame = ({
       return;
     }
 
-    // Bắt đầu animation ngay lập tức để tránh UI bị treo khi đợi mạng chậm
-    spawnBetParticles();
+    // Delay 1 frame để DOM render potRef trước khi đọc getBoundingClientRect
+    const tSpawn = setTimeout(() => spawnBetParticles(), 80);
     
-    // Đếm số pot tăng dần 0 -> pot
+    // Đếm số pot tăng dần 0 -> pot (chạy song song, độc lập với potRef)
     const targetPot = (wager || 0) * 2;
     const duration = 1400;
     const startTime = Date.now();
@@ -1347,6 +1354,7 @@ const CrosswordGame = ({
       }
     }, 40);
 
+    // setBetAnimDone chạy theo timer CỐ ĐỊNH — không phụ thuộc vào potRef
     const tAnim = setTimeout(() => {
       setPotGlow(true);
       setTimeout(() => setBetAnimDone(true), 400);
@@ -1362,6 +1370,7 @@ const CrosswordGame = ({
       });
 
     return () => {
+      clearTimeout(tSpawn);
       clearTimeout(tAnim);
       clearInterval(intervalId);
     };
@@ -1371,18 +1380,22 @@ const CrosswordGame = ({
   /* ── Spawn coin fly particles từ 2 avatar vào pot ── */
   const spawnBetParticles = useCallback(() => {
     const potEl = potRef.current;
-    if (!potEl) { setBetAnimDone(true); return; }
-    const potRect = potEl.getBoundingClientRect();
-    const tx = potRect.left + potRect.width  / 2;
-    const ty = potRect.top  + potRect.height / 2;
+    // Nếu potRef chưa mount thì dùng center màn hình làm đích
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    let tx = vw / 2;
+    let ty = vh / 2;
+    if (potEl) {
+      const potRect = potEl.getBoundingClientRect();
+      tx = potRect.left + potRect.width  / 2;
+      ty = potRect.top  + potRect.height / 2;
+    }
 
     // Lấy vị trí thực tế từ DOM avatar refs
     const myRect  = myAvatarRef.current?.getBoundingClientRect();
     const oppRect = oppAvatarRef2.current?.getBoundingClientRect();
 
     // Fallback nếu refs chưa mount
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
     const myX  = myRect  ? myRect.left  + myRect.width  / 2 : vw * 0.2;
     const myY  = myRect  ? myRect.top   + myRect.height / 2 : vh * 0.3;
     const oppX = oppRect ? oppRect.left + oppRect.width  / 2 : vw * 0.8;
@@ -1475,6 +1488,7 @@ const CrosswordGame = ({
     setPotGlow(false);
     setDisplayPot(0);
     betChargedRef.current = false;
+    finishCalledRef.current = false;
   };
 
   /* ── Replay same puzzle (0 XP, reduced coins) ── */
@@ -1915,7 +1929,7 @@ const CrosswordGame = ({
                 <img src={iconCoin} alt="" style={{ width: 22, height: 22 }} />
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: 9, color: potGlow ? '#fff' : 'rgba(255,255,255,0.5)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>Giải thưởng</div>
-                  <div style={{ fontSize: 20, fontWeight: 900, color: potGlow ? '#fff' : '#fbbf24', lineHeight: 1.1 }}>{pot} <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /></div>
+                  <div style={{ fontSize: 20, fontWeight: 900, color: potGlow ? '#fff' : '#fbbf24', lineHeight: 1.1 }}>{displayPot} <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /></div>
                 </div>
               </motion.div>
             )}
@@ -1959,7 +1973,12 @@ const CrosswordGame = ({
     const isWinner = isP2P ? myWordsCount > oppWordsCount : false;
     const isDraw = isP2P ? myWordsCount === oppWordsCount : false;
     const isPerfect = solvedWords.size === totalWords;
-    // Tính xem đối thủ còn online không (để hiện nút "Chơi tiếp")
+    const myPercent = totalWords > 0 ? Math.round((myWordsCount / totalWords) * 100) : 0;
+    const opponentPercent = totalWords > 0 ? Math.round((oppWordsCount / totalWords) * 100) : 0;
+    
+    // P2P rematch variables
+    const REMATCH_MIN_COINS = 20;
+    const canAffordRematch = userCoins >= REMATCH_MIN_COINS;
     const opponentUid = Object.keys(roomData?.players ?? {}).find(k => k !== myUid);
     const opponentStillOnline = roomData?.players?.[opponentUid]?.isOnline !== false;
     const handleRequestRematch = async () => {
@@ -1978,8 +1997,9 @@ const CrosswordGame = ({
         hintsSpent={hintsSpent} score={score}
         myProfile={myProfile} opponentProfile={opponentProfile}
         myPercent={myPercent} opponentPercent={opponentPercent}
-        onReplay={isSolo ? handleReplay : undefined}
-        onNewGame={isSolo ? handleNewGame : undefined}
+        myFBName={myFBName} oppFBName={oppFBName}
+        onReplay={!isP2P ? handleReplay : undefined}
+        onNewGame={!isP2P ? handleNewGame : undefined}
         onLeaveGame={onLeaveGame}
         onRequestRematch={isP2P && opponentStillOnline ? handleRequestRematch : null}
         canAffordRematch={canAffordRematch}

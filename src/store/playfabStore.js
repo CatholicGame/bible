@@ -200,7 +200,10 @@ export const usePlayFabStore = create((set, get) => ({
       const coins = parseInt(data.Coins?.Value) || 0;
       const nickname = profileReq.PlayerProfile?.DisplayName || 'Người chơi';
       const playFabId = profileReq.PlayerProfile?.PlayerId;
-      const avatarUrl = profileReq.PlayerProfile?.AvatarUrl || null;
+      // Ưu tiên AvatarUrl từ PlayFab, fallback về localStorage (Google photo)
+      const avatarUrl = profileReq.PlayerProfile?.AvatarUrl
+        || localStorage.getItem('pf_avatar_url')
+        || null;
 
       set({
         isLoggedIn: true, isLoading: false,
@@ -356,8 +359,11 @@ export const usePlayFabStore = create((set, get) => ({
         try { await updateDisplayName(firebaseUser.displayName); } catch (_) {}
       }
 
-      // Save Google photo URL as avatar
+      // Save Google photo URL as avatar (persist to localStorage để survive F5)
       const photoURL = firebaseUser.photoURL || null;
+      if (photoURL) {
+        try { localStorage.setItem('pf_avatar_url', photoURL); } catch (_) {}
+      }
 
       const giaoxu = userData?.GiaoXu?.Value || null;
       const hat = userData?.Hat?.Value || null;
@@ -796,6 +802,7 @@ export const usePlayFabStore = create((set, get) => ({
   // ── Reset (logout) ──
   reset: () => {
     forgetCredentials();
+    try { localStorage.removeItem('pf_avatar_url'); } catch (_) {}
     set({
       isLoggedIn: false,
       isLoading: false,

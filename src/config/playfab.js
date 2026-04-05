@@ -78,9 +78,9 @@ export async function loginWithCustomID(customId) {
     CreateAccount: true,
     InfoRequestParameters: {
       GetUserData: true,
-      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh', 'GlobalScore', 'Coins', 'Stats', 'PinnacleMyVote'],
+      UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh', 'GlobalScore', 'Coins', 'Stats', 'PinnacleMyVote', 'PlayedCrosswordIds'],
       GetPlayerProfile: true,
-      ProfileConstraints: { ShowDisplayName: true },
+      ProfileConstraints: { ShowDisplayName: true, ShowAvatarUrl: true },
     },
   }, false); // Auth not needed for login
 
