@@ -22,6 +22,31 @@ const BG_STYLE = {
   backgroundPosition: 'center',
 };
 
+/* ── Physics-based coin burst spawner ──
+   Pre-computes a parabolic (vx·t, vy·t + ½·g·t²) trajectory
+   sampled at STEPS time points. ease:'linear' between keyframes
+   means the curve shape comes from the DATA, not the easing. */
+const PHYS_STEPS = [0, 0.06, 0.13, 0.22, 0.33, 0.46, 0.59, 0.72, 0.84, 0.93, 1.0];
+
+function spawnCoinBurst(cx, cy, N, speedMin, speedMax, gravMin, gravMax, durMin, durMax, sizeMin, sizeMax, delMax = 0.15) {
+  return Array.from({ length: N }, (_, i) => {
+    const angle = (Math.PI * 2 / N) * i + (Math.random() - 0.5) * 0.5;
+    const speed = speedMin + Math.random() * (speedMax - speedMin);
+    const vx    = Math.cos(angle) * speed;
+    const vy    = Math.sin(angle) * speed - (100 + Math.random() * 70); // bias upward
+    const grav  = gravMin + Math.random() * (gravMax - gravMin);
+    const dur   = durMin  + Math.random() * (durMax - durMin);
+    const del   = Math.random() * delMax;
+    const spin  = (Math.random() > 0.5 ? 1 : -1) * (200 + Math.random() * 300);
+    const size  = sizeMin + Math.random() * (sizeMax - sizeMin);
+    // Sample parabola at each step
+    const xK   = PHYS_STEPS.map(t => vx   * t * dur);
+    const yK   = PHYS_STEPS.map(t => vy   * t * dur + 0.5 * grav * Math.pow(t * dur, 2));
+    const rotK = PHYS_STEPS.map(t => spin * t);
+    return { i, xK, yK, rotK, dur, del, size };
+  });
+}
+
 /* ══════════════════════════════════════════════════════════════
    PUZZLE DATA — load từ crossword_puzzles.json
    ══════════════════════════════════════════════════════════════ */
@@ -578,7 +603,29 @@ const CrosswordGame = ({
   const [gameState, setGameState] = useState(() => isP2PMode ? 'matchSetup' : 'intro');
   const [countdown, setCountdown] = useState(3);   // 3-2-1 countdown
   const [confirmQuit, setConfirmQuit] = useState(false);
-  const [hintEffects, setHintEffects] = useState([]);
+  const [hintEffects, setHintEffects] = useState([]);  // burst events [{id,x,y,amt,particles}]
+  const burstTimersRef = useRef({});
+
+  // Inject CSS keyframes (once)
+  useEffect(() => {
+    if (document.getElementById('cw-coin-burst-style')) return;
+    const style = document.createElement('style');
+    style.id = 'cw-coin-burst-style';
+    style.textContent = `
+      @keyframes cwCoinFall {
+        0%   { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+        28%  { transform: translate(var(--bx), var(--by)) rotate(var(--r1)) scale(1); opacity: 1; }
+        100% { transform: translate(var(--fx), var(--fy)) rotate(var(--r2)) scale(0.85); opacity: 1; }
+      }
+      @keyframes cwBokeh {
+        0%   { transform: translate(0, 0) scale(1);    opacity: 0.7; }
+        33%  { transform: translate(12px, -18px) scale(1.12); opacity: 1;   }
+        66%  { transform: translate(-8px, 10px) scale(0.92);  opacity: 0.8; }
+        100% { transform: translate(6px, -8px)  scale(1.05);  opacity: 0.7; }
+      }
+    `;
+    document.head.appendChild(style);
+  }, []);
 
   // Store — MUST be declared before puzzle state so lazy initialisers can use them
   const { addXP, addCoins, coins: userCoins, playedCrosswordIds, markCrosswordPlayed, globalScore, nickname, giaoxu, avatarUrl } = usePlayFabStore();
@@ -662,6 +709,7 @@ const CrosswordGame = ({
   // Timer
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
   const timerRef = useRef(null);
+  const endTimeRef = useRef(null);
 
   // Ref to opponent avatar DOM element (used by EmojiReactionPanel for bubble positioning)
   const opponentAvatarRef = useRef(null);
@@ -929,7 +977,18 @@ const CrosswordGame = ({
     setHintUsed(true);
     setHintsSpent(prev => prev + 20);
     addCoins(-20); // deduct coins live
-    if (e && e.clientX && e.clientY) { setHintEffects(prev => [...prev, { id: Date.now() + Math.random(), amt: 20, x: e.clientX, y: e.clientY }]); }
+    // — Spawn physics coin burst —
+    if (e && e.clientX && e.clientY) {
+      const cx = e.clientX, cy = e.clientY;
+      const particles = spawnCoinBurst(cx, cy, 20, 80, 160, 220, 340, 4.5, 5.0, 14, 24, 0.4);
+      const burstId = Date.now() + Math.random();
+      const maxMs = Math.max(...particles.map(p => p.dur + p.del)) * 1000 + 400;
+      setHintEffects(prev => [...prev, { id: burstId, x: cx, y: cy, amt: 20, particles }]);
+      burstTimersRef.current[burstId] = setTimeout(() => {
+        setHintEffects(prev => prev.filter(b => b.id !== burstId));
+        delete burstTimersRef.current[burstId];
+      }, maxMs);
+    }
     const newGrid = userGrid.map(r => [...r]);
     newGrid[row][col] = cell.letter;
     setUserGrid(newGrid);
@@ -967,7 +1026,18 @@ const CrosswordGame = ({
     setHintUsed(true);
     setHintsSpent(prev => prev + 50);
     addCoins(-50); // deduct coins live
-    if (e && e.clientX && e.clientY) { setHintEffects(prev => [...prev, { id: Date.now() + Math.random(), amt: 50, x: e.clientX, y: e.clientY }]); }
+    // — Spawn physics coin burst —
+    if (e && e.clientX && e.clientY) {
+      const cx = e.clientX, cy = e.clientY;
+      const particles = spawnCoinBurst(cx, cy, 20, 100, 190, 250, 380, 4.5, 5.0, 16, 26, 0.4);
+      const burstId = Date.now() + Math.random();
+      const maxMs = Math.max(...particles.map(p => p.dur + p.del)) * 1000 + 400;
+      setHintEffects(prev => [...prev, { id: burstId, x: cx, y: cy, amt: 50, particles }]);
+      burstTimersRef.current[burstId] = setTimeout(() => {
+        setHintEffects(prev => prev.filter(b => b.id !== burstId));
+        delete burstTimersRef.current[burstId];
+      }, maxMs);
+    }
     const newGrid = userGrid.map(r => [...r]);
     const letters = [...w.answer];
     letters.forEach((ch, i) => {
@@ -1094,15 +1164,21 @@ const CrosswordGame = ({
 
   /* ── Timer ── */
   useEffect(() => {
-    if (gameState !== 'playing') return;
+    if (gameState !== 'playing') {
+      endTimeRef.current = null;
+      return;
+    }
+    
+    if (!endTimeRef.current) {
+      endTimeRef.current = Date.now() + 300 * 1000;
+    }
+
     timerRef.current = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timerRef.current);
-          return 0;
-        }
-        return prev - 1;
-      });
+      const remaining = Math.max(0, Math.ceil((endTimeRef.current - Date.now()) / 1000));
+      setTimeLeft(remaining);
+      if (remaining === 0) {
+        clearInterval(timerRef.current);
+      }
     }, 1000);
     return () => clearInterval(timerRef.current);
   }, [gameState]);
@@ -1390,6 +1466,7 @@ const CrosswordGame = ({
     setEarnedXP(null);
     setEarnedCoins(null);
     setTimeLeft(300);
+    if (endTimeRef.current) endTimeRef.current = null;
     setShowCelebration(false);
     clearInterval(timerRef.current);
     
@@ -1919,9 +1996,36 @@ const CrosswordGame = ({
   return (
     <div className="w-full h-full flex flex-col relative overflow-hidden select-none"
       style={{ ...BG_STYLE }}>
-      {/* Subtle light overlay — giảm tối, tăng độ trong */}
+      {/* ── Layered blur background ── */}
+      {/* Layer 1: dark scrim to deepen the background photo */}
       <div className="absolute inset-0 pointer-events-none z-0"
-        style={{ background: 'rgba(255,255,255,0.18)' }} />
+        style={{ background: 'rgba(10,15,40,0.55)' }} />
+
+      {/* Layer 2: frosted glass blur */}
+      <div className="absolute inset-0 pointer-events-none z-0"
+        style={{ backdropFilter: 'blur(3px)', WebkitBackdropFilter: 'blur(3px)' }} />
+
+      {/* Layer 3: animated bokeh orbs */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        {[
+          { size: 220, x: '12%',  y: '18%',  color: 'rgba(96,165,250,0.18)',  dur: '9s',  delay: '0s'   },
+          { size: 180, x: '72%',  y: '10%',  color: 'rgba(167,139,250,0.16)', dur: '12s', delay: '1.5s' },
+          { size: 260, x: '55%',  y: '60%',  color: 'rgba(59,130,246,0.14)',  dur: '15s', delay: '0.8s' },
+          { size: 150, x: '8%',   y: '65%',  color: 'rgba(139,92,246,0.14)',  dur: '10s', delay: '2s'   },
+          { size: 200, x: '82%',  y: '75%',  color: 'rgba(248,113,113,0.10)', dur: '13s', delay: '0.3s' },
+          { size: 130, x: '40%',  y: '85%',  color: 'rgba(52,211,153,0.10)',  dur: '11s', delay: '1s'   },
+        ].map((o, i) => (
+          <div key={i} style={{
+            position: 'absolute',
+            left: o.x, top: o.y,
+            width: o.size, height: o.size,
+            borderRadius: '50%',
+            background: `radial-gradient(circle, ${o.color} 0%, transparent 70%)`,
+            filter: 'blur(32px)',
+            animation: `cwBokeh ${o.dur} ${o.delay} ease-in-out infinite alternate`,
+          }} />
+        ))}
+      </div>
 
       {/* Hidden input for physical keyboard + IME — inputMode="none" prevents native mobile keyboard */}
       <input
@@ -2001,7 +2105,15 @@ const CrosswordGame = ({
           {/* Value Coin */}
           <div className="flex items-center gap-1">
             <img src={iconCoin} alt="C" className="w-3.5 h-3.5" />
-            <span className="font-black text-xs text-slate-700">{userCoins?.toLocaleString() || 0}</span>
+            <motion.span
+              key={userCoins}
+              initial={{ scale: 1, color: '#334155' }}
+              animate={{ scale: [1, 1.4, 1], color: ['#ef4444', '#ef4444', '#334155'] }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              className="font-black text-xs"
+            >
+              {userCoins?.toLocaleString() || 0}
+            </motion.span>
           </div>
         </div>
       </div>
@@ -2033,11 +2145,19 @@ const CrosswordGame = ({
       {/* Landscape: row layout (grid | right-pane), Portrait: column layout (grid then keyboard) */}
       <div className={`relative z-10 flex-1 min-h-0 flex gap-2 p-2 ${isLandscape ? 'flex-row' : 'flex-col'}`}>
 
-        {/* ── GRID ── */}
+        {/* ── GRID — glass panel ── */}
         <div ref={gridContainerRef}
           className={`overflow-auto ${
             isLandscape ? 'flex-1 min-w-0 min-h-0' : 'flex-1 min-h-0'
-          }`}>
+          }`}
+          style={{
+            background: 'rgba(255,255,255,0.07)',
+            backdropFilter: 'blur(18px)',
+            WebkitBackdropFilter: 'blur(18px)',
+            borderRadius: 18,
+            border: '1px solid rgba(255,255,255,0.15)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.2)',
+          }}>
           <div ref={gridRef} className="grid gap-[2px] px-2"
             style={{
               gridTemplateColumns: `repeat(${puzzle.gridSize.cols}, ${cellSize}px)`,
@@ -2154,7 +2274,13 @@ const CrosswordGame = ({
             )}
             {/* Clues */}
             <div className="flex-1 min-h-0 overflow-y-auto rounded-xl p-2 space-y-2 scrollbar-hide"
-              style={{ background: '#0f1b2d', border: '1px solid rgba(255,255,255,0.12)' }}>
+              style={{
+                background: 'rgba(8,14,30,0.65)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255,255,255,0.10)',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)',
+              }}>
               <div>
                 <p className="text-amber-400 font-black text-[10px] uppercase tracking-widest mb-1 px-1">→ Ngang</p>
                 {acrossClues.map(w => {
@@ -2226,34 +2352,61 @@ const CrosswordGame = ({
             {/* Hint buttons row */}
             {isSolo && (
               <div className="flex gap-2 flex-shrink-0">
-                <motion.button whileTap={{ scale: 0.93, y: 2 }}
-                  onClick={handleRevealLetter}
+                {/* Mở 1 chữ — portrait */}
+                <motion.button
+                  whileTap={userCoins >= 20 ? { scale: 0.93, y: 2 } : {}}
+                  onClick={userCoins >= 20 ? handleRevealLetter : undefined}
+                  disabled={userCoins < 20}
                   className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden"
-                  style={{ background: 'linear-gradient(180deg, #06b6d4, #0891b2)', border: '2px solid #0e7490', boxShadow: '0 3px 0 #0e7490' }}>
+                  style={{
+                    background: userCoins >= 20
+                      ? 'linear-gradient(180deg, #06b6d4, #0891b2)'
+                      : 'linear-gradient(180deg, #64748b, #475569)',
+                    border: userCoins >= 20 ? '2px solid #0e7490' : '2px solid #334155',
+                    boxShadow: userCoins >= 20 ? '0 3px 0 #0e7490' : 'none',
+                    cursor: userCoins >= 20 ? 'pointer' : 'not-allowed',
+                    opacity: userCoins >= 20 ? 1 : 0.55,
+                  }}>
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Eye size={13} className="relative z-10" />
                   <span className="relative z-10">Mở 1 chữ</span>
-                  <span className="relative z-10 text-amber-300 text-[10px] font-bold"><div className="flex items-center gap-0.5 relative z-10 text-amber-300 text-[10px] font-bold ml-auto">20<img src={iconCoin} alt="C" className="w-3.5 h-3.5" /></div></span>
+                  <div className={`flex items-center gap-0.5 relative z-10 text-[10px] font-bold ml-auto ${userCoins >= 20 ? 'text-amber-300' : 'text-slate-400'}`}>
+                    20<img src={iconCoin} alt="C" className="w-3.5 h-3.5" />
+                  </div>
                 </motion.button>
-                <motion.button whileTap={{ scale: 0.93, y: 2 }}
-                  onClick={handleRevealWord}
+
+                {/* Mở cả từ — portrait */}
+                <motion.button
+                  whileTap={userCoins >= 50 ? { scale: 0.93, y: 2 } : {}}
+                  onClick={userCoins >= 50 ? handleRevealWord : undefined}
+                  disabled={userCoins < 50}
                   className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden"
-                  style={{ background: 'linear-gradient(180deg, #f59e0b, #d97706)', border: '2px solid #b45309', boxShadow: '0 3px 0 #92400e' }}>
+                  style={{
+                    background: userCoins >= 50
+                      ? 'linear-gradient(180deg, #f59e0b, #d97706)'
+                      : 'linear-gradient(180deg, #64748b, #475569)',
+                    border: userCoins >= 50 ? '2px solid #b45309' : '2px solid #334155',
+                    boxShadow: userCoins >= 50 ? '0 3px 0 #92400e' : 'none',
+                    cursor: userCoins >= 50 ? 'pointer' : 'not-allowed',
+                    opacity: userCoins >= 50 ? 1 : 0.55,
+                  }}>
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Lightbulb size={13} className="relative z-10" />
                   <span className="relative z-10">Mở cả từ</span>
-                  <span className="relative z-10 text-white/80 text-[10px] font-bold"><div className="flex items-center gap-0.5 relative z-10 text-white/80 text-[10px] font-bold ml-auto">50<img src={iconCoin} alt="C" className="w-3.5 h-3.5" /></div></span>
+                  <div className={`flex items-center gap-0.5 relative z-10 text-[10px] font-bold ml-auto ${userCoins >= 50 ? 'text-white/80' : 'text-slate-400'}`}>
+                    50<img src={iconCoin} alt="C" className="w-3.5 h-3.5" />
+                  </div>
                 </motion.button>
               </div>
             )}
             {/* Clues panel — short, scrollable */}
             <div className="flex-1 min-h-0 overflow-y-auto rounded-xl p-2 space-y-2 scrollbar-hide"
               style={{
-                background: 'rgba(255,255,255,0.82)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                border: '1px solid rgba(0,0,0,0.08)',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+                background: 'rgba(255,255,255,0.88)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255,255,255,0.25)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.5)',
               }}>
               <div className="flex gap-3">
                 <div className="flex-1">
@@ -2458,25 +2611,65 @@ const CrosswordGame = ({
           </motion.div>
         )}
       </AnimatePresence>
-{/* ── Coin Drop Animation ── */}
-      <AnimatePresence>
-        {hintEffects.map(p => createPortal(
+{/* ── Coin Burst Particles ── */}
+      {hintEffects.map(burst => createPortal(
+        <div key={burst.id} style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 10000 }}>
+
+          {/* -AMT label */}
           <motion.div
-            key={p.id}
-            initial={{ opacity: 1, y: p.y - 10, x: p.x - 20, scale: 0.5 }}
-            animate={{ opacity: 0, y: p.y - 90, scale: 1.5 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            onAnimationComplete={() => setHintEffects(prev => prev.filter(e => e.id !== p.id))}
-            className="fixed pointer-events-none z-[10000] flex items-center gap-1 font-black"
-            style={{ left: 0, top: 0, color: '#ef4444', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
+            initial={{ y: 0, opacity: 1 }}
+            animate={{ y: -85, opacity: 0 }}
+            transition={{ duration: 0.85, ease: 'easeOut' }}
+            style={{
+              position: 'fixed',
+              left: burst.x - 20,
+              top: burst.y - 40,
+              color: '#ef4444',
+              fontWeight: 900,
+              fontSize: 20,
+              textShadow: '0 2px 12px rgba(239,68,68,1)',
+              pointerEvents: 'none',
+            }}
           >
-            -{p.amt}
-            <img src={iconCoin} alt="C" className="w-5 h-5" />
-          </motion.div>,
-          document.body
-        ))}
-      </AnimatePresence>
+            -{burst.amt}
+          </motion.div>
+
+          {/* 20 coin particles — parabolic arc */}
+          {burst.particles.map(p => (
+            <motion.img
+              key={p.i}
+              src={iconCoin}
+              alt=""
+              initial={{ x: 0, y: 0, rotate: 0, opacity: 1 }}
+              animate={{
+                x: p.xK,
+                y: p.yK,
+                rotate: p.rotK,
+                opacity: 1,
+              }}
+              transition={{
+                duration: p.dur,
+                delay: p.del,
+                times: PHYS_STEPS,
+                ease: 'linear',
+              }}
+              style={{
+                position: 'fixed',
+                left: burst.x - p.size / 2,
+                top:  burst.y - p.size / 2,
+                width:  p.size,
+                height: p.size,
+                borderRadius: '50%',
+                filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))',
+                pointerEvents: 'none',
+                willChange: 'transform',
+              }}
+            />
+          ))}
+        </div>,
+        document.body
+      ))}
+
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { usePlayFabStore } from '../../store/playfabStore';
 
 
 
-const LoginScreen = ({ onLogin }) => {
+const LoginScreen = ({ onLogin, onOpenPrivacy }) => {
     const [showGuestInput, setShowGuestInput] = useState(false);
     const [guestName, setGuestName] = useState('');
 
@@ -361,7 +361,15 @@ const LoginScreen = ({ onLogin }) => {
                 </AnimatePresence>
 
                 <p className="text-center text-xs text-gray-400 mt-5 leading-relaxed">
-                    Bằng việc đăng nhập, bạn đồng ý với Điều khoản sử dụng.
+                    Bằng việc đăng nhập, bạn đồng ý với Điều khoản sử dụng và{' '}
+                    <button
+                        id="login-privacy-policy-link"
+                        type="button"
+                        onClick={onOpenPrivacy}
+                        className="text-blue-500 hover:underline font-medium"
+                    >
+                        Chính Sách Bảo Mật
+                    </button>.
                 </p>
             </motion.div>
         </div>

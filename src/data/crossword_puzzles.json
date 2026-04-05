@@ -2,6 +2,7 @@
   {
     "id": 1,
     "theme": "Người Thứ Nhất - Tạo Dựng",
+    "title": "Người Thứ Nhất - Tạo Dựng",
     "gridSize": {
       "rows": 6,
       "cols": 7
@@ -62,6 +63,7 @@
   {
     "id": 2,
     "theme": "Tổ Phụ Đức Tin",
+    "title": "Tổ Phụ Đức Tin",
     "gridSize": {
       "rows": 10,
       "cols": 11
@@ -132,6 +134,7 @@
   {
     "id": 3,
     "theme": "Môsê & Xuất Hành",
+    "title": "Môsê & Xuất Hành",
     "gridSize": {
       "rows": 9,
       "cols": 10
@@ -192,6 +195,7 @@
   {
     "id": 4,
     "theme": "Các Thánh Tông Đồ",
+    "title": "Các Thánh Tông Đồ",
     "gridSize": {
       "rows": 8,
       "cols": 7
@@ -262,6 +266,7 @@
   {
     "id": 5,
     "theme": "Phép Lạ Của Chúa",
+    "title": "Phép Lạ Của Chúa",
     "gridSize": {
       "rows": 11,
       "cols": 11
@@ -332,6 +337,7 @@
   {
     "id": 6,
     "theme": "Dụ Ngôn Nước Trời",
+    "title": "Dụ Ngôn Nước Trời",
     "gridSize": {
       "rows": 10,
       "cols": 12
@@ -402,6 +408,7 @@
   {
     "id": 7,
     "theme": "Cuộc Thương Khó",
+    "title": "Cuộc Thương Khó",
     "gridSize": {
       "rows": 10,
       "cols": 10
@@ -472,6 +479,7 @@
   {
     "id": 8,
     "theme": "Phục Sinh Và Lên Trời",
+    "title": "Phục Sinh Và Lên Trời",
     "gridSize": {
       "rows": 9,
       "cols": 9
@@ -532,9 +540,10 @@
   {
     "id": 9,
     "theme": "Bảy Bí Tích",
+    "title": "Bảy Bí Tích",
     "gridSize": {
       "rows": 9,
-      "cols": 14
+      "cols": 12
     },
     "words": [
       {
@@ -602,9 +611,10 @@
   {
     "id": 10,
     "theme": "Đức Mẹ La Vang",
+    "title": "Đức Mẹ La Vang",
     "gridSize": {
       "rows": 12,
-      "cols": 13
+      "cols": 12
     },
     "words": [
       {
@@ -672,6 +682,7 @@
   {
     "id": 101,
     "theme": "XH 1: Israel Bị Áp Bức",
+    "title": "XH 1: Israel Bị Áp Bức",
     "gridSize": {
       "rows": 10,
       "cols": 8
@@ -742,6 +753,7 @@
   {
     "id": 102,
     "theme": "XH 2: Môsê Chào Đời",
+    "title": "XH 2: Môsê Chào Đời",
     "gridSize": {
       "rows": 9,
       "cols": 8
@@ -802,6 +814,7 @@
   {
     "id": 11,
     "theme": "Mầu Nhiệm Giáng Sinh",
+    "title": "Mầu Nhiệm Giáng Sinh",
     "gridSize": {
       "rows": 10,
       "cols": 10
@@ -872,6 +885,7 @@
   {
     "id": 12,
     "theme": "Bài Giảng Trên Núi",
+    "title": "Bài Giảng Trên Núi",
     "gridSize": {
       "rows": 10,
       "cols": 12
@@ -942,6 +956,7 @@
   {
     "id": 13,
     "theme": "Mầu Nhiệm Ba Ngôi",
+    "title": "Mầu Nhiệm Ba Ngôi",
     "gridSize": {
       "rows": 11,
       "cols": 12
@@ -1012,9 +1027,10 @@
   {
     "id": 14,
     "theme": "Năm Phụng Vụ",
+    "title": "Năm Phụng Vụ",
     "gridSize": {
       "rows": 12,
-      "cols": 14
+      "cols": 12
     },
     "words": [
       {
@@ -1082,9 +1098,10 @@
   {
     "id": 15,
     "theme": "Đời Sống Đức Tin",
+    "title": "Đời Sống Đức Tin",
     "gridSize": {
       "rows": 10,
-      "cols": 13
+      "cols": 12
     },
     "words": [
       {
@@ -1152,6 +1169,7 @@
   {
     "id": 103,
     "theme": "XH 3: Bụi Gai Bốc Lửa",
+    "title": "XH 3: Bụi Gai Bốc Lửa",
     "gridSize": {
       "rows": 7,
       "cols": 8
@@ -1212,6 +1230,7 @@
   {
     "id": 104,
     "theme": "XH 4: Chúa Ban Quyền Năng",
+    "title": "XH 4: Chúa Ban Quyền Năng",
     "gridSize": {
       "rows": 8,
       "cols": 8
@@ -1272,6 +1291,7 @@
   {
     "id": 16,
     "theme": "Kinh Thánh Tân Ước",
+    "title": "Kinh Thánh Tân Ước",
     "gridSize": {
       "rows": 10,
       "cols": 9
@@ -1332,9 +1352,10 @@
   {
     "id": 17,
     "theme": "Kinh Thánh Cựu Ước",
+    "title": "Kinh Thánh Cựu Ước",
     "gridSize": {
       "rows": 9,
-      "cols": 14
+      "cols": 12
     },
     "words": [
       {
@@ -1402,8 +1423,9 @@
   {
     "id": 18,
     "theme": "Mầu Nhiệm Cứu Độ",
+    "title": "Mầu Nhiệm Cứu Độ",
     "gridSize": {
-      "rows": 15,
+      "rows": 12,
       "cols": 12
     },
     "words": [
@@ -1472,9 +1494,10 @@
   {
     "id": 19,
     "theme": "Vật Dụng Phụng Vụ",
+    "title": "Vật Dụng Phụng Vụ",
     "gridSize": {
       "rows": 12,
-      "cols": 13
+      "cols": 12
     },
     "words": [
       {
@@ -1542,8 +1565,9 @@
   {
     "id": 20,
     "theme": "Tước Hiệu Chúa Giêsu",
+    "title": "Tước Hiệu Chúa Giêsu",
     "gridSize": {
-      "rows": 13,
+      "rows": 12,
       "cols": 8
     },
     "words": [
@@ -1612,6 +1636,7 @@
   {
     "id": 105,
     "theme": "XH 5: Pharaô Bắt Nạt",
+    "title": "XH 5: Pharaô Bắt Nạt",
     "gridSize": {
       "rows": 8,
       "cols": 10
@@ -1682,6 +1707,7 @@
   {
     "id": 106,
     "theme": "XH 6: Giao Ước Được Nhắc Lại",
+    "title": "XH 6: Giao Ước Được Nhắc Lại",
     "gridSize": {
       "rows": 10,
       "cols": 11
@@ -1751,7 +1777,8 @@
   },
   {
     "id": 21,
-    "theme": "Dia Ly Kinh Thanh",
+    "theme": "Địa Lý Kinh Thánh",
+    "title": "Địa Lý Kinh Thánh",
     "gridSize": {
       "rows": 11,
       "cols": 12
@@ -1821,7 +1848,8 @@
   },
   {
     "id": 22,
-    "theme": "Nu Nhan Kinh Thanh",
+    "theme": "Nữ Nhân Kinh Thánh",
+    "title": "Nữ Nhân Kinh Thánh",
     "gridSize": {
       "rows": 8,
       "cols": 8
@@ -1891,7 +1919,8 @@
   },
   {
     "id": 23,
-    "theme": "Pham Trat Hoi Thanh",
+    "theme": "Phẩm Trật Hội Thánh",
+    "title": "Phẩm Trật Hội Thánh",
     "gridSize": {
       "rows": 9,
       "cols": 12
@@ -1961,10 +1990,11 @@
   },
   {
     "id": 24,
-    "theme": "Con So Kinh Thanh",
+    "theme": "Con Số Kinh Thánh",
+    "title": "Con Số Kinh Thánh",
     "gridSize": {
       "rows": 8,
-      "cols": 13
+      "cols": 12
     },
     "words": [
       {
@@ -2031,9 +2061,10 @@
   },
   {
     "id": 25,
-    "theme": "Chua Thanh Than",
+    "theme": "Chúa Thánh Thần",
+    "title": "Chúa Thánh Thần",
     "gridSize": {
-      "rows": 15,
+      "rows": 12,
       "cols": 11
     },
     "words": [
@@ -2102,6 +2133,7 @@
   {
     "id": 107,
     "theme": "XH 7: Gậy Rắn & Sông Máu",
+    "title": "XH 7: Gậy Rắn & Sông Máu",
     "gridSize": {
       "rows": 7,
       "cols": 7
@@ -2162,6 +2194,7 @@
   {
     "id": 108,
     "theme": "XH 8: Ếch, Muỗi, Ruồi",
+    "title": "XH 8: Ếch, Muỗi, Ruồi",
     "gridSize": {
       "rows": 7,
       "cols": 7
@@ -2222,6 +2255,7 @@
   {
     "id": 26,
     "theme": "Vua Đavít",
+    "title": "Vua Đavít",
     "gridSize": {
       "rows": 6,
       "cols": 9
@@ -2282,6 +2316,7 @@
   {
     "id": 27,
     "theme": "Hành Trình Phaolô",
+    "title": "Hành Trình Phaolô",
     "gridSize": {
       "rows": 7,
       "cols": 8
@@ -2342,6 +2377,7 @@
   {
     "id": 28,
     "theme": "Công Vụ Tông Đồ",
+    "title": "Công Vụ Tông Đồ",
     "gridSize": {
       "rows": 11,
       "cols": 9
@@ -2412,6 +2448,7 @@
   {
     "id": 29,
     "theme": "Kinh Thánh Lời Chúa",
+    "title": "Kinh Thánh Lời Chúa",
     "gridSize": {
       "rows": 9,
       "cols": 9
@@ -2462,6 +2499,7 @@
   {
     "id": 30,
     "theme": "Đời Sống Phụng Vụ",
+    "title": "Đời Sống Phụng Vụ",
     "gridSize": {
       "rows": 12,
       "cols": 9
@@ -2532,6 +2570,7 @@
   {
     "id": 109,
     "theme": "XH 9: Dịch Súc Vật & Mưa Đá",
+    "title": "XH 9: Dịch Súc Vật & Mưa Đá",
     "gridSize": {
       "rows": 9,
       "cols": 7
@@ -2592,6 +2631,7 @@
   {
     "id": 110,
     "theme": "XH 10: Châu Chấu Và Bóng Tối",
+    "title": "XH 10: Châu Chấu Và Bóng Tối",
     "gridSize": {
       "rows": 6,
       "cols": 8
@@ -2652,9 +2692,10 @@
   {
     "id": 31,
     "theme": "Luân Lý Xã Hội",
+    "title": "Luân Lý Xã Hội",
     "gridSize": {
       "rows": 8,
-      "cols": 13
+      "cols": 12
     },
     "words": [
       {
@@ -2722,6 +2763,7 @@
   {
     "id": 32,
     "theme": "Nước Thiên Chúa",
+    "title": "Nước Thiên Chúa",
     "gridSize": {
       "rows": 11,
       "cols": 11
@@ -2782,8 +2824,9 @@
   {
     "id": 33,
     "theme": "Tín Điều Đức Mẹ",
+    "title": "Tín Điều Đức Mẹ",
     "gridSize": {
-      "rows": 13,
+      "rows": 12,
       "cols": 11
     },
     "words": [
@@ -2852,8 +2895,9 @@
   {
     "id": 34,
     "theme": "Nguồn Mặc Khải",
+    "title": "Nguồn Mặc Khải",
     "gridSize": {
-      "rows": 14,
+      "rows": 12,
       "cols": 11
     },
     "words": [
@@ -2922,6 +2966,7 @@
   {
     "id": 35,
     "theme": "Chúa Giêsu Giảng Dạy",
+    "title": "Chúa Giêsu Giảng Dạy",
     "gridSize": {
       "rows": 8,
       "cols": 7
@@ -2982,6 +3027,7 @@
   {
     "id": 111,
     "theme": "XH 11: Báo Tai Họa Cuối",
+    "title": "XH 11: Báo Tai Họa Cuối",
     "gridSize": {
       "rows": 9,
       "cols": 9
@@ -3052,6 +3098,7 @@
   {
     "id": 112,
     "theme": "XH 12: Lễ Vượt Qua",
+    "title": "XH 12: Lễ Vượt Qua",
     "gridSize": {
       "rows": 12,
       "cols": 8
@@ -3122,6 +3169,7 @@
   {
     "id": 36,
     "theme": "Phán Xét Cuối Cùng",
+    "title": "Phán Xét Cuối Cùng",
     "gridSize": {
       "rows": 11,
       "cols": 9
@@ -3182,9 +3230,10 @@
   {
     "id": 37,
     "theme": "Các Nhân Đức",
+    "title": "Các Nhân Đức",
     "gridSize": {
       "rows": 10,
-      "cols": 13
+      "cols": 12
     },
     "words": [
       {
@@ -3252,6 +3301,7 @@
   {
     "id": 38,
     "theme": "Nhân Vật Cựu Ước",
+    "title": "Nhân Vật Cựu Ước",
     "gridSize": {
       "rows": 7,
       "cols": 9
@@ -3312,6 +3362,7 @@
   {
     "id": 39,
     "theme": "Bảy Mối Tội Đầu",
+    "title": "Bảy Mối Tội Đầu",
     "gridSize": {
       "rows": 12,
       "cols": 9
@@ -3382,6 +3433,7 @@
   {
     "id": 40,
     "theme": "Lời Kinh Phụng Vụ",
+    "title": "Lời Kinh Phụng Vụ",
     "gridSize": {
       "rows": 11,
       "cols": 12
@@ -3452,6 +3504,7 @@
   {
     "id": 113,
     "theme": "XH 13: Dâng Con Đầu Lòng",
+    "title": "XH 13: Dâng Con Đầu Lòng",
     "gridSize": {
       "rows": 9,
       "cols": 7
@@ -3522,6 +3575,7 @@
   {
     "id": 114,
     "theme": "XH 14: Vượt Biển Đỏ",
+    "title": "XH 14: Vượt Biển Đỏ",
     "gridSize": {
       "rows": 7,
       "cols": 8
@@ -3592,9 +3646,10 @@
   {
     "id": 41,
     "theme": "Bảy Ơn Thánh Thần",
+    "title": "Bảy Ơn Thánh Thần",
     "gridSize": {
       "rows": 8,
-      "cols": 13
+      "cols": 12
     },
     "words": [
       {
@@ -3662,9 +3717,10 @@
   {
     "id": 42,
     "theme": "Lịch Sử Giáo Hội",
+    "title": "Lịch Sử Giáo Hội",
     "gridSize": {
       "rows": 12,
-      "cols": 15
+      "cols": 12
     },
     "words": [
       {
@@ -3732,6 +3788,7 @@
   {
     "id": 43,
     "theme": "Mùa Vọng Giáng Sinh",
+    "title": "Mùa Vọng Giáng Sinh",
     "gridSize": {
       "rows": 9,
       "cols": 12
@@ -3802,9 +3859,10 @@
   {
     "id": 44,
     "theme": "Hôn Nhân Công Giáo",
+    "title": "Hôn Nhân Công Giáo",
     "gridSize": {
-      "rows": 15,
-      "cols": 13
+      "rows": 12,
+      "cols": 12
     },
     "words": [
       {
@@ -3872,6 +3930,7 @@
   {
     "id": 45,
     "theme": "Lòng Thương Xót",
+    "title": "Lòng Thương Xót",
     "gridSize": {
       "rows": 9,
       "cols": 9
@@ -3942,6 +4001,7 @@
   {
     "id": 115,
     "theme": "XH 15: Bài Ca Bờ Biển",
+    "title": "XH 15: Bài Ca Bờ Biển",
     "gridSize": {
       "rows": 4,
       "cols": 8
@@ -3992,6 +4052,7 @@
   {
     "id": 116,
     "theme": "XH 16: Manna Và Chim Cút",
+    "title": "XH 16: Manna Và Chim Cút",
     "gridSize": {
       "rows": 9,
       "cols": 7
@@ -4062,9 +4123,10 @@
   {
     "id": 46,
     "theme": "Chúa Giêsu Chữa Lành",
+    "title": "Chúa Giêsu Chữa Lành",
     "gridSize": {
       "rows": 9,
-      "cols": 14
+      "cols": 12
     },
     "words": [
       {
@@ -4132,9 +4194,10 @@
   {
     "id": 47,
     "theme": "Tâm Tình Phúc Âm",
+    "title": "Tâm Tình Phúc Âm",
     "gridSize": {
       "rows": 10,
-      "cols": 14
+      "cols": 12
     },
     "words": [
       {
@@ -4202,9 +4265,10 @@
   {
     "id": 48,
     "theme": "Bí Tích Thánh Thể",
+    "title": "Bí Tích Thánh Thể",
     "gridSize": {
       "rows": 7,
-      "cols": 15
+      "cols": 12
     },
     "words": [
       {
@@ -4272,6 +4336,7 @@
   {
     "id": 49,
     "theme": "Sứ Mạng Truyền Giáo",
+    "title": "Sứ Mạng Truyền Giáo",
     "gridSize": {
       "rows": 9,
       "cols": 10
@@ -4332,6 +4397,7 @@
   {
     "id": 50,
     "theme": "Biểu Tượng Kinh Thánh",
+    "title": "Biểu Tượng Kinh Thánh",
     "gridSize": {
       "rows": 8,
       "cols": 12
@@ -4402,6 +4468,7 @@
   {
     "id": 117,
     "theme": "XH 17: Nước Từ Tảng Đá",
+    "title": "XH 17: Nước Từ Tảng Đá",
     "gridSize": {
       "rows": 9,
       "cols": 8
@@ -4472,8 +4539,9 @@
   {
     "id": 118,
     "theme": "XH 18: Gít-rô Khuyên Nhủ",
+    "title": "XH 18: Gít-rô Khuyên Nhủ",
     "gridSize": {
-      "rows": 13,
+      "rows": 12,
       "cols": 10
     },
     "words": [
@@ -4542,6 +4610,7 @@
   {
     "id": 51,
     "theme": "Ngôn Sứ Cựu Ước",
+    "title": "Ngôn Sứ Cựu Ước",
     "gridSize": {
       "rows": 7,
       "cols": 11
@@ -4612,6 +4681,7 @@
   {
     "id": 52,
     "theme": "Các Phép Lạ Của Chúa",
+    "title": "Các Phép Lạ Của Chúa",
     "gridSize": {
       "rows": 12,
       "cols": 8
@@ -4682,9 +4752,10 @@
   {
     "id": 53,
     "theme": "Cầu Nguyện Thiêng Liêng",
+    "title": "Cầu Nguyện Thiêng Liêng",
     "gridSize": {
       "rows": 11,
-      "cols": 17
+      "cols": 12
     },
     "words": [
       {
@@ -4752,6 +4823,7 @@
   {
     "id": 54,
     "theme": "Chức Thánh Và Tu Trì",
+    "title": "Chức Thánh Và Tu Trì",
     "gridSize": {
       "rows": 9,
       "cols": 11
@@ -4822,6 +4894,7 @@
   {
     "id": 55,
     "theme": "Thời Kỳ Chinh Phục",
+    "title": "Thời Kỳ Chinh Phục",
     "gridSize": {
       "rows": 10,
       "cols": 10
@@ -4892,6 +4965,7 @@
   {
     "id": 119,
     "theme": "XH 19: Đến Núi Si-nai",
+    "title": "XH 19: Đến Núi Si-nai",
     "gridSize": {
       "rows": 4,
       "cols": 5
@@ -4932,6 +5006,7 @@
   {
     "id": 120,
     "theme": "XH 20: Mười Điều Răn (1)",
+    "title": "XH 20: Mười Điều Răn (1)",
     "gridSize": {
       "rows": 8,
       "cols": 8
@@ -4992,6 +5067,7 @@
   {
     "id": 56,
     "theme": "Bốn Sách Tin Mừng",
+    "title": "Bốn Sách Tin Mừng",
     "gridSize": {
       "rows": 8,
       "cols": 7
@@ -5052,6 +5128,7 @@
   {
     "id": 57,
     "theme": "Tuần Thánh Khổ Nạn",
+    "title": "Tuần Thánh Khổ Nạn",
     "gridSize": {
       "rows": 11,
       "cols": 11
@@ -5112,6 +5189,7 @@
   {
     "id": 58,
     "theme": "Giai Đoạn Sáng Thế",
+    "title": "Giai Đoạn Sáng Thế",
     "gridSize": {
       "rows": 10,
       "cols": 11
@@ -5182,6 +5260,7 @@
   {
     "id": 59,
     "theme": "Các Thư Thánh Phaolô",
+    "title": "Các Thư Thánh Phaolô",
     "gridSize": {
       "rows": 9,
       "cols": 12
@@ -5252,6 +5331,7 @@
   {
     "id": 60,
     "theme": "Hội Thánh Sơ Khai",
+    "title": "Hội Thánh Sơ Khai",
     "gridSize": {
       "rows": 11,
       "cols": 11
@@ -5322,6 +5402,7 @@
   {
     "id": 121,
     "theme": "XH 20: Mười Điều Răn (2)",
+    "title": "XH 20: Mười Điều Răn (2)",
     "gridSize": {
       "rows": 9,
       "cols": 9
@@ -5392,6 +5473,7 @@
   {
     "id": 122,
     "theme": "XH 21: Luật Về Quyền Lợi",
+    "title": "XH 21: Luật Về Quyền Lợi",
     "gridSize": {
       "rows": 7,
       "cols": 10
@@ -5442,6 +5524,7 @@
   {
     "id": 61,
     "theme": "Các Thư Tín Trong Tân Ước",
+    "title": "Các Thư Tín Trong Tân Ước",
     "gridSize": {
       "rows": 10,
       "cols": 9
@@ -5502,8 +5585,9 @@
   {
     "id": 62,
     "theme": "Lời Chúa Trong Đời Sống",
+    "title": "Lời Chúa Trong Đời Sống",
     "gridSize": {
-      "rows": 13,
+      "rows": 12,
       "cols": 9
     },
     "words": [
@@ -5572,6 +5656,7 @@
   {
     "id": 63,
     "theme": "Trung Tâm Hành Hương",
+    "title": "Trung Tâm Hành Hương",
     "gridSize": {
       "rows": 9,
       "cols": 12
@@ -5642,6 +5727,7 @@
   {
     "id": 64,
     "theme": "Không Gian Phụng Vụ",
+    "title": "Không Gian Phụng Vụ",
     "gridSize": {
       "rows": 9,
       "cols": 12
@@ -5702,6 +5788,7 @@
   {
     "id": 65,
     "theme": "Dòng Lịch Sử Cứu Độ",
+    "title": "Dòng Lịch Sử Cứu Độ",
     "gridSize": {
       "rows": 8,
       "cols": 7
@@ -5762,6 +5849,7 @@
   {
     "id": 123,
     "theme": "XH 22: Luật Về Tài Sản",
+    "title": "XH 22: Luật Về Tài Sản",
     "gridSize": {
       "rows": 11,
       "cols": 9
@@ -5832,6 +5920,7 @@
   {
     "id": 124,
     "theme": "XH 23: Luật Lễ Hội",
+    "title": "XH 23: Luật Lễ Hội",
     "gridSize": {
       "rows": 10,
       "cols": 9
@@ -5902,6 +5991,7 @@
   {
     "id": 66,
     "theme": "Thần Học Và Giáo Phụ",
+    "title": "Thần Học Và Giáo Phụ",
     "gridSize": {
       "rows": 9,
       "cols": 10
@@ -5972,6 +6062,7 @@
   {
     "id": 67,
     "theme": "Tôn Giáo Và Khoa Học",
+    "title": "Tôn Giáo Và Khoa Học",
     "gridSize": {
       "rows": 12,
       "cols": 10
@@ -6042,8 +6133,9 @@
   {
     "id": 68,
     "theme": "Canh Thức Vượt Qua",
+    "title": "Canh Thức Vượt Qua",
     "gridSize": {
-      "rows": 15,
+      "rows": 12,
       "cols": 11
     },
     "words": [
@@ -6112,8 +6204,9 @@
   {
     "id": 69,
     "theme": "Các Cộng Đoàn",
+    "title": "Các Cộng Đoàn",
     "gridSize": {
-      "rows": 15,
+      "rows": 12,
       "cols": 10
     },
     "words": [
@@ -6182,6 +6275,7 @@
   {
     "id": 70,
     "theme": "Tám Mối Phúc Thật",
+    "title": "Tám Mối Phúc Thật",
     "gridSize": {
       "rows": 11,
       "cols": 11
@@ -6252,6 +6346,7 @@
   {
     "id": 125,
     "theme": "XH 24: Giao Ước",
+    "title": "XH 24: Giao Ước",
     "gridSize": {
       "rows": 8,
       "cols": 12
@@ -6322,8 +6417,9 @@
   {
     "id": 126,
     "theme": "XH 25: Hòm Bia",
+    "title": "XH 25: Hòm Bia",
     "gridSize": {
-      "rows": 14,
+      "rows": 12,
       "cols": 12
     },
     "words": [
@@ -6392,8 +6488,9 @@
   {
     "id": 71,
     "theme": "Luật Thiêng Liêng",
+    "title": "Luật Thiêng Liêng",
     "gridSize": {
-      "rows": 14,
+      "rows": 12,
       "cols": 11
     },
     "words": [
@@ -6462,6 +6559,7 @@
   {
     "id": 72,
     "theme": "Tình Yêu Trong Kinh Thánh",
+    "title": "Tình Yêu Trong Kinh Thánh",
     "gridSize": {
       "rows": 11,
       "cols": 9
@@ -6532,8 +6630,9 @@
   {
     "id": 73,
     "theme": "Kinh Nguyện Hằng Ngày",
+    "title": "Kinh Nguyện Hằng Ngày",
     "gridSize": {
-      "rows": 14,
+      "rows": 12,
       "cols": 12
     },
     "words": [
@@ -6602,9 +6701,10 @@
   {
     "id": 74,
     "theme": "Phụng Vụ Và Lời Chúa",
+    "title": "Phụng Vụ Và Lời Chúa",
     "gridSize": {
       "rows": 11,
-      "cols": 13
+      "cols": 12
     },
     "words": [
       {
@@ -6672,8 +6772,9 @@
   {
     "id": 75,
     "theme": "Tu Đức Linh Đạo",
+    "title": "Tu Đức Linh Đạo",
     "gridSize": {
-      "rows": 14,
+      "rows": 12,
       "cols": 11
     },
     "words": [
@@ -6742,8 +6843,9 @@
   {
     "id": 127,
     "theme": "XH 26-27: Nhà Tạm",
+    "title": "XH 26-27: Nhà Tạm",
     "gridSize": {
-      "rows": 13,
+      "rows": 12,
       "cols": 11
     },
     "words": [
@@ -6812,9 +6914,10 @@
   {
     "id": 128,
     "theme": "XH 28-29: Phẩm Phục",
+    "title": "XH 28-29: Phẩm Phục",
     "gridSize": {
       "rows": 10,
-      "cols": 13
+      "cols": 12
     },
     "words": [
       {
@@ -6882,6 +6985,7 @@
   {
     "id": 76,
     "theme": "Giáo Hội Việt Nam",
+    "title": "Giáo Hội Việt Nam",
     "gridSize": {
       "rows": 10,
       "cols": 12
@@ -6952,6 +7056,7 @@
   {
     "id": 77,
     "theme": "Hiện Tượng Siêu Nhiên",
+    "title": "Hiện Tượng Siêu Nhiên",
     "gridSize": {
       "rows": 11,
       "cols": 10
@@ -7022,9 +7127,10 @@
   {
     "id": 78,
     "theme": "Mười Điều Răn",
+    "title": "Mười Điều Răn",
     "gridSize": {
       "rows": 11,
-      "cols": 16
+      "cols": 12
     },
     "words": [
       {
@@ -7092,6 +7198,7 @@
   {
     "id": 79,
     "theme": "Đường Thánh Giá",
+    "title": "Đường Thánh Giá",
     "gridSize": {
       "rows": 9,
       "cols": 11
@@ -7162,9 +7269,10 @@
   {
     "id": 80,
     "theme": "Phục Sinh Và Lên Trời",
+    "title": "Phục Sinh Và Lên Trời",
     "gridSize": {
       "rows": 9,
-      "cols": 13
+      "cols": 12
     },
     "words": [
       {
@@ -7232,6 +7340,7 @@
   {
     "id": 129,
     "theme": "XH 30-31: Đồ Dùng Thờ Phượng",
+    "title": "XH 30-31: Đồ Dùng Thờ Phượng",
     "gridSize": {
       "rows": 11,
       "cols": 11
@@ -7302,6 +7411,7 @@
   {
     "id": 130,
     "theme": "XH 32: Con Bê Vàng",
+    "title": "XH 32: Con Bê Vàng",
     "gridSize": {
       "rows": 7,
       "cols": 6
@@ -7352,6 +7462,7 @@
   {
     "id": 81,
     "theme": "Đời Sống Tu Trì",
+    "title": "Đời Sống Tu Trì",
     "gridSize": {
       "rows": 11,
       "cols": 10
@@ -7422,9 +7533,10 @@
   {
     "id": 82,
     "theme": "Dụ Ngôn Nước Trời",
+    "title": "Dụ Ngôn Nước Trời",
     "gridSize": {
       "rows": 10,
-      "cols": 13
+      "cols": 12
     },
     "words": [
       {
@@ -7492,6 +7604,7 @@
   {
     "id": 83,
     "theme": "Đặc Ngữ Kinh Thánh",
+    "title": "Đặc Ngữ Kinh Thánh",
     "gridSize": {
       "rows": 8,
       "cols": 10
@@ -7562,8 +7675,9 @@
   {
     "id": 84,
     "theme": "Sùng Kính Và Tôn Kính",
+    "title": "Sùng Kính Và Tôn Kính",
     "gridSize": {
-      "rows": 13,
+      "rows": 12,
       "cols": 11
     },
     "words": [
@@ -7632,6 +7746,7 @@
   {
     "id": 85,
     "theme": "Dụ Ngôn Nước Trời Hai",
+    "title": "Dụ Ngôn Nước Trời Hai",
     "gridSize": {
       "rows": 10,
       "cols": 12
@@ -7702,6 +7817,7 @@
   {
     "id": 86,
     "theme": "Bối Cảnh Cựu Ước",
+    "title": "Bối Cảnh Cựu Ước",
     "gridSize": {
       "rows": 9,
       "cols": 7
@@ -7772,8 +7888,9 @@
   {
     "id": 87,
     "theme": "Hình Ảnh Về Thiên Chúa",
+    "title": "Hình Ảnh Về Thiên Chúa",
     "gridSize": {
-      "rows": 13,
+      "rows": 12,
       "cols": 11
     },
     "words": [
@@ -7842,9 +7959,10 @@
   {
     "id": 88,
     "theme": "Giáo Hội Và Thế Giới",
+    "title": "Giáo Hội Và Thế Giới",
     "gridSize": {
-      "rows": 13,
-      "cols": 14
+      "rows": 12,
+      "cols": 12
     },
     "words": [
       {
@@ -7912,6 +8030,7 @@
   {
     "id": 89,
     "theme": "Trí Tuệ Kinh Thánh",
+    "title": "Trí Tuệ Kinh Thánh",
     "gridSize": {
       "rows": 10,
       "cols": 9
@@ -7982,9 +8101,10 @@
   {
     "id": 90,
     "theme": "Thể Chế Phục Vụ",
+    "title": "Thể Chế Phục Vụ",
     "gridSize": {
-      "rows": 13,
-      "cols": 14
+      "rows": 12,
+      "cols": 12
     },
     "words": [
       {
@@ -8052,9 +8172,10 @@
   {
     "id": 131,
     "theme": "XH 33: Cầu Bầu Cho Dân",
+    "title": "XH 33: Cầu Bầu Cho Dân",
     "gridSize": {
       "rows": 10,
-      "cols": 15
+      "cols": 12
     },
     "words": [
       {
@@ -8122,9 +8243,10 @@
   {
     "id": 132,
     "theme": "XH 34: Giao Ước Mới",
+    "title": "XH 34: Giao Ước Mới",
     "gridSize": {
       "rows": 10,
-      "cols": 13
+      "cols": 12
     },
     "words": [
       {
@@ -8192,8 +8314,9 @@
   {
     "id": 133,
     "theme": "XH 35: Lệnh Nghỉ Ngơi",
+    "title": "XH 35: Lệnh Nghỉ Ngơi",
     "gridSize": {
-      "rows": 13,
+      "rows": 12,
       "cols": 10
     },
     "words": [
@@ -8262,6 +8385,7 @@
   {
     "id": 134,
     "theme": "XH 36: Xây Dựng Nhà Tạm",
+    "title": "XH 36: Xây Dựng Nhà Tạm",
     "gridSize": {
       "rows": 10,
       "cols": 7
@@ -8312,9 +8436,10 @@
   {
     "id": 135,
     "theme": "XH 37: Làm Hòm Bia",
+    "title": "XH 37: Làm Hòm Bia",
     "gridSize": {
-      "rows": 14,
-      "cols": 14
+      "rows": 12,
+      "cols": 12
     },
     "words": [
       {
@@ -8382,6 +8507,7 @@
   {
     "id": 91,
     "theme": "Con Người Toàn Vẹn",
+    "title": "Con Người Toàn Vẹn",
     "gridSize": {
       "rows": 10,
       "cols": 12
@@ -8452,8 +8578,9 @@
   {
     "id": 92,
     "theme": "Bậc Thầy Tâm Linh",
+    "title": "Bậc Thầy Tâm Linh",
     "gridSize": {
-      "rows": 13,
+      "rows": 12,
       "cols": 10
     },
     "words": [
@@ -8522,6 +8649,7 @@
   {
     "id": 93,
     "theme": "Sứ Vụ Và Phụng Vụ",
+    "title": "Sứ Vụ Và Phụng Vụ",
     "gridSize": {
       "rows": 12,
       "cols": 12
@@ -8592,6 +8720,7 @@
   {
     "id": 94,
     "theme": "Hành Trình Xuất Hành",
+    "title": "Hành Trình Xuất Hành",
     "gridSize": {
       "rows": 9,
       "cols": 9
@@ -8662,8 +8791,9 @@
   {
     "id": 95,
     "theme": "Vẻ Đẹp Phụng Vụ",
+    "title": "Vẻ Đẹp Phụng Vụ",
     "gridSize": {
-      "rows": 13,
+      "rows": 12,
       "cols": 12
     },
     "words": [
@@ -8732,9 +8862,10 @@
   {
     "id": 96,
     "theme": "Lời Ca Linh Thánh",
+    "title": "Lời Ca Linh Thánh",
     "gridSize": {
       "rows": 9,
-      "cols": 16
+      "cols": 12
     },
     "words": [
       {
@@ -8802,9 +8933,10 @@
   {
     "id": 97,
     "theme": "Từ Vựng Thần Học",
+    "title": "Từ Vựng Thần Học",
     "gridSize": {
       "rows": 8,
-      "cols": 13
+      "cols": 12
     },
     "words": [
       {
@@ -8872,6 +9004,7 @@
   {
     "id": 98,
     "theme": "Lịch Sử Nhà Do Thái",
+    "title": "Lịch Sử Nhà Do Thái",
     "gridSize": {
       "rows": 6,
       "cols": 7
@@ -8922,6 +9055,7 @@
   {
     "id": 99,
     "theme": "Hiệp Nhất Và Chia Rẽ",
+    "title": "Hiệp Nhất Và Chia Rẽ",
     "gridSize": {
       "rows": 10,
       "cols": 12
@@ -8992,6 +9126,7 @@
   {
     "id": 100,
     "theme": "Sự Chết Và Phục Sinh",
+    "title": "Sự Chết Và Phục Sinh",
     "gridSize": {
       "rows": 12,
       "cols": 10
@@ -9062,9 +9197,10 @@
   {
     "id": 136,
     "theme": "XH 38: Sân Nhà Tạm",
+    "title": "XH 38: Sân Nhà Tạm",
     "gridSize": {
-      "rows": 14,
-      "cols": 13
+      "rows": 12,
+      "cols": 12
     },
     "words": [
       {
@@ -9132,8 +9268,9 @@
   {
     "id": 137,
     "theme": "XH 39: Y Phục Tư Tế",
+    "title": "XH 39: Y Phục Tư Tế",
     "gridSize": {
-      "rows": 13,
+      "rows": 12,
       "cols": 12
     },
     "words": [
@@ -9202,9 +9339,10 @@
   {
     "id": 138,
     "theme": "XH 40: Dựng Nhà Tạm",
+    "title": "XH 40: Dựng Nhà Tạm",
     "gridSize": {
       "rows": 9,
-      "cols": 14
+      "cols": 12
     },
     "words": [
       {
@@ -9272,6 +9410,7 @@
   {
     "id": 139,
     "theme": "Sách Xuất Hành Tổng Hợp",
+    "title": "Sách Xuất Hành Tổng Hợp",
     "gridSize": {
       "rows": 12,
       "cols": 9
@@ -9342,6 +9481,7 @@
   {
     "id": 140,
     "theme": "Chủ Đề Dấu Tích",
+    "title": "Chủ Đề Dấu Tích",
     "gridSize": {
       "rows": 11,
       "cols": 7

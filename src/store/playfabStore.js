@@ -2,7 +2,9 @@ import { create } from 'zustand';
 import { loginWithCustomID, loginWithEmail, registerWithEmail, getUserData, updateUserData, updateDisplayName, forgetCredentials, updatePlayerStatistics, getLeaderboard, getLeaderboardSilent, getLeaderboardAroundPlayer, getPlayerProfile } from '../config/playfab';
 import { getQuestionsForGame } from '../utils/questionManager';
 import { getRankByScore } from '../utils/ranks';
-import { auth } from '../config/firebase';
+import { auth, db } from '../config/firebase';
+import { ref, increment, update, get, onValue } from 'firebase/database';
+
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 // Leaderboard stat names for PinnacleGame
@@ -664,20 +666,21 @@ export const usePlayFabStore = create((set, get) => ({
   },
 
   // ── Submit Rosary Offering (Dâng Hoa) ──
+  // Reward: 1 hạt = 1 Coin + bonus 10 Coin mỏi tràng hoàn chỉnh (50 hạt)
+  // Max mỗi ngày: 150 hạt = 150 Coin + 3 tràng × 10 = 30 bonus = 180 Coins
   submitRosary: async (hatCount, coinReward) => {
-    const { rosaryToday, rosaryTotal, rosaryGlobal, coins } = get();
+    const { rosaryToday, rosaryTotal, coins } = get();
     const todayStr = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' })).toISOString().slice(0, 10);
-    const DAILY_MAX = 150;
+    const DAILY_MAX_HAT = 150;
 
     // Validate daily limit
     const newToday = rosaryToday + hatCount;
-    if (newToday > DAILY_MAX) {
+    if (newToday > DAILY_MAX_HAT) {
       console.warn('[Rosary] Daily limit exceeded');
       return false;
     }
 
     const newTotal = rosaryTotal + hatCount;
-    const newGlobal = rosaryGlobal + hatCount;
     const newCoins = coins + coinReward;
 
     // Update local state immediately
@@ -685,24 +688,60 @@ export const usePlayFabStore = create((set, get) => ({
       rosaryToday: newToday,
       rosaryDate: todayStr,
       rosaryTotal: newTotal,
-      rosaryGlobal: newGlobal,
       coins: newCoins,
     });
 
-    // Persist to PlayFab
+    // 1. Persist per-player data to PlayFab
     try {
       await updateUserData({
         RosaryToday: String(newToday),
         RosaryDate: todayStr,
         RosaryTotal: String(newTotal),
-        RosaryGlobal: String(newGlobal),
         Coins: String(newCoins),
       });
-      console.log(`[Rosary] Submitted ${hatCount} hạt, +${coinReward} coins. Today: ${newToday}/${DAILY_MAX}`);
-      return true;
     } catch (e) {
-      console.warn('[Rosary] Failed to save', e);
-      return false;
+      console.warn('[Rosary] Failed to save PlayFab data', e);
+    }
+
+    // 2. Atomic increment on Firebase global counter (sum across ALL players)
+    try {
+      await update(ref(db, 'global'), { rosaryTotal: increment(hatCount) });
+      // Read back the new global total
+      const snap = await get(ref(db, 'global/rosaryTotal'));
+      const newGlobal = snap.val() || 0;
+      set({ rosaryGlobal: newGlobal });
+      console.log(`[Rosary] Submitted ${hatCount} hạt, +${coinReward} coins. Global: ${newGlobal}`);
+    } catch (e) {
+      console.warn('[Rosary] Failed to update Firebase global', e);
+    }
+
+    return true;
+  },
+
+  // ── Subscribe to real-time global rosary total from Firebase ──
+  // Returns unsubscribe function. Use inside a useEffect.
+  subscribeRosaryGlobal: () => {
+    const unsub = onValue(
+      ref(db, 'global/rosaryTotal'),
+      (snap) => {
+        const val = snap.val() || 0;
+        usePlayFabStore.setState({ rosaryGlobal: val });
+      },
+      (err) => { console.warn('[Rosary] onValue error', err); }
+    );
+    return unsub; // caller must call unsub() on cleanup
+  },
+
+  // ── Legacy one-time load (kept as fallback) ──
+  loadRosaryGlobal: async () => {
+    try {
+      const snap = await get(ref(db, 'global/rosaryTotal'));
+      const val = snap.val() || 0;
+      set({ rosaryGlobal: val });
+      return val;
+    } catch (e) {
+      console.warn('[Rosary] Failed to load global', e);
+      return 0;
     }
   },
 

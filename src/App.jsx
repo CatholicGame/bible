@@ -6,6 +6,7 @@ import { ref, update, onValue } from 'firebase/database';
 import { db } from './config/firebase';
 import MainMenu from './components/menu/MainMenu';
 import LandingScreen from './components/LandingScreen';
+import PrivacyPolicy from './components/PrivacyPolicy';
 import PinnacleGame from './components/games/PinnacleGame';
 import CrosswordGame from './components/games/crossword/CrosswordGame';
 import LoginScreen from './components/auth/LoginScreen';
@@ -64,8 +65,9 @@ function App() {
 
   const { done: preloadDone, progress } = usePreload(1200);
 
-  // Views: 'login' | 'menu' | 'profile' | 'create_room' | 'join_room' | 'waiting_room' | 'playing'
+  // Views: 'login' | 'menu' | 'profile' | 'create_room' | 'join_room' | 'waiting_room' | 'playing' | 'privacy'
   const [currentView, setCurrentView] = useState(hasSession ? 'menu' : 'login');
+  const [prevView, setPrevView] = useState('login'); // để quay lại từ privacy
   const [activeGameType, setActiveGameType] = useState(null);
   const [activeMode, setActiveMode] = useState(null);
   const [initialPin, setInitialPin] = useState('');
@@ -294,7 +296,10 @@ function App() {
             initial={{ opacity: 1 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="absolute inset-0 z-50">
-            <LoginScreen onLogin={handleLogin} />
+            <LoginScreen
+              onLogin={handleLogin}
+              onOpenPrivacy={() => { setPrevView('login'); setCurrentView('privacy'); }}
+            />
           </motion.div>
         )}
 
@@ -423,6 +428,16 @@ function App() {
               />
             </motion.div>
           ) : null
+        )}
+
+        {/* ── Privacy Policy ── */}
+        {currentView === 'privacy' && (
+          <motion.div key="view-privacy"
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 z-50 overflow-y-auto">
+            <PrivacyPolicy onBack={() => setCurrentView(prevView)} />
+          </motion.div>
         )}
 
       </AnimatePresence>

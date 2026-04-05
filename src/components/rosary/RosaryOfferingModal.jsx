@@ -1,8 +1,9 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Globe } from 'lucide-react';
+import { X, Globe, HelpCircle } from 'lucide-react';
 import WheelPicker from './WheelPicker';
 import UserAvatar from '../common/UserAvatar';
+import { usePlayFabStore } from '../../store/playfabStore';
 import './RosaryOfferingModal.css';
 
 import rosaryBgLandscape from '../../assets/rosary/rosary_bg_landscape.jpg';
@@ -14,8 +15,9 @@ import rose1 from '../../assets/rosary/rose1.png';
 import rose2 from '../../assets/rosary/rose2.png';
 import rose3 from '../../assets/rosary/rose3.png';
 
-const DAILY_MAX = 150;
-const COIN_PER_HAT = 1;
+const DAILY_MAX = 150;      // số hạt tối đa mỗi ngày
+const COIN_PER_HAT = 1;     // 1 hạt = 1 Coin
+const BONUS_PER_TRANG = 10; // +10 Coin cho mỗi tràng hoàn chỉnh (50 hạt)
 
 const TRANG_ITEMS = [
     { value: 0, label: '0' },
@@ -55,6 +57,7 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
     const [trangIdx, setTrangIdx] = useState(0);
     const [chucIdx, setChucIdx] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showGuide, setShowGuide] = useState(false);
     const [particles, setParticles] = useState([]);
     const [showBloom, setShowBloom] = useState(false);
     const [showQuote, setShowQuote] = useState(false);
@@ -77,7 +80,15 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
 
     // ── Background music — loops while modal is open ──
     const { setBgVolume } = useSoundManager(rosaryBgMusic, {});
-    useEffect(() => { setBgVolume(0.35); }, [setBgVolume]);
+
+    // ── Real-time global rosary count from Firebase ──
+    const subscribeRosaryGlobal = usePlayFabStore(s => s.subscribeRosaryGlobal);
+    useEffect(() => {
+        if (!subscribeRosaryGlobal) return;
+        const unsub = subscribeRosaryGlobal(); // starts onValue listener
+        return () => unsub?.();               // cleanup on modal close
+    }, [subscribeRosaryGlobal]);
+
 
     useEffect(() => {
         const query = window.matchMedia("(min-width: 700px) and (orientation: landscape)");
@@ -96,7 +107,13 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
     const totalHat = trang * 50 + chuc;
     const remaining = Math.max(0, DAILY_MAX - animToday);
     const effectiveHat = Math.min(totalHat, remaining);
-    const estimatedCoins = effectiveHat * COIN_PER_HAT;
+
+    // Reward calculation: base + tràng bonus
+    const baseCoin = effectiveHat * COIN_PER_HAT;
+    const trangComplete = Math.floor(effectiveHat / 50);
+    const bonusCoin = trangComplete * BONUS_PER_TRANG;
+    const estimatedCoins = baseCoin + bonusCoin;
+
     const isOver = totalHat > remaining && totalHat > 0;
     const canSubmit = effectiveHat > 0 && !isSubmitting;
     const isDailyComplete = remaining <= 0;
@@ -297,8 +314,27 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
             transition={{ duration: 0.4 }}
             style={{ backgroundImage: `url(${isLandscape ? rosaryBgLandscape : rosaryBgPortrait})` }}
         >
-            {/* ── Header: only close ── */}
+            {/* ── Header: close + guide button ── */}
             <div className="ro-header">
+                <button
+                    className="ro-guide-btn"
+                    onClick={() => setShowGuide(true)}
+                    aria-label="Hướng dẫn"
+                    style={{
+                        position: 'fixed',
+                        top: 12, left: 12,
+                        width: 32, height: 32,
+                        borderRadius: '50%',
+                        background: 'rgba(255,248,220,0.18)',
+                        border: '1.5px solid rgba(212,175,80,0.45)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        cursor: 'pointer', zIndex: 9999,
+                        backdropFilter: 'blur(6px)',
+                        boxShadow: '0 2px 10px rgba(200,160,40,0.2)',
+                    }}
+                >
+                    <HelpCircle size={16} color="rgba(212,175,80,0.9)" strokeWidth={2} />
+                </button>
                 <button className="ro-close" onClick={onClose} aria-label="Đóng">
                     <X size={15} strokeWidth={2.5} />
                 </button>
@@ -336,14 +372,19 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
                             boxShadow: '0 3px 14px rgba(200,160,40,0.35)',
                             zIndex: 9998,
                             pointerEvents: 'none',
-                            fontSize: 14,
-                            fontWeight: 700,
                             color: '#8a6010',
                             fontFamily: "'Playfair Display', serif",
                         }}
                     >
                         <img src={iconCoin} alt="" style={{ width: 20, height: 20 }} />
-                        <span>+{estimatedCoins}</span>
+                        <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
+                            <span style={{ fontSize: 14, fontWeight: 700 }}>+{estimatedCoins}</span>
+                            {bonusCoin > 0 && (
+                                <span style={{ fontSize: 10, color: '#b8820a', fontWeight: 600 }}>
+                                    {baseCoin} + ✨{bonusCoin} bonus
+                                </span>
+                            )}
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -366,6 +407,129 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
                     </div>
                 </div>
             )}
+
+            {/* ── Guide Popup ── */}
+            <AnimatePresence>
+                {showGuide && (
+                    <motion.div
+                        key="guide-overlay"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        style={{
+                            position: 'fixed', inset: 0, zIndex: 10100,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            background: 'rgba(8,4,20,0.82)', backdropFilter: 'blur(8px)',
+                            padding: 20,
+                        }}
+                        onClick={() => setShowGuide(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.88, y: 24 }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.92, y: 16 }}
+                            transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+                            onClick={e => e.stopPropagation()}
+                            style={{
+                                width: '100%', maxWidth: 380,
+                                background: 'linear-gradient(160deg, rgba(22,10,48,0.98) 0%, rgba(35,16,62,0.98) 100%)',
+                                border: '1.5px solid rgba(212,175,80,0.4)',
+                                borderRadius: 22,
+                                padding: '24px 22px 20px',
+                                boxShadow: '0 12px 50px rgba(0,0,0,0.6), inset 0 0 40px rgba(200,140,50,0.06)',
+                                position: 'relative',
+                            }}
+                        >
+                            {/* Close */}
+                            <button
+                                onClick={() => setShowGuide(false)}
+                                style={{
+                                    position: 'absolute', top: 12, right: 12,
+                                    width: 28, height: 28, borderRadius: '50%',
+                                    background: 'rgba(255,255,255,0.08)',
+                                    border: '1px solid rgba(255,255,255,0.15)',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    cursor: 'pointer', color: 'rgba(255,255,255,0.6)',
+                                }}
+                            >
+                                <X size={13} />
+                            </button>
+
+                            {/* Title */}
+                            <div style={{ textAlign: 'center', marginBottom: 18 }}>
+                                <div style={{ fontSize: 28, marginBottom: 6 }}>📿</div>
+                                <h3 style={{
+                                    fontFamily: "'Playfair Display', serif",
+                                    fontSize: 18, fontWeight: 700,
+                                    color: 'rgba(212,175,80,0.95)',
+                                    textShadow: '0 0 16px rgba(212,175,80,0.4)',
+                                    margin: 0,
+                                }}>Hướng Dẫn Dâng Hoa</h3>
+                                <div style={{ fontSize: 10, color: 'rgba(212,175,80,0.5)', letterSpacing: '0.35em', marginTop: 4 }}>✦ — Ave Maria — ✦</div>
+                            </div>
+
+                            {/* Section: Rosary structure */}
+                            <div style={{
+                                background: 'rgba(212,175,80,0.06)',
+                                border: '1px solid rgba(212,175,80,0.18)',
+                                borderRadius: 14, padding: '14px 16px', marginBottom: 12,
+                            }}>
+                                <p style={{ margin: '0 0 10px', fontSize: 12, fontWeight: 700, color: 'rgba(212,175,80,0.8)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>📿 Cấu Trúc Chuỗi Mân Côi</p>
+                                {[
+                                    ['1 Hạt', '1 Kinh Kính Mừng'],
+                                    ['1 Chục', '10 hạt (Kính Mừng × 10 + Lạy Cha + Sáng Danh)'],
+                                    ['1 Tràng', '5 Chục = 50 hạt'],
+                                    ['Tối đa/ngày', '3 Tràng = 150 hạt'],
+                                ].map(([label, desc]) => (
+                                    <div key={label} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 6 }}>
+                                        <span style={{
+                                            fontSize: 11, fontWeight: 700,
+                                            color: 'rgba(255,220,120,0.9)',
+                                            minWidth: 80, flexShrink: 0,
+                                            paddingTop: 1,
+                                        }}>{label}</span>
+                                        <span style={{ fontSize: 12, color: 'rgba(255,240,200,0.75)', lineHeight: 1.5 }}>{desc}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Section: Rewards */}
+                            <div style={{
+                                background: 'rgba(255,200,60,0.06)',
+                                border: '1px solid rgba(255,200,60,0.2)',
+                                borderRadius: 14, padding: '14px 16px',
+                            }}>
+                                <p style={{ margin: '0 0 10px', fontSize: 12, fontWeight: 700, color: 'rgba(255,200,80,0.85)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>💰 Phần Thưởng</p>
+                                {[
+                                    ['1 hạt dâng', '+1 Coin'],
+                                    ['1 tràng (50 hạt)', '+10 Coin bonus'],
+                                    ['2 tràng (100 hạt)', '+20 Coin bonus'],
+                                    ['3 tràng (150 hạt)', '+30 Coin bonus'],
+                                    ['Tối đa mỗi ngày', '180 Coin (150 + 30 bonus)'],
+                                ].map(([label, value]) => (
+                                    <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 7 }}>
+                                        <span style={{ fontSize: 12, color: 'rgba(255,240,200,0.75)' }}>{label}</span>
+                                        <span style={{
+                                            fontSize: 12, fontWeight: 700,
+                                            color: label.includes('Tối đa') ? 'rgba(255,180,50,0.95)' : 'rgba(255,215,80,0.9)',
+                                            background: 'rgba(255,200,60,0.12)',
+                                            padding: '2px 9px', borderRadius: 20,
+                                            border: '1px solid rgba(255,200,60,0.2)',
+                                        }}>{value}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <p style={{
+                                fontSize: 11, color: 'rgba(255,240,200,0.4)',
+                                textAlign: 'center', margin: '14px 0 0',
+                                fontStyle: 'italic',
+                                fontFamily: "'Playfair Display', serif",
+                            }}>"Mỗi Kinh Kính Mừng là một bông hồng dâng lên Đức Mẹ"</p>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* ── Controls — direct overlay, no panel ── */}
             <div className="ro-controls">
