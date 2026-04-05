@@ -163,7 +163,7 @@ const PrivacyPolicy = ({ onBack }) => {
                         <div className="mt-2 bg-black/20 rounded-xl p-3 text-sm border border-white/10">
                             <p className="text-slate-200 font-semibold">Catholic Quiz</p>
                             <p className="text-slate-400">📧 Email: <a href="mailto:hapagonmolie@gmail.com" className="text-amber-400 hover:underline">hapagonmolie@gmail.com</a></p>
-                            <p className="text-slate-400">🌐 Website: <a href="https://catholicquiz.app" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">catholicquiz.app</a></p>
+                            <p className="text-slate-400">📘 Facebook: <a href="https://www.facebook.com/profile.php?id=61584274960298" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">Catholic Quiz Vietnam</a></p>
                         </div>
                     </Section>
                 </motion.div>

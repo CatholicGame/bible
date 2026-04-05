@@ -2082,13 +2082,25 @@ const CrosswordGame = ({
         </div>
 
         {/* User Profile (Avatar + XP + Coins) */}
-        <div className="flex items-center gap-2 px-1 py-1 rounded-full bg-slate-900/10 border-[1.5px] border-slate-900/10 backdrop-blur-sm pr-3">
+        <div className="flex items-center gap-2 rounded-full pr-2.5 pl-1 py-1"
+          style={{
+            background: 'linear-gradient(135deg, rgba(30,58,138,0.18) 0%, rgba(59,130,246,0.12) 100%)',
+            border: '1.5px solid rgba(59,130,246,0.45)',
+            boxShadow: '0 0 10px rgba(59,130,246,0.20), 0 2px 8px rgba(0,0,0,0.10)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+          }}>
           {/* Avatar */}
-          <div className="w-6 h-6 rounded-full overflow-hidden border border-white/40 shadow-sm shrink-0">
+          <div className="w-7 h-7 rounded-full overflow-hidden shrink-0"
+            style={{
+              border: '2px solid rgba(96,165,250,0.8)',
+              boxShadow: '0 0 8px rgba(59,130,246,0.5)',
+            }}>
             {avatarUrl ? (
               <img src={avatarUrl} alt="" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full bg-slate-300 flex items-center justify-center text-xs font-bold text-slate-500">
+              <div className="w-full h-full flex items-center justify-center text-xs font-black text-white"
+                style={{ background: 'linear-gradient(135deg, #1d4ed8 0%, #7c3aed 100%)' }}>
                 {nickname?.[0]?.toUpperCase() || '?'}
               </div>
             )}
@@ -2096,11 +2108,11 @@ const CrosswordGame = ({
           
           {/* Value XP */}
           <div className="flex items-center gap-1">
-            <Star size={11} className="text-amber-500" />
+            <Star size={11} className="text-amber-400" />
             <span className="font-black text-xs text-slate-700">{globalScore?.toLocaleString() || 0}</span>
           </div>
 
-          <div className="w-px h-3 bg-slate-900/15 mx-0.5" />
+          <div className="w-px h-3 mx-0.5" style={{ background: 'rgba(59,130,246,0.3)' }} />
 
           {/* Value Coin */}
           <div className="flex items-center gap-1">

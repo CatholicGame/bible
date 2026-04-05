@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Globe, HelpCircle } from 'lucide-react';
+import { X, Globe } from 'lucide-react';
 import WheelPicker from './WheelPicker';
 import UserAvatar from '../common/UserAvatar';
 import { usePlayFabStore } from '../../store/playfabStore';
@@ -14,6 +14,7 @@ import { useSoundManager } from '../../utils/soundManager';
 import rose1 from '../../assets/rosary/rose1.png';
 import rose2 from '../../assets/rosary/rose2.png';
 import rose3 from '../../assets/rosary/rose3.png';
+import iconInfo from '../../assets/rosary/icon_info.png';
 
 const DAILY_MAX = 150;      // số hạt tối đa mỗi ngày
 const COIN_PER_HAT = 1;     // 1 hạt = 1 Coin
@@ -79,7 +80,13 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
     const haloRef = useRef({ x: 0, y: 0, r: 80 });
 
     // ── Background music — loops while modal is open ──
-    const { setBgVolume } = useSoundManager(rosaryBgMusic, {});
+    const { setBgVolume, stopBg } = useSoundManager(rosaryBgMusic, {});
+
+    // Wrapper: tắt nhạc TRƯỚC khi đóng modal (tránh delay do AnimatePresence exit animation)
+    const handleClose = () => {
+        stopBg();
+        onClose();
+    };
 
     // ── Real-time global rosary count from Firebase ──
     const subscribeRosaryGlobal = usePlayFabStore(s => s.subscribeRosaryGlobal);
@@ -323,19 +330,23 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
                     style={{
                         position: 'fixed',
                         top: 12, left: 12,
-                        width: 32, height: 32,
+                        width: 40, height: 40,
                         borderRadius: '50%',
-                        background: 'rgba(255,248,220,0.18)',
-                        border: '1.5px solid rgba(212,175,80,0.45)',
+                        background: '#0a0a0a',
+                        border: '2px solid rgba(212,175,80,0.6)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         cursor: 'pointer', zIndex: 9999,
-                        backdropFilter: 'blur(6px)',
-                        boxShadow: '0 2px 10px rgba(200,160,40,0.2)',
+                        boxShadow: '0 4px 14px rgba(200,160,40,0.3)',
+                        padding: 0,
+                        overflow: 'hidden',
+                        transition: 'transform 0.2s ease',
                     }}
+                    onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                    onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                 >
-                    <HelpCircle size={16} color="rgba(212,175,80,0.9)" strokeWidth={2} />
+                    <img src={iconInfo} alt="Info" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </button>
-                <button className="ro-close" onClick={onClose} aria-label="Đóng">
+                <button className="ro-close" onClick={handleClose} aria-label="Đóng">
                     <X size={15} strokeWidth={2.5} />
                 </button>
             </div>
