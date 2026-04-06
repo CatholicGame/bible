@@ -82,6 +82,10 @@ export const usePlayFabStore = create((set, get) => ({
   pinnacleMyVote: null,      // null | 'like' | 'dislike' — vote của player này
   pinnacleVoteCounts: { like: 0, dislike: 0 }, // tổng vote (xấp xỉ từ stats)
 
+  // ── Crossword Vote ──
+  crosswordMyVote: null,     // null | 'like' | 'dislike'
+  crosswordVoteCounts: { like: 0, dislike: 0 },
+
   // ── Login ──
   login: async (customNickname) => {
     // Guard: skip if already logged-in state is set or login is in progress
@@ -134,8 +138,8 @@ export const usePlayFabStore = create((set, get) => ({
       const todayStr = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' })).toISOString().slice(0, 10);
       const effectiveRosaryToday = rosaryDate === todayStr ? rosaryToday : 0;
 
-      // Pinnacle vote
       const pinnacleMyVote = userData?.PinnacleMyVote?.Value || null;
+      const crosswordMyVote = userData?.CrosswordMyVote?.Value || null;
 
       set({
         isLoggedIn: true,
@@ -158,6 +162,7 @@ export const usePlayFabStore = create((set, get) => ({
         rosaryTotal,
         rosaryGlobal,
         pinnacleMyVote,
+        crosswordMyVote,
         error: null,
       });
 
@@ -292,6 +297,7 @@ export const usePlayFabStore = create((set, get) => ({
       if (userData?.Stats?.Value) { try { stats = JSON.parse(userData.Stats.Value); } catch (_) {} }
 
       const pinnacleMyVote = userData?.PinnacleMyVote?.Value || null;
+      const crosswordMyVote = userData?.CrosswordMyVote?.Value || null;
 
       set({
         isLoggedIn: true,
@@ -310,6 +316,7 @@ export const usePlayFabStore = create((set, get) => ({
         rank: getRankByScore(globalScore),
         ...(stats ? { stats } : {}),
         pinnacleMyVote,
+        crosswordMyVote,
         error: null,
       });
 
@@ -375,6 +382,7 @@ export const usePlayFabStore = create((set, get) => ({
       if (userData?.Stats?.Value) { try { stats = JSON.parse(userData.Stats.Value); } catch (_) {} }
 
       const pinnacleMyVote = userData?.PinnacleMyVote?.Value || null;
+      const crosswordMyVote = userData?.CrosswordMyVote?.Value || null;
 
       usePlayFabStore.setState({
         isLoggedIn: true,
@@ -394,6 +402,7 @@ export const usePlayFabStore = create((set, get) => ({
         rank: getRankByScore(globalScore),
         ...(stats ? { stats } : {}),
         pinnacleMyVote,
+        crosswordMyVote,
         error: null,
       });
 
@@ -771,9 +780,17 @@ export const usePlayFabStore = create((set, get) => ({
 
   // ── Submit Like / Dislike vote ──
   submitPinnacleVote: async (vote) => {
-    if (get().pinnacleMyVote === vote) return;
-    // Update UI immediately
-    set({ pinnacleMyVote: vote });
+    const oldVote = get().pinnacleMyVote;
+    if (oldVote === vote) return;
+    
+    // Update UI immediately (optimistic update)
+    set(s => {
+      const newCounts = { ...s.pinnacleVoteCounts };
+      if (oldVote) newCounts[oldVote] = Math.max(0, newCounts[oldVote] - 1);
+      newCounts[vote] += 1;
+      return { pinnacleMyVote: vote, pinnacleVoteCounts: newCounts };
+    });
+
     try {
       // 1. Save this player's vote to UserData (persists across sessions)
       await updateUserData({ PinnacleMyVote: vote });
@@ -781,10 +798,16 @@ export const usePlayFabStore = create((set, get) => ({
       //    Each player has exactly one stat entry, so count = number of unique voters
       const statName = vote === 'like' ? 'PinnacleVoteLike' : 'PinnacleVoteDislike';
       await updatePlayerStatistics([{ StatisticName: statName, Value: 1 }]);
-      // 3. Reload global counts
-      await get().loadPinnacleVoteCounts();
+      // LƯU Ý: Không fetch lại leaderboard ngay vì PlayFab có cache (có thể trả về số cũ làm nhảy số)
     } catch (e) {
       console.warn('[Pinnacle] vote save failed', e);
+      // Revert UI on failure
+      set(s => {
+        const revertedCounts = { ...s.pinnacleVoteCounts };
+        revertedCounts[vote] = Math.max(0, revertedCounts[vote] - 1);
+        if (oldVote) revertedCounts[oldVote] += 1;
+        return { pinnacleMyVote: oldVote, pinnacleVoteCounts: revertedCounts };
+      });
     }
   },
 
@@ -797,6 +820,51 @@ export const usePlayFabStore = create((set, get) => ({
     const likes    = likeData?.Leaderboard?.length ?? 0;
     const dislikes = dislikeData?.Leaderboard?.length ?? 0;
     set({ pinnacleVoteCounts: { like: likes, dislike: dislikes } });
+  },
+
+  // ── Submit Like / Dislike vote cho Crossword ──
+  submitCrosswordVote: async (vote) => {
+    const oldVote = get().crosswordMyVote;
+    if (oldVote === vote) return;
+
+    // Optimistic UI update
+    set(s => {
+      const newCounts = { ...s.crosswordVoteCounts };
+      if (oldVote) newCounts[oldVote] = Math.max(0, newCounts[oldVote] - 1);
+      newCounts[vote] += 1;
+      return { crosswordMyVote: vote, crosswordVoteCounts: newCounts };
+    });
+
+    try {
+      await updateUserData({ CrosswordMyVote: vote });
+      const statName = vote === 'like' ? 'CrosswordVoteLike' : 'CrosswordVoteDislike';
+      await updatePlayerStatistics([{ StatisticName: statName, Value: 1 }]);
+      // Không fetch lại leaderboard ngay vì PlayFab cache
+    } catch (e) {
+      console.warn('[Crossword] vote save failed', e);
+      // Revert UI on failure
+      set(s => {
+        const revertedCounts = { ...s.crosswordVoteCounts };
+        revertedCounts[vote] = Math.max(0, revertedCounts[vote] - 1);
+        if (oldVote) revertedCounts[oldVote] += 1;
+        return { crosswordMyVote: oldVote, crosswordVoteCounts: revertedCounts };
+      });
+    }
+  },
+
+  // ── Load global crossword vote counts ──
+  loadCrosswordVoteCounts: async () => {
+    try {
+      const [likeData, dislikeData] = await Promise.all([
+        getLeaderboardSilent('CrosswordVoteLike', 100),
+        getLeaderboardSilent('CrosswordVoteDislike', 100),
+      ]);
+      const likes    = likeData?.Leaderboard?.length ?? 0;
+      const dislikes = dislikeData?.Leaderboard?.length ?? 0;
+      set({ crosswordVoteCounts: { like: likes, dislike: dislikes } });
+    } catch (e) {
+      console.warn('[Crossword] loadVoteCounts failed', e);
+    }
   },
 
   // ── Reset (logout) ──

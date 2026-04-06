@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Clock, Trophy, Star, Check, RotateCcw, Zap, Eye, Lightbulb, ChevronLeft, Play, RefreshCcw } from 'lucide-react';
+import { ArrowLeft, Clock, Trophy, Star, Check, RotateCcw, Zap, Eye, Lightbulb, ChevronLeft, Play, RefreshCcw, ThumbsUp, ThumbsDown, Users } from 'lucide-react';
 import { usePlayFabStore } from '../../../store/playfabStore';
 import { getRankByScore } from '../../../utils/ranks';
 import { useRoomStore } from '../../../store/roomStore';
@@ -479,31 +479,45 @@ const CrosswordFinishedOverlay = ({
               </div>
 
               {/* Reward Pills */}
-              {(totalCoins !== 0 || totalXP > 0) && (
+              {(earnedCoins !== null || earnedXP !== null) && (
                 <div className="flex items-end justify-center gap-4 mb-4 w-full max-w-md mx-auto">
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-white/70 text-[10px] font-black uppercase tracking-widest">Coin</span>
-                    <div ref={coinPillRef} className="flex items-center justify-center bg-yellow-400 text-[#1e3a8a] rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1)] py-1.5 px-4 relative overflow-hidden">
-                      <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full" />
-                      <img src={iconCoin} alt="" className="w-6 h-6 relative z-10 mr-1.5" />
-                      <motion.span key={displayCoins} initial={{ y:-4, opacity:0.7 }} animate={{ y:0, opacity:1 }} transition={{ duration:0.08 }}
-                        className="text-xl font-black relative z-10">
-                        {displayCoins >= 0 ? '+' : ''}{displayCoins.toLocaleString()}
-                      </motion.span>
+                  {totalCoins > 0 && (
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-white/70 text-[10px] font-black uppercase tracking-widest">Coin</span>
+                      <div ref={coinPillRef} className="flex items-center justify-center bg-yellow-400 text-[#1e3a8a] rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1)] py-1.5 px-4 relative overflow-hidden">
+                        <div className="absolute inset-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-full" />
+                        <img src={iconCoin} alt="" className="w-6 h-6 relative z-10 mr-1.5" />
+                        <motion.span key={displayCoins} initial={{ y:-4, opacity:0.7 }} animate={{ y:0, opacity:1 }} transition={{ duration:0.08 }}
+                          className="text-xl font-black relative z-10">
+                          +{displayCoins.toLocaleString()}
+                        </motion.span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-white/70 text-[10px] font-black uppercase tracking-widest">XP</span>
-                    <div ref={xpPillRef} className="flex items-center justify-center bg-amber-500 text-white rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1)] py-1.5 px-4 relative overflow-hidden">
-                      <div className="absolute inset-0 w-full h-1/2 bg-white/25 pointer-events-none rounded-t-full" />
-                      <img src={iconTrophy} alt="" className="w-6 h-6 relative z-10 mr-1.5" />
-                      <motion.span key={displayXP} initial={{ y:-4, opacity:0.7 }} animate={{ y:0, opacity:1 }} transition={{ duration:0.08 }}
-                        className="text-xl font-black relative z-10">
-                        +{displayXP.toLocaleString()}
-                      </motion.span>
-                      <span className="text-base font-black ml-1.5 relative z-10">XP</span>
+                  )}
+                  {totalXP > 0 && (
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-white/70 text-[10px] font-black uppercase tracking-widest">XP</span>
+                      <div ref={xpPillRef} className="flex items-center justify-center bg-amber-500 text-white rounded-full border-4 border-[#1e3a8a] shadow-[0_6px_0_rgba(30,58,138,1)] py-1.5 px-4 relative overflow-hidden">
+                        <div className="absolute inset-0 w-full h-1/2 bg-white/25 pointer-events-none rounded-t-full" />
+                        <img src={iconTrophy} alt="" className="w-6 h-6 relative z-10 mr-1.5" />
+                        <motion.span key={displayXP} initial={{ y:-4, opacity:0.7 }} animate={{ y:0, opacity:1 }} transition={{ duration:0.08 }}
+                          className="text-xl font-black relative z-10">
+                          +{displayXP.toLocaleString()}
+                        </motion.span>
+                        <span className="text-base font-black ml-1.5 relative z-10">XP</span>
+                      </div>
+                      {(earnedXP?.revealedWordCount ?? 0) > 0 && (
+                        <span className="text-white/50 text-[10px] font-semibold text-center leading-tight mt-0.5">
+                          💡 -{earnedXP.revealedWordCount} từ dùng gợi ý<br/>không tính XP
+                        </span>
+                      )}
                     </div>
-                  </div>
+                  )}
+                  {totalCoins === 0 && totalXP === 0 && (
+                    <p className="text-white/50 text-xs font-semibold italic mb-1">
+                      💡 Không nhận thưởng (Chơi lại)
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -607,6 +621,9 @@ const CrosswordGame = ({
   const [hintEffects, setHintEffects] = useState([]);  // burst events [{id,x,y,amt,particles}]
   const burstTimersRef = useRef({});
 
+  // Load crossword vote counts on mount
+  useEffect(() => { loadCrosswordVoteCounts(); }, []); // eslint-disable-line
+
   // Inject CSS keyframes (once)
   useEffect(() => {
     if (document.getElementById('cw-coin-burst-style')) return;
@@ -629,7 +646,9 @@ const CrosswordGame = ({
   }, []);
 
   // Store — MUST be declared before puzzle state so lazy initialisers can use them
-  const { addXP, addCoins, coins: userCoins, playedCrosswordIds, markCrosswordPlayed, globalScore, nickname, giaoxu, avatarUrl } = usePlayFabStore();
+  const { addXP, addCoins, coins: userCoins, playedCrosswordIds, markCrosswordPlayed, globalScore, nickname, giaoxu, avatarUrl,
+          crosswordMyVote, crosswordVoteCounts, submitCrosswordVote, loadCrosswordVoteCounts,
+        } = usePlayFabStore();
   const { roomData, roomId, myRole } = useRoomStore();
   const { uid: storeUid } = useUserStore();
   const { leaveRoom, requestRematch, acceptRematch, declineRematch, chargeBet, awardWinner } = useRoom();
@@ -685,6 +704,8 @@ const CrosswordGame = ({
   const isSolo = !isP2PMode;
   const [hintUsed, setHintUsed] = useState(false);
   const [hintsSpent, setHintsSpent] = useState(0);
+  const [revealedWordIds, setRevealedWordIds] = useState(() => new Set()); // từ bị Mở cả từ
+  const [revealedCells, setRevealedCells] = useState(() => new Set()); // các cell bị mở bởi gợi ý ("r,c")
   const [showHintMenu, setShowHintMenu] = useState(false);
 
   // P2P: forfeit + rematch state
@@ -700,6 +721,7 @@ const CrosswordGame = ({
   const [displayPot, setDisplayPot] = useState(0);         // số dư pot đang hiển thị
   const betChargedRef = useRef(false);                     // tránh charge 2 lần (StrictMode)
   const finishCalledRef = useRef(false);                   // tránh gọi finishGame 2 lần
+  const finishGameRef = useRef(null);                      // luôn trỏ đến finishGame mới nhất
   const potRef = useRef(null);                             // ref tới pot element để lấy vị trí
   const myAvatarRef  = useRef(null);                       // ref avatar bản thân (trong matchSetup)
   const oppAvatarRef2 = useRef(null);                      // ref avatar đối thủ (trong matchSetup)
@@ -883,6 +905,12 @@ const CrosswordGame = ({
     const { row, col } = selectedCell;
     if (!gridMap[row]?.[col]?.isCell) return;
 
+    if (revealedCells.has(`${row},${col}`)) {
+      // Cell is locked by hint, skip editing and move next
+      moveToNext(row, col, direction);
+      return;
+    }
+
     const newGrid = userGrid.map(r => [...r]);
     newGrid[row][col] = letter.toUpperCase();
     setUserGrid(newGrid);
@@ -895,16 +923,18 @@ const CrosswordGame = ({
       }
     });
 
-    // Auto-check each word this cell belongs to
+    // Auto-check ALL words (in case intersections completed other words)
     const newSolved = new Set(solvedWords);
     let changed = false;
-    cell.wordIds.forEach(wid => {
-      if (!newSolved.has(wid) && isWordFilled(wid, newGrid) && checkWord(wid, newGrid)) {
-        newSolved.add(wid);
+    puzzle.words.forEach(w => {
+      if (!newSolved.has(w.id) && isWordFilled(w.id, newGrid) && checkWord(w.id, newGrid)) {
+        newSolved.add(w.id);
         changed = true;
+        console.log(`[CW] ✅ Word solved: ${w.answer} (id=${w.id}) | total solved=${newSolved.size}/${puzzle.words.length}`);
       }
     });
     if (changed) {
+      console.log(`[CW] setSolvedWords → ${newSolved.size}/${puzzle.words.length}. All done? ${newSolved.size === puzzle.words.length}`);
       setSolvedWords(newSolved);
       setScore(newSolved.size * 10);
       // Report progress
@@ -917,13 +947,23 @@ const CrosswordGame = ({
 
     // Move to next cell
     moveToNext(row, col, direction);
-  }, [selectedCell, gameState, gridMap, userGrid, direction, solvedWords, wrongWords, checkWord, isWordFilled, moveToNext, onProgressUpdate]);
+  }, [selectedCell, gameState, gridMap, userGrid, direction, solvedWords, wrongWords, checkWord, isWordFilled, moveToNext, onProgressUpdate, puzzle.words, revealedCells]);
 
   /* ── Handle backspace ── */
   const handleBackspace = useCallback(() => {
     if (!selectedCell || gameState !== 'playing') return;
     const { row, col } = selectedCell;
     if (!gridMap[row]?.[col]?.isCell) return;
+
+    if (revealedCells.has(`${row},${col}`)) {
+      // Cell is locked by hint, don't delete, just move back
+      const pr = direction === 'down' ? row - 1 : row;
+      const pc = direction === 'across' ? col - 1 : col;
+      if (pr >= 0 && pc >= 0 && gridMap[pr]?.[pc]?.isCell) {
+        setSelectedCell({ row: pr, col: pc });
+      }
+      return;
+    }
 
     const newGrid = userGrid.map(r => [...r]);
     if (newGrid[row][col]) {
@@ -934,12 +974,15 @@ const CrosswordGame = ({
       const pr = direction === 'down' ? row - 1 : row;
       const pc = direction === 'across' ? col - 1 : col;
       if (pr >= 0 && pc >= 0 && gridMap[pr]?.[pc]?.isCell) {
-        newGrid[pr][pc] = '';
-        setUserGrid(newGrid);
+        // If the previous cell is locked, we still move there but don't delete it
+        if (!revealedCells.has(`${pr},${pc}`)) {
+          newGrid[pr][pc] = '';
+          setUserGrid(newGrid);
+        }
         setSelectedCell({ row: pr, col: pc });
       }
     }
-  }, [selectedCell, gameState, gridMap, userGrid, direction]);
+  }, [selectedCell, gameState, gridMap, userGrid, direction, revealedCells]);
 
   /* ── Handle "Kiểm tra" all ── */
   const handleCheckAll = useCallback(() => {
@@ -979,13 +1022,18 @@ const CrosswordGame = ({
     setHintUsed(true);
     setHintsSpent(prev => prev + 20);
     addCoins(-20); // deduct coins live
-    // — Spawn physics coin burst —
+    // — Spawn physics coin burst (clear previous first) —
     if (e && e.clientX && e.clientY) {
       const cx = e.clientX, cy = e.clientY;
       const particles = spawnCoinBurst(cx, cy, 20, 80, 160, 220, 340, 4.5, 5.0, 14, 24, 0.4);
       const burstId = Date.now() + Math.random();
       const maxMs = Math.max(...particles.map(p => p.dur + p.del)) * 1000 + 400;
-      setHintEffects(prev => [...prev, { id: burstId, x: cx, y: cy, amt: 20, particles }]);
+      // Clear all existing bursts and their timers before adding new one
+      Object.keys(burstTimersRef.current).forEach(id => {
+        clearTimeout(burstTimersRef.current[id]);
+        delete burstTimersRef.current[id];
+      });
+      setHintEffects([{ id: burstId, x: cx, y: cy, amt: 20, particles }]);
       burstTimersRef.current[burstId] = setTimeout(() => {
         setHintEffects(prev => prev.filter(b => b.id !== burstId));
         delete burstTimersRef.current[burstId];
@@ -994,13 +1042,14 @@ const CrosswordGame = ({
     const newGrid = userGrid.map(r => [...r]);
     newGrid[row][col] = cell.letter;
     setUserGrid(newGrid);
+    setRevealedCells(prev => new Set([...prev, `${row},${col}`]));
 
-    // Auto-check words after reveal
+    // Auto-check ALL words after reveal
     const newSolved = new Set(solvedWords);
     let changed = false;
-    cell.wordIds.forEach(wid => {
-      if (!newSolved.has(wid) && isWordFilled(wid, newGrid) && checkWord(wid, newGrid)) {
-        newSolved.add(wid);
+    puzzle.words.forEach(w => {
+      if (!newSolved.has(w.id) && isWordFilled(w.id, newGrid) && checkWord(w.id, newGrid)) {
+        newSolved.add(w.id);
         changed = true;
       }
     });
@@ -1028,13 +1077,18 @@ const CrosswordGame = ({
     setHintUsed(true);
     setHintsSpent(prev => prev + 50);
     addCoins(-50); // deduct coins live
-    // — Spawn physics coin burst —
+    // — Spawn physics coin burst (clear previous first) —
     if (e && e.clientX && e.clientY) {
       const cx = e.clientX, cy = e.clientY;
       const particles = spawnCoinBurst(cx, cy, 20, 100, 190, 250, 380, 4.5, 5.0, 16, 26, 0.4);
       const burstId = Date.now() + Math.random();
       const maxMs = Math.max(...particles.map(p => p.dur + p.del)) * 1000 + 400;
-      setHintEffects(prev => [...prev, { id: burstId, x: cx, y: cy, amt: 50, particles }]);
+      // Clear all existing bursts and their timers before adding new one
+      Object.keys(burstTimersRef.current).forEach(id => {
+        clearTimeout(burstTimersRef.current[id]);
+        delete burstTimersRef.current[id];
+      });
+      setHintEffects([{ id: burstId, x: cx, y: cy, amt: 50, particles }]);
       burstTimersRef.current[burstId] = setTimeout(() => {
         setHintEffects(prev => prev.filter(b => b.id !== burstId));
         delete burstTimersRef.current[burstId];
@@ -1042,25 +1096,26 @@ const CrosswordGame = ({
     }
     const newGrid = userGrid.map(r => [...r]);
     const letters = [...w.answer];
+    const newRevealedCells = new Set(revealedCells);
     letters.forEach((ch, i) => {
       const r = w.direction === 'down' ? w.row + i : w.row;
       const c = w.direction === 'across' ? w.col + i : w.col;
       newGrid[r][c] = ch;
+      newRevealedCells.add(`${r},${c}`);
     });
     setUserGrid(newGrid);
+    setRevealedCells(newRevealedCells);
 
-    // Mark as solved + check cross-words
+    // Mark as solved + track as hint-revealed + check cross-words
     const newSolved = new Set(solvedWords);
     newSolved.add(w.id);
-    // Check all words that share cells with this word
-    letters.forEach((_, i) => {
-      const r = w.direction === 'down' ? w.row + i : w.row;
-      const c = w.direction === 'across' ? w.col + i : w.col;
-      gridMap[r][c].wordIds.forEach(wid => {
-        if (!newSolved.has(wid) && isWordFilled(wid, newGrid) && checkWord(wid, newGrid)) {
-          newSolved.add(wid);
-        }
-      });
+    // Track from full-word reveal (không tính vào XP)
+    setRevealedWordIds(prev => new Set([...prev, w.id]));
+    // Check all words (in case intersections completed them)
+    puzzle.words.forEach(ww => {
+      if (!newSolved.has(ww.id) && isWordFilled(ww.id, newGrid) && checkWord(ww.id, newGrid)) {
+        newSolved.add(ww.id);
+      }
     });
     setSolvedWords(newSolved);
     setScore(newSolved.size * 10);
@@ -1194,33 +1249,45 @@ const CrosswordGame = ({
 
   /* ── Auto-finish when all words solved ── */
   useEffect(() => {
-    if (gameState === 'playing' && solvedWords.size === totalWords) {
+    console.log(`[CW] solvedWords.size=${solvedWords.size} totalWords=${totalWords} gameState=${gameState}`);
+    if (gameState === 'playing' && solvedWords.size > 0 && solvedWords.size === totalWords) {
+      console.log('[CW] 🎉 ALL WORDS SOLVED → triggering finishGame in 2s');
       setShowCelebration(true);
-      const t = setTimeout(() => finishGame(), 2000);
+      const t = setTimeout(() => {
+        console.log('[CW] ⏰ setTimeout fired → calling finishGameRef.current()');
+        finishGameRef.current?.();
+      }, 2000);
       return () => clearTimeout(t);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [solvedWords.size, totalWords, gameState]);
 
   /* ── Finish game ── */
   const finishGame = useCallback(() => {
+    console.log(`[CW] finishGame() called. finishCalledRef=${finishCalledRef.current} solvedWords.size=${solvedWords.size} totalWords=${totalWords} gameState=${gameState}`);
     // Guard: chỉ chạy 1 lần, tránh double-call từ timer + auto-finish
-    if (finishCalledRef.current) return;
+    if (finishCalledRef.current) {
+      console.log('[CW] finishGame() blocked by guard!');
+      return;
+    }
     finishCalledRef.current = true;
     clearInterval(timerRef.current);
+    console.log('[CW] finishGame() → setGameState(finished)');
 
     if (isReplay) {
       // ── REPLAY: 0 XP, only +2 coin per word ──
       const wordCoins = solvedWords.size * 2;
+      const displayTotal = Math.max(0, wordCoins - hintsSpent);
       setEarnedXP({ wordsXP: 0, completionXP: 0, noHintXP: 0, speedXP: 0, total: 0 });
-      setEarnedCoins({ wordCoins, completionCoins: 0, perfectBonus: 0, hintsSpent, total: wordCoins - hintsSpent });
+      setEarnedCoins({ wordCoins, completionCoins: 0, perfectBonus: 0, hintsSpent, total: displayTotal });
       if (isSolo) {
         addCoins(wordCoins); // hints already deducted live
       }
     } else {
       // ── FIRST PLAY: full rewards ──
-      const wordsXP = solvedWords.size * 3;
-      const completionXP = 20;
+      // Chỉ tính XP cho từ user tự giải (không tính từ "Mở cả từ")
+      const selfSolvedCount = [...solvedWords].filter(id => !revealedWordIds.has(id)).length;
+      const wordsXP = selfSolvedCount * 3;
+      const completionXP = selfSolvedCount === totalWords ? 20 : 0; // chỉ perfect nếu tự giải hết
       const noHintXP = !hintUsed ? 10 : 0;
       const timeUsed = 300 - timeLeft;
       const speedXP = timeUsed <= 120 ? 10 : 0;
@@ -1231,12 +1298,13 @@ const CrosswordGame = ({
       const perfectBonus = solvedWords.size === totalWords ? 20 : 0;
       const rewardCoins = wordCoins + completionCoins + perfectBonus;
 
-      setEarnedXP({ wordsXP, completionXP, noHintXP, speedXP, total: totalXP });
-      setEarnedCoins({ wordCoins, completionCoins, perfectBonus, hintsSpent, total: rewardCoins - hintsSpent });
+      setEarnedXP({ wordsXP, completionXP, noHintXP, speedXP, total: totalXP, revealedWordCount: revealedWordIds.size });
+      const displayTotal = Math.max(0, rewardCoins - hintsSpent);
+      setEarnedCoins({ wordCoins, completionCoins, perfectBonus, hintsSpent, total: displayTotal });
 
       if (isSolo) {
         addXP(totalXP);
-        addCoins(rewardCoins);
+        addCoins(rewardCoins); // hints already deducted live during play
       }
     }
 
@@ -1251,7 +1319,10 @@ const CrosswordGame = ({
       hintUsed,
       hintsSpent,
     });
-  }, [solvedWords, timeLeft, onFinish, hintUsed, hintsSpent, totalWords, isSolo, addXP, addCoins, isReplay]);
+  }, [solvedWords, revealedWordIds, timeLeft, onFinish, hintUsed, hintsSpent, totalWords, isSolo, addXP, addCoins, isReplay]);
+
+  // Keep finishGameRef always pointing to the latest finishGame
+  finishGameRef.current = finishGame;
 
   /* ── P2P: distribute pot khi game kết thúc bình thường ── */
   useEffect(() => {
@@ -1475,6 +1546,8 @@ const CrosswordGame = ({
     setScore(0);
     setHintUsed(false);
     setHintsSpent(0);
+    setRevealedWordIds(new Set());
+    setRevealedCells(new Set());
     setShowHintMenu(false);
     setEarnedXP(null);
     setEarnedCoins(null);
@@ -1590,9 +1663,61 @@ const CrosswordGame = ({
      RENDER
      ═══════════════════════════════════════ */
 
+  // Compute all derived values needed for rendering (no early returns allowed before this point)
+  const rankName = getRankByScore(globalScore || 0);
+
+  // ── Hint button state (computed inline, not as hooks) ──
+  let isCellCorrect = false;
+  if (selectedCell) {
+    const { row: _r, col: _c } = selectedCell;
+    const _cell = gridMap[_r]?.[_c];
+    if (_cell?.isCell) isCellCorrect = userGrid[_r][_c]?.toUpperCase() === _cell.letter.toUpperCase();
+  }
+  const isCurrentWordSolved = Boolean(activeWordId && solvedWords.has(activeWordId));
+
+  // ── Finished overlay (computed before return, portal renders on top of playing screen) ──
+  let rootOverlay = null;
+  if (gameState === 'finished') {
+    const _isP2P = isP2PMode;
+    const myWordsCount = solvedWords.size;
+    const oppWordsCount = opponentProgress?.completedItems?.length || 0;
+    const isWinner = _isP2P ? myWordsCount > oppWordsCount : false;
+    const isDraw = _isP2P ? myWordsCount === oppWordsCount : false;
+    const isPerfect = solvedWords.size === totalWords;
+    const myPercentF = totalWords > 0 ? Math.round((myWordsCount / totalWords) * 100) : 0;
+    const opponentPercentF = totalWords > 0 ? Math.round((oppWordsCount / totalWords) * 100) : 0;
+    const REMATCH_MIN_COINS = 20;
+    const canAffordRematch = userCoins >= REMATCH_MIN_COINS;
+    const _opponentUid = Object.keys(roomData?.players ?? {}).find(k => k !== myUid);
+    const opponentStillOnline = roomData?.players?.[_opponentUid]?.isOnline !== false;
+    const handleRequestRematch = async () => {
+      if (!canAffordRematch || !roomId || !_opponentUid) return;
+      const nextPuzzle = pickNextPuzzle(PUZZLES, playedCrosswordIds);
+      setRematchStatus('waiting');
+      await requestRematch(roomId, _opponentUid, nextPuzzle.id);
+    };
+    rootOverlay = (
+      <CrosswordFinishedOverlay
+        isPerfect={isPerfect}
+        isP2P={_isP2P} isWinner={isWinner} isDraw={isDraw}
+        solvedWords={solvedWords} totalWords={totalWords}
+        timeLeft={timeLeft} earnedXP={earnedXP} earnedCoins={earnedCoins}
+        hintsSpent={hintsSpent} score={score}
+        myProfile={myProfile} opponentProfile={opponentProfile}
+        myPercent={myPercentF} opponentPercent={opponentPercentF}
+        myFBName={myFBName} oppFBName={oppFBName}
+        onReplay={!_isP2P ? handleReplay : undefined}
+        onNewGame={!_isP2P ? handleNewGame : undefined}
+        onLeaveGame={onLeaveGame}
+        onRequestRematch={_isP2P && opponentStillOnline ? handleRequestRematch : null}
+        canAffordRematch={canAffordRematch}
+        rematchStatus={rematchStatus}
+      />
+    );
+  }
+
   // ── INTRO SCREEN ──
   if (gameState === 'intro') {
-    const rankName = getRankByScore(globalScore || 0);
     return (
       <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden"
         style={{ ...BG_STYLE }}>
@@ -1623,6 +1748,34 @@ const CrosswordGame = ({
               Giải Ô Chữ
             </h1>
             <p className="text-blue-200 text-xs font-semibold">{puzzle.theme} · {totalWords} từ cần tìm</p>
+
+            {/* Vote row — like/dislike matching Pinnacle lobby */}
+            <div className="flex items-center justify-center gap-3 mt-2">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => submitCrosswordVote('like')}
+                  title="Thích"
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black text-sm transition-all active:scale-90 ${
+                    crosswordMyVote === 'like'
+                      ? 'bg-green-500 text-white border-2 border-green-300 shadow-[0_2px_0_#14532d] cursor-default'
+                      : 'bg-green-500/15 text-green-300 border border-green-400/40 hover:bg-green-500/30 cursor-pointer'
+                  }`}>
+                  <ThumbsUp size={13} fill={crosswordMyVote === 'like' ? 'currentColor' : 'none'} />
+                  <span>{crosswordVoteCounts?.like ?? 0}</span>
+                </button>
+                <button
+                  onClick={() => submitCrosswordVote('dislike')}
+                  title="Không thích"
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black text-sm transition-all active:scale-90 ${
+                    crosswordMyVote === 'dislike'
+                      ? 'bg-red-500 text-white border-2 border-red-300 shadow-[0_2px_0_#7f1d1d] cursor-default'
+                      : 'bg-red-500/15 text-red-300 border border-red-400/40 hover:bg-red-500/30 cursor-pointer'
+                  }`}>
+                  <ThumbsDown size={13} fill={crosswordMyVote === 'dislike' ? 'currentColor' : 'none'} />
+                  <span>{crosswordVoteCounts?.dislike ?? 0}</span>
+                </button>
+              </div>
+            </div>
 
             {/* Rules chips */}
             <div className="flex flex-wrap justify-center gap-1.5 mt-3">
@@ -1695,7 +1848,7 @@ const CrosswordGame = ({
     );
   }
 
-  // ── MATCH SETUP SCREEN (P2P only: 3-2-1 countdown) ──
+  // ── MATCH SETUP SCREEN (P2P only) ──
   if (gameState === 'matchSetup') {
     // Host luôn bên trái (xanh), guest luôn bên phải (đỏ) — nhất quán trên cả 2 client
     const amHost       = myRole === 'host';
@@ -1963,49 +2116,6 @@ const CrosswordGame = ({
         ))}
       </div>
     );
-  }
-
-  // ── FINISHED SCREEN ──
-  if (gameState === 'finished') {
-    const isP2P = isP2PMode;
-    const myWordsCount = solvedWords.size;
-    const oppWordsCount = opponentProgress?.completedItems?.length || 0;
-    const isWinner = isP2P ? myWordsCount > oppWordsCount : false;
-    const isDraw = isP2P ? myWordsCount === oppWordsCount : false;
-    const isPerfect = solvedWords.size === totalWords;
-    const myPercent = totalWords > 0 ? Math.round((myWordsCount / totalWords) * 100) : 0;
-    const opponentPercent = totalWords > 0 ? Math.round((oppWordsCount / totalWords) * 100) : 0;
-    
-    // P2P rematch variables
-    const REMATCH_MIN_COINS = 20;
-    const canAffordRematch = userCoins >= REMATCH_MIN_COINS;
-    const opponentUid = Object.keys(roomData?.players ?? {}).find(k => k !== myUid);
-    const opponentStillOnline = roomData?.players?.[opponentUid]?.isOnline !== false;
-    const handleRequestRematch = async () => {
-      if (!canAffordRematch || !roomId || !opponentUid) return;
-      const nextPuzzle = pickNextPuzzle(PUZZLES, playedCrosswordIds);
-      setRematchStatus('waiting');
-      await requestRematch(roomId, opponentUid, nextPuzzle.id);
-    };
-
-    return <>
-      <CrosswordFinishedOverlay
-        isPerfect={isPerfect}
-        isP2P={isP2P} isWinner={isWinner} isDraw={isDraw}
-        solvedWords={solvedWords} totalWords={totalWords}
-        timeLeft={timeLeft} earnedXP={earnedXP} earnedCoins={earnedCoins}
-        hintsSpent={hintsSpent} score={score}
-        myProfile={myProfile} opponentProfile={opponentProfile}
-        myPercent={myPercent} opponentPercent={opponentPercent}
-        myFBName={myFBName} oppFBName={oppFBName}
-        onReplay={!isP2P ? handleReplay : undefined}
-        onNewGame={!isP2P ? handleNewGame : undefined}
-        onLeaveGame={onLeaveGame}
-        onRequestRematch={isP2P && opponentStillOnline ? handleRequestRematch : null}
-        canAffordRematch={canAffordRematch}
-        rematchStatus={rematchStatus}
-      />
-    </>;
   }
 
   // ── PLAYING SCREEN ──
@@ -2284,19 +2394,35 @@ const CrosswordGame = ({
            {/* Hint buttons */}
             {isSolo && (
               <div className="flex flex-col gap-2">
-                <motion.button whileTap={{ scale: 0.93, y: 2 }}
-                  onClick={handleRevealLetter}
+                <motion.button 
+                  whileTap={!isCellCorrect && userCoins >= 20 ? { scale: 0.93, y: 2 } : {}}
+                  onClick={!isCellCorrect && userCoins >= 20 ? handleRevealLetter : undefined}
+                  disabled={isCellCorrect || userCoins < 20}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden w-full"
-                  style={{ background: 'linear-gradient(180deg, #06b6d4, #0891b2)', border: '2px solid #0e7490', boxShadow: '0 3px 0 #0e7490' }}>
+                  style={{ 
+                    background: (!isCellCorrect && userCoins >= 20) ? 'linear-gradient(180deg, #06b6d4, #0891b2)' : 'linear-gradient(180deg, #64748b, #475569)', 
+                    border: (!isCellCorrect && userCoins >= 20) ? '2px solid #0e7490' : '2px solid #334155', 
+                    boxShadow: (!isCellCorrect && userCoins >= 20) ? '0 3px 0 #0e7490' : 'none',
+                    opacity: (!isCellCorrect && userCoins >= 20) ? 1 : 0.55,
+                    cursor: (!isCellCorrect && userCoins >= 20) ? 'pointer' : 'not-allowed'
+                  }}>
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Eye size={13} className="relative z-10" />
                   <span className="relative z-10">Mở 1 chữ</span>
                   <span className="relative z-10 text-amber-300 text-[10px] font-bold ml-auto"><div className="flex items-center gap-0.5 relative z-10 text-amber-300 text-[10px] font-bold ml-auto">20<img src={iconCoin} alt="C" className="w-3.5 h-3.5" /></div></span>
                 </motion.button>
-                <motion.button whileTap={{ scale: 0.93, y: 2 }}
-                  onClick={handleRevealWord}
+                <motion.button 
+                  whileTap={!isCurrentWordSolved && userCoins >= 50 ? { scale: 0.93, y: 2 } : {}}
+                  onClick={!isCurrentWordSolved && userCoins >= 50 ? handleRevealWord : undefined}
+                  disabled={isCurrentWordSolved || userCoins < 50}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden w-full"
-                  style={{ background: 'linear-gradient(180deg, #f59e0b, #d97706)', border: '2px solid #b45309', boxShadow: '0 3px 0 #92400e' }}>
+                  style={{ 
+                    background: (!isCurrentWordSolved && userCoins >= 50) ? 'linear-gradient(180deg, #f59e0b, #d97706)' : 'linear-gradient(180deg, #64748b, #475569)', 
+                    border: (!isCurrentWordSolved && userCoins >= 50) ? '2px solid #b45309' : '2px solid #334155', 
+                    boxShadow: (!isCurrentWordSolved && userCoins >= 50) ? '0 3px 0 #92400e' : 'none',
+                    opacity: (!isCurrentWordSolved && userCoins >= 50) ? 1 : 0.55,
+                    cursor: (!isCurrentWordSolved && userCoins >= 50) ? 'pointer' : 'not-allowed'
+                  }}>
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Lightbulb size={13} className="relative z-10" />
                   <span className="relative z-10">Mở cả từ</span>
@@ -2386,18 +2512,18 @@ const CrosswordGame = ({
               <div className="flex gap-2 flex-shrink-0">
                 {/* Mở 1 chữ — portrait */}
                 <motion.button
-                  whileTap={userCoins >= 20 ? { scale: 0.93, y: 2 } : {}}
-                  onClick={userCoins >= 20 ? handleRevealLetter : undefined}
-                  disabled={userCoins < 20}
+                  whileTap={(!isCellCorrect && userCoins >= 20) ? { scale: 0.93, y: 2 } : {}}
+                  onClick={(!isCellCorrect && userCoins >= 20) ? handleRevealLetter : undefined}
+                  disabled={isCellCorrect || userCoins < 20}
                   className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden"
                   style={{
-                    background: userCoins >= 20
+                    background: (!isCellCorrect && userCoins >= 20)
                       ? 'linear-gradient(180deg, #06b6d4, #0891b2)'
                       : 'linear-gradient(180deg, #64748b, #475569)',
-                    border: userCoins >= 20 ? '2px solid #0e7490' : '2px solid #334155',
-                    boxShadow: userCoins >= 20 ? '0 3px 0 #0e7490' : 'none',
-                    cursor: userCoins >= 20 ? 'pointer' : 'not-allowed',
-                    opacity: userCoins >= 20 ? 1 : 0.55,
+                    border: (!isCellCorrect && userCoins >= 20) ? '2px solid #0e7490' : '2px solid #334155',
+                    boxShadow: (!isCellCorrect && userCoins >= 20) ? '0 3px 0 #0e7490' : 'none',
+                    cursor: (!isCellCorrect && userCoins >= 20) ? 'pointer' : 'not-allowed',
+                    opacity: (!isCellCorrect && userCoins >= 20) ? 1 : 0.55,
                   }}>
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Eye size={13} className="relative z-10" />
@@ -2409,18 +2535,18 @@ const CrosswordGame = ({
 
                 {/* Mở cả từ — portrait */}
                 <motion.button
-                  whileTap={userCoins >= 50 ? { scale: 0.93, y: 2 } : {}}
-                  onClick={userCoins >= 50 ? handleRevealWord : undefined}
-                  disabled={userCoins < 50}
+                  whileTap={(!isCurrentWordSolved && userCoins >= 50) ? { scale: 0.93, y: 2 } : {}}
+                  onClick={(!isCurrentWordSolved && userCoins >= 50) ? handleRevealWord : undefined}
+                  disabled={isCurrentWordSolved || userCoins < 50}
                   className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden"
                   style={{
-                    background: userCoins >= 50
+                    background: (!isCurrentWordSolved && userCoins >= 50)
                       ? 'linear-gradient(180deg, #f59e0b, #d97706)'
                       : 'linear-gradient(180deg, #64748b, #475569)',
-                    border: userCoins >= 50 ? '2px solid #b45309' : '2px solid #334155',
-                    boxShadow: userCoins >= 50 ? '0 3px 0 #92400e' : 'none',
-                    cursor: userCoins >= 50 ? 'pointer' : 'not-allowed',
-                    opacity: userCoins >= 50 ? 1 : 0.55,
+                    border: (!isCurrentWordSolved && userCoins >= 50) ? '2px solid #b45309' : '2px solid #334155',
+                    boxShadow: (!isCurrentWordSolved && userCoins >= 50) ? '0 3px 0 #92400e' : 'none',
+                    cursor: (!isCurrentWordSolved && userCoins >= 50) ? 'pointer' : 'not-allowed',
+                    opacity: (!isCurrentWordSolved && userCoins >= 50) ? 1 : 0.55,
                   }}>
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Lightbulb size={13} className="relative z-10" />
@@ -2505,6 +2631,9 @@ const CrosswordGame = ({
           opponentAvatarRef={opponentAvatarRef}
         />
       )}
+
+      {/* ── FINISHED OVERLAY — Portal renders on top of everything ── */}
+      {rootOverlay}
 
       <AnimatePresence>
         {confirmQuit && (

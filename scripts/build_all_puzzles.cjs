@@ -67,7 +67,7 @@ function buildCrossword(wordList) {
   const norm=placed.map(w=>({...w,row:w.row-minR,col:w.col-minC}));
   norm.sort((a,b)=>a.row!==b.row?a.row-b.row:a.col-b.col);
   norm.forEach((w,i)=>{w.num=i+1;w.id=`${i+1}-${w.direction}`;});
-  return {gridSize:{rows:Math.min(12,maxR-minR+1),cols:Math.min(12,maxC-minC+1)},words:norm};
+  return {gridSize:{rows:maxR-minR+1,cols:maxC-minC+1},words:norm};
 }
 
 // Load seed files in order
