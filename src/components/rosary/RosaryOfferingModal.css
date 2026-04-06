@@ -45,7 +45,8 @@
 .ro-global-counter {
   position: absolute;
   top: 100px;
-  left: 50px;
+  left: 50%;
+  transform: translateX(-50%);
   max-width: calc(100% - 80px);
   display: flex;
   align-items: center;

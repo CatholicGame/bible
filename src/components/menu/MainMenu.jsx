@@ -429,7 +429,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
 
 
                     {/* User button — opens quick profile menu */}
-                    <div className="relative flex-shrink-0">
+                    <div className="relative flex-shrink-0 ml-auto">
                         <motion.button whileTap={{ y: 2 }}
                             onClick={() => setShowProfileMenu(v => !v)}
                             className="flex items-center gap-2 px-2.5 py-1.5 rounded-full transition-colors"

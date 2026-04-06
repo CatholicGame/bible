@@ -785,6 +785,30 @@ export const usePlayFabStore = create((set, get) => ({
     return unsub; // caller must call unsub() on cleanup
   },
 
+  // ── Re-fetch rosary data from PlayFab (cross-device sync) ──
+  // Call this when the Rosary modal opens to pick up changes from other devices.
+  refreshRosaryData: async () => {
+    try {
+      const res = await getUserData(['RosaryToday', 'RosaryDate', 'RosaryTotal', 'Coins']);
+      const d = res?.Data || {};
+      const rosaryTotal = parseInt(d.RosaryTotal?.Value) || 0;
+      const rosaryDate  = d.RosaryDate?.Value || null;
+      const rosaryToday = parseInt(d.RosaryToday?.Value) || 0;
+      const coins       = parseInt(d.Coins?.Value) || 0;
+      const todayStr = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' })).toISOString().slice(0, 10);
+      const effectiveRosaryToday = rosaryDate === todayStr ? rosaryToday : 0;
+      set({
+        rosaryToday: effectiveRosaryToday,
+        rosaryDate: todayStr,
+        rosaryTotal,
+        coins,
+      });
+      console.log(`[Rosary] Refreshed from PlayFab: today=${effectiveRosaryToday}, total=${rosaryTotal}, coins=${coins}`);
+    } catch (e) {
+      console.warn('[Rosary] Failed to refresh from PlayFab', e);
+    }
+  },
+
   // ── Legacy one-time load (kept as fallback) ──
   loadRosaryGlobal: async () => {
     try {

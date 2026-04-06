@@ -127,11 +127,17 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
 
     // ── Real-time global rosary count from Firebase ──
     const subscribeRosaryGlobal = usePlayFabStore(s => s.subscribeRosaryGlobal);
+    const refreshRosaryData = usePlayFabStore(s => s.refreshRosaryData);
     useEffect(() => {
         if (!subscribeRosaryGlobal) return;
         const unsub = subscribeRosaryGlobal(); // starts onValue listener
         return () => unsub?.();               // cleanup on modal close
     }, [subscribeRosaryGlobal]);
+
+    // ── Cross-device sync: re-fetch rosary data from PlayFab on mount ──
+    useEffect(() => {
+        refreshRosaryData?.();
+    }, []);
 
 
     useEffect(() => {
@@ -627,7 +633,7 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
                         bottom: 0, left: 0, right: 0,
                         display: 'flex',
                         flexDirection: 'row',
-                        gap: isLandscape ? -60 : -60,
+                        gap: isLandscape ? -60 : 0,
                         justifyContent: 'center',
                         alignItems: 'flex-end',
                         pointerEvents: 'none',
@@ -637,7 +643,7 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
                             <motion.div key={i}
                                 initial={{ scale: 0, y: 50 }} animate={{ scale: 1, y: 0 }}
                                 transition={{ type: 'spring', stiffness: 300, damping: 20, delay: i * 0.15 }}
-                                style={{ position: 'relative', textAlign: 'center' }}
+                                style={{ position: 'relative', textAlign: 'center', margin: isLandscape ? 0 : '0 -20px' }}
                             >
                                 {/* Phấn hương bay lên */}
                                 {[0, 1, 2].map(j => (
@@ -657,7 +663,7 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
                                     src={rose.img}
                                     alt={`Tràng ${i + 1}`}
                                     style={{
-                                        height: isLandscape ? 400 : 760, // Exact x2 of original 380px for portrait
+                                        height: isLandscape ? 400 : '55vh', // Responsive to viewport — occupies lower half
                                         width: 'auto',
                                         objectFit: 'contain',
                                         filter: `drop-shadow(0 4px 10px rgba(0,0,0,0.25))`,
