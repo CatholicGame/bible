@@ -10,17 +10,12 @@ import { useRoom } from '../../../hooks/useRoom';
 import { setPendingRefund, clearPendingRefund } from '../../../hooks/usePendingRefund';
 import EmojiReactionPanel from '../EmojiReactionPanel';
 import UserAvatar from '../../common/UserAvatar';
-import bgCrossword from '../../../assets/common/bg_crossword.png';
+import bgCrosswordLandscape from '../../../assets/common/cross_bg_landscape.jpg';
+import bgCrosswordPortrait from '../../../assets/common/cross_bg_portrait.jpg';
 import resultBanner from '../../../assets/common/result_banner.png';
 import iconCoin from '../../../assets/common/coin.png';
 import iconTrophy from '../../../assets/common/trophy.png';
 import RAW_PUZZLES from '../../../data/crossword_puzzles.json';
-
-const BG_STYLE = {
-  backgroundImage: `url(${bgCrossword})`,
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-};
 
 /* ── Physics-based coin burst spawner ──
    Pre-computes a parabolic (vx·t, vy·t + ½·g·t²) trajectory
@@ -237,8 +232,6 @@ const P2PRaceBar = ({ myLabel, myPercent, myColor, opponentLabel, opponentPercen
     </div>
   );
 };
-
-
 /* Simple bar used in result overlay */
 const ProgressBar = ({ label, percent, color, avatar }) => (
   <div className="flex items-center gap-2 w-full">
@@ -278,9 +271,14 @@ const CrosswordFinishedOverlay = ({
   onRequestRematch = null,   // P2P only
   canAffordRematch = true,   // P2P only
   rematchStatus = null,      // 'waiting'|'declined'
+  puzzleWords = [],          // full word list with clue + explanation
 }) => {
   const { globalScore, coins: profileCoins, nickname } = usePlayFabStore();
   const rankName = getRankByScore(globalScore || 0);
+  const [showExplain, setShowExplain] = useState(false);
+
+  // Words user actually solved (filter puzzleWords by solvedWords set)
+  const solvedWordsList = puzzleWords.filter(w => solvedWords.has(w.id));
 
   const totalCoins = earnedCoins?.total ?? 0;
   const totalXP    = earnedXP?.total ?? 0;
@@ -565,6 +563,16 @@ const CrosswordFinishedOverlay = ({
                   <p className="text-center text-red-300 text-sm font-semibold py-2">Đối thủ đã từ chối chơi tiếp</p>
                 )}
 
+                {/* Xem Giải Thích button */}
+                {solvedWordsList.length > 0 && (
+                  <button onClick={() => setShowExplain(true)}
+                    className="w-full bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-widest text-sm py-4 rounded-full border-4 border-purple-900 shadow-[0_6px_0_rgba(88,28,135,1)] active:translate-y-1.5 active:shadow-none transition-all flex justify-center items-center gap-2 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full" />
+                    <Lightbulb size={16} className="relative z-10" />
+                    <span className="relative z-10">Xem Giải Thích ({solvedWordsList.length} từ)</span>
+                  </button>
+                )}
+
                 {(onReplay || onNewGame) && (
                   <div className="flex flex-row gap-2">
                     {onReplay && (
@@ -594,6 +602,92 @@ const CrosswordFinishedOverlay = ({
           </div>
         </motion.div>
       </div>
+
+      {/* ── EXPLANATION POPUP ── */}
+      <AnimatePresence>
+        {showExplain && createPortal(
+          <>
+            {/* Backdrop */}
+            <motion.div
+              key="explain-bd"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setShowExplain(false)}
+              style={{ position:'fixed', inset:0, zIndex:11000, background:'rgba(0,0,0,0.75)', backdropFilter:'blur(6px)', cursor:'pointer' }}
+            />
+            {/* Panel */}
+            <motion.div
+              key="explain-panel"
+              initial={{ opacity:0, y:60, scale:0.94 }}
+              animate={{ opacity:1, y:0, scale:1 }}
+              exit={{ opacity:0, y:40, scale:0.96 }}
+              transition={{ type:'spring', stiffness:280, damping:26 }}
+              style={{
+                position:'fixed', bottom:0, left:0, right:0, zIndex:11001,
+                maxHeight:'82dvh', display:'flex', flexDirection:'column',
+                background:'linear-gradient(180deg,#1e3a8a 0%,#1e40af 100%)',
+                borderRadius:'24px 24px 0 0',
+                border:'3px solid #60a5fa',
+                borderBottom:'none',
+                boxShadow:'0 -8px 40px rgba(30,58,138,0.7)',
+              }}
+            >
+              {/* Header */}
+              <div style={{ padding:'16px 20px 12px', borderBottom:'2px solid rgba(255,255,255,0.12)', display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                  <Lightbulb size={18} color="#fbbf24" />
+                  <span style={{ fontWeight:900, fontSize:'1rem', color:'#fef3c7', letterSpacing:'0.05em', textTransform:'uppercase' }}>Giải Thích</span>
+                  <span style={{ background:'rgba(251,191,36,0.25)', border:'1.5px solid #fbbf24', color:'#fef3c7', fontWeight:900, fontSize:'0.7rem', padding:'2px 8px', borderRadius:9999 }}>{solvedWordsList.length} từ</span>
+                </div>
+                <button onClick={() => setShowExplain(false)}
+                  style={{ width:32, height:32, borderRadius:'50%', background:'rgba(255,255,255,0.1)', border:'2px solid rgba(255,255,255,0.2)', color:'#fff', fontSize:18, display:'flex', alignItems:'center', justifyContent:'center', lineHeight:1, cursor:'pointer' }}
+                >×</button>
+              </div>
+              {/* Scrollable word list */}
+              <div style={{ overflowY:'auto', flex:1, padding:'12px 16px 24px' }}>
+                {solvedWordsList.map((word, idx) => (
+                  <motion.div
+                    key={word.id}
+                    initial={{ opacity:0, x:-16 }}
+                    animate={{ opacity:1, x:0 }}
+                    transition={{ delay: idx * 0.04 }}
+                    style={{
+                      marginBottom:12,
+                      background:'rgba(255,255,255,0.07)',
+                      border:'1.5px solid rgba(255,255,255,0.13)',
+                      borderRadius:16,
+                      padding:'12px 14px',
+                    }}
+                  >
+                    {/* Word header */}
+                    <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:6 }}>
+                      <span style={{ background:'linear-gradient(135deg,#fbbf24,#f59e0b)', color:'#1e3a8a', fontWeight:900, fontSize:'0.75rem', padding:'2px 8px', borderRadius:9999, border:'1.5px solid #fef08a', flexShrink:0 }}>
+                        {word.num}.
+                      </span>
+                      <span style={{ fontWeight:900, fontSize:'1rem', color:'#fef3c7', letterSpacing:'0.12em' }}>{word.answer}</span>
+                      <span style={{ fontSize:'0.68rem', fontWeight:700, color: word.direction==='across' ? '#93c5fd' : '#86efac', background: word.direction==='across' ? 'rgba(147,197,253,0.15)' : 'rgba(134,239,172,0.15)', padding:'1px 6px', borderRadius:9999, border:`1px solid ${word.direction==='across' ? 'rgba(147,197,253,0.3)' : 'rgba(134,239,172,0.3)'}`, flexShrink:0 }}>
+                        {word.direction === 'across' ? '→ Ngang' : '↓ Dọc'}
+                      </span>
+                    </div>
+                    {/* Clue */}
+                    <p style={{ fontSize:'0.8rem', color:'rgba(255,255,255,0.75)', marginBottom: word.explanation ? 6 : 0, lineHeight:1.5, fontStyle:'italic' }}>
+                      📎 {word.clue}
+                    </p>
+                    {/* Explanation */}
+                    {word.explanation && (
+                      <div style={{ background:'rgba(251,191,36,0.1)', border:'1px solid rgba(251,191,36,0.25)', borderRadius:10, padding:'8px 10px', marginTop:4 }}>
+                        <p style={{ fontSize:'0.82rem', color:'#fef3c7', lineHeight:1.55, margin:0 }}>
+                          💡 {word.explanation}
+                        </p>
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </>,
+          document.body
+        )}
+      </AnimatePresence>
     </>,
     document.body
   );
@@ -1619,6 +1713,13 @@ const CrosswordGame = ({
     return () => window.removeEventListener('resize', update);
   }, []);
 
+  // Background respects orientation
+  const bgStyle = {
+    backgroundImage: `url(${isLandscape ? bgCrosswordLandscape : bgCrosswordPortrait})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  };
+
   /* ── Cell Size ── */
   const [cellSize, setCellSize] = useState(36);
   useEffect(() => {
@@ -1712,6 +1813,7 @@ const CrosswordGame = ({
         onRequestRematch={_isP2P && opponentStillOnline ? handleRequestRematch : null}
         canAffordRematch={canAffordRematch}
         rematchStatus={rematchStatus}
+        puzzleWords={puzzle.words}
       />
     );
   }
@@ -1720,7 +1822,7 @@ const CrosswordGame = ({
   if (gameState === 'intro') {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden"
-        style={{ ...BG_STYLE }}>
+        style={bgStyle}>
         {/* Dark overlay */}
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'rgba(5,10,25,0.78)' }} />
 
@@ -1876,7 +1978,7 @@ const CrosswordGame = ({
 
     return (
       <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden select-none"
-        style={{ ...BG_STYLE }}>
+        style={bgStyle}>
         <div className="absolute inset-0" style={{ background: 'rgba(5,10,25,0.85)' }} />
 
         {/* Ambient pulses */}
@@ -2125,7 +2227,7 @@ const CrosswordGame = ({
 
   return (
     <div className="w-full h-full flex flex-col relative overflow-hidden select-none"
-      style={{ ...BG_STYLE }}>
+      style={bgStyle}>
       {/* ── Layered blur background ── */}
       {/* Layer 1: dark scrim to deepen the background photo */}
       <div className="absolute inset-0 pointer-events-none z-0"

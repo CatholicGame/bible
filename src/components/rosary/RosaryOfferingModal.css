@@ -86,11 +86,12 @@
   line-height: 1;
 }
 
-/* ── Profile card — portrait: top right ── */
+/* ── Profile card — portrait: top center ── */
 .ro-profile-card {
   position: absolute;
   top: 14px;
-  right: 16px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -102,6 +103,7 @@
   border: 1.5px solid rgba(201, 168, 76, 0.45);
   box-shadow: 0 4px 18px rgba(160, 120, 40, 0.20);
   z-index: 10;
+  white-space: nowrap;
 }
 
 .ro-profile-info {
@@ -576,5 +578,6 @@
   /* In landscape, restore cards to bottom */
   .ro-header { justify-content: flex-end; }
   .ro-global-counter { top: auto; bottom: 16px; left: 16px; right: auto; transform: none; max-width: 220px; }
-  .ro-profile-card   { top: auto; bottom: 16px; right: 16px; }
+  .ro-profile-card   { top: auto; bottom: 16px; left: auto; right: 16px; transform: none; }
+
 }

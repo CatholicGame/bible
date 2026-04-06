@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Maximize2, Minimize2 } from 'lucide-react';
 import { signInAnonymously } from 'firebase/auth';
 import { ref, update, onValue } from 'firebase/database';
 import { db } from './config/firebase';
@@ -72,6 +73,20 @@ function App() {
   const [activeMode, setActiveMode] = useState(null);
   const [initialPin, setInitialPin] = useState('');
   const [showProfileRoadmap, setShowProfileRoadmap] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement);
+
+  // Track fullscreen state
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+    };
+  }, []);
+
+  const toggleFullscreen = () => isFullscreen ? exitFullscreen() : enterFullscreen();
 
   // P2P crossword state
   const [opponentProgress, setOpponentProgress] = useState(null);   // real-time opponent data
@@ -471,6 +486,36 @@ function App() {
         )}
 
       </AnimatePresence>
+
+      {/* ── Global Fullscreen Toggle Button — visible on all screens ── */}
+      <button
+        onClick={toggleFullscreen}
+        title={isFullscreen ? 'Thoát toàn màn hình' : 'Toàn màn hình'}
+        style={{
+          position: 'fixed',
+          bottom: 14,
+          left: 14,
+          width: 36,
+          height: 36,
+          borderRadius: '50%',
+          background: 'rgba(0,0,0,0.42)',
+          border: '1.5px solid rgba(255,255,255,0.22)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'rgba(255,255,255,0.75)',
+          cursor: 'pointer',
+          zIndex: 99999,
+          boxShadow: '0 2px 10px rgba(0,0,0,0.35)',
+          transition: 'background 0.2s, transform 0.15s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.65)'; e.currentTarget.style.transform = 'scale(1.1)'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.42)'; e.currentTarget.style.transform = 'scale(1)'; }}
+      >
+        {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+      </button>
     </div>
   );
 }

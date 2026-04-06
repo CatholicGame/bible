@@ -323,8 +323,7 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
         >
             {/* ── Header: close + guide button ── */}
             <div className="ro-header">
-                <button
-                    className="ro-guide-btn"
+                <button className="ro-guide-btn"
                     onClick={() => setShowGuide(true)}
                     aria-label="Hướng dẫn"
                     style={{
@@ -346,8 +345,30 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
                 >
                     <img src={iconInfo} alt="Info" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </button>
-                <button className="ro-close" onClick={handleClose} aria-label="Đóng">
-                    <X size={15} strokeWidth={2.5} />
+
+                {/* Close button — position fixed top-right, always visible */}
+                <button
+                    onClick={handleClose}
+                    aria-label="Đóng"
+                    style={{
+                        position: 'fixed',
+                        top: 12, right: 12,
+                        width: 40, height: 40,
+                        borderRadius: '50%',
+                        background: 'rgba(0,0,0,0.55)',
+                        border: '2px solid rgba(255,255,255,0.3)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: '#fff',
+                        cursor: 'pointer', zIndex: 9999,
+                        boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
+                        transition: 'background 0.2s, transform 0.15s',
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.8)'; e.currentTarget.style.transform = 'scale(1.08)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.55)'; e.currentTarget.style.transform = 'scale(1)'; }}
+                >
+                    <X size={18} strokeWidth={2.5} />
                 </button>
             </div>
 

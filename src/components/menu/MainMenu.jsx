@@ -11,7 +11,8 @@ import RankRoadmap from '../profile/RankRoadmap';
 import SettingsModal from '../common/SettingsModal';
 import RosaryOfferingModal from '../rosary/RosaryOfferingModal';
 
-import bgImage from '../../assets/common/common_background.png';
+import bgLandscape from '../../assets/common/common_background_land.png';
+import bgPortrait from '../../assets/common/main_bg_portrait.png';
 import iconCoin from '../../assets/common/coin.png';
 import iconTrophy from '../../assets/common/trophy.png';
 import roseIcon from '../../assets/rosary/rose1.png';
@@ -65,39 +66,39 @@ function useCardTransform(dragX, idx, cwRef, cardW, step) {
     const x = useTransform(dragX, (xv) => {
         const cw = cwRef.current;
         if (!cw) return 0;
-        
+
         const rawIdx = (cw / 2 - cardW / 2 - xv) / step;
-        
+
         const getScale = (i) => {
             const cardCenterX = xv + i * step + cardW / 2;
             const distPx = Math.abs(cardCenterX - cw / 2);
             const t = Math.min(distPx / (step * SC_RANGE), 1);
             return MAX_SC - (MAX_SC - MIN_SC) * t;
         };
-        
+
         const N = GAMES.length;
         const widths = [];
         for (let i = 0; i < N; i++) widths.push(cardW * getScale(i));
-        
+
         const layouts = [0];
         for (let i = 1; i < N; i++) {
-            layouts[i] = layouts[i-1] + widths[i-1]/2 + GAP + widths[i]/2;
+            layouts[i] = layouts[i - 1] + widths[i - 1] / 2 + GAP + widths[i] / 2;
         }
-        
+
         let cameraLayout = 0;
         if (rawIdx <= 0) {
             cameraLayout = layouts[0] + rawIdx * (widths[0] + GAP);
         } else if (rawIdx >= N - 1) {
-            cameraLayout = layouts[N-1] + (rawIdx - (N-1)) * (widths[N-1] + GAP);
+            cameraLayout = layouts[N - 1] + (rawIdx - (N - 1)) * (widths[N - 1] + GAP);
         } else {
             const floor = Math.floor(rawIdx);
             const frac = rawIdx - floor;
-            cameraLayout = layouts[floor] + frac * (layouts[floor+1] - layouts[floor]);
+            cameraLayout = layouts[floor] + frac * (layouts[floor + 1] - layouts[floor]);
         }
-        
+
         const targetScreenCenter = cw / 2 - cameraLayout + layouts[idx];
         const currentScreenCenter = xv + idx * (cardW + GAP) + cardW / 2;
-        
+
         return targetScreenCenter - currentScreenCenter;
     });
     return { scale, zIndex, x };
@@ -111,11 +112,11 @@ const GameCard = ({ game, idx, dragX, cwRef, isSnapped, onPress, stats, cardW, c
     const isComingSoon = !!game.comingSoon;
 
     // Scale font/spacing proportionally so cards look right at any size
-    const titleSize   = Math.round(cardH * 0.082);
-    const badgeSize   = Math.round(cardH * 0.039);
-    const bottomOff   = Math.round(cardH * 0.088);
-    const badgeOff    = Math.round(cardH * 0.300);
-    const borderRad   = Math.round(cardH * 0.065);
+    const titleSize = Math.round(cardH * 0.082);
+    const badgeSize = Math.round(cardH * 0.039);
+    const bottomOff = Math.round(cardH * 0.088);
+    const badgeOff = Math.round(cardH * 0.300);
+    const borderRad = Math.round(cardH * 0.065);
 
     return (
         <motion.div style={{ width: cardW, height: cardH, scale, zIndex, x, flexShrink: 0, position: 'relative' }}>
@@ -252,6 +253,18 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
     const [ready, setReady] = useState(false);
     const [cardDims, setCardDims] = useState({ cardW: BASE_CARD_W, cardH: BASE_CARD_H, step: Math.round(BASE_CARD_W * MAX_SC) + GAP });
     const [isLandscape, setIsLandscape] = useState(false);
+    // Separate orientation state for background — uses proper matchMedia, not carousel height
+    const [bgIsLandscape, setBgIsLandscape] = useState(
+        () => window.matchMedia('(orientation: landscape)').matches
+    );
+
+    useEffect(() => {
+        const mq = window.matchMedia('(orientation: landscape)');
+        setBgIsLandscape(mq.matches);
+        const listener = (e) => setBgIsLandscape(e.matches);
+        mq.addEventListener('change', listener);
+        return () => mq.removeEventListener('change', listener);
+    }, []);
 
     const { coins, globalScore, rosaryToday, rosaryGlobal, submitRosary } = usePlayFabStore();
     const avatarUrl = usePlayFabStore(state => state.avatarUrl);
@@ -321,7 +334,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
     const enterFullscreen = () => {
         try {
             if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(() => {});
+                document.documentElement.requestFullscreen().catch(() => { });
             }
         } catch (err) { /* ignore */ }
     };
@@ -355,8 +368,12 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
         <div className="w-full h-full flex flex-col overflow-hidden relative select-none">
 
             {/* Background */}
-            <div className="absolute inset-0 z-0">
-                <img src={bgImage} alt="" className="w-full h-full object-cover object-center" />
+            <div className="absolute inset-0 z-0 overflow-hidden">
+                <img
+                    src={bgIsLandscape ? bgLandscape : bgPortrait}
+                    alt=""
+                    className="w-full h-full object-cover object-center"
+                />
                 <div className="absolute inset-0"
                     style={{ background: 'linear-gradient(to bottom,rgba(0,80,120,0.38) 0%,rgba(0,180,216,0.04) 45%,rgba(0,80,120,0.32) 100%)' }} />
             </div>
@@ -414,9 +431,9 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                     <motion.button whileTap={{ scale: 0.9, y: 2 }}
                         onClick={() => {
                             if (!document.fullscreenElement) {
-                                document.documentElement.requestFullscreen().catch(() => {});
+                                document.documentElement.requestFullscreen().catch(() => { });
                             } else {
-                                document.exitFullscreen().catch(() => {});
+                                document.exitFullscreen().catch(() => { });
                             }
                         }}
                         className="flex items-center justify-center w-10 h-10 rounded-full transition-colors ml-auto sm:ml-0 mr-[-4px]"
@@ -585,10 +602,10 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                 onClick={() => onJoinRoom('', null)}
                                 className="w-full flex items-center gap-3 px-4 py-2.5 rounded-2xl"
                                 style={{
-                            background: 'rgba(255,255,255,0.82)', backdropFilter: 'blur(14px)',
-                            border: '1.5px solid rgba(0,180,216,0.25)',
-                            boxShadow: '0 4px 12px rgba(0,100,150,0.12)',
-                        }}>
+                                    background: 'rgba(255,255,255,0.82)', backdropFilter: 'blur(14px)',
+                                    border: '1.5px solid rgba(0,180,216,0.25)',
+                                    boxShadow: '0 4px 12px rgba(0,100,150,0.12)',
+                                }}>
                                 <span className="shrink-0 text-xs" style={{ color: '#7fb3cc' }}>#</span>
                                 <span className="flex-1 font-bold tracking-[0.15em] text-sm text-left" style={{ color: '#7fb3cc' }}>Nhập PIN phòng bạn bè...</span>
                                 <span className="text-xs" style={{ color: '#7fb3cc' }}>→</span>
@@ -662,11 +679,11 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                 className="relative flex items-center gap-3 px-4 py-3.5 rounded-2xl w-full text-left overflow-hidden cursor-not-allowed opacity-90"
                                 style={{ background: '#94a3b8', border: '2px solid #64748b', boxShadow: '0 4px 0 #64748b' }}>
                                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20"
-                                     style={{ background: 'rgba(15,23,42,0.45)', backdropFilter: 'blur(1.5px)' }}>
-                                     <span className="px-3 py-1 rounded-full font-black uppercase tracking-widest shadow-md"
-                                         style={{ fontSize: '10px', background: 'linear-gradient(135deg,#fbbf24,#f59e0b)', color: '#7c2d12', border: '2px solid #b45309', boxShadow: '0 2px 0 #b45309' }}>
-                                         Coming Soon
-                                     </span>
+                                    style={{ background: 'rgba(15,23,42,0.45)', backdropFilter: 'blur(1.5px)' }}>
+                                    <span className="px-3 py-1 rounded-full font-black uppercase tracking-widest shadow-md"
+                                        style={{ fontSize: '10px', background: 'linear-gradient(135deg,#fbbf24,#f59e0b)', color: '#7c2d12', border: '2px solid #b45309', boxShadow: '0 2px 0 #b45309' }}>
+                                        Coming Soon
+                                    </span>
                                 </div>
                                 <div className="w-11 h-11 rounded-xl bg-slate-300 flex items-center justify-center shrink-0 border-2 border-black/20 text-xl grayscale blur-[1px]">🎯</div>
                                 <div className="flex-1 z-10 grayscale blur-[0.5px]">
