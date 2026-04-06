@@ -10,8 +10,8 @@ import { useRoom } from '../../../hooks/useRoom';
 import { setPendingRefund, clearPendingRefund } from '../../../hooks/usePendingRefund';
 import EmojiReactionPanel from '../EmojiReactionPanel';
 import UserAvatar from '../../common/UserAvatar';
-import bgCrosswordLandscape from '../../../assets/common/cross_bg_landscape.jpg';
-import bgCrosswordPortrait from '../../../assets/common/cross_bg_portrait.jpg';
+import bgCrosswordLandscape from '../../../assets/common/common_background_land.png';
+import bgCrosswordPortrait from '../../../assets/common/main_bg_portrait.png';
 import resultBanner from '../../../assets/common/result_banner.png';
 import iconCoin from '../../../assets/common/coin.png';
 import iconTrophy from '../../../assets/common/trophy.png';
@@ -605,7 +605,7 @@ const CrosswordFinishedOverlay = ({
 
       {/* ── EXPLANATION POPUP ── */}
       <AnimatePresence>
-        {showExplain && createPortal(
+        {showExplain && (
           <>
             {/* Backdrop */}
             <motion.div
@@ -684,8 +684,7 @@ const CrosswordFinishedOverlay = ({
                 ))}
               </div>
             </motion.div>
-          </>,
-          document.body
+          </>
         )}
       </AnimatePresence>
     </>,
@@ -1447,6 +1446,10 @@ const CrosswordGame = ({
 
   /* ── Start game ── */
   const handleStart = () => {
+    if (isReplay) {
+      // Chơi lại cùng puzzle: reset hoàn toàn grid trước khi bắt đầu
+      resetGameState(puzzle);
+    }
     setGameState('playing');
     markCrosswordPlayed(puzzle.id);
     const firstWord = puzzle.words[0];
@@ -1658,17 +1661,14 @@ const CrosswordGame = ({
     finishCalledRef.current = false;
   };
 
-  /* ── Replay same puzzle (0 XP, reduced coins) ── */
+  /* ── Replay same puzzle ──
+     Bước 1: hiện lại màn hình intro (hướng dẫn)
+     Bước 2: user bấm "Bắt Đầu" → handleStart() sẽ gọi resetGameState + setGameState('playing')
+  */
   const handleReplay = () => {
     setIsReplay(true);
-    resetGameState(puzzle);
-    setGameState('playing');
-    const firstWord = puzzle.words[0];
-    if (firstWord) {
-      setSelectedCell({ row: firstWord.row, col: firstWord.col });
-      setDirection(firstWord.direction);
-      setActiveWordId(firstWord.id);
-    }
+    // Chỉ hiện intro — handleStart() dưới sẽ reset và chạy game
+    setGameState('intro');
   };
 
   /* ── New game with a different puzzle (full rewards) ── */
@@ -1823,8 +1823,7 @@ const CrosswordGame = ({
     return (
       <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden"
         style={bgStyle}>
-        {/* Dark overlay */}
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'rgba(5,10,25,0.78)' }} />
+
 
         {/* Ambient glow shapes */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -1893,24 +1892,36 @@ const CrosswordGame = ({
               ))}
             </div>
 
-            {/* Reward row */}
-            <div className="flex justify-center gap-3 mt-3 pt-3 border-t border-white/10">
-              <span className="text-[11px] font-bold text-purple-300">⭐ +3 XP/từ</span>
-              <span className="text-white/30 text-[11px]">·</span>
-              <span className="text-[11px] font-bold text-amber-300"><img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /> +5 Coin/từ</span>
-              <span className="text-white/30 text-[11px]">·</span>
-              <span className="text-[11px] font-bold text-yellow-300">🏆 Bonus 100%</span>
-            </div>
+            {/* Reward row — hiện khác khi replay */}
+            {isReplay ? (
+              <div className="flex justify-center items-center gap-2 mt-3 pt-3 border-t border-white/10">
+                <span className="text-sm">🚫</span>
+                <span className="text-[12px] font-black text-red-300 tracking-wide">
+                  Chơi lại không nhận được XP và Coin
+                </span>
+              </div>
+            ) : (
+              <div className="flex justify-center gap-3 mt-3 pt-3 border-t border-white/10">
+                <span className="text-[11px] font-bold text-purple-300">⭐ +3 XP/từ</span>
+                <span className="text-white/30 text-[11px]">·</span>
+                <span className="text-[11px] font-bold text-amber-300"><img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /> +5 Coin/từ</span>
+                <span className="text-white/30 text-[11px]">·</span>
+                <span className="text-[11px] font-bold text-yellow-300">🏆 Bonus 100%</span>
+              </div>
+            )}
           </div>
 
-          {/* ── Action button ── */}
           <button
             onClick={handleStart}
-            className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a] font-black uppercase tracking-wider text-base py-4 rounded-2xl border-4 border-[#1e3a8a] shadow-[0_5px_0_rgba(30,58,138,1)] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 relative overflow-hidden group"
+            className={`flex-1 font-black uppercase tracking-wider text-base py-4 rounded-2xl border-4 border-[#1e3a8a] shadow-[0_5px_0_rgba(30,58,138,1)] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 relative overflow-hidden group ${
+              isReplay
+                ? 'bg-blue-400 hover:bg-blue-300 text-white'
+                : 'bg-yellow-400 hover:bg-yellow-300 text-[#1e3a8a]'
+            }`}
           >
             <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-xl" />
             <Play fill="currentColor" size={18} className="relative z-10" />
-            <span className="relative z-10">Bắt Đầu</span>
+            <span className="relative z-10">{isReplay ? 'Bắt Đầu Chơi Lại' : 'Bắt Đầu'}</span>
           </button>
 
           {/* ── Player info card ── */}
@@ -2227,25 +2238,17 @@ const CrosswordGame = ({
 
   return (
     <div className="w-full h-full flex flex-col relative overflow-hidden select-none"
-      style={bgStyle}>
-      {/* ── Layered blur background ── */}
-      {/* Layer 1: dark scrim to deepen the background photo */}
-      <div className="absolute inset-0 pointer-events-none z-0"
-        style={{ background: 'rgba(10,15,40,0.55)' }} />
+      style={{ background: '#0a0f28' }}>
 
-      {/* Layer 2: frosted glass blur */}
-      <div className="absolute inset-0 pointer-events-none z-0"
-        style={{ backdropFilter: 'blur(3px)', WebkitBackdropFilter: 'blur(3px)' }} />
-
-      {/* Layer 3: animated bokeh orbs */}
+      {/* ── Animated bokeh orbs — ambient background ── */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         {[
-          { size: 220, x: '12%',  y: '18%',  color: 'rgba(96,165,250,0.18)',  dur: '9s',  delay: '0s'   },
-          { size: 180, x: '72%',  y: '10%',  color: 'rgba(167,139,250,0.16)', dur: '12s', delay: '1.5s' },
-          { size: 260, x: '55%',  y: '60%',  color: 'rgba(59,130,246,0.14)',  dur: '15s', delay: '0.8s' },
-          { size: 150, x: '8%',   y: '65%',  color: 'rgba(139,92,246,0.14)',  dur: '10s', delay: '2s'   },
-          { size: 200, x: '82%',  y: '75%',  color: 'rgba(248,113,113,0.10)', dur: '13s', delay: '0.3s' },
-          { size: 130, x: '40%',  y: '85%',  color: 'rgba(52,211,153,0.10)',  dur: '11s', delay: '1s'   },
+          { size: 220, x: '12%',  y: '18%',  color: 'rgba(96,165,250,0.22)',  dur: '9s',  delay: '0s'   },
+          { size: 180, x: '72%',  y: '10%',  color: 'rgba(167,139,250,0.20)', dur: '12s', delay: '1.5s' },
+          { size: 260, x: '55%',  y: '60%',  color: 'rgba(59,130,246,0.18)',  dur: '15s', delay: '0.8s' },
+          { size: 150, x: '8%',   y: '65%',  color: 'rgba(139,92,246,0.18)',  dur: '10s', delay: '2s'   },
+          { size: 200, x: '82%',  y: '75%',  color: 'rgba(248,113,113,0.12)', dur: '13s', delay: '0.3s' },
+          { size: 130, x: '40%',  y: '85%',  color: 'rgba(52,211,153,0.12)',  dur: '11s', delay: '1s'   },
         ].map((o, i) => (
           <div key={i} style={{
             position: 'absolute',
@@ -2401,7 +2404,11 @@ const CrosswordGame = ({
             borderRadius: 18,
             border: '1px solid rgba(255,255,255,0.15)',
             boxShadow: '0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.2)',
-          }}>
+            scrollbarWidth: 'none',        /* Firefox */
+            msOverflowStyle: 'none',       /* IE/Edge */
+          }}
+          onScroll={() => {}} /* keep scroll functional */
+        >
           <div ref={gridRef} className="grid gap-[2px] px-2"
             style={{
               gridTemplateColumns: `repeat(${puzzle.gridSize.cols}, ${cellSize}px)`,
@@ -2532,56 +2539,49 @@ const CrosswordGame = ({
                 </motion.button>
               </div>
             )}
-            {/* Clues */}
-            <div className="flex-1 min-h-0 overflow-y-auto rounded-xl p-2 space-y-2 scrollbar-hide"
-              style={{
-                background: 'rgba(8,14,30,0.65)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255,255,255,0.10)',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)',
-              }}>
-              <div>
-                <p className="text-amber-400 font-black text-[10px] uppercase tracking-widest mb-1 px-1">→ Ngang</p>
-                {acrossClues.map(w => {
-                  const solved = solvedWords.has(w.id);
-                  const wrong = wrongWords.has(w.id);
-                  const active = activeWordId === w.id;
-                  return (
-                    <motion.button key={w.id}
-                      onClick={() => selectWordFromClue(w.id)}
-                      className={`w-full text-left px-2 py-1 rounded-lg text-[10px] transition-colors mb-0.5 flex items-center gap-1
-                        ${active ? 'bg-amber-500/20' : solved ? 'bg-green-500/10' : wrong ? 'bg-red-500/10' : 'hover:bg-white/5'}`}
-                      style={{ border: active ? '1px solid rgba(245,158,11,0.4)' : solved ? '1px solid rgba(34,197,94,0.3)' : wrong ? '1px solid rgba(239,68,68,0.3)' : '1px solid transparent' }}>
-                      <span className={`font-black mr-1 ${solved ? 'text-green-400' : wrong ? 'text-red-400' : 'text-amber-300'}`}>{w.num}.</span>
-                      <span className={`font-semibold flex-1 ${solved ? 'text-green-300/70 line-through' : wrong ? 'text-red-300/80' : 'text-white/80'}`}>{w.clue}</span>
-                      {solved && <span className="text-green-400 text-xs font-black shrink-0">✓</span>}
-                      {wrong && <span className="text-red-400 text-xs font-black shrink-0">✗</span>}
-                    </motion.button>
-                  );
-                })}
-              </div>
-              <div>
-                <p className="text-blue-400 font-black text-[10px] uppercase tracking-widest mb-1 px-1">↓ Dọc</p>
-                {downClues.map(w => {
-                  const solved = solvedWords.has(w.id);
-                  const wrong = wrongWords.has(w.id);
-                  const active = activeWordId === w.id;
-                  return (
-                    <motion.button key={w.id}
-                      onClick={() => selectWordFromClue(w.id)}
-                      className={`w-full text-left px-2 py-1 rounded-lg text-[10px] transition-colors mb-0.5 flex items-center gap-1
-                        ${active ? 'bg-blue-500/20' : solved ? 'bg-green-500/10' : wrong ? 'bg-red-500/10' : 'hover:bg-white/5'}`}
-                      style={{ border: active ? '1px solid rgba(59,130,246,0.4)' : solved ? '1px solid rgba(34,197,94,0.3)' : wrong ? '1px solid rgba(239,68,68,0.3)' : '1px solid transparent' }}>
-                      <span className={`font-black mr-1 ${solved ? 'text-green-400' : wrong ? 'text-red-400' : 'text-blue-300'}`}>{w.num}.</span>
-                      <span className={`font-semibold flex-1 ${solved ? 'text-green-300/70 line-through' : wrong ? 'text-red-300/80' : 'text-white/80'}`}>{w.clue}</span>
-                      {solved && <span className="text-green-400 text-xs font-black shrink-0">✓</span>}
-                      {wrong && <span className="text-red-400 text-xs font-black shrink-0">✗</span>}
-                    </motion.button>
-                  );
-                })}
-              </div>
-            </div>
+            {/* Clues — sorted by number, split evenly into 2 columns */}
+            {(() => {
+              const allClues = [...puzzle.words].sort((a, b) => a.num - b.num);
+              const half = Math.ceil(allClues.length / 2);
+              const leftCol = allClues.slice(0, half);
+              const rightCol = allClues.slice(half);
+              const renderClue = (w) => {
+                const solved = solvedWords.has(w.id);
+                const wrong = wrongWords.has(w.id);
+                const active = activeWordId === w.id;
+                const isAcross = w.direction === 'across';
+                return (
+                  <motion.button key={w.id}
+                    onClick={() => selectWordFromClue(w.id)}
+                    className={`w-full text-left px-2 py-1 rounded-lg text-[10px] transition-colors mb-0.5 flex items-start gap-1
+                      ${active ? (isAcross ? 'bg-amber-500/20' : 'bg-blue-500/20') : solved ? 'bg-green-500/10' : wrong ? 'bg-red-500/10' : 'hover:bg-white/5'}`}
+                    style={{ border: active ? `1px solid ${isAcross ? 'rgba(245,158,11,0.4)' : 'rgba(59,130,246,0.4)'}` : solved ? '1px solid rgba(34,197,94,0.3)' : wrong ? '1px solid rgba(239,68,68,0.3)' : '1px solid transparent' }}>
+                    <span className={`font-black mr-0.5 shrink-0 ${solved ? 'text-green-400' : wrong ? 'text-red-400' : isAcross ? 'text-amber-300' : 'text-blue-300'}`}>
+                      {w.num}<span style={{ fontSize: '8px', opacity: 0.7 }}>{isAcross ? '→' : '↓'}</span>
+                    </span>
+                    <span className={`font-semibold flex-1 leading-tight ${solved ? 'text-green-300/70 line-through' : wrong ? 'text-red-300/80' : 'text-white/80'}`}>{w.clue}</span>
+                    {solved && <span className="text-green-400 text-xs font-black shrink-0">✓</span>}
+                    {wrong && <span className="text-red-400 text-xs font-black shrink-0">✗</span>}
+                  </motion.button>
+                );
+              };
+              return (
+                <div className="flex-1 min-h-0 overflow-y-auto rounded-xl p-2 scrollbar-hide"
+                  style={{
+                    background: 'rgba(8,14,30,0.65)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    border: '1px solid rgba(255,255,255,0.10)',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)',
+                    scrollbarWidth: 'none',
+                  }}>
+                  <div className="flex gap-2">
+                    <div className="flex-1">{leftCol.map(renderClue)}</div>
+                    <div className="flex-1">{rightCol.map(renderClue)}</div>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         ) : (
           /* Portrait: hints as a row above clues, clues in a short panel */
@@ -2659,58 +2659,49 @@ const CrosswordGame = ({
                 </motion.button>
               </div>
             )}
-            {/* Clues panel — short, scrollable */}
-            <div className="flex-1 min-h-0 overflow-y-auto rounded-xl p-2 space-y-2 scrollbar-hide"
-              style={{
-                background: 'rgba(255,255,255,0.88)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255,255,255,0.25)',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.5)',
-              }}>
-              <div className="flex gap-3">
-                <div className="flex-1">
-                  <p className="text-orange-600 font-black text-[10px] uppercase tracking-widest mb-1 px-1">→ Ngang</p>
-                  {acrossClues.map(w => {
-                    const solved = solvedWords.has(w.id);
-                    const wrong = wrongWords.has(w.id);
-                    const active = activeWordId === w.id;
-                    return (
-                      <motion.button key={w.id}
-                        onClick={() => selectWordFromClue(w.id)}
-                        className={`w-full text-left px-2 py-1 rounded-lg text-[10px] transition-colors mb-0.5 flex items-center gap-1
-                          ${active ? 'bg-amber-100' : solved ? 'bg-green-50' : wrong ? 'bg-red-50' : 'hover:bg-black/5'}`}
-                        style={{ border: active ? '1px solid rgba(245,158,11,0.5)' : solved ? '1px solid rgba(34,197,94,0.4)' : wrong ? '1px solid rgba(239,68,68,0.4)' : '1px solid transparent' }}>
-                        <span className={`font-black mr-1 ${solved ? 'text-green-600' : wrong ? 'text-red-500' : 'text-orange-500'}`}>{w.num}.</span>
-                        <span className={`font-semibold flex-1 ${solved ? 'text-green-600/70 line-through' : wrong ? 'text-red-500' : 'text-slate-700'}`}>{w.clue}</span>
-                        {solved && <span className="text-green-500 text-xs font-black shrink-0">✓</span>}
-                        {wrong && <span className="text-red-500 text-xs font-black shrink-0">✗</span>}
-                      </motion.button>
-                    );
-                  })}
+            {/* Clues panel — short, 2-column sorted by number */}
+            {(() => {
+              const allClues = [...puzzle.words].sort((a, b) => a.num - b.num);
+              const half = Math.ceil(allClues.length / 2);
+              const leftCol = allClues.slice(0, half);
+              const rightCol = allClues.slice(half);
+              const renderClue = (w) => {
+                const solved = solvedWords.has(w.id);
+                const wrong = wrongWords.has(w.id);
+                const active = activeWordId === w.id;
+                const isAcross = w.direction === 'across';
+                return (
+                  <motion.button key={w.id}
+                    onClick={() => selectWordFromClue(w.id)}
+                    className={`w-full text-left px-2 py-1 rounded-lg text-[10px] transition-colors mb-0.5 flex items-start gap-1
+                      ${active ? (isAcross ? 'bg-amber-100' : 'bg-blue-100') : solved ? 'bg-green-50' : wrong ? 'bg-red-50' : 'hover:bg-black/5'}`}
+                    style={{ border: active ? `1px solid ${isAcross ? 'rgba(245,158,11,0.5)' : 'rgba(59,130,246,0.5)'}` : solved ? '1px solid rgba(34,197,94,0.4)' : wrong ? '1px solid rgba(239,68,68,0.4)' : '1px solid transparent' }}>
+                    <span className={`font-black mr-0.5 shrink-0 ${solved ? 'text-green-600' : wrong ? 'text-red-500' : isAcross ? 'text-orange-500' : 'text-blue-600'}`}>
+                      {w.num}<span style={{ fontSize: '8px', opacity: 0.7 }}>{isAcross ? '→' : '↓'}</span>
+                    </span>
+                    <span className={`font-semibold flex-1 leading-tight ${solved ? 'text-green-600/70 line-through' : wrong ? 'text-red-500' : 'text-slate-700'}`}>{w.clue}</span>
+                    {solved && <span className="text-green-500 text-xs font-black shrink-0">✓</span>}
+                    {wrong && <span className="text-red-500 text-xs font-black shrink-0">✗</span>}
+                  </motion.button>
+                );
+              };
+              return (
+                <div className="flex-1 min-h-0 overflow-y-auto rounded-xl p-2 scrollbar-hide"
+                  style={{
+                    background: 'rgba(255,255,255,0.88)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    border: '1px solid rgba(255,255,255,0.25)',
+                    boxShadow: '0 4px 24px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.5)',
+                    scrollbarWidth: 'none',
+                  }}>
+                  <div className="flex gap-2">
+                    <div className="flex-1">{leftCol.map(renderClue)}</div>
+                    <div className="flex-1">{rightCol.map(renderClue)}</div>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <p className="text-blue-600 font-black text-[10px] uppercase tracking-widest mb-1 px-1">↓ Dọc</p>
-                  {downClues.map(w => {
-                    const solved = solvedWords.has(w.id);
-                    const wrong = wrongWords.has(w.id);
-                    const active = activeWordId === w.id;
-                    return (
-                      <motion.button key={w.id}
-                        onClick={() => selectWordFromClue(w.id)}
-                        className={`w-full text-left px-2 py-1 rounded-lg text-[10px] transition-colors mb-0.5 flex items-center gap-1
-                          ${active ? 'bg-blue-100' : solved ? 'bg-green-50' : wrong ? 'bg-red-50' : 'hover:bg-black/5'}`}
-                        style={{ border: active ? '1px solid rgba(59,130,246,0.5)' : solved ? '1px solid rgba(34,197,94,0.4)' : wrong ? '1px solid rgba(239,68,68,0.4)' : '1px solid transparent' }}>
-                        <span className={`font-black mr-1 ${solved ? 'text-green-600' : wrong ? 'text-red-500' : 'text-blue-600'}`}>{w.num}.</span>
-                        <span className={`font-semibold flex-1 ${solved ? 'text-green-600/70 line-through' : wrong ? 'text-red-500' : 'text-slate-700'}`}>{w.clue}</span>
-                        {solved && <span className="text-green-500 text-xs font-black shrink-0">✓</span>}
-                        {wrong && <span className="text-red-500 text-xs font-black shrink-0">✗</span>}
-                      </motion.button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
+              );
+            })()}
           </div>
         )}
       </div>

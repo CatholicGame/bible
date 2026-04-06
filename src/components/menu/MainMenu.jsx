@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import {
     Users, User, ArrowLeft, Trophy, Shield,
-    LogOut, Map, ChevronRight, ChevronLeft, Power, Maximize
+    LogOut, Map, ChevronRight, ChevronLeft, Power
 } from 'lucide-react';
 import { getRankByScore } from '../../utils/ranks';
 import { usePlayFabStore } from '../../store/playfabStore';
@@ -427,21 +427,6 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                         <span className="font-black text-[10px] tracking-wider uppercase" style={{ color: '#c2185b' }}>Dâng Hoa</span>
                     </motion.button>
 
-                    {/* Fullscreen button — ml-auto on portrait to push right */}
-                    <motion.button whileTap={{ scale: 0.9, y: 2 }}
-                        onClick={() => {
-                            if (!document.fullscreenElement) {
-                                document.documentElement.requestFullscreen().catch(() => { });
-                            } else {
-                                document.exitFullscreen().catch(() => { });
-                            }
-                        }}
-                        className="flex items-center justify-center w-10 h-10 rounded-full transition-colors ml-auto sm:ml-0 mr-[-4px]"
-                        style={{ background: 'rgba(0,180,216,0.12)', border: '2px solid rgba(0,180,216,0.28)', boxShadow: '0 2px 0 rgba(0,100,150,0.15)' }}
-                        title="Toàn màn hình"
-                    >
-                        <Maximize size={18} strokeWidth={2.5} style={{ color: '#1b9aaa' }} />
-                    </motion.button>
 
                     {/* User button — opens quick profile menu */}
                     <div className="relative flex-shrink-0">

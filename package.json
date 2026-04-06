@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@imgly/background-removal-node": "^1.4.5",
     "@tailwindcss/vite": "^4.2.1",
     "@vercel/speed-insights": "^2.0.0",
     "firebase": "^12.10.0",
     "framer-motion": "^12.34.3",
+    "jimp": "^1.6.0",
     "lucide-react": "^0.575.0",
     "playfab-web-sdk": "^1.205.251205",
     "react": "^19.2.0",

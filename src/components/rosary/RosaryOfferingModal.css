@@ -27,7 +27,6 @@
   background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   font-family: 'Nunito', 'Segoe UI', sans-serif;
 }
 
@@ -46,9 +45,8 @@
 .ro-global-counter {
   position: absolute;
   top: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  max-width: calc(100% - 32px);
+  left: 50px;
+  max-width: calc(100% - 80px);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -492,8 +490,14 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 20px 16px;
+  padding: 20px 20px;
   text-align: center;
+  background: rgba(20, 10, 5, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 20px;
+  border: 1px solid rgba(201, 168, 76, 0.30);
+  width: 100%;
 }
 
 .ro-completed-icon {
@@ -505,9 +509,9 @@
   font-family: 'Playfair Display', serif;
   font-size: 17px;
   font-weight: 700;
-  color: var(--ro-text-dark);
+  color: #fff5e0;
   margin: 0;
-  text-shadow: 0 1px 8px rgba(255,255,255,0.8);
+  text-shadow: 0 1px 6px rgba(0,0,0,0.5);
 }
 
 .ro-completed-sub {
@@ -577,7 +581,7 @@
 
   /* In landscape, restore cards to bottom */
   .ro-header { justify-content: flex-end; }
-  .ro-global-counter { top: auto; bottom: 16px; left: 16px; right: auto; transform: none; max-width: 220px; }
+  .ro-global-counter { top: auto; bottom: 16px; left: 50px; right: auto; transform: none; max-width: 220px; }
   .ro-profile-card   { top: auto; bottom: 16px; left: auto; right: 16px; transform: none; }
 
 }

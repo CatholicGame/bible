@@ -14,11 +14,48 @@ import { useSoundManager } from '../../utils/soundManager';
 import rose1 from '../../assets/rosary/rose1.png';
 import rose2 from '../../assets/rosary/rose2.png';
 import rose3 from '../../assets/rosary/rose3.png';
+import roseRed  from '../../assets/rosary/rose_red.png';
+import rosePink from '../../assets/rosary/rose_pink.png';
+import roseGold from '../../assets/rosary/rose_gold.png';
 import iconInfo from '../../assets/rosary/icon_info.png';
 
 const DAILY_MAX = 150;      // số hạt tối đa mỗi ngày
 const COIN_PER_HAT = 1;     // 1 hạt = 1 Coin
 const BONUS_PER_TRANG = 10; // +10 Coin cho mỗi tràng hoàn chỉnh (50 hạt)
+
+// Hook: đếm số trườt tới target khi value thay đổi
+const useCountUp = (target, duration = 800) => {
+    const [display, setDisplay] = useState(target);
+    const prevRef = useRef(target);
+    useEffect(() => {
+        const from = prevRef.current;
+        const to = target;
+        prevRef.current = to;
+        if (from === to) return;
+        const diff = to - from;
+        const steps = Math.min(Math.abs(diff), 40);
+        if (steps === 0) { setDisplay(to); return; }
+        const stepVal = diff / steps;
+        const ms = duration / steps;
+        let cur = from;
+        let count = 0;
+        const id = setInterval(() => {
+            count++;
+            cur = count >= steps ? to : Math.round(from + stepVal * count);
+            setDisplay(cur);
+            if (count >= steps) clearInterval(id);
+        }, ms);
+        return () => clearInterval(id);
+    }, [target, duration]);
+    return display;
+};
+
+// Mỗi tràng Mân Côi → 1 bông hồng (màu khác nhau)
+const TRANG_ROSES = [
+    { src: null, color: '#ff4d6d', glow: 'rgba(255,60,100,0.60)', label: 'Hồng Đỏ' },    // placeholder until import resolved
+    { src: null, color: '#ff85c2', glow: 'rgba(255,130,190,0.60)', label: 'Hồng Hồng' },
+    { src: null, color: '#ffd700', glow: 'rgba(255,210,60,0.60)',  label: 'Hồng Vàng' },
+];
 
 const TRANG_ITEMS = [
     { value: 0, label: '0' },
@@ -105,9 +142,20 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
         return () => query.removeEventListener("change", listener);
     }, []);
 
-    useEffect(() => { setAnimCoins(coins); }, [coins]);
-    useEffect(() => { setAnimToday(rosaryToday); }, [rosaryToday]);
-    useEffect(() => { setAnimGlobal(rosaryGlobal); }, [rosaryGlobal]);
+    // Guard: khi đang submit, không cho store update reset animation display
+    // (submitRosary set store.coins / store.rosaryToday sau khi PlayFab save xong,
+    //  nhưng animation coin/today đang chạy qua setTimeout — không được interrupt)
+    const isSubmittingRef = useRef(false);
+    useEffect(() => { isSubmittingRef.current = isSubmitting; }, [isSubmitting]);
+
+    useEffect(() => { if (!isSubmittingRef.current) setAnimCoins(coins); }, [coins, isSubmitting]);
+    useEffect(() => { if (!isSubmittingRef.current) setAnimToday(rosaryToday); }, [rosaryToday, isSubmitting]);
+    useEffect(() => { if (!isSubmittingRef.current) setAnimGlobal(rosaryGlobal); }, [rosaryGlobal, isSubmitting]);
+
+    // Count-up displays (trượt số khi giá trị thay đổi)
+    const displayGlobal = useCountUp(animGlobal, 1200);
+    const displayToday  = useCountUp(animToday, 800);
+    const displayCoins  = useCountUp(animCoins, 800);
 
     const trang = TRANG_ITEMS[trangIdx].value;
     const chuc = CHUC_ITEMS[chucIdx].value;
@@ -377,7 +425,7 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
                 <Globe size={12} strokeWidth={2.5} />
                 <div className="ro-global-counter-text">
                     <span className="ro-global-counter-label">Số tràng hạt giáo dân Việt Nam đã dâng lên Mẹ</span>
-                    <span className="ro-global-counter-num">{formatNum(animGlobal)} hạt</span>
+                    <span className="ro-global-counter-num">{formatNum(displayGlobal)} hạt</span>
                 </div>
             </div>
 
@@ -434,7 +482,7 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
                         <span className="ro-profile-name">{user.name}</span>
                         <span className="ro-profile-coins" ref={profileCoinRef}>
                             <img src={iconCoin} alt="" />
-                            {animCoins.toLocaleString()} Coin
+                            {displayCoins.toLocaleString()} Coin
                         </span>
                     </div>
                 </div>
@@ -563,20 +611,91 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
                 )}
             </AnimatePresence>
 
-            {/* ── Controls — direct overlay, no panel ── */}
-            <div className="ro-controls">
+            {/* ── Fixed Background Roses ── */}
+            {(() => {
+                const completedTrang = Math.min(3, Math.max(0, Math.floor(animToday / 50)));
+                if (completedTrang === 0) return null;
+                const ROSES = [
+                    { img: roseRed,  color: '#ff4d6d' },
+                    { img: rosePink, color: '#ff85c2' },
+                    { img: roseGold, color: '#ffd700' },
+                ];
+                const activeRoses = ROSES.slice(0, completedTrang);
+                return (
+                    <div style={{ 
+                        position: 'absolute',
+                        bottom: 0, left: 0, right: 0,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: isLandscape ? -60 : -60,
+                        justifyContent: 'center',
+                        alignItems: 'flex-end',
+                        pointerEvents: 'none',
+                        zIndex: 2,
+                    }}>
+                        {activeRoses.map((rose, i) => (
+                            <motion.div key={i}
+                                initial={{ scale: 0, y: 50 }} animate={{ scale: 1, y: 0 }}
+                                transition={{ type: 'spring', stiffness: 300, damping: 20, delay: i * 0.15 }}
+                                style={{ position: 'relative', textAlign: 'center' }}
+                            >
+                                {/* Phấn hương bay lên */}
+                                {[0, 1, 2].map(j => (
+                                    <motion.div key={j}
+                                        animate={{ y: [-4, -80 - j * 20], x: [(j-1)*16, (j-1)*40], opacity: [0.85, 0], scale: [0.9, 0.2] }}
+                                        transition={{ duration: 2.2, repeat: Infinity, delay: i * 0.4 + j * 0.55, ease: 'easeOut' }}
+                                        style={{
+                                            position: 'absolute', bottom: '85%', left: '50%', transform: 'translateX(-50%)',
+                                            width: 14, height: 14, borderRadius: '50%',
+                                            background: rose.color, pointerEvents: 'none',
+                                            filter: `blur(4px) drop-shadow(0 0 10px ${rose.color})`,
+                                        }}
+                                    />
+                                ))}
+                                {/* ảnh bông hồng thật */}
+                                <img
+                                    src={rose.img}
+                                    alt={`Tràng ${i + 1}`}
+                                    style={{
+                                        height: isLandscape ? 400 : 760, // Exact x2 of original 380px for portrait
+                                        width: 'auto',
+                                        objectFit: 'contain',
+                                        filter: `drop-shadow(0 4px 10px rgba(0,0,0,0.25))`,
+                                        display: 'block',
+                                        transformOrigin: 'bottom center',
+                                    }}
+                                />
+                            </motion.div>
+                        ))}
+                    </div>
+                );
+            })()}
 
+            {/* ── Controls — direct overlay, no panel ── */}
+            <div className="ro-controls" style={{ position: 'relative', zIndex: 10 }}>
                 {isDailyComplete ? (
-                    <motion.div
-                        className="ro-completed"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
+                    <motion.div className="ro-completed"
+                        initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
                         transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+                        style={{ background: 'none', border: 'none', backdropFilter: 'none', WebkitBackdropFilter: 'none', padding: 0 }}
                     >
-                        <div className="ro-completed-icon">🌹</div>
-                        <p className="ro-completed-title">Đã hoàn thành hôm nay!</p>
-                        <p className="ro-completed-sub">Đã dâng {DAILY_MAX} hạt · Hẹn ngày mai</p>
-                    </motion.div>
+                        {/* Dark box chỉ bao quanh phần text */}
+                            <div style={{
+                                background: 'rgba(20,10,5,0.65)',
+                                backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+                                borderRadius: 16, border: '1px solid rgba(201,168,76,0.30)',
+                                padding: '14px 18px', width: '100%',
+                            }}>
+                                <p className="ro-completed-title">Tuyệt vời! Đã dâng trọn hôm nay!</p>
+                                <p style={{ fontSize: 13, color: 'rgba(255,240,210,0.95)', margin: '6px 0', lineHeight: 1.55 }}>
+                                    Mẹ Maria chắc chắn đã vui nhận<br />
+                                    <strong style={{ color: '#ffd54f' }}>{DAILY_MAX} hạt Mân Côi</strong> bạn dâng lên hôm nay 💛
+                                </p>
+                                <p style={{ fontSize: 11, fontStyle: 'italic', color: 'rgba(255,225,170,0.78)', lineHeight: 1.5, margin: 0 }}>
+                                    ✨ Hẹn gặp lại ngày mai — mỗi ngày một tràng chuỗi<br />là sợi dây kết nối bạn với Trái Tim Vô Nhiễm Mẹ ✨
+                                </p>
+                            </div>
+                        </motion.div>
                 ) : (
                     <>
                         {/* Section title */}
@@ -659,6 +778,37 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
                             )}
                         </AnimatePresence>
 
+                        {/* Nhắc nhở lương tâm */}
+                        <div style={{
+                            textAlign: 'center',
+                            padding: '10px 14px',
+                            margin: '0 0 6px',
+                            borderRadius: 12,
+                            background: 'rgba(20,10,5,0.68)',
+                            backdropFilter: 'blur(6px)',
+                            WebkitBackdropFilter: 'blur(6px)',
+                            border: '1.5px solid rgba(200,150,80,0.35)',
+                        }}>
+                            <p style={{
+                                fontSize: 12,
+                                color: 'rgba(255,245,220,0.97)',
+                                lineHeight: 1.65,
+                                margin: 0,
+                                fontWeight: 600,
+                            }}>
+                                🙏 Chỉ dâng khi bạn <strong style={{ color: '#ffd54f', fontWeight: 900 }}>thật sự đã lần chuỗi Mân Côi</strong> hôm nay.
+                            </p>
+                            <p style={{
+                                fontSize: 11,
+                                color: 'rgba(255,220,160,0.78)',
+                                lineHeight: 1.5,
+                                margin: '5px 0 0',
+                                fontStyle: 'italic',
+                            }}>
+                                — Đây là việc đạo đức. Đừng dâng để lấy Coin khi chưa thực sự cầu nguyện —
+                            </p>
+                        </div>
+
                         {/* Submit */}
                         <motion.button
                             ref={submitBtnRef}
@@ -685,7 +835,7 @@ const RosaryOfferingModal = ({ onClose, coins, rosaryToday, rosaryGlobal, onSubm
                 <div className="ro-progress">
                     <div className="ro-progress-info">
                         <span>Hôm nay</span>
-                        <span><strong>{animToday}</strong> / {DAILY_MAX} hạt</span>
+                        <span><strong>{displayToday}</strong> / {DAILY_MAX} hạt</span>
                     </div>
                     <div className="ro-progress-track">
                         <motion.div

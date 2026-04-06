@@ -210,12 +210,25 @@ export const usePlayFabStore = create((set, get) => ({
         || localStorage.getItem('pf_avatar_url')
         || null;
 
+      // Rosary data — auto-reset if different day
+      const rosaryTotal = parseInt(data.RosaryTotal?.Value) || 0;
+      const rosaryDate = data.RosaryDate?.Value || null;
+      const rosaryToday = parseInt(data.RosaryToday?.Value) || 0;
+      const todayStr = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' })).toISOString().slice(0, 10);
+      const effectiveRosaryToday = rosaryDate === todayStr ? rosaryToday : 0;
+
+      const pinnacleMyVote = data.PinnacleMyVote?.Value || null;
+
       set({
         isLoggedIn: true, isLoading: false,
         playFabId, nickname, authMethod: 'restored',
         answeredQuestions, playedCrosswordIds,
         globalScore, coins, rank: getRankByScore(globalScore),
         giaoxu, hat, giaophan, tinhthanh, avatarUrl,
+        rosaryToday: effectiveRosaryToday,
+        rosaryDate: todayStr,
+        rosaryTotal,
+        pinnacleMyVote,
         error: null,
       });
 
@@ -384,6 +397,13 @@ export const usePlayFabStore = create((set, get) => ({
       const pinnacleMyVote = userData?.PinnacleMyVote?.Value || null;
       const crosswordMyVote = userData?.CrosswordMyVote?.Value || null;
 
+      // Rosary data — auto-reset if different day
+      const rosaryTotal = parseInt(userData?.RosaryTotal?.Value) || 0;
+      const rosaryDate  = userData?.RosaryDate?.Value || null;
+      const rosaryToday = parseInt(userData?.RosaryToday?.Value) || 0;
+      const todayStr = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' })).toISOString().slice(0, 10);
+      const effectiveRosaryToday = rosaryDate === todayStr ? rosaryToday : 0;
+
       usePlayFabStore.setState({
         isLoggedIn: true,
         isLoading: false,
@@ -401,6 +421,9 @@ export const usePlayFabStore = create((set, get) => ({
         coins,
         rank: getRankByScore(globalScore),
         ...(stats ? { stats } : {}),
+        rosaryToday: effectiveRosaryToday,
+        rosaryDate: todayStr,
+        rosaryTotal,
         pinnacleMyVote,
         crosswordMyVote,
         error: null,
@@ -683,13 +706,17 @@ export const usePlayFabStore = create((set, get) => ({
   // ── Submit Rosary Offering (Dâng Hoa) ──
   // Reward: 1 hạt = 1 Coin + bonus 10 Coin mỏi tràng hoàn chỉnh (50 hạt)
   // Max mỗi ngày: 150 hạt = 150 Coin + 3 tràng × 10 = 30 bonus = 180 Coins
+  // Ghi chú bảo mật:
+  //   - Chống double-submit sau F5 được xử lý bởi restoreSession (load rosaryToday từ server)
+  //   - KHÔNG đọc lại PlayFab ở đây để tránh: (1) PlayFab cache stale, (2) store update mid-animation
   submitRosary: async (hatCount, coinReward) => {
     const { rosaryToday, rosaryTotal, coins } = get();
     const todayStr = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' })).toISOString().slice(0, 10);
     const DAILY_MAX_HAT = 150;
 
-    // Validate daily limit
-    const newToday = rosaryToday + hatCount;
+    // Validate daily limit using local store (đã sync chính xác từ server khi login/restoreSession)
+    const effectiveToday = get().rosaryDate === todayStr ? rosaryToday : 0;
+    const newToday = effectiveToday + hatCount;
     if (newToday > DAILY_MAX_HAT) {
       console.warn('[Rosary] Daily limit exceeded');
       return false;
@@ -698,12 +725,18 @@ export const usePlayFabStore = create((set, get) => ({
     const newTotal = rosaryTotal + hatCount;
     const newCoins = coins + coinReward;
 
-    // Update local state immediately
+    // Update local state ngay lập tức (optimistic) — KHÔNG update ở đây để tránh
+    // useEffect trong Modal bị trigger và reset animCoins mid-animation.
+    // Store sẽ chỉ update SAU KHI animation hoàn thành (thông qua flag delay 2800ms trong Modal).
+    // GHI CHÚ: Thực ra store cần update để canSubmit = false trong lần sau,
+    // nhưng không được update coins vì sẽ trigger useEffect trong modal.
+    // Giải pháp: update rosaryToday (dùng để validate canSubmit) nhưng để modal tự xử lý animCoins.
     set({
       rosaryToday: newToday,
       rosaryDate: todayStr,
       rosaryTotal: newTotal,
-      coins: newCoins,
+      // coins KHÔNG update ở đây — Modal tự update animCoins qua setTimeout 1300ms
+      // Store.coins sẽ được update sau khi animation xong (2800ms delay ở Modal)
     });
 
     // 1. Persist per-player data to PlayFab
@@ -714,8 +747,13 @@ export const usePlayFabStore = create((set, get) => ({
         RosaryTotal: String(newTotal),
         Coins: String(newCoins),
       });
+      // Update coins trong store SAU KHI PlayFab đã lưu thành công
+      // Lúc này animation đã xong (PlayFab call thường > 1300ms)
+      set({ coins: newCoins });
     } catch (e) {
       console.warn('[Rosary] Failed to save PlayFab data', e);
+      // Ngay cả khi PlayFab fail, update local coins để UI nhất quán
+      set({ coins: newCoins });
     }
 
     // 2. Atomic increment on Firebase global counter (sum across ALL players)
