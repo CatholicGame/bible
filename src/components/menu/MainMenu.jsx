@@ -558,7 +558,21 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                         <span className="font-black text-[10px] tracking-wider uppercase" style={{ color: '#c2185b' }}>Dâng Hoa</span>
                     </motion.button>
 
-
+                    {/* Leaderboard XP button */}
+                    <motion.button
+                        whileTap={{ scale: 0.93, y: 2 }}
+                        onClick={() => { enterFullscreen(); setShowLeaderboard(true); }}
+                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full transition-colors"
+                        style={{
+                            background: 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.22))',
+                            border: '2px solid rgba(245,158,11,0.4)',
+                            boxShadow: '0 2px 0 rgba(120,60,0,0.15)',
+                        }}
+                        title="Bảng xếp hạng XP"
+                    >
+                        <img src={iconTrophy} alt="" className="w-4 h-4 object-contain" />
+                        <span className="font-black text-[10px] tracking-wider uppercase" style={{ color: '#d97706' }}>XP</span>
+                    </motion.button>
 
                     {/* User button — opens quick profile menu */}
                     <div className="relative flex-shrink-0 ml-auto">
@@ -718,14 +732,6 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
             {/* BODY */}
             <motion.div layout className={`relative z-10 flex-1 min-h-0 flex flex-col items-center ${isLandscape ? 'pt-1 pb-0 gap-1' : 'pt-4 pb-3 gap-3'}`}>
 
-                {/* ── Rank Banner — only on home (not in modes selection) ── */}
-                {user && !showModes && (
-                    <RankBanner
-                        score={user.score || 0}
-                        onOpenRoadmap={() => { enterFullscreen(); setShowRoadmap(true); }}
-                        isLandscape={isLandscape}
-                    />
-                )}
 
                 {/* PIN / Modes */}
                 <AnimatePresence mode="wait">
