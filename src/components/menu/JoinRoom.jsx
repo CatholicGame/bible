@@ -56,18 +56,24 @@ export default function JoinRoom({ onBack, onJoined, initialPin = '' }) {
     setError(null);
     setInsufficientCoins(null);
 
-    const result = await joinRoom(pin, userCoins ?? 0);
-    setLoading(false);
+    try {
+      const result = await joinRoom(pin, userCoins ?? 0);
+      setLoading(false);
 
-    if (result.success) {
-      onJoined?.(pin);
-    } else if (result.error === 'insufficient_coins') {
-      // Không đủ coin — không ghi vào phòng, hiện màn reject
-      setInsufficientCoins({ wager: result.wager, myCoins: result.myCoins });
-    } else {
-      setError(result.error);
-      setDigits(['', '', '', '', '', '']);
-      inputRefs.current[0]?.focus();
+      if (result.success) {
+        onJoined?.(pin);
+      } else if (result.error === 'insufficient_coins') {
+        // Không đủ coin — không ghi vào phòng, hiện màn reject
+        setInsufficientCoins({ wager: result.wager, myCoins: result.myCoins });
+      } else {
+        setError(result.error);
+        setDigits(['', '', '', '', '', '']);
+        inputRefs.current[0]?.focus();
+      }
+    } catch (e) {
+      setLoading(false);
+      setError('Lỗi kết nối. Vui lòng thử lại.');
+      console.error('[JoinRoom] Error:', e);
     }
   };
 

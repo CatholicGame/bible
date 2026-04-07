@@ -136,6 +136,7 @@ export const usePlayFabStore = create((set, get) => ({
 
       // Get display name and profile fields
       const displayName = data.InfoResultPayload?.PlayerProfile?.DisplayName;
+      const avatarUrl = data.InfoResultPayload?.PlayerProfile?.AvatarUrl || null;
       const giaoxu = userData?.GiaoXu?.Value || null;
       const hat = userData?.Hat?.Value || null;
       const giaophan = userData?.GiaoPhan?.Value || null;
@@ -169,6 +170,7 @@ export const usePlayFabStore = create((set, get) => ({
         playFabId,
         nickname: displayName || customNickname || 'Người chơi',
         authMethod: 'guest',
+        avatarUrl,
         giaoxu,
         hat,
         giaophan,
@@ -330,6 +332,7 @@ export const usePlayFabStore = create((set, get) => ({
       }
 
       const displayName = data.InfoResultPayload?.PlayerProfile?.DisplayName;
+      const avatarUrl = data.InfoResultPayload?.PlayerProfile?.AvatarUrl || null;
       const giaoxu = userData?.GiaoXu?.Value || null;
       const hat = userData?.Hat?.Value || null;
       const giaophan = userData?.GiaoPhan?.Value || null;
@@ -348,6 +351,7 @@ export const usePlayFabStore = create((set, get) => ({
         playFabId,
         nickname: displayName || email,
         authMethod: 'email',
+        avatarUrl,
         giaoxu,
         hat,
         giaophan,

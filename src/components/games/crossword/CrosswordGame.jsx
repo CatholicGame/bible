@@ -134,7 +134,7 @@ const VirtualKeyboard = ({ onKey, onBackspace, compact = false }) => (
    Bar fill từ ngoài vo hướng vào avatar ở giữa
    ══════════════════════════════════════════════════════════════ */
 
-const P2PRaceBar = ({ myLabel, myPercent, myColor, opponentLabel, opponentPercent, opponentColor, compact = false, opponentAvatarRef }) => {
+const P2PRaceBar = ({ myLabel, myAvatarUrl, myPercent, myColor, opponentLabel, opponentAvatarUrl, opponentPercent, opponentColor, compact = false, opponentAvatarRef }) => {
   const clampedMy  = Math.min(100, Math.max(0, myPercent));
   const clampedOpp = Math.min(100, Math.max(0, opponentPercent));
   // compact = landscape strip, !compact = portrait panel
@@ -146,7 +146,7 @@ const P2PRaceBar = ({ myLabel, myPercent, myColor, opponentLabel, opponentPercen
   const isOppLeading = clampedOpp > clampedMy;
 
   /* ── Avatar + name block (reused) ── */
-  const Avatar = ({ label, color, isLeading, dataAttr, pct, domRef }) => (
+  const Avatar = ({ label, avatarUrl, color, isLeading, dataAttr, pct, domRef }) => (
     <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
       <motion.div
         ref={domRef}
@@ -161,9 +161,14 @@ const P2PRaceBar = ({ myLabel, myPercent, myColor, opponentLabel, opponentPercen
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontWeight: 900, fontSize: Math.round(AV * 0.42), color: '#fff',
           textShadow: '0 1px 3px rgba(0,0,0,0.9)',
+          overflow: 'hidden',
         }}
       >
-        {label?.[0]?.toUpperCase() || '?'}
+        {avatarUrl ? (
+          <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : (
+          label?.[0]?.toUpperCase() || '?'
+        )}
       </motion.div>
       <span style={{
         fontSize: FONT_NAME, fontWeight: 900, color: '#1e293b',
@@ -202,7 +207,7 @@ const P2PRaceBar = ({ myLabel, myPercent, myColor, opponentLabel, opponentPercen
       </div>
 
       {/* ── MY AVATAR (left of center) ── */}
-      <Avatar label={myLabel} color={myColor} isLeading={isMyLeading} dataAttr="my" pct={clampedMy} />
+      <Avatar label={myLabel} avatarUrl={myAvatarUrl} color={myColor} isLeading={isMyLeading} dataAttr="my" pct={clampedMy} />
 
       {/* ── CENTER ⚔️ ── */}
       <motion.div
@@ -212,7 +217,7 @@ const P2PRaceBar = ({ myLabel, myPercent, myColor, opponentLabel, opponentPercen
       >⚔️</motion.div>
 
       {/* ── OPP AVATAR (right of center) ── */}
-      <Avatar label={opponentLabel} color={opponentColor} isLeading={isOppLeading} dataAttr="opponent" pct={clampedOpp} domRef={opponentAvatarRef} />
+      <Avatar label={opponentLabel} avatarUrl={opponentAvatarUrl} color={opponentColor} isLeading={isOppLeading} dataAttr="opponent" pct={clampedOpp} domRef={opponentAvatarRef} />
 
       {/* ── RIGHT BAR: fill từ cạnh PHẢI vào phía avatar (edge → center) ── */}
       <div style={{ flex: 1, position: 'relative', height: BAR, borderRadius: 99, overflow: 'hidden',
@@ -233,11 +238,15 @@ const P2PRaceBar = ({ myLabel, myPercent, myColor, opponentLabel, opponentPercen
   );
 };
 /* Simple bar used in result overlay */
-const ProgressBar = ({ label, percent, color, avatar }) => (
+const ProgressBar = ({ label, percent, color, avatar, avatarUrl }) => (
   <div className="flex items-center gap-2 w-full">
-    <div className="w-7 h-7 rounded-full flex items-center justify-center font-black text-xs text-white shrink-0"
+    <div className="w-7 h-7 rounded-full flex items-center justify-center font-black text-xs text-white shrink-0 overflow-hidden"
       style={{ background: color, border: '2px solid rgba(0,0,0,0.3)', boxShadow: '0 2px 0 rgba(0,0,0,0.3)' }}>
-      {avatar || '?'}
+      {avatarUrl ? (
+        <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      ) : (
+        avatar || '?'
+      )}
     </div>
     <div className="flex-1 min-w-0">
       <div className="flex justify-between items-baseline mb-0.5">
@@ -273,7 +282,7 @@ const CrosswordFinishedOverlay = ({
   rematchStatus = null,      // 'waiting'|'declined'
   puzzleWords = [],          // full word list with clue + explanation
 }) => {
-  const { globalScore, coins: profileCoins, nickname } = usePlayFabStore();
+  const { globalScore, coins: profileCoins, nickname, avatarUrl } = usePlayFabStore();
   const rankName = getRankByScore(globalScore || 0);
   const [showExplain, setShowExplain] = useState(false);
 
@@ -396,8 +405,12 @@ const CrosswordFinishedOverlay = ({
         }}>
           <div style={{ position:'absolute', top:0, left:0, right:0, height:'50%', borderRadius:'17px 17px 0 0', background:'rgba(255,255,255,0.08)', pointerEvents:'none' }} />
           <div style={{ display:'flex', alignItems:'center', gap:8, position:'relative', zIndex:10 }}>
-            <div style={{ width:28, height:28, borderRadius:'50%', background:'linear-gradient(135deg,#fef3c7,#fbbf24)', border:'2px solid #fef08a', boxShadow:'0 2px 0 #1c0a00', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, color:'#92400e', fontSize:12 }}>
-              {nickname?.[0]?.toUpperCase() || '?'}
+            <div style={{ width:28, height:28, borderRadius:'50%', background:'linear-gradient(135deg,#fef3c7,#fbbf24)', border:'2px solid #fef08a', boxShadow:'0 2px 0 #1c0a00', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, color:'#92400e', fontSize:12, overflow: 'hidden' }}>
+              {avatarUrl ? (
+                <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                nickname?.[0]?.toUpperCase() || '?'
+              )}
             </div>
             <span style={{ fontWeight:900, fontSize:14, color:'#fef3c7', textShadow:'0 1px 0 #1c0a00' }}>{nickname || 'Nguoi choi'}</span>
             <span style={{ fontSize:9, fontWeight:900, padding:'2px 8px', borderRadius:9999, background:'rgba(251,191,36,0.2)', border:'1.5px solid #fbbf24', color:'#fde68a' }}>{rankName}</span>
@@ -527,8 +540,8 @@ const CrosswordFinishedOverlay = ({
                     Số Từ Tìm Được
                   </div>
                   <div className="px-4 py-3 flex flex-col gap-2">
-                    <ProgressBar label={myProfile?.nickname || myFBName || 'Bạn'} percent={myPercent} color="#3b82f6" avatar={(myProfile?.nickname || myFBName || 'B')[0]} />
-                    <ProgressBar label={opponentProfile?.nickname || oppFBName || 'Đối thủ'} percent={opponentPercent} color="#ef4444" avatar={(opponentProfile?.nickname || oppFBName || 'Đ')[0]} />
+                    <ProgressBar label={myProfile?.nickname || myFBName || 'Bạn'} percent={myPercent} color="#3b82f6" avatar={(myProfile?.nickname || myFBName || 'B')[0]} avatarUrl={myProfile?.avatarUrl} />
+                    <ProgressBar label={opponentProfile?.nickname || oppFBName || 'Đối thủ'} percent={opponentPercent} color="#ef4444" avatar={(opponentProfile?.nickname || oppFBName || 'Đ')[0]} avatarUrl={opponentProfile?.avatarUrl} />
                   </div>
                 </div>
               )}
@@ -769,6 +782,8 @@ const CrosswordGame = ({
   // Đặt tên cho "tôi" và "đối thủ" dựa theo role
   const myFBName  = myRole === 'host' ? p2pHostName  : p2pGuestName;
   const oppFBName = myRole === 'host' ? p2pGuestName : p2pHostName;
+  const hostAvatarUrl  = roomData?.players?.[hostUid]?.avatarUrl  || null;
+  const guestAvatarUrl = roomData?.players?.[guestUid]?.avatarUrl || null;
 
   // Puzzle — solo: theo thứ tự; P2P: từ roomData.puzzleId (set bởi host trước khi game start)
   const [puzzle, setPuzzle] = useState(() => {
@@ -1108,7 +1123,7 @@ const CrosswordGame = ({
 
   /* ── Hint: Reveal one letter ── */
   const handleRevealLetter = useCallback((e) => {
-    if (!selectedCell || gameState !== 'playing' || !isSolo) return;
+    if (!selectedCell || gameState !== 'playing') return;
     const { row, col } = selectedCell;
     const cell = gridMap[row]?.[col];
     if (!cell?.isCell) return;
@@ -1162,7 +1177,7 @@ const CrosswordGame = ({
     }
     moveToNext(row, col, direction);
     setShowHintMenu(false);
-  }, [selectedCell, gameState, isSolo, gridMap, userGrid, solvedWords, checkWord, isWordFilled, moveToNext, direction, onProgressUpdate]);
+  }, [selectedCell, gameState, userCoins, addCoins, puzzle.words, gridMap, userGrid, solvedWords, checkWord, isWordFilled, moveToNext, direction, onProgressUpdate]);
 
   /* ── Hint: Reveal entire word ── */
   const handleRevealWord = useCallback((e) => {
@@ -1223,7 +1238,7 @@ const CrosswordGame = ({
       lastUpdated: Date.now(),
     });
     setShowHintMenu(false);
-  }, [activeWordId, gameState, isSolo, puzzle.words, userGrid, gridMap, solvedWords, checkWord, isWordFilled, onProgressUpdate]);
+  }, [activeWordId, gameState, isSolo, userCoins, addCoins, puzzle.words, userGrid, gridMap, solvedWords, checkWord, isWordFilled, onProgressUpdate]);
 
   /* ── Hidden input for physical keyboard + IME support ── */
   const hiddenInputRef = useRef(null);
@@ -1499,14 +1514,14 @@ const CrosswordGame = ({
   /* ── Charge bet + spawn coin animation khi bắt đầu matchSetup ── */
   useEffect(() => {
     if (gameState !== 'matchSetup') return;
-    if (betChargedRef.current) return;
-    betChargedRef.current = true;
 
     if (!wager || wager <= 0) {
       // Không có wager → bỏ qua animation, bắt đầu luôn
       setBetAnimDone(true);
       return;
     }
+
+    // ── Animation timers (luôn chạy, không guard bởi ref) ──
 
     // Delay 1 frame để DOM render potRef trước khi đọc getBoundingClientRect
     const tSpawn = setTimeout(() => spawnBetParticles(), 80);
@@ -1531,14 +1546,17 @@ const CrosswordGame = ({
       setTimeout(() => setBetAnimDone(true), 400);
     }, 1400);
 
-    // Trừ coin và lưu pending refund chạy ngầm
-    chargeBet(roomId, wager)
-      .then(() => {
-        setPendingRefund({ roomId, uid: myUid, amount: wager });
-      })
-      .catch(err => {
-        console.warn('[BetCharge] Failed:', err);
-      });
+    // ── Charge coin (chỉ chạy 1 lần, guard bởi betChargedRef) ──
+    if (!betChargedRef.current) {
+      betChargedRef.current = true;
+      chargeBet(roomId, wager)
+        .then(() => {
+          setPendingRefund({ roomId, uid: myUid, amount: wager });
+        })
+        .catch(err => {
+          console.warn('[BetCharge] Failed:', err);
+        });
+    }
 
     return () => {
       clearTimeout(tSpawn);
@@ -2001,8 +2019,6 @@ const CrosswordGame = ({
     const rightInitial = rightLabel[0]?.toUpperCase() || '?';
 
     // Avatar URLs: đọc từ roomData (Firebase) — single source of truth
-    const hostAvatarUrl  = roomData?.players?.[hostUid]?.avatarUrl  || null;
-    const guestAvatarUrl = roomData?.players?.[guestUid]?.avatarUrl || null;
     const leftAvatarUrl  = hostAvatarUrl;   // host = trái
     const rightAvatarUrl = guestAvatarUrl;  // guest = phải
 
@@ -2408,9 +2424,11 @@ const CrosswordGame = ({
           }}>
           <P2PRaceBar
             myLabel={p2pHostName}
+            myAvatarUrl={hostAvatarUrl}
             myPercent={myRole === 'host' ? myPercent : opponentPercent}
             myColor="#3b82f6"
             opponentLabel={p2pGuestName}
+            opponentAvatarUrl={guestAvatarUrl}
             opponentPercent={myRole === 'host' ? opponentPercent : myPercent}
             opponentColor="#ef4444"
             opponentAvatarRef={myRole === 'host' ? opponentAvatarRef : undefined}
@@ -2532,8 +2550,7 @@ const CrosswordGame = ({
         {isLandscape ? (
           <div className="flex-shrink-0 flex flex-col gap-2" style={{ width: 220 }}>
            {/* Hint buttons */}
-            {isSolo && (
-              <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
                 <motion.button 
                   whileTap={!isCellCorrect && userCoins >= 5 ? { scale: 0.93, y: 2 } : {}}
                   onClick={!isCellCorrect && userCoins >= 5 ? handleRevealLetter : undefined}
@@ -2551,6 +2568,7 @@ const CrosswordGame = ({
                   <span className="relative z-10">Mở 1 chữ</span>
                   <span className="relative z-10 text-amber-300 text-[10px] font-bold ml-auto"><div className="flex items-center gap-0.5 relative z-10 text-amber-300 text-[10px] font-bold ml-auto">5<img src={iconCoin} alt="C" className="w-3.5 h-3.5" /></div></span>
                 </motion.button>
+                {isSolo && (
                 <motion.button 
                   whileTap={!isCurrentWordSolved && userCoins >= 15 ? { scale: 0.93, y: 2 } : {}}
                   onClick={!isCurrentWordSolved && userCoins >= 15 ? handleRevealWord : undefined}
@@ -2568,8 +2586,8 @@ const CrosswordGame = ({
                   <span className="relative z-10">Mở cả từ</span>
                   <span className="relative z-10 text-white/80 text-[10px] font-bold ml-auto"><div className="flex items-center gap-0.5 relative z-10 text-white/80 text-[10px] font-bold ml-auto">15<img src={iconCoin} alt="C" className="w-3.5 h-3.5" /></div></span>
                 </motion.button>
+                )}
               </div>
-            )}
             {/* Clues — sorted by number, split evenly into 2 columns */}
             {(() => {
               const allClues = [...puzzle.words].sort((a, b) => a.num - b.num);
@@ -2631,9 +2649,11 @@ const CrosswordGame = ({
               }}>
                 <P2PRaceBar
                   myLabel={myRole === 'host' ? (myProfile?.nickname || 'Bạn') : (opponentProfile?.nickname || 'Đối thủ')}
+                  myAvatarUrl={hostAvatarUrl}
                   myPercent={myRole === 'host' ? myPercent : opponentPercent}
                   myColor="#3b82f6"
                   opponentLabel={myRole === 'host' ? (opponentProfile?.nickname || 'Đối thủ') : (myProfile?.nickname || 'Bạn')}
+                  opponentAvatarUrl={guestAvatarUrl}
                   opponentPercent={myRole === 'host' ? opponentPercent : myPercent}
                   opponentColor="#ef4444"
                   opponentAvatarRef={myRole === 'host' ? opponentAvatarRef : undefined}
@@ -2641,9 +2661,8 @@ const CrosswordGame = ({
               </div>
             )}
             {/* Hint buttons row */}
-            {isSolo && (
               <div className="flex gap-2 flex-shrink-0">
-                {/* Mở 1 chữ — portrait */}
+                {/* Mở 1 chữ — portrait (solo + P2P) */}
                 <motion.button
                   whileTap={(!isCellCorrect && userCoins >= 5) ? { scale: 0.93, y: 2 } : {}}
                   onClick={(!isCellCorrect && userCoins >= 5) ? handleRevealLetter : undefined}
@@ -2666,7 +2685,8 @@ const CrosswordGame = ({
                   </div>
                 </motion.button>
 
-                {/* Mở cả từ — portrait */}
+                {/* Mở cả từ — portrait (solo only) */}
+                {isSolo && (
                 <motion.button
                   whileTap={(!isCurrentWordSolved && userCoins >= 15) ? { scale: 0.93, y: 2 } : {}}
                   onClick={(!isCurrentWordSolved && userCoins >= 15) ? handleRevealWord : undefined}
@@ -2688,8 +2708,8 @@ const CrosswordGame = ({
                     15<img src={iconCoin} alt="C" className="w-3.5 h-3.5" />
                   </div>
                 </motion.button>
+                )}
               </div>
-            )}
             {/* Clues panel — short, 2-column sorted by number */}
             {(() => {
               const allClues = [...puzzle.words].sort((a, b) => a.num - b.num);

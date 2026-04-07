@@ -129,7 +129,7 @@ export async function loginWithEmail(email, password) {
       GetUserData: true,
       UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh', 'GlobalScore', 'Coins', 'Stats', 'PinnacleMyVote'],
       GetPlayerProfile: true,
-      ProfileConstraints: { ShowDisplayName: true },
+      ProfileConstraints: { ShowDisplayName: true, ShowAvatarUrl: true },
     },
   }, false);
 
@@ -155,7 +155,7 @@ export async function loginWithGoogleAccount(accessToken) {
       GetUserData: true,
       UserDataKeys: ['AnsweredQuestions', 'GiaoXu', 'TinhThanh', 'GlobalScore', 'Coins', 'Stats', 'PinnacleMyVote'],
       GetPlayerProfile: true,
-      ProfileConstraints: { ShowDisplayName: true },
+      ProfileConstraints: { ShowDisplayName: true, ShowAvatarUrl: true },
     },
   }, false);
 
