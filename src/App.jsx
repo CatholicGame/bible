@@ -13,6 +13,7 @@ import CrosswordGame from './components/games/crossword/CrosswordGame';
 import LoginScreen from './components/auth/LoginScreen';
 import ProfileScreen from './components/profile/ProfileScreen';
 import RankRoadmap from './components/profile/RankRoadmap';
+import XPLeaderboardModal from './components/menu/XPLeaderboardModal';
 import LoadingScreen, { usePreload } from './components/LoadingScreen';
 import CreateRoom from './components/menu/CreateRoom';
 import JoinRoom from './components/menu/JoinRoom';
@@ -73,6 +74,7 @@ function App() {
   const [activeMode, setActiveMode] = useState(null);
   const [initialPin, setInitialPin] = useState('');
   const [showProfileRoadmap, setShowProfileRoadmap] = useState(false);
+  const [showProfileXPLeaderboard, setShowProfileXPLeaderboard] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement);
 
   // Track fullscreen state
@@ -386,6 +388,7 @@ function App() {
               user={user}
               onBack={() => setCurrentView('menu')}
               onOpenRoadmap={() => setShowProfileRoadmap(true)}
+              onOpenLeaderboard={() => setShowProfileXPLeaderboard(true)}
             />
             {/* Roadmap overlay from Profile */}
             <AnimatePresence>
@@ -397,6 +400,11 @@ function App() {
                     <RankRoadmap currentScore={user?.score} onBack={() => setShowProfileRoadmap(false)} />
                   </motion.div>
                 </motion.div>
+              )}
+            </AnimatePresence>
+            <AnimatePresence>
+              {showProfileXPLeaderboard && (
+                <XPLeaderboardModal onClose={() => setShowProfileXPLeaderboard(false)} />
               )}
             </AnimatePresence>
           </motion.div>

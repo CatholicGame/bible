@@ -1,5 +1,13 @@
 import { create } from 'zustand';
 import { loginWithCustomID, loginWithEmail, registerWithEmail, getUserData, updateUserData, updateDisplayName, forgetCredentials, updatePlayerStatistics, getLeaderboard, getLeaderboardSilent, getLeaderboardAroundPlayer, getPlayerProfile } from '../config/playfab';
+
+// XP leaderboard stat names — 4 periods (must match PlayFab stat config)
+const XP_STATS = {
+  daily:   'GlobalScore_XP_Daily',
+  weekly:  'GlobalScore_XP_Weekly',
+  monthly: 'GlobalScore_XP_Monthly',
+  allTime: 'GlobalScore_XP',        // all-time stat (no reset)
+};
 import { getQuestionsForGame } from '../utils/questionManager';
 import { getRankByScore } from '../utils/ranks';
 import { auth, db } from '../config/firebase';
@@ -62,7 +70,9 @@ export const usePlayFabStore = create((set, get) => ({
   globalScore: 0,
   coins: 0,
   rank: null,
-  stats: { solo: { plays: 0, perfects: 0, totalCorrect: 0, totalQuestions: 0 }, p2p: { plays: 0, wins: 0, losses: 0, totalCorrect: 0, totalQuestions: 0 } },
+  stats: { solo: { plays: 0, perfects: 0, totalCorrect: 0, totalQuestions: 0 }, p2p: { plays: 0, wins: 0, losses: 0, forfeits: 0, totalCorrect: 0, totalQuestions: 0 } },
+  // Per-game breakdown: { millionaire: { xp, coins, plays }, crossword: { xp, coins, plays } }
+  gameStats: {},
   error: null,
 
   // ── Rosary Offering (Dâng Hoa) ──
@@ -81,6 +91,12 @@ export const usePlayFabStore = create((set, get) => ({
   pinnaclePlayerCount: 0,    // unique player count
   pinnacleMyVote: null,      // null | 'like' | 'dislike' — vote của player này
   pinnacleVoteCounts: { like: 0, dislike: 0 }, // tổng vote (xấp xỉ từ stats)
+
+  // ── XP Leaderboard ──
+  xpLeaderboard: [],
+  xpLeaderboardLoading: false,
+  xpPlayerRank: null,
+  xpActiveTab: 'allTime',
 
   // ── Crossword Vote ──
   crosswordMyVote: null,     // null | 'like' | 'dislike'
@@ -141,6 +157,12 @@ export const usePlayFabStore = create((set, get) => ({
       const pinnacleMyVote = userData?.PinnacleMyVote?.Value || null;
       const crosswordMyVote = userData?.CrosswordMyVote?.Value || null;
 
+      // GameStats per game
+      let gameStats = {};
+      if (userData?.GameStats?.Value) {
+        try { gameStats = JSON.parse(userData.GameStats.Value); } catch (_) {}
+      }
+
       set({
         isLoggedIn: true,
         isLoading: false,
@@ -157,6 +179,7 @@ export const usePlayFabStore = create((set, get) => ({
         coins,
         rank: getRankByScore(globalScore),
         ...(stats ? { stats } : {}),
+        gameStats,
         rosaryToday: effectiveRosaryToday,
         rosaryDate: todayStr,
         rosaryTotal,
@@ -219,12 +242,19 @@ export const usePlayFabStore = create((set, get) => ({
 
       const pinnacleMyVote = data.PinnacleMyVote?.Value || null;
 
+      // GameStats per game
+      let gameStats = {};
+      if (data.GameStats?.Value) {
+        try { gameStats = JSON.parse(data.GameStats.Value); } catch (_) {}
+      }
+
       set({
         isLoggedIn: true, isLoading: false,
         playFabId, nickname, authMethod: 'restored',
         answeredQuestions, playedCrosswordIds,
         globalScore, coins, rank: getRankByScore(globalScore),
         giaoxu, hat, giaophan, tinhthanh, avatarUrl,
+        gameStats,
         rosaryToday: effectiveRosaryToday,
         rosaryDate: todayStr,
         rosaryTotal,
@@ -528,16 +558,67 @@ export const usePlayFabStore = create((set, get) => ({
     });
   },
 
-  // ── Add XP (persist to PlayFab) ──
+  // ── Add XP (persist to PlayFab UserData + all 4 Statistics for leaderboard) ──
   addXP: async (xp) => {
     const { globalScore } = get();
     const newScore = globalScore + xp;
     set({ globalScore: newScore, rank: getRankByScore(newScore) });
     try {
-      await updateUserData({ GlobalScore: String(newScore) });
+      await Promise.all([
+        updateUserData({ GlobalScore: String(newScore) }),
+        // Write to all 4 XP leaderboard stats simultaneously
+        updatePlayerStatistics([
+          { StatisticName: XP_STATS.daily,   Value: newScore },
+          { StatisticName: XP_STATS.weekly,  Value: newScore },
+          { StatisticName: XP_STATS.monthly, Value: newScore },
+          { StatisticName: XP_STATS.allTime, Value: newScore },
+        ]),
+      ]);
       console.log(`[PlayFab] XP updated: ${globalScore} → ${newScore}`);
     } catch (e) {
       console.warn('[PlayFab] Failed to save XP', e);
+    }
+  },
+
+  // ── Add Per-Game Stats (XP + coins + plays per gameId) ──
+  addGameStats: async (gameId, { xp = 0, coins = 0, plays = 1 } = {}) => {
+    const current = get().gameStats || {};
+    const prev = current[gameId] || { xp: 0, coins: 0, plays: 0 };
+    const updated = {
+      ...current,
+      [gameId]: {
+        xp: prev.xp + xp,
+        coins: prev.coins + coins,
+        plays: prev.plays + plays,
+      },
+    };
+    set({ gameStats: updated });
+    try {
+      await updateUserData({ GameStats: JSON.stringify(updated) });
+    } catch (e) {
+      console.warn('[GameStats] Failed to save', e);
+    }
+  },
+
+  // ── Record P2P game result: 'win' | 'loss' | 'forfeit' ──
+  addGameResult: async (outcome) => {
+    const current = get().stats || {};
+    const p2p = current.p2p || { plays: 0, wins: 0, losses: 0, forfeits: 0 };
+    const updated = {
+      ...current,
+      p2p: {
+        ...p2p,
+        plays:    (p2p.plays    || 0) + 1,
+        wins:     outcome === 'win'     ? (p2p.wins     || 0) + 1 : (p2p.wins     || 0),
+        losses:   outcome === 'loss'   ? (p2p.losses   || 0) + 1 : (p2p.losses   || 0),
+        forfeits: outcome === 'forfeit'? (p2p.forfeits || 0) + 1 : (p2p.forfeits || 0),
+      },
+    };
+    set({ stats: updated });
+    try {
+      await updateUserData({ Stats: JSON.stringify(updated) });
+    } catch (e) {
+      console.warn('[GameResult] Failed to save', e);
     }
   },
 
@@ -658,6 +739,36 @@ export const usePlayFabStore = create((set, get) => ({
     } catch (e) {
       console.warn('[Pinnacle] Failed to load Hall of Fame', e);
       set({ hallOfFameLoading: false });
+    }
+  },
+
+  // ── Load XP Leaderboard (tab: 'daily' | 'weekly' | 'monthly' | 'allTime') ──
+  loadXPLeaderboard: async (tab = 'allTime') => {
+    const statName = XP_STATS[tab];
+    if (!statName) return;
+    set({ xpLeaderboardLoading: true, xpActiveTab: tab });
+    try {
+      const [topData, aroundData] = await Promise.all([
+        getLeaderboard(statName, 20),
+        getLeaderboardAroundPlayer(statName, 5),
+      ]);
+      const entries = (topData?.Leaderboard || []).map(e => ({
+        position: e.Position + 1,
+        displayName: e.DisplayName || e.PlayFabId?.slice(-6) || '???',
+        xp: e.StatValue ?? 0,
+        playFabId: e.PlayFabId,
+        avatarUrl: null,
+      }));
+      let xpPlayerRank = null;
+      const around = aroundData?.Leaderboard || [];
+      if (around.length > 0) {
+        const mid = around[Math.floor(around.length / 2)];
+        if (mid) xpPlayerRank = { position: mid.Position + 1, xp: mid.StatValue ?? 0 };
+      }
+      set({ xpLeaderboard: entries, xpPlayerRank, xpLeaderboardLoading: false });
+    } catch (e) {
+      console.warn('[XP Leaderboard] Failed to load', e);
+      set({ xpLeaderboardLoading: false });
     }
   },
 

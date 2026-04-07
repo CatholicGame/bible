@@ -2486,7 +2486,7 @@ const Confetti = ({ questionIndex = 14 }) => {
 
 const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionIndex, endMessage, showEndMessage, selectedOption, questions, isVoluntaryStop, earnedXP, myVote, voteCounts, onVote }) => {
     const [showLeaderboard, setShowLeaderboard] = useState(false);
-    const { addXP, addCoins, globalScore, coins: profileCoins, nickname } = usePlayFabStore();
+    const { addXP, addCoins, addGameStats, globalScore, coins: profileCoins, nickname } = usePlayFabStore();
     const savedRef = useRef(false);
 
     const [displayScore, setDisplayScore] = useState(0);
@@ -2624,13 +2624,17 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [totalXP]);
 
-    // After XP done → fly XP (count = totalXP capped at 9) → addXP
+    // After XP done → fly XP → addXP + addGameStats
     useEffect(() => {
         if (!xpDone || totalXP <= 0) return;
         const t = setTimeout(() => {
             spawnFly('xp', xpPillRef, xpTargetRef, totalXP);
             setTimeout(() => {
-                if (!savedRef.current) { savedRef.current = true; addXP(totalXP); }
+                if (!savedRef.current) {
+                    savedRef.current = true;
+                    addXP(totalXP);
+                    addGameStats('millionaire', { xp: totalXP, coins: totalCoins });
+                }
                 setProfileUpdated(true);
             }, 1400);
         }, 300);

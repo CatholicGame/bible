@@ -739,7 +739,7 @@ const CrosswordGame = ({
   }, []);
 
   // Store — MUST be declared before puzzle state so lazy initialisers can use them
-  const { addXP, addCoins, coins: userCoins, playedCrosswordIds, markCrosswordPlayed, globalScore, nickname, giaoxu, avatarUrl,
+  const { addXP, addCoins, addGameStats, addGameResult, coins: userCoins, playedCrosswordIds, markCrosswordPlayed, globalScore, nickname, giaoxu, avatarUrl,
           crosswordMyVote, crosswordVoteCounts, submitCrosswordVote, loadCrosswordVoteCounts,
         } = usePlayFabStore();
   const { roomData, roomId, myRole } = useRoomStore();
@@ -1398,6 +1398,7 @@ const CrosswordGame = ({
       if (isSolo) {
         addXP(totalXP);
         addCoins(rewardCoins); // hints already deducted live during play
+        addGameStats('crossword', { xp: totalXP, coins: rewardCoins - hintsSpent });
       }
     }
 
@@ -1412,7 +1413,7 @@ const CrosswordGame = ({
       hintUsed,
       hintsSpent,
     });
-  }, [solvedWords, revealedWordIds, timeLeft, onFinish, hintUsed, hintsSpent, totalWords, isSolo, addXP, addCoins, isReplay]);
+  }, [solvedWords, revealedWordIds, timeLeft, onFinish, hintUsed, hintsSpent, totalWords, isSolo, addXP, addCoins, addGameStats, isReplay]);
 
   // Keep finishGameRef always pointing to the latest finishGame
   finishGameRef.current = finishGame;
@@ -1424,6 +1425,9 @@ const CrosswordGame = ({
     const oppWordsCount = opponentProgress?.completedItems?.length || 0;
     const isDraw = myWordsCount === oppWordsCount;
     const iWon  = myWordsCount > oppWordsCount;
+
+    // Record P2P result
+    addGameResult(isDraw ? 'loss' : iWon ? 'win' : 'loss');
 
     if (pot <= 0) { clearPendingRefund(); return; } // không có wager
 
@@ -2754,6 +2758,7 @@ const CrosswordGame = ({
                     if (isP2PMode && (gameState === 'playing' || gameState === 'matchSetup') && roomId && myRole) {
                       // Forfeit: đối thủ nhận pot, ta mất bet
                       clearPendingRefund(); // ta đã forfeit, không refund
+                      addGameResult('forfeit');
                       await leaveRoom(roomId, myRole, true, opponentUid, pot);
                     }
                     onLeaveGame?.();

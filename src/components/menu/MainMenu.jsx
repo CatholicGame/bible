@@ -2,14 +2,18 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import {
     Users, User, ArrowLeft, Trophy, Shield,
-    LogOut, Map, ChevronRight, ChevronLeft, Power
+    LogOut, Map, ChevronRight, ChevronLeft, Power,
+    BookOpen, Footprints, Heart, Feather, Wine, Compass,
+    HandHeart, BookMarked, Flame, Leaf, Megaphone, Crown,
+    Star, ChevronUp,
 } from 'lucide-react';
-import { getRankByScore } from '../../utils/ranks';
+import { getRankByScore, RANK_TIERS, getNextRank, getProgressToNextRank } from '../../utils/ranks';
 import { usePlayFabStore } from '../../store/playfabStore';
 import UserAvatar from '../common/UserAvatar';
 import RankRoadmap from '../profile/RankRoadmap';
 import SettingsModal from '../common/SettingsModal';
 import RosaryOfferingModal from '../rosary/RosaryOfferingModal';
+import XPLeaderboardModal from './XPLeaderboardModal';
 
 import bgLandscape from '../../assets/common/common_background_land.png';
 import bgPortrait from '../../assets/common/main_bg_portrait.png';
@@ -21,6 +25,126 @@ import roseIcon from '../../assets/rosary/rose1.png';
 import imgMillionaire from '../../assets/games/millionaire.png';
 import imgSorting from '../../assets/games/thumb_secret_words.png';
 import imgGolgotha from '../../assets/games/thumb_golgotha.png';
+
+/* ── Rank icons map (same order as RANK_TIERS) ── */
+const RANK_ICONS_LIST = [
+    BookOpen, Footprints, Heart, Feather, Wine, Compass,
+    HandHeart, BookMarked, Flame, Leaf, Megaphone, Crown,
+];
+
+/* ── Rank color palette ── */
+const RANK_COLORS = [
+    { from: '#64748b', to: '#475569', glow: '#94a3b8' },   // 1 Nguoi Tim Hieu
+    { from: '#16a34a', to: '#15803d', glow: '#4ade80' },   // 2 Du Tong
+    { from: '#0ea5e9', to: '#0284c7', glow: '#38bdf8' },   // 3 Chien Con
+    { from: '#8b5cf6', to: '#7c3aed', glow: '#a78bfa' },   // 4 Thien Than Nho
+    { from: '#ec4899', to: '#db2777', glow: '#f472b6' },   // 5 Thieu Nhi
+    { from: '#f59e0b', to: '#d97706', glow: '#fbbf24' },   // 6 Len Duong
+    { from: '#ef4444', to: '#dc2626', glow: '#f87171' },   // 7 Nguoi Phuc Vu
+    { from: '#06b6d4', to: '#0891b2', glow: '#22d3ee' },   // 8 Mon De
+    { from: '#f97316', to: '#ea580c', glow: '#fb923c' },   // 9 Chung Nhan
+    { from: '#a855f7', to: '#9333ea', glow: '#c084fc' },   // 10 Nguoi Giao Hat
+    { from: '#14b8a6', to: '#0d9488', glow: '#2dd4bf' },   // 11 Su Gia
+    { from: '#d97706', to: '#b45309', glow: '#fbbf24' },   // 12 Tong Do
+];
+
+/* ── Compact Rank Banner ── */
+const RankBanner = ({ score, onOpenRoadmap, isLandscape }) => {
+    const currentTierIdx = RANK_TIERS.reduce((best, tier, i) => score >= tier.minXP ? i : best, 0);
+    const currentTier = RANK_TIERS[currentTierIdx];
+    const nextTier = RANK_TIERS[currentTierIdx + 1] || null;
+    const progress = getProgressToNextRank(score);
+    const color = RANK_COLORS[currentTierIdx] || RANK_COLORS[0];
+    const RankIcon = RANK_ICONS_LIST[currentTierIdx] || Star;
+    const isMax = !nextTier;
+    const xpInLevel = score - currentTier.minXP;
+    const xpNeeded = nextTier ? nextTier.minXP - currentTier.minXP : 1;
+
+    return (
+        <motion.button
+            onClick={onOpenRoadmap}
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
+            whileTap={{ scale: 0.97 }}
+            className="flex-shrink-0 w-full max-w-sm px-4 md:px-0"
+        >
+            <div
+                className="relative overflow-hidden rounded-2xl"
+                style={{
+                    background: 'rgba(255,255,255,0.88)',
+                    border: `2px solid ${color.from}44`,
+                    boxShadow: `0 3px 0 ${color.to}55, 0 6px 18px ${color.from}22`,
+                    backdropFilter: 'blur(12px)',
+                }}
+            >
+                {/* Glow orb */}
+                <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full pointer-events-none"
+                    style={{ background: `radial-gradient(circle, ${color.glow}33 0%, transparent 70%)` }} />
+
+                <div className={`flex items-center gap-3 px-3 ${isLandscape ? 'py-1.5' : 'py-2'}`}>
+
+                    {/* Rank icon badge */}
+                    <motion.div
+                        animate={{ rotate: [0, -4, 4, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                        className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center"
+                        style={{
+                            background: `linear-gradient(135deg, ${color.from}, ${color.to})`,
+                            border: `2.5px solid ${color.to}`,
+                            boxShadow: `0 3px 0 ${color.to}, 0 0 10px ${color.glow}55`,
+                        }}
+                    >
+                        <RankIcon size={16} strokeWidth={2.5} color="#fff" />
+                    </motion.div>
+
+                    {/* Middle: name + progress */}
+                    <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-0.5">
+                            <span className="font-black text-xs leading-none truncate"
+                                style={{ color: color.from }}>
+                                {currentTier.name}
+                            </span>
+                            <span className="font-bold text-[9px] ml-2 flex-shrink-0"
+                                style={{ color: '#64748b' }}>
+                                {isMax ? '⭐ MAX' : `${xpInLevel.toLocaleString()} / ${xpNeeded.toLocaleString()} XP`}
+                            </span>
+                        </div>
+
+                        {/* Progress bar */}
+                        <div className="relative h-2 rounded-full overflow-hidden"
+                            style={{ background: `${color.from}20` }}>
+                            <motion.div
+                                className="absolute left-0 top-0 h-full rounded-full"
+                                initial={{ width: '0%' }}
+                                animate={{ width: `${isMax ? 100 : progress}%` }}
+                                transition={{ duration: 0.9, ease: 'easeOut', delay: 0.2 }}
+                                style={{
+                                    background: `linear-gradient(90deg, ${color.from}, ${color.glow})`,
+                                    boxShadow: `0 0 6px ${color.glow}88`,
+                                }}
+                            />
+                            {/* Shine */}
+                            <div className="absolute inset-0 rounded-full"
+                                style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.35) 0%, transparent 60%)' }} />
+                        </div>
+
+                        {!isMax && nextTier && (
+                            <div className="flex items-center mt-0.5">
+                                <span className="text-[8.5px] font-semibold" style={{ color: '#94a3b8' }}>
+                                    Tiếp: {nextTier.name}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Chevron tap hint */}
+                    <ChevronUp size={13} className="flex-shrink-0" style={{ color: color.from + '99' }} />
+                </div>
+            </div>
+        </motion.button>
+    );
+};
 
 const GAMES = [
     { id: 'millionaire', title: 'Nhà Thần Học?', subtitle: 'Ai Là', image: imgMillionaire, from: '#8b5cf6', to: '#5b21b6', isSoloOnly: true },
@@ -250,6 +374,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [showRosary, setShowRosary] = useState(false);
+    const [showLeaderboard, setShowLeaderboard] = useState(false);
     const [ready, setReady] = useState(false);
     const [cardDims, setCardDims] = useState({ cardW: BASE_CARD_W, cardH: BASE_CARD_H, step: Math.round(BASE_CARD_W * MAX_SC) + GAP });
     const [isLandscape, setIsLandscape] = useState(false);
@@ -266,8 +391,14 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
         return () => mq.removeEventListener('change', listener);
     }, []);
 
-    const { coins, globalScore, rosaryToday, rosaryGlobal, submitRosary } = usePlayFabStore();
+    const { coins, globalScore, rosaryToday, rosaryGlobal, submitRosary, stats: pfStats, gameStats } = usePlayFabStore();
     const avatarUrl = usePlayFabStore(state => state.avatarUrl);
+
+    // Per-game stats from store; show zeros for games without play history yet
+    const getCardStats = (gameId) => {
+        const gs = gameStats?.[gameId];
+        return gs || { xp: 0, coins: 0, plays: 0 };
+    };
 
     /* Measure → set cwRef + card dims based on available height, then centre card-0 */
     useEffect(() => {
@@ -415,7 +546,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                     {/* Dâng Hoa button — hidden on portrait, visible on landscape/desktop */}
                     <motion.button whileTap={{ scale: 0.93, y: 2 }}
                         onClick={() => setShowRosary(true)}
-                        className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors ml-auto"
+                        className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors"
                         style={{
                             background: 'linear-gradient(135deg, rgba(236,64,122,0.12), rgba(233,30,99,0.18))',
                             border: '2px solid rgba(233,30,99,0.3)',
@@ -426,6 +557,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                         <span style={{ fontSize: 16 }}>🌸</span>
                         <span className="font-black text-[10px] tracking-wider uppercase" style={{ color: '#c2185b' }}>Dâng Hoa</span>
                     </motion.button>
+
 
 
                     {/* User button — opens quick profile menu */}
@@ -543,6 +675,16 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                 {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
             </AnimatePresence>
 
+            {/* XP Leaderboard Modal */}
+            <AnimatePresence>
+                {showLeaderboard && (
+                    <XPLeaderboardModal
+                        onClose={() => setShowLeaderboard(false)}
+                        currentUser={user}
+                    />
+                )}
+            </AnimatePresence>
+
             {/* Rosary Offering Modal */}
             <AnimatePresence>
                 {showRosary && (
@@ -574,7 +716,16 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
 
 
             {/* BODY */}
-            <motion.div layout className={`relative z-10 flex-1 min-h-0 flex flex-col items-center ${isLandscape ? 'pt-1 pb-0 gap-1' : 'pt-5 pb-3 gap-3'}`}>
+            <motion.div layout className={`relative z-10 flex-1 min-h-0 flex flex-col items-center ${isLandscape ? 'pt-1 pb-0 gap-1' : 'pt-4 pb-3 gap-3'}`}>
+
+                {/* ── Rank Banner — only on home (not in modes selection) ── */}
+                {user && !showModes && (
+                    <RankBanner
+                        score={user.score || 0}
+                        onOpenRoadmap={() => { enterFullscreen(); setShowRoadmap(true); }}
+                        isLandscape={isLandscape}
+                    />
+                )}
 
                 {/* PIN / Modes */}
                 <AnimatePresence mode="wait">
@@ -782,7 +933,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                             cwRef={cwRef}
                                             isSnapped={i === snapped}
                                             onPress={() => { if (i !== snapped) navigateTo(i); else handleSelect(game.id); }}
-                                            stats={(user?.gameStats || {})[game.id]}
+                                            stats={getCardStats(game.id)}
                                             cardW={cardW}
                                             cardH={cardH}
                                             step={step}

@@ -70,7 +70,7 @@ const C = {
     rankBadge: { bg: 'linear-gradient(135deg, #ffd166, #f4a261)', color: '#7c2d12', border: '#e9952a', shadow: '#c77a1a' },
 };
 
-const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
+const ProfileScreen = ({ user, onBack, onOpenRoadmap, onOpenLeaderboard }) => {
     const globalScore = usePlayFabStore(state => state.globalScore);
     const coins = usePlayFabStore(state => state.coins);
     const stats = usePlayFabStore(state => state.stats);
@@ -82,6 +82,8 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
     const saveProfile = usePlayFabStore(state => state.saveProfile);
     const saveDisplayName = usePlayFabStore(state => state.saveDisplayName);
     const nickname = usePlayFabStore(state => state.nickname);
+    const xpPlayerRank = usePlayFabStore(state => state.xpPlayerRank);
+    const loadXPLeaderboard = usePlayFabStore(state => state.loadXPLeaderboard);
     const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
 
     useEffect(() => {
@@ -89,6 +91,9 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
         window.addEventListener('resize', check);
         return () => window.removeEventListener('resize', check);
     }, []);
+
+    // Load XP leaderboard rank on mount
+    useEffect(() => { loadXPLeaderboard('allTime'); }, []); // eslint-disable-line
 
     const score = globalScore || user?.score || 0;
     const userCoins = coins || 0;
@@ -98,10 +103,8 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
     const progress = getProgressToNextRank(score);
     const xpToNext = nextRank ? nextRank.minXP - score : 0;
 
-    const solo = stats?.solo || { plays: 0, perfects: 0, totalCorrect: 0, totalQuestions: 0 };
-    const p2p = stats?.p2p || { plays: 0, wins: 0, losses: 0, totalCorrect: 0, totalQuestions: 0 };
-    const totalGames = solo.plays + p2p.plays;
-    const avgCorrect = solo.plays > 0 ? (solo.totalCorrect / solo.plays).toFixed(1) : '0';
+    const p2p = stats?.p2p || { plays: 0, wins: 0, losses: 0, forfeits: 0, totalCorrect: 0, totalQuestions: 0 };
+    const totalGames = p2p.plays;
     const winRate = p2p.plays > 0 ? Math.round((p2p.wins / p2p.plays) * 100) : 0;
 
     const displayName = nickname || user?.name || 'Khách';
@@ -223,46 +226,26 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
         <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 px-0.5">
                 <Award size={13} className="text-amber-400" />
-                <span className="font-black text-xs tracking-wider uppercase" style={{ color: C.textPrimary }}>Thống Kê</span>
+                <span className="font-black text-xs tracking-wider uppercase" style={{ color: C.textPrimary }}>Thống Kê P2P</span>
                 <span className="text-[9px] font-bold ml-auto" style={{ color: C.textMuted }}>Tổng: {totalGames} trận</span>
             </div>
-            <div className="grid grid-cols-2 gap-2.5">
-                {/* Solo */}
-                <div className="rounded-xl p-3 flex flex-col gap-2 relative overflow-hidden"
-                    style={{
-                        background: C.soloCard.bg,
-                        border: `2.5px solid ${C.soloCard.border}`,
-                        boxShadow: `0 4px 0 ${C.soloCard.shadow}`,
-                    }}>
-                    <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/15 pointer-events-none" />
-                    <div className="flex items-center gap-1.5 relative z-10">
-                        <User size={11} strokeWidth={3} className="text-white" />
-                        <span className="font-black text-[10px] text-white tracking-wider uppercase">Solo</span>
-                    </div>
-                    <div className="space-y-1 relative z-10">
-                        <StatRow icon="🎮" label="Trận" value={solo.plays} />
-                        <StatRow icon="⭐" label="Perfect" value={solo.perfects} />
-                        <StatRow icon="✅" label="TB đúng" value={`${avgCorrect}/15`} />
-                    </div>
+            <div className="rounded-xl p-3 flex flex-col gap-2 relative overflow-hidden"
+                style={{
+                    background: C.p2pCard.bg,
+                    border: `2.5px solid ${C.p2pCard.border}`,
+                    boxShadow: `0 4px 0 ${C.p2pCard.shadow}`,
+                }}>
+                <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/15 pointer-events-none" />
+                <div className="flex items-center gap-1.5 relative z-10">
+                    <Swords size={11} strokeWidth={3} className="text-white" />
+                    <span className="font-black text-[10px] text-white tracking-wider uppercase">P2P Crossword</span>
                 </div>
-                {/* P2P */}
-                <div className="rounded-xl p-3 flex flex-col gap-2 relative overflow-hidden"
-                    style={{
-                        background: C.p2pCard.bg,
-                        border: `2.5px solid ${C.p2pCard.border}`,
-                        boxShadow: `0 4px 0 ${C.p2pCard.shadow}`,
-                    }}>
-                    <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/15 pointer-events-none" />
-                    <div className="flex items-center gap-1.5 relative z-10">
-                        <Swords size={11} strokeWidth={3} className="text-white" />
-                        <span className="font-black text-[10px] text-white tracking-wider uppercase">P2P</span>
-                    </div>
-                    <div className="space-y-1 relative z-10">
-                        <StatRow icon="⚔️" label="Trận" value={p2p.plays} />
-                        <StatRow icon="🏆" label="Thắng" value={p2p.wins} highlight />
-                        <StatRow icon="💀" label="Thua" value={p2p.losses} />
-                        <StatRow icon="📊" label="Win%" value={`${winRate}%`} highlight />
-                    </div>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-1 relative z-10">
+                    <StatRow icon="⚔️" label="Trận" value={p2p.plays} />
+                    <StatRow icon="🏆" label="Thắng" value={p2p.wins} highlight />
+                    <StatRow icon="💀" label="Thua" value={p2p.losses} />
+                    <StatRow icon="🏼" label="Bỏ cuộc" value={p2p.forfeits || 0} />
+                    <StatRow icon="📊" label="Win%" value={`${winRate}%`} highlight />
                 </div>
             </div>
         </div>
@@ -288,23 +271,26 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                 </span>
                 <ChevronRight size={14} className="text-sky-300 group-hover:text-sky-500 transition-colors" />
             </motion.button>
-            <motion.button whileTap={{ scale: 0.97, y: 2 }}
+            <motion.button whileTap={{ scale: 0.97, y: 2 }} onClick={onOpenLeaderboard}
                 className="flex-1 flex items-center justify-between px-3.5 py-2.5 rounded-xl group"
                 style={{
                     background: C.card,
                     border: `1.5px solid ${C.cardBorder}`,
                     boxShadow: '0 3px 0 rgba(0,150,200,0.15)',
-                }}>
+                }}
+            >
                 <span className="flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center border border-purple-200">
-                        <Trophy size={14} className="text-purple-500" />
+                    <span className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center border border-amber-200">
+                        <Trophy size={14} className="text-amber-500" />
                     </span>
                     <span className="flex flex-col text-left">
-                        <span className="font-black text-xs" style={{ color: C.textPrimary }}>Bảng Xếp Hạng</span>
-                        <span className="text-[9px] font-semibold" style={{ color: C.textMuted }}>Coming soon</span>
+                        <span className="font-black text-xs" style={{ color: C.textPrimary }}>Bảng Xếp Hạng XP</span>
+                        <span className="text-[9px] font-semibold" style={{ color: C.textMuted }}>
+                            {xpPlayerRank ? `Hạng #${xpPlayerRank.position} · ${(xpPlayerRank.xp || 0).toLocaleString()} XP` : 'Xem vị trí của bạn'}
+                        </span>
                     </span>
                 </span>
-                <ChevronRight size={14} className="text-sky-300 group-hover:text-sky-500 transition-colors" />
+                <ChevronRight size={14} className="text-amber-400 group-hover:text-amber-500 transition-colors" />
             </motion.button>
         </div>
     );
@@ -460,8 +446,8 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                 <motion.div custom={0} variants={fadeUp} initial="hidden" animate="visible"><AvatarSection /></motion.div>
                 <motion.div custom={1} variants={fadeUp} initial="hidden" animate="visible"><CurrencyCards /></motion.div>
                 <motion.div custom={2} variants={fadeUp} initial="hidden" animate="visible"><RankProgress /></motion.div>
-                <motion.div custom={3} variants={fadeUp} initial="hidden" animate="visible"><StatsSection /></motion.div>
-                <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible"><QuickActions /></motion.div>
+                <motion.div custom={3} variants={fadeUp} initial="hidden" animate="visible"><QuickActions /></motion.div>
+                <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible"><StatsSection /></motion.div>
                 <motion.div custom={5} variants={fadeUp} initial="hidden" animate="visible"><PersonalInfo /></motion.div>
             </div>
         </div>
@@ -550,37 +536,22 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                     style={{ background: C.card, border: `1.5px solid ${C.cardBorder}`, boxShadow: '0 2px 8px rgba(0,150,200,0.1)' }}>
                     <div className="flex items-center gap-2 mb-2">
                         <Award size={18} className="text-amber-400" />
-                        <span className="font-black text-lg tracking-wider uppercase" style={{ color: C.textPrimary }}>Detailed Statistics</span>
+                        <span className="font-black text-lg tracking-wider uppercase" style={{ color: C.textPrimary }}>Thống Kê P2P</span>
                     </div>
-                    <div className="grid grid-cols-2 gap-3 flex-1">
-                        {/* Solo */}
-                        <div className="rounded-xl px-5 py-3 flex flex-col gap-2.5 relative overflow-hidden"
-                            style={{ background: C.soloCard.bg, border: `2.5px solid ${C.soloCard.border}`, boxShadow: `0 3px 0 ${C.soloCard.shadow}` }}>
-                            <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/15 pointer-events-none" />
-                            <div className="flex items-center gap-2 relative z-10">
-                                <User size={18} strokeWidth={3} className="text-white" />
-                                <span className="font-black text-xl text-white tracking-wider uppercase">SOLO Mode</span>
-                            </div>
-                            <div className="space-y-2.5 relative z-10 flex-1 flex flex-col justify-center">
-                                <StatRowLg icon="🎮" label="Trận" value={solo.plays} animated />
-                                <StatRowLg icon="⭐" label="Perfect" value={solo.perfects} animated />
-                                <StatRowLg icon="✅" label="TB đúng" value={avgCorrect} suffix="/15" />
-                            </div>
+                    {/* P2P full-width */}
+                    <div className="rounded-xl px-5 py-3 flex flex-col gap-2.5 relative overflow-hidden flex-1"
+                        style={{ background: C.p2pCard.bg, border: `2.5px solid ${C.p2pCard.border}`, boxShadow: `0 3px 0 ${C.p2pCard.shadow}` }}>
+                        <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/15 pointer-events-none" />
+                        <div className="flex items-center gap-2 relative z-10">
+                            <Swords size={18} strokeWidth={3} className="text-purple-200" />
+                            <span className="font-black text-xl text-white tracking-wider uppercase">P2P Mode</span>
                         </div>
-                        {/* P2P */}
-                        <div className="rounded-xl px-5 py-3 flex flex-col gap-2.5 relative overflow-hidden"
-                            style={{ background: C.p2pCard.bg, border: `2.5px solid ${C.p2pCard.border}`, boxShadow: `0 3px 0 ${C.p2pCard.shadow}` }}>
-                            <div className="absolute top-0 left-0 right-0 h-1/4 bg-white/15 pointer-events-none" />
-                            <div className="flex items-center gap-2 relative z-10">
-                                <Swords size={18} strokeWidth={3} className="text-purple-200" />
-                                <span className="font-black text-xl text-white tracking-wider uppercase">P2P Mode</span>
-                            </div>
-                            <div className="space-y-2.5 relative z-10 flex-1 flex flex-col justify-center">
-                                <StatRowLg icon="⚔️" label="Trận" value={p2p.plays} animated />
-                                <StatRowLg icon="🏆" label="Thắng" value={p2p.wins} highlight animated />
-                                <StatRowLg icon="💀" label="Thua" value={p2p.losses} animated />
-                                <StatRowLg icon="📊" label="Win%" value={winRate} suffix="%" highlight animated />
-                            </div>
+                        <div className="grid grid-cols-2 gap-x-8 gap-y-2 relative z-10 flex-1 content-center">
+                            <StatRowLg icon="⚔️" label="Trận" value={p2p.plays} animated />
+                            <StatRowLg icon="🏆" label="Thắng" value={p2p.wins} highlight animated />
+                            <StatRowLg icon="💀" label="Thua" value={p2p.losses} animated />
+                            <StatRowLg icon="🏼" label="Bỏ cuộc" value={p2p.forfeits || 0} animated />
+                            <StatRowLg icon="📊" label="Win%" value={winRate} suffix="%" highlight animated />
                         </div>
                     </div>
                 </motion.div>
@@ -632,19 +603,21 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap }) => {
                         </span>
                         <ChevronRight size={14} className="text-sky-300 group-hover:text-sky-500 transition-colors" />
                     </motion.button>
-                    <motion.button whileTap={{ scale: 0.97, y: 2 }}
+                    <motion.button whileTap={{ scale: 0.97, y: 2 }} onClick={onOpenLeaderboard}
                         className="flex items-center justify-between px-4 py-2.5 rounded-xl group"
                         style={{ background: C.card, border: `1.5px solid ${C.cardBorder}`, boxShadow: '0 3px 0 rgba(0,150,200,0.15)' }}>
                         <span className="flex items-center gap-2.5">
-                            <span className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center border border-purple-200">
-                                <Trophy size={14} className="text-purple-500" />
+                            <span className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center border border-amber-200">
+                                <Trophy size={14} className="text-amber-500" />
                             </span>
                             <span className="flex flex-col text-left">
-                                <span className="font-black text-sm" style={{ color: C.textPrimary }}>Bảng Xếp Hạng</span>
-                                <span className="text-[10px] font-semibold" style={{ color: C.textMuted }}>Coming soon</span>
+                                <span className="font-black text-sm" style={{ color: C.textPrimary }}>Bảng Xếp Hạng XP</span>
+                                <span className="text-[10px] font-semibold" style={{ color: C.textMuted }}>
+                                    {xpPlayerRank ? `Hạng #${xpPlayerRank.position} · ${(xpPlayerRank.xp || 0).toLocaleString()} XP` : 'Xem vị trí của bạn'}
+                                </span>
                             </span>
                         </span>
-                        <ChevronRight size={14} className="text-sky-300 group-hover:text-sky-500 transition-colors" />
+                        <ChevronRight size={14} className="text-amber-400 group-hover:text-amber-500 transition-colors" />
                     </motion.button>
                 </motion.div>
 
