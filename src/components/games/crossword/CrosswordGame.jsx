@@ -620,14 +620,11 @@ const CrosswordFinishedOverlay = ({
       {/* ── EXPLANATION POPUP ── */}
       <AnimatePresence>
         {showExplain && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              key="explain-bd"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              onClick={() => setShowExplain(false)}
-              style={{ position:'fixed', inset:0, zIndex:11000, background:'rgba(0,0,0,0.75)', backdropFilter:'blur(6px)', cursor:'pointer' }}
-            />
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[12000] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <div className="absolute inset-0 cursor-pointer" onClick={() => setShowExplain(false)} />
             {/* Panel */}
             <motion.div
               key="explain-panel"
@@ -635,14 +632,10 @@ const CrosswordFinishedOverlay = ({
               animate={{ opacity:1, y:0, scale:1 }}
               exit={{ opacity:0, y:40, scale:0.96 }}
               transition={{ type:'spring', stiffness:280, damping:26 }}
+              className="relative z-10 flex flex-col w-full"
               style={{
-                position:'fixed',
-                top: '50%', left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: 'min(520px, calc(100vw - 16px))',
+                maxWidth: 520,
                 maxHeight: 'min(88dvh, 700px)',
-                zIndex:11001,
-                display:'flex', flexDirection:'column',
                 background:'linear-gradient(180deg,#1e3a8a 0%,#1e40af 100%)',
                 borderRadius: 24,
                 border:'3px solid #60a5fa',
@@ -702,7 +695,7 @@ const CrosswordFinishedOverlay = ({
                 ))}
               </div>
             </motion.div>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
     </>,
@@ -1625,6 +1618,25 @@ const CrosswordGame = ({
       setForfeitWin({ name: f.nickname || 'Đối thủ' });
     }
   }, [roomData?.forfeit?.timestamp, gameState, isP2PMode, myUid]);
+
+  /* ── P2P: Check if opponent disconnects (closes tab/app) mid-game ── */
+  useEffect(() => {
+    if (!isP2PMode || gameState !== 'playing' || !roomData?.players) return;
+    const _opUid = Object.keys(roomData.players).find(k => k !== myUid);
+    if (!_opUid || !roomId) return;
+
+    if (roomData.players[_opUid].isOnline === false && !forfeitWin) {
+      // Grace period vỡ mạng (4 giây) đề phòng họ F5
+      const t = setTimeout(() => {
+        if (gameState === 'playing' && !forfeitWin) {
+          clearInterval(timerRef.current);
+          setForfeitWin({ name: roomData.players[_opUid].nickname || 'Đối thủ', reason: 'disconnect' });
+          if (awardWinner) awardWinner(roomId, myUid, pot, false);
+        }
+      }, 4000);
+      return () => clearTimeout(t);
+    }
+  }, [roomData?.players, gameState, isP2PMode, myUid, forfeitWin, roomId, pot, awardWinner]);
 
   /* ── P2P: watch rematch request từ đối thủ ── */
   useEffect(() => {
@@ -2835,7 +2847,7 @@ const CrosswordGame = ({
               <p className="text-yellow-300 font-black text-2xl uppercase tracking-widest"
                 style={{ textShadow: '0 3px 0 #78350f' }}>Bạn Thắng!</p>
               <p className="text-blue-200 text-sm font-semibold">
-                <span className="text-white font-black">"{forfeitWin.name}"</span> đã rời phòng giữa chừng.
+                <span className="text-white font-black">"{forfeitWin.name}"</span> {forfeitWin.reason === 'disconnect' ? 'đã mất kết nối' : 'đã rời phòng giữa chừng'}.
               </p>
               <div className="flex justify-center">
                 <div className="px-5 py-2.5 rounded-2xl font-black text-amber-300 text-xl"
