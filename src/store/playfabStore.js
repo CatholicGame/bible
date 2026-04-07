@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { loginWithCustomID, loginWithEmail, registerWithEmail, getUserData, updateUserData, updateDisplayName, forgetCredentials, updatePlayerStatistics, getLeaderboard, getLeaderboardSilent, getLeaderboardAroundPlayer, getPlayerProfile } from '../config/playfab';
+import { loginWithCustomID, loginWithEmail, registerWithEmail, getUserData, updateUserData, updateDisplayName, updateAvatarUrl, forgetCredentials, updatePlayerStatistics, getLeaderboard, getLeaderboardSilent, getLeaderboardAroundPlayer, getPlayerProfile } from '../config/playfab';
 
 // XP leaderboard stat names — 4 periods (must match PlayFab stat config)
 const XP_STATS = {
@@ -413,6 +413,8 @@ export const usePlayFabStore = create((set, get) => ({
       const photoURL = firebaseUser.photoURL || null;
       if (photoURL) {
         try { localStorage.setItem('pf_avatar_url', photoURL); } catch (_) {}
+        // Push avatar URL to PlayFab so it appears in leaderboards
+        try { await updateAvatarUrl(photoURL); } catch (_) {}
       }
 
       const giaoxu = userData?.GiaoXu?.Value || null;
@@ -670,6 +672,7 @@ export const usePlayFabStore = create((set, get) => ({
         displayName: e.DisplayName || e.PlayFabId?.slice(-6) || '???',
         score: e.StatValue ?? 0,
         entityId: e.PlayFabId,
+        avatarUrl: e.Profile?.AvatarUrl || null,
       }));
 
       // Find player's rank from around-player response (player is somewhere in the list)
@@ -692,20 +695,6 @@ export const usePlayFabStore = create((set, get) => ({
         pinnaclePlayerRank: playerRank,
         pinnacleLeaderboardLoading: false,
       });
-
-      // Enrich entries with avatar URLs in parallel (best-effort)
-      const playfabIds = entries.map(e => e.entityId).filter(Boolean);
-      if (playfabIds.length > 0) {
-        const results = await Promise.allSettled(playfabIds.map(id => getPlayerProfile(id)));
-        const enriched = entries.map((e, i) => {
-          const result = results[i];
-          const avatarUrl = result?.status === 'fulfilled'
-            ? (result.value?.PlayerProfile?.AvatarUrl || null)
-            : null;
-          return { ...e, avatarUrl };
-        });
-        set({ pinnacleLeaderboard: enriched });
-      }
     } catch (e) {
       console.warn('[Pinnacle] Failed to load leaderboard', e);
       set({ pinnacleLeaderboardLoading: false });
@@ -729,7 +718,7 @@ export const usePlayFabStore = create((set, get) => ({
         }
         return {
           displayName: e.DisplayName || '???',
-          avatarUrl: null,
+          avatarUrl: e.Profile?.AvatarUrl || null,
           achievement,
           score,
           rank: e.Position + 1,
@@ -737,20 +726,6 @@ export const usePlayFabStore = create((set, get) => ({
         };
       });
       set({ hallOfFame: entries, hallOfFameLoading: false });
-
-      // Enrich entries with avatar URLs
-      const playfabIds = entries.map(e => e.entityId).filter(Boolean);
-      if (playfabIds.length > 0) {
-        const results = await Promise.allSettled(playfabIds.map(id => getPlayerProfile(id)));
-        const enriched = entries.map((e, i) => {
-          const result = results[i];
-          const avatarUrl = result?.status === 'fulfilled'
-            ? (result.value?.PlayerProfile?.AvatarUrl || null)
-            : null;
-          return { ...e, avatarUrl };
-        });
-        set({ hallOfFame: enriched });
-      }
     } catch (e) {
       console.warn('[Pinnacle] Failed to load Hall of Fame', e);
       set({ hallOfFameLoading: false });
@@ -772,7 +747,7 @@ export const usePlayFabStore = create((set, get) => ({
         displayName: e.DisplayName || e.PlayFabId?.slice(-6) || '???',
         xp: e.StatValue ?? 0,
         playFabId: e.PlayFabId,
-        avatarUrl: null,
+        avatarUrl: e.Profile?.AvatarUrl || null,
       }));
       let xpPlayerRank = null;
       const around = aroundData?.Leaderboard || [];
@@ -781,20 +756,6 @@ export const usePlayFabStore = create((set, get) => ({
         if (mid) xpPlayerRank = { position: mid.Position + 1, xp: mid.StatValue ?? 0 };
       }
       set({ xpLeaderboard: entries, xpPlayerRank, xpLeaderboardLoading: false });
-
-      // Enrich entries with avatar URLs
-      const playfabIds = entries.map(e => e.playFabId).filter(Boolean);
-      if (playfabIds.length > 0) {
-        const results = await Promise.allSettled(playfabIds.map(id => getPlayerProfile(id)));
-        const enriched = entries.map((e, i) => {
-          const result = results[i];
-          const avatarUrl = result?.status === 'fulfilled'
-            ? (result.value?.PlayerProfile?.AvatarUrl || null)
-            : null;
-          return { ...e, avatarUrl };
-        });
-        set({ xpLeaderboard: enriched });
-      }
     } catch (e) {
       console.warn('[XP Leaderboard] Failed to load', e);
       set({ xpLeaderboardLoading: false });

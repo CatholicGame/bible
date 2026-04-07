@@ -42,11 +42,12 @@ const TOP3 = [
 ];
 
 /* ── Individual row ── */
-const LeaderboardRow = ({ entry, isMe, delay = 0 }) => {
+const LeaderboardRow = ({ entry, isMe, delay = 0, myAvatarUrl = null }) => {
     const color = getRankColor(entry.xp);
     const rankName = getRankByScore(entry.xp);
     const isTop3 = entry.position <= 3;
     const top3Cfg = isTop3 ? TOP3[entry.position - 1] : null;
+    const avatarUrl = (isMe && myAvatarUrl) ? myAvatarUrl : entry.avatarUrl;
 
     return (
         <motion.div
@@ -112,7 +113,7 @@ const LeaderboardRow = ({ entry, isMe, delay = 0 }) => {
             <div className="relative flex-shrink-0 z-10">
                 <UserAvatar
                     name={entry.displayName}
-                    photoURL={entry.avatarUrl}
+                    photoURL={avatarUrl}
                     size={isTop3 ? 36 : 30}
                     style={{
                         border: isTop3
@@ -185,6 +186,7 @@ const XPLeaderboardModal = ({ onClose }) => {
         xpActiveTab, loadXPLeaderboard, globalScore,
     } = usePlayFabStore();
     const myPlayFabId = usePlayFabStore(s => s.playFabId);
+    const myAvatarUrl = usePlayFabStore(s => s.avatarUrl);
 
     const loadTab = useCallback((tab) => { loadXPLeaderboard(tab); }, [loadXPLeaderboard]);
     useEffect(() => { loadTab('allTime'); }, [loadTab]);
@@ -370,6 +372,7 @@ const XPLeaderboardModal = ({ onClose }) => {
                                         entry={entry}
                                         isMe={entry.playFabId === myPlayFabId}
                                         delay={i * 0.04}
+                                        myAvatarUrl={myAvatarUrl}
                                     />
                                 ))}
                             </motion.div>

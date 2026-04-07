@@ -40,9 +40,10 @@ const TOP3 = [
 ];
 
 /* ── Individual row ── */
-const LeaderboardRow = ({ entry, isMe, delay = 0 }) => {
+const LeaderboardRow = ({ entry, isMe, delay = 0, myAvatarUrl = null }) => {
     const isTop3 = entry.position <= 3;
     const top3Cfg = isTop3 ? TOP3[entry.position - 1] : null;
+    const avatarUrl = (isMe && myAvatarUrl) ? myAvatarUrl : entry.avatarUrl;
 
     return (
         <motion.div
@@ -103,7 +104,7 @@ const LeaderboardRow = ({ entry, isMe, delay = 0 }) => {
             <div className="relative flex-shrink-0 z-10">
                 <UserAvatar
                     name={entry.displayName}
-                    photoURL={entry.avatarUrl}
+                    photoURL={avatarUrl}
                     size={isTop3 ? 36 : 30}
                     style={{
                         border: isTop3 ? `2.5px solid ${top3Cfg.border}66` : '2px solid rgba(255,255,255,0.12)',
@@ -350,10 +351,11 @@ const PinnacleLeaderboard = ({ onBack }) => {
                                 className="flex flex-col gap-1.5">
                                 {pinnacleLeaderboard.map((entry, i) => (
                                     <LeaderboardRow
-                                        key={entry.playFabId || entry.position}
+                                        key={entry.entityId || entry.position}
                                         entry={entry}
-                                        isMe={entry.playFabId === myPlayFabId}
+                                        isMe={entry.entityId === myPlayFabId}
                                         delay={i * 0.035}
+                                        myAvatarUrl={myAvatarUrl}
                                     />
                                 ))}
 

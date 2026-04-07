@@ -189,10 +189,7 @@ export default function JoinRoom({ onBack, onJoined, initialPin = '' }) {
             <ArrowLeft size={18} className="text-white" strokeWidth={3} />
           </motion.button>
 
-          <div className="w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ background: '#f59e0b', border: '3px solid #b45309', boxShadow: '0 4px 0 #b45309' }}>
-            <LogIn size={18} className="text-amber-900" />
-          </div>
+
         </div>
 
         <motion.div variants={container} initial="hidden" animate="visible" className="px-5 pb-6">

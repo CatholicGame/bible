@@ -194,6 +194,12 @@ export async function updateDisplayName(displayName) {
   });
 }
 
+export async function updateAvatarUrl(avatarUrl) {
+  return callPlayFab('/Client/UpdateAvatarUrl', {
+    ImageUrl: avatarUrl,
+  });
+}
+
 // ── Statistics ──
 
 export async function updatePlayerStatistics(statistics) {
@@ -214,7 +220,7 @@ export async function getLeaderboard(statName, maxResults = 10) {
   return callPlayFab('/Client/GetLeaderboard', {
     StatisticName: statName,
     MaxResultsCount: maxResults,
-    ProfileConstraints: { ShowDisplayName: true },
+    ProfileConstraints: { ShowDisplayName: true, ShowAvatarUrl: true },
   });
 }
 
@@ -224,7 +230,7 @@ export async function getLeaderboardSilent(statName, maxResults = 10) {
     const res = await fetch(`${BASE_URL}/Client/GetLeaderboard`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Authorization': sessionTicket },
-      body: JSON.stringify({ StatisticName: statName, MaxResultsCount: maxResults }),
+      body: JSON.stringify({ StatisticName: statName, MaxResultsCount: maxResults, ProfileConstraints: { ShowDisplayName: true, ShowAvatarUrl: true } }),
     });
     const json = await res.json();
     if (json.code !== 200) return null;
@@ -238,7 +244,7 @@ export async function getLeaderboardAroundPlayer(statName, maxResults = 7) {
   return callPlayFab('/Client/GetLeaderboardAroundPlayer', {
     StatisticName: statName,
     MaxResultsCount: maxResults,
-    ProfileConstraints: { ShowDisplayName: true },
+    ProfileConstraints: { ShowDisplayName: true, ShowAvatarUrl: true },
   });
 }
 
