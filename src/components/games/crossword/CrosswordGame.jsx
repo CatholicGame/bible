@@ -278,6 +278,7 @@ const CrosswordFinishedOverlay = ({
   myFBName = 'Bạn', oppFBName = 'Đối thủ',
   onReplay, onNewGame, onLeaveGame,
   onRequestRematch = null,   // P2P only
+  opponentStillOnline = true,
   canAffordRematch = true,   // P2P only
   rematchStatus = null,      // 'waiting'|'declined'
   puzzleWords = [],          // full word list with clue + explanation
@@ -551,14 +552,14 @@ const CrosswordFinishedOverlay = ({
                 {/* P2P: Chơi tiếp */}
                 {isP2P && onRequestRematch && !rematchStatus && (
                   <button onClick={onRequestRematch}
-                    disabled={!canAffordRematch}
+                    disabled={!canAffordRematch || !opponentStillOnline}
                     className="w-full font-black uppercase tracking-widest text-sm py-4 rounded-full border-4 transition-all flex justify-center items-center relative overflow-hidden"
-                    style={canAffordRematch
-                      ? { background: '#22c55e', color: '#fff', borderColor: '#14532d', boxShadow: '0 6px 0 #14532d' }
-                      : { background: '#94a3b8', color: '#fff', borderColor: '#475569', boxShadow: '0 4px 0 #475569', cursor: 'not-allowed' }}>
+                    style={(!canAffordRematch || !opponentStillOnline)
+                      ? { background: '#94a3b8', color: '#fff', borderColor: '#475569', boxShadow: '0 4px 0 #475569', cursor: 'not-allowed' }
+                      : { background: '#22c55e', color: '#fff', borderColor: '#14532d', boxShadow: '0 6px 0 #14532d' }}>
                     <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 pointer-events-none rounded-t-full" />
                     <span className="relative z-10">
-                      {canAffordRematch ? '⚔️ Chơi Tiếp' : <>Cần 20 <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /> để chơi tiếp</>}
+                      {!opponentStillOnline ? `❌ ${oppFBName || 'Đối thủ'} đã rời phòng` : (canAffordRematch ? '⚔️ Chơi Tiếp' : <>Cần 20 <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /> để chơi tiếp</>)}
                     </span>
                   </button>
                 )}
@@ -1831,7 +1832,8 @@ const CrosswordGame = ({
         onReplay={!_isP2P ? handleReplay : undefined}
         onNewGame={!_isP2P ? handleNewGame : undefined}
         onLeaveGame={onLeaveGame}
-        onRequestRematch={_isP2P && opponentStillOnline ? handleRequestRematch : null}
+        onRequestRematch={_isP2P ? handleRequestRematch : null}
+        opponentStillOnline={opponentStillOnline}
         canAffordRematch={canAffordRematch}
         rematchStatus={rematchStatus}
         puzzleWords={puzzle.words}
@@ -2824,7 +2826,7 @@ const CrosswordGame = ({
       <AnimatePresence>
         {forfeitWin && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            className="fixed inset-0 z-[12000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
             <motion.div initial={{ scale: 0.85, y: 30 }} animate={{ scale: 1, y: 0 }}
               transition={{ type: 'spring', stiffness: 260, damping: 22 }}
               className="rounded-3xl p-6 max-w-sm w-full text-center space-y-4"
@@ -2865,7 +2867,7 @@ const CrosswordGame = ({
       <AnimatePresence>
         {rematchIncoming && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+            className="fixed inset-0 z-[12000] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
             <motion.div initial={{ scale: 0.85, y: 30 }} animate={{ scale: 1, y: 0 }}
               transition={{ type: 'spring', stiffness: 260, damping: 22 }}
               className="rounded-3xl p-6 max-w-sm w-full text-center space-y-4"

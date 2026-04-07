@@ -388,7 +388,7 @@ const EmojiReactionPanel = ({ roomId, myUid, opponentUid, opponentName = 'Đối
         style={{
           position: 'fixed',
           bottom: 16,
-          left: 16,
+          left: 64, // Dịch sang phải 48px để tránh đè lên nút Fullscreen (left: 14)
           zIndex: 500,
           display: 'flex',
           flexDirection: 'column',
