@@ -545,6 +545,12 @@ const PinnacleGame = ({ onLeaveGame }) => {
     const [isSwapping, setIsSwapping] = useState(false);
 
     // Timer
+    // Q1–5 (idx 0–4): 30s | Q6–10 (idx 5–9): 35s | Q11–15 (idx 10–14): 40s
+    const getTimeLimitForQuestion = (idx) => {
+        if (idx >= 10) return 40;
+        if (idx >= 5)  return 35;
+        return 30;
+    };
     const [timeLeft, setTimeLeft] = useState(30);
 
     // Refs for XP animation start and end points
@@ -831,7 +837,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
     const handleStartGame = () => {
         loadNewGame(); // Rút 15 câu hỏi mới từ pool
         setGameState('playing');
-        setTimeLeft(30);
+        setTimeLeft(getTimeLimitForQuestion(0)); // câu đầu luôn là idx 0 → 30s
         playActiveSound();
         setIntroPhase(1);
     };
@@ -1006,8 +1012,9 @@ const PinnacleGame = ({ onLeaveGame }) => {
                 if (currentQuestionIndex < currentQuestions.length - 1) {
                     setIsSwapping(true); // mượn lại hiệu ứng chuyển câu
                     setTimeout(() => {
-                        setCurrentQuestionIndex(prev => prev + 1);
-                        resetTurnState();
+                        const nextIdx = currentQuestionIndex + 1;
+                        setCurrentQuestionIndex(nextIdx);
+                        resetTurnState(nextIdx);
                         setIsSwapping(false);
                     }, 500);
                 } else {
@@ -1020,12 +1027,12 @@ const PinnacleGame = ({ onLeaveGame }) => {
         }, 400); // Wait 400ms for the explanation panel to exit completely
     };
 
-    const resetTurnState = () => {
+    const resetTurnState = (nextIdx) => {
         setSelectedOption(null);
         setIsAnswerRevealed(false);
         setHiddenOptions([]);
         setEncouragementMessage(null);
-        setTimeLeft(30);
+        setTimeLeft(getTimeLimitForQuestion(nextIdx ?? 0));
         setAnswerStep('thinking');
         setIsSkipped(false);
     };
@@ -1060,7 +1067,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
         setConfirmSwap(false);
         setIsSwapping(false);
         setLifelines({ fiftyFifty: false, phone: false, audience: false, swap: false });
-        setTimeLeft(30);
+        setTimeLeft(getTimeLimitForQuestion(0)); // bắt đầu lại từ câu 1 → 30s
         setMcMessage("");
         setShowMcBubble(false);
         setEncouragementMessage(null);
