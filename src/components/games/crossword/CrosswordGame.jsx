@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Clock, Trophy, Star, Check, RotateCcw, Zap, Eye, Lightbulb, ChevronLeft, Play, RefreshCcw, ThumbsUp, ThumbsDown, Users } from 'lucide-react';
+import { ArrowLeft, Clock, Trophy, Star, Check, RotateCcw, Zap, Eye, Lightbulb, ChevronLeft, Play, RefreshCcw, ThumbsUp, ThumbsDown, Users, Info, X } from 'lucide-react';
 import { usePlayFabStore } from '../../../store/playfabStore';
 import { getRankByScore } from '../../../utils/ranks';
 import { useRoomStore } from '../../../store/roomStore';
@@ -622,13 +622,17 @@ const CrosswordFinishedOverlay = ({
               exit={{ opacity:0, y:40, scale:0.96 }}
               transition={{ type:'spring', stiffness:280, damping:26 }}
               style={{
-                position:'fixed', bottom:0, left:0, right:0, zIndex:11001,
-                maxHeight:'82dvh', display:'flex', flexDirection:'column',
+                position:'fixed',
+                top: '50%', left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 'min(520px, calc(100vw - 16px))',
+                maxHeight: 'min(88dvh, 700px)',
+                zIndex:11001,
+                display:'flex', flexDirection:'column',
                 background:'linear-gradient(180deg,#1e3a8a 0%,#1e40af 100%)',
-                borderRadius:'24px 24px 0 0',
+                borderRadius: 24,
                 border:'3px solid #60a5fa',
-                borderBottom:'none',
-                boxShadow:'0 -8px 40px rgba(30,58,138,0.7)',
+                boxShadow:'0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(30,58,138,0.4)',
               }}
             >
               {/* Header */}
@@ -833,6 +837,7 @@ const CrosswordGame = ({
 
   // Celebration
   const [showCelebration, setShowCelebration] = useState(false);
+  const [showInstructionModal, setShowInstructionModal] = useState(false);
 
   // Refs
   const gridContainerRef = useRef(null);
@@ -1111,14 +1116,14 @@ const CrosswordGame = ({
     if (userGrid[row][col]?.toUpperCase() === cell.letter.toUpperCase()) return;
 
     // Check user has enough coins
-    if (userCoins < 20) return;
+    if (userCoins < 5) return;
     setHintUsed(true);
-    setHintsSpent(prev => prev + 20);
-    addCoins(-20); // deduct coins live
+    setHintsSpent(prev => prev + 5);
+    addCoins(-5); // deduct coins live
     // — Spawn physics coin burst (clear previous first) —
     if (e && e.clientX && e.clientY) {
       const cx = e.clientX, cy = e.clientY;
-      const particles = spawnCoinBurst(cx, cy, 20, 80, 160, 220, 340, 4.5, 5.0, 14, 24, 0.4);
+      const particles = spawnCoinBurst(cx, cy, 5, 80, 160, 220, 340, 4.5, 5.0, 14, 24, 0.4);
       const burstId = Date.now() + Math.random();
       const maxMs = Math.max(...particles.map(p => p.dur + p.del)) * 1000 + 400;
       // Clear all existing bursts and their timers before adding new one
@@ -1126,7 +1131,7 @@ const CrosswordGame = ({
         clearTimeout(burstTimersRef.current[id]);
         delete burstTimersRef.current[id];
       });
-      setHintEffects([{ id: burstId, x: cx, y: cy, amt: 20, particles }]);
+      setHintEffects([{ id: burstId, x: cx, y: cy, amt: 5, particles }]);
       burstTimersRef.current[burstId] = setTimeout(() => {
         setHintEffects(prev => prev.filter(b => b.id !== burstId));
         delete burstTimersRef.current[burstId];
@@ -1166,14 +1171,14 @@ const CrosswordGame = ({
     if (!w) return;
 
     // Check user has enough coins
-    if (userCoins < 50) return;
+    if (userCoins < 15) return;
     setHintUsed(true);
-    setHintsSpent(prev => prev + 50);
-    addCoins(-50); // deduct coins live
+    setHintsSpent(prev => prev + 15);
+    addCoins(-15); // deduct coins live
     // — Spawn physics coin burst (clear previous first) —
     if (e && e.clientX && e.clientY) {
       const cx = e.clientX, cy = e.clientY;
-      const particles = spawnCoinBurst(cx, cy, 20, 100, 190, 250, 380, 4.5, 5.0, 16, 26, 0.4);
+      const particles = spawnCoinBurst(cx, cy, 15, 100, 190, 250, 380, 4.5, 5.0, 16, 26, 0.4);
       const burstId = Date.now() + Math.random();
       const maxMs = Math.max(...particles.map(p => p.dur + p.del)) * 1000 + 400;
       // Clear all existing bursts and their timers before adding new one
@@ -1181,7 +1186,7 @@ const CrosswordGame = ({
         clearTimeout(burstTimersRef.current[id]);
         delete burstTimersRef.current[id];
       });
-      setHintEffects([{ id: burstId, x: cx, y: cy, amt: 50, particles }]);
+      setHintEffects([{ id: burstId, x: cx, y: cy, amt: 15, particles }]);
       burstTimersRef.current[burstId] = setTimeout(() => {
         setHintEffects(prev => prev.filter(b => b.id !== burstId));
         delete burstTimersRef.current[burstId];
@@ -1367,38 +1372,32 @@ const CrosswordGame = ({
     console.log('[CW] finishGame() → setGameState(finished)');
 
     if (isReplay) {
-      // ── REPLAY: 0 XP, only +2 coin per word ──
-      const wordCoins = solvedWords.size * 2;
-      const displayTotal = Math.max(0, wordCoins - hintsSpent);
+      // ── REPLAY: 0 XP, 0 coin ──
       setEarnedXP({ wordsXP: 0, completionXP: 0, noHintXP: 0, speedXP: 0, total: 0 });
-      setEarnedCoins({ wordCoins, completionCoins: 0, perfectBonus: 0, hintsSpent, total: displayTotal });
-      if (isSolo) {
-        addCoins(wordCoins); // hints already deducted live
-      }
+      setEarnedCoins({ wordCoins: 0, completionCoins: 0, perfectBonus: 0, total: 0 });
     } else {
       // ── FIRST PLAY: full rewards ──
       // Chỉ tính XP cho từ user tự giải (không tính từ "Mở cả từ")
       const selfSolvedCount = [...solvedWords].filter(id => !revealedWordIds.has(id)).length;
       const wordsXP = selfSolvedCount * 3;
-      const completionXP = selfSolvedCount === totalWords ? 20 : 0; // chỉ perfect nếu tự giải hết
-      const noHintXP = !hintUsed ? 10 : 0;
-      const timeUsed = 300 - timeLeft;
-      const speedXP = timeUsed <= 120 ? 10 : 0;
-      const totalXP = wordsXP + completionXP + noHintXP + speedXP;
+      const completionXP = 0;
+      const noHintXP = 0;
+      const speedXP = 0;
+      const totalXP = wordsXP;
 
-      const wordCoins = solvedWords.size * 5;
-      const completionCoins = 20;
-      const perfectBonus = solvedWords.size === totalWords ? 20 : 0;
-      const rewardCoins = wordCoins + completionCoins + perfectBonus;
+      const wordCoins = selfSolvedCount * 10;
+      const completionCoins = 0;
+      const perfectBonus = selfSolvedCount === totalWords && totalWords > 0 ? 20 : 0;
+      const rewardCoins = wordCoins + perfectBonus;
 
       setEarnedXP({ wordsXP, completionXP, noHintXP, speedXP, total: totalXP, revealedWordCount: revealedWordIds.size });
-      const displayTotal = Math.max(0, rewardCoins - hintsSpent);
-      setEarnedCoins({ wordCoins, completionCoins, perfectBonus, hintsSpent, total: displayTotal });
+      // hints already deducted live — show gross reward earned
+      setEarnedCoins({ wordCoins, completionCoins, perfectBonus, total: rewardCoins });
 
       if (isSolo) {
         addXP(totalXP);
         addCoins(rewardCoins); // hints already deducted live during play
-        addGameStats('crossword', { xp: totalXP, coins: rewardCoins - hintsSpent });
+        addGameStats('crossword', { xp: totalXP, coins: rewardCoins });
       }
     }
 
@@ -1847,7 +1846,7 @@ const CrosswordGame = ({
         >
           {/* ── Game title card — matches Pinnacle lobby ── */}
           <div className="bg-[#1e3a8a]/80 backdrop-blur-sm rounded-2xl border-2 border-blue-400/40 p-5 text-center shadow-xl relative">
-            <div className="text-4xl mb-1">✝️</div>
+            <div className="text-4xl mb-1 mt-1">✝️</div>
             <h1 className="text-2xl font-black text-yellow-300 uppercase tracking-widest mb-0.5"
               style={{ textShadow: '0 3px 0 #78350f' }}>
               Giải Ô Chữ
@@ -1881,38 +1880,6 @@ const CrosswordGame = ({
                 </button>
               </div>
             </div>
-
-            {/* Rules chips */}
-            <div className="flex flex-wrap justify-center gap-1.5 mt-3">
-              {[
-                { icon: '📝', text: 'Điền chữ theo gợi ý' },
-                { icon: '⏱️', text: '5 phút' },
-                { icon: '💡', text: <>Hint: 20-50 <img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /></> },
-              ].map(({ icon, text }) => (
-                <span key={text} className="text-[11px] font-semibold px-2.5 py-1 rounded-full text-blue-100"
-                  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
-                  {icon} {text}
-                </span>
-              ))}
-            </div>
-
-            {/* Reward row — hiện khác khi replay */}
-            {isReplay ? (
-              <div className="flex justify-center items-center gap-2 mt-3 pt-3 border-t border-white/10">
-                <span className="text-sm">🚫</span>
-                <span className="text-[12px] font-black text-red-300 tracking-wide">
-                  Chơi lại không nhận được XP và Coin
-                </span>
-              </div>
-            ) : (
-              <div className="flex justify-center gap-3 mt-3 pt-3 border-t border-white/10">
-                <span className="text-[11px] font-bold text-purple-300">⭐ +3 XP/từ</span>
-                <span className="text-white/30 text-[11px]">·</span>
-                <span className="text-[11px] font-bold text-amber-300"><img src={iconCoin} alt='C' style={{ width:'1em', height:'1em', display:'inline-block', verticalAlign:'text-bottom', margin:'0 2px' }} /> +5 Coin/từ</span>
-                <span className="text-white/30 text-[11px]">·</span>
-                <span className="text-[11px] font-bold text-yellow-300">🏆 Bonus 100%</span>
-              </div>
-            )}
           </div>
 
           <button
@@ -1926,6 +1893,15 @@ const CrosswordGame = ({
             <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 pointer-events-none rounded-t-xl" />
             <Play fill="currentColor" size={18} className="relative z-10" />
             <span className="relative z-10">{isReplay ? 'Bắt Đầu Chơi Lại' : 'Bắt Đầu'}</span>
+          </button>
+
+          <button
+            onClick={() => setShowInstructionModal(true)}
+            className="flex-1 font-black uppercase tracking-wider text-base py-4 rounded-2xl border-4 border-[#1e3a8a] shadow-[0_5px_0_rgba(30,58,138,1)] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 relative overflow-hidden group bg-blue-600 hover:bg-blue-500 text-white"
+          >
+            <div className="absolute top-0 left-0 w-full h-1/2 bg-white/10 pointer-events-none rounded-t-xl" />
+            <Info size={18} className="relative z-10" />
+            <span className="relative z-10 text-[15px]">Xem Luật Chơi</span>
           </button>
 
           {/* ── Player info card ── */}
@@ -1961,6 +1937,56 @@ const CrosswordGame = ({
             Về trang chính
           </button>
         </motion.div>
+
+        {/* ── Instruction Modal ── */}
+        <AnimatePresence>
+          {showInstructionModal && (
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}
+              className="fixed inset-0 z-[12000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            >
+              <motion.div
+                initial={{ scale: 0.95, y: 15 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 15 }}
+                className="bg-blue-950 border-2 border-blue-400/50 rounded-3xl p-6 max-w-sm w-full text-left shadow-2xl relative"
+                style={{
+                  background: 'linear-gradient(180deg, #1e3a8a 0%, #172554 100%)',
+                  boxShadow: '0 20px 40px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.1)'
+                }}
+              >
+                <h2 className="text-lg font-black text-yellow-400 mb-4 uppercase drop-shadow-md">Luật Giải Ô Chữ</h2>
+                
+                <div className="space-y-3.5 text-[13px] text-blue-100/90 font-medium leading-relaxed max-h-[65vh] overflow-y-auto pr-2" style={{ scrollbarWidth: 'none' }}>
+                  <p>🎮 <span className="text-white font-bold">Cách chơi:</span> Bấm vào tên gợi ý (Từng dòng) hoặc ô chữ để chọn từ cần giải, sau đó nhập đáp án từ bàn phím. Sử dụng nút <b>Gợi ý (Hint)</b> bên cạnh nếu bạn gặp khó.</p>
+                  
+                  <p>🎯 <span className="text-white font-bold">Mục tiêu:</span> Điền đúng tất cả các từ trong thời gian 5 phút dựa trên gợi ý.</p>
+                  
+                  <div className="bg-blue-900/50 p-3 rounded-xl border border-blue-400/20">
+                    <p>💡 <span className="text-white font-bold">Dùng Gợi ý (Hint):</span></p>
+                    <ul className="ml-5 list-disc mt-1 space-y-0.5 text-blue-200">
+                      <li>Mở 1 ô: <span className="text-white font-bold">-5 Coin</span></li>
+                      <li>Mở 1 từ: <span className="text-white font-bold">-15 Coin</span></li>
+                    </ul>
+                    <p className="mt-2 text-red-300 font-bold">Lưu ý: Từ được giải bằng hint sẽ không được tính Coin và XP thưởng.</p>
+                  </div>
+                  
+                  <p>🎁 <span className="text-white font-bold">Phần thưởng:</span><br/>
+                    • Giải 1 từ: <span className="text-green-300 font-bold">+3 XP, +10 Coin</span><br/>
+                    • Hoàn thành 100% tự giải: <span className="text-yellow-300 font-bold">Thưởng 20 Coin</span></p>
+                  
+                  <p>🔄 <span className="text-white font-bold">Chơi lại:</span> Bạn sẽ <span className="text-red-300 font-bold">không nhận được Coin và XP</span>.</p>
+                </div>
+                
+                <button
+                  onClick={() => setShowInstructionModal(false)}
+                  className="mt-6 w-full py-3 rounded-full text-white font-black tracking-widest text-[13px] border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all"
+                  style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' }}
+                >
+                  ĐÃ HIỂU
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
@@ -2304,10 +2330,11 @@ const CrosswordGame = ({
           <ArrowLeft size={16} className="text-slate-700" />
         </motion.button>
 
-        {/* Title */}
-        <span className="font-black text-slate-800 text-sm md:text-base flex-1 truncate">
-          Giải ô chữ <span className="font-semibold text-slate-500 text-xs ml-1">· {puzzle.theme}</span>
-        </span>
+        {/* Title + Topic */}
+        <div className="flex-1 min-w-0 flex flex-col justify-center">
+          <span className="font-black text-slate-800 text-sm leading-tight truncate">Giải Ô Chữ</span>
+          <span className="font-bold text-blue-600 text-xs leading-tight truncate" style={{ maxWidth: '100%' }}>📚 {puzzle.theme}</span>
+        </div>
 
         {/* Timer */}
         <div className="flex items-center gap-1 px-2.5 py-1 rounded-full font-black text-xs"
@@ -2508,38 +2535,38 @@ const CrosswordGame = ({
             {isSolo && (
               <div className="flex flex-col gap-2">
                 <motion.button 
-                  whileTap={!isCellCorrect && userCoins >= 20 ? { scale: 0.93, y: 2 } : {}}
-                  onClick={!isCellCorrect && userCoins >= 20 ? handleRevealLetter : undefined}
-                  disabled={isCellCorrect || userCoins < 20}
+                  whileTap={!isCellCorrect && userCoins >= 5 ? { scale: 0.93, y: 2 } : {}}
+                  onClick={!isCellCorrect && userCoins >= 5 ? handleRevealLetter : undefined}
+                  disabled={isCellCorrect || userCoins < 5}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden w-full"
                   style={{ 
-                    background: (!isCellCorrect && userCoins >= 20) ? 'linear-gradient(180deg, #06b6d4, #0891b2)' : 'linear-gradient(180deg, #64748b, #475569)', 
-                    border: (!isCellCorrect && userCoins >= 20) ? '2px solid #0e7490' : '2px solid #334155', 
-                    boxShadow: (!isCellCorrect && userCoins >= 20) ? '0 3px 0 #0e7490' : 'none',
-                    opacity: (!isCellCorrect && userCoins >= 20) ? 1 : 0.55,
-                    cursor: (!isCellCorrect && userCoins >= 20) ? 'pointer' : 'not-allowed'
+                    background: (!isCellCorrect && userCoins >= 5) ? 'linear-gradient(180deg, #06b6d4, #0891b2)' : 'linear-gradient(180deg, #64748b, #475569)', 
+                    border: (!isCellCorrect && userCoins >= 5) ? '2px solid #0e7490' : '2px solid #334155', 
+                    boxShadow: (!isCellCorrect && userCoins >= 5) ? '0 3px 0 #0e7490' : 'none',
+                    opacity: (!isCellCorrect && userCoins >= 5) ? 1 : 0.55,
+                    cursor: (!isCellCorrect && userCoins >= 5) ? 'pointer' : 'not-allowed'
                   }}>
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Eye size={13} className="relative z-10" />
                   <span className="relative z-10">Mở 1 chữ</span>
-                  <span className="relative z-10 text-amber-300 text-[10px] font-bold ml-auto"><div className="flex items-center gap-0.5 relative z-10 text-amber-300 text-[10px] font-bold ml-auto">20<img src={iconCoin} alt="C" className="w-3.5 h-3.5" /></div></span>
+                  <span className="relative z-10 text-amber-300 text-[10px] font-bold ml-auto"><div className="flex items-center gap-0.5 relative z-10 text-amber-300 text-[10px] font-bold ml-auto">5<img src={iconCoin} alt="C" className="w-3.5 h-3.5" /></div></span>
                 </motion.button>
                 <motion.button 
-                  whileTap={!isCurrentWordSolved && userCoins >= 50 ? { scale: 0.93, y: 2 } : {}}
-                  onClick={!isCurrentWordSolved && userCoins >= 50 ? handleRevealWord : undefined}
-                  disabled={isCurrentWordSolved || userCoins < 50}
+                  whileTap={!isCurrentWordSolved && userCoins >= 15 ? { scale: 0.93, y: 2 } : {}}
+                  onClick={!isCurrentWordSolved && userCoins >= 15 ? handleRevealWord : undefined}
+                  disabled={isCurrentWordSolved || userCoins < 15}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden w-full"
                   style={{ 
-                    background: (!isCurrentWordSolved && userCoins >= 50) ? 'linear-gradient(180deg, #f59e0b, #d97706)' : 'linear-gradient(180deg, #64748b, #475569)', 
-                    border: (!isCurrentWordSolved && userCoins >= 50) ? '2px solid #b45309' : '2px solid #334155', 
-                    boxShadow: (!isCurrentWordSolved && userCoins >= 50) ? '0 3px 0 #92400e' : 'none',
-                    opacity: (!isCurrentWordSolved && userCoins >= 50) ? 1 : 0.55,
-                    cursor: (!isCurrentWordSolved && userCoins >= 50) ? 'pointer' : 'not-allowed'
+                    background: (!isCurrentWordSolved && userCoins >= 15) ? 'linear-gradient(180deg, #f59e0b, #d97706)' : 'linear-gradient(180deg, #64748b, #475569)', 
+                    border: (!isCurrentWordSolved && userCoins >= 15) ? '2px solid #b45309' : '2px solid #334155', 
+                    boxShadow: (!isCurrentWordSolved && userCoins >= 15) ? '0 3px 0 #92400e' : 'none',
+                    opacity: (!isCurrentWordSolved && userCoins >= 15) ? 1 : 0.55,
+                    cursor: (!isCurrentWordSolved && userCoins >= 15) ? 'pointer' : 'not-allowed'
                   }}>
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Lightbulb size={13} className="relative z-10" />
                   <span className="relative z-10">Mở cả từ</span>
-                  <span className="relative z-10 text-white/80 text-[10px] font-bold ml-auto"><div className="flex items-center gap-0.5 relative z-10 text-white/80 text-[10px] font-bold ml-auto">50<img src={iconCoin} alt="C" className="w-3.5 h-3.5" /></div></span>
+                  <span className="relative z-10 text-white/80 text-[10px] font-bold ml-auto"><div className="flex items-center gap-0.5 relative z-10 text-white/80 text-[10px] font-bold ml-auto">15<img src={iconCoin} alt="C" className="w-3.5 h-3.5" /></div></span>
                 </motion.button>
               </div>
             )}
@@ -2618,47 +2645,47 @@ const CrosswordGame = ({
               <div className="flex gap-2 flex-shrink-0">
                 {/* Mở 1 chữ — portrait */}
                 <motion.button
-                  whileTap={(!isCellCorrect && userCoins >= 20) ? { scale: 0.93, y: 2 } : {}}
-                  onClick={(!isCellCorrect && userCoins >= 20) ? handleRevealLetter : undefined}
-                  disabled={isCellCorrect || userCoins < 20}
+                  whileTap={(!isCellCorrect && userCoins >= 5) ? { scale: 0.93, y: 2 } : {}}
+                  onClick={(!isCellCorrect && userCoins >= 5) ? handleRevealLetter : undefined}
+                  disabled={isCellCorrect || userCoins < 5}
                   className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden"
                   style={{
-                    background: (!isCellCorrect && userCoins >= 20)
+                    background: (!isCellCorrect && userCoins >= 5)
                       ? 'linear-gradient(180deg, #06b6d4, #0891b2)'
                       : 'linear-gradient(180deg, #64748b, #475569)',
-                    border: (!isCellCorrect && userCoins >= 20) ? '2px solid #0e7490' : '2px solid #334155',
-                    boxShadow: (!isCellCorrect && userCoins >= 20) ? '0 3px 0 #0e7490' : 'none',
-                    cursor: (!isCellCorrect && userCoins >= 20) ? 'pointer' : 'not-allowed',
-                    opacity: (!isCellCorrect && userCoins >= 20) ? 1 : 0.55,
+                    border: (!isCellCorrect && userCoins >= 5) ? '2px solid #0e7490' : '2px solid #334155',
+                    boxShadow: (!isCellCorrect && userCoins >= 5) ? '0 3px 0 #0e7490' : 'none',
+                    cursor: (!isCellCorrect && userCoins >= 5) ? 'pointer' : 'not-allowed',
+                    opacity: (!isCellCorrect && userCoins >= 5) ? 1 : 0.55,
                   }}>
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Eye size={13} className="relative z-10" />
                   <span className="relative z-10">Mở 1 chữ</span>
-                  <div className={`flex items-center gap-0.5 relative z-10 text-[10px] font-bold ml-auto ${userCoins >= 20 ? 'text-amber-300' : 'text-slate-400'}`}>
-                    20<img src={iconCoin} alt="C" className="w-3.5 h-3.5" />
+                  <div className={`flex items-center gap-0.5 relative z-10 text-[10px] font-bold ml-auto ${userCoins >= 5 ? 'text-amber-300' : 'text-slate-400'}`}>
+                    5<img src={iconCoin} alt="C" className="w-3.5 h-3.5" />
                   </div>
                 </motion.button>
 
                 {/* Mở cả từ — portrait */}
                 <motion.button
-                  whileTap={(!isCurrentWordSolved && userCoins >= 50) ? { scale: 0.93, y: 2 } : {}}
-                  onClick={(!isCurrentWordSolved && userCoins >= 50) ? handleRevealWord : undefined}
-                  disabled={isCurrentWordSolved || userCoins < 50}
+                  whileTap={(!isCurrentWordSolved && userCoins >= 15) ? { scale: 0.93, y: 2 } : {}}
+                  onClick={(!isCurrentWordSolved && userCoins >= 15) ? handleRevealWord : undefined}
+                  disabled={isCurrentWordSolved || userCoins < 15}
                   className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden"
                   style={{
-                    background: (!isCurrentWordSolved && userCoins >= 50)
+                    background: (!isCurrentWordSolved && userCoins >= 15)
                       ? 'linear-gradient(180deg, #f59e0b, #d97706)'
                       : 'linear-gradient(180deg, #64748b, #475569)',
-                    border: (!isCurrentWordSolved && userCoins >= 50) ? '2px solid #b45309' : '2px solid #334155',
-                    boxShadow: (!isCurrentWordSolved && userCoins >= 50) ? '0 3px 0 #92400e' : 'none',
-                    cursor: (!isCurrentWordSolved && userCoins >= 50) ? 'pointer' : 'not-allowed',
-                    opacity: (!isCurrentWordSolved && userCoins >= 50) ? 1 : 0.55,
+                    border: (!isCurrentWordSolved && userCoins >= 15) ? '2px solid #b45309' : '2px solid #334155',
+                    boxShadow: (!isCurrentWordSolved && userCoins >= 15) ? '0 3px 0 #92400e' : 'none',
+                    cursor: (!isCurrentWordSolved && userCoins >= 15) ? 'pointer' : 'not-allowed',
+                    opacity: (!isCurrentWordSolved && userCoins >= 15) ? 1 : 0.55,
                   }}>
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
                   <Lightbulb size={13} className="relative z-10" />
                   <span className="relative z-10">Mở cả từ</span>
-                  <div className={`flex items-center gap-0.5 relative z-10 text-[10px] font-bold ml-auto ${userCoins >= 50 ? 'text-white/80' : 'text-slate-400'}`}>
-                    50<img src={iconCoin} alt="C" className="w-3.5 h-3.5" />
+                  <div className={`flex items-center gap-0.5 relative z-10 text-[10px] font-bold ml-auto ${userCoins >= 15 ? 'text-white/80' : 'text-slate-400'}`}>
+                    15<img src={iconCoin} alt="C" className="w-3.5 h-3.5" />
                   </div>
                 </motion.button>
               </div>

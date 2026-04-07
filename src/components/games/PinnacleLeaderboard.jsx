@@ -175,6 +175,7 @@ const PinnacleLeaderboard = ({ onBack }) => {
     const pinnacleActiveTab   = usePlayFabStore(s => s.pinnacleActiveTab);
     const loadPinnacleLeaderboard = usePlayFabStore(s => s.loadPinnacleLeaderboard);
     const myPlayFabId = usePlayFabStore(s => s.playFabId);
+    const myAvatarUrl = usePlayFabStore(s => s.avatarUrl);
 
     const loadTab = useCallback((tab) => {
         loadPinnacleLeaderboard(tab);
@@ -365,7 +366,7 @@ const PinnacleLeaderboard = ({ onBack }) => {
                                             <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.1)' }} />
                                         </div>
                                         <LeaderboardRow
-                                            entry={{ position: playerPos, displayName: 'Bạn', score: playerScore, playFabId: myPlayFabId }}
+                                            entry={{ position: playerPos, displayName: 'Bạn', score: playerScore, playFabId: myPlayFabId, avatarUrl: myAvatarUrl }}
                                             isMe={true}
                                             delay={0}
                                         />

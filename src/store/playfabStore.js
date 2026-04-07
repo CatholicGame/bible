@@ -588,7 +588,7 @@ export const usePlayFabStore = create((set, get) => ({
       ...current,
       [gameId]: {
         xp: prev.xp + xp,
-        coins: prev.coins + coins,
+        coins: Math.max(0, prev.coins + coins),
         plays: prev.plays + plays,
       },
     };
@@ -733,9 +733,24 @@ export const usePlayFabStore = create((set, get) => ({
           achievement,
           score,
           rank: e.Position + 1,
+          entityId: e.PlayFabId,
         };
       });
       set({ hallOfFame: entries, hallOfFameLoading: false });
+
+      // Enrich entries with avatar URLs
+      const playfabIds = entries.map(e => e.entityId).filter(Boolean);
+      if (playfabIds.length > 0) {
+        const results = await Promise.allSettled(playfabIds.map(id => getPlayerProfile(id)));
+        const enriched = entries.map((e, i) => {
+          const result = results[i];
+          const avatarUrl = result?.status === 'fulfilled'
+            ? (result.value?.PlayerProfile?.AvatarUrl || null)
+            : null;
+          return { ...e, avatarUrl };
+        });
+        set({ hallOfFame: enriched });
+      }
     } catch (e) {
       console.warn('[Pinnacle] Failed to load Hall of Fame', e);
       set({ hallOfFameLoading: false });
@@ -766,6 +781,20 @@ export const usePlayFabStore = create((set, get) => ({
         if (mid) xpPlayerRank = { position: mid.Position + 1, xp: mid.StatValue ?? 0 };
       }
       set({ xpLeaderboard: entries, xpPlayerRank, xpLeaderboardLoading: false });
+
+      // Enrich entries with avatar URLs
+      const playfabIds = entries.map(e => e.playFabId).filter(Boolean);
+      if (playfabIds.length > 0) {
+        const results = await Promise.allSettled(playfabIds.map(id => getPlayerProfile(id)));
+        const enriched = entries.map((e, i) => {
+          const result = results[i];
+          const avatarUrl = result?.status === 'fulfilled'
+            ? (result.value?.PlayerProfile?.AvatarUrl || null)
+            : null;
+          return { ...e, avatarUrl };
+        });
+        set({ xpLeaderboard: enriched });
+      }
     } catch (e) {
       console.warn('[XP Leaderboard] Failed to load', e);
       set({ xpLeaderboardLoading: false });
