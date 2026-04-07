@@ -1,58 +1,254 @@
 module.exports = [
-  {id:76,theme:'Giáo Hội Việt Nam',words:[
-    {answer:'TUDAO',clue:'Hàng trăm ngàn người Việt đã nhuộm đỏ đức tin qua các thế kỷ bách hại gắt gao lê lết, trong đó có một trăm mười bảy vị anh dũng tuyên xưng Hiển Thánh.',explanation:'Các Thánh Tử Đạo Việt Nam đã dốc đổ cạn máu xối xả đầm đìa, làm phân bón ươm cây Đức Tin gieo trồng khắp gầm trời đất Việt sặc sỡ bừng sáng.'},
-    {answer:'DACLO',clue:'Vị linh mục dòng Tên người Pháp mang tên A-lịch-sơn vắt óc biên soạn cuốn từ điển Việt-Bồ-La nhào nặn ra kho tàng bảng chữ Quốc Ngữ lắt léo.',explanation:'Công quả tuyệt vời của ngài đục đẽo ngôn ngữ bản địa chắp cánh mở toang cho Lời Chúa dễ dàng lọt tai bám rễ đâm chồi vào tâm trí dân mộc mạc.'},
-    {answer:'GIAMMUC',clue:'Cơ cấu lãnh đạo tột cao của Giáo Hội Việt Nam, thường xuyên họp bàn định hướng dẫn dắt ba giáo tỉnh lớn vững vàng bước trên chông gai ngút ngát.',explanation:'Hội Đồng Giám Mục tập hợp những đấng chăn chiên đội mũ sừng chống gậy vươn mình, lèo lái con thuyền đức tin đút lót cắm lều giữ đạo nhiệt thành.'},
-    {answer:'ANRE',clue:'Chàng trai trẻ tuổi Phú Yên lẫm liệt uốn cổ ôm án trảm quyết để rực rỡ trở thành vị tông đồ chứng nhân tử đạo đầu dòng hiên ngang nhất vòm xứ Việt.',explanation:'Anh dõng dạc xin lấy tảng đá kê đầu, không nháy mắt xưng hô "Giê-su, Ma-ri-a, Giu-se" rành rọt trước khi nhát chém oan khiên trảm lìa cổ họng lọt thỏm.'},
-    {answer:'THAYGIANG',clue:'Chức sắc độc đáo ở giáo hội sơ khai nhọc nhằn Việt Nam, những người rảo bước thay linh mục lội bùn đi vào tận hang cùng ngõ hẻm giậm chân dạy giáo lý.',explanation:'Họ là những cây giáo dân mũi nhọn rẽ sóng chắp tay vất vả rao truyền, gieo vãi hột giống thánh hóa khi mỏi mắt trông ngóng bóng dáng linh mục thưa thớt.'},
-    {answer:'TRAKIEU',clue:'Đức Mẹ hiển linh uy nghi chói rực đứng dang rộng tà áo đùm bọc che chở giáo dân chật vật chạy trốn chống đỡ các cuộc nã pháo thần công lồi lõm khốc liệt.',explanation:'Tượng Mẹ đứng sừng sững gánh đỡ hàng tấn súng đạn xé rách đùn bọc, trở thành phép lạ không có vết xước chở che giáo phận non trẻ chót vót khỏi họa diệt vong.'},
-  ]},
-  {id:77,theme:'Hiện Tượng Siêu Nhiên',words:[
-    {answer:'PHEPLA',clue:'Sự can thiệp ngược ngạo chọc thủng tước bỏ những định luật tự nhiên khắt khe để tung hô múa nhảy quyền năng ngợp trời của Đấng ngự trên ngai báu.',explanation:'Các dấu lạ vượt quá quy luật vật lý đanh đá chật hẹp, nhắm mục đích xoáy sâu củng cố niềm tin tuyệt luân dọn đường vớt vác rước Nước Trời hạ cánh nhấp nhô.'},
-    {answer:'DAULA',clue:'Bảy sự kiện bùng nổ kỳ diệu bung xòe trong Tin Mừng thánh Gio-an, chẳng hạn như dẫm bộ cưỡi sóng mặt nước rào rạt hay hóa bánh ra nhiều lúc rỗng ruột.',explanation:'Thánh Gio-an không gượng ép gọi đó là ma thuật, mà nhấn mạnh là tấm biển hiệu rực sáng khơi mào cho đợt hiển dung bóc trần thần tính nhập thể thâm sâu phập phồng.'},
-    {answer:'THIKIEN',clue:'Trạng thái mầu nhiệm nhấc bổng nhãn quan con người trần tục khờ khạo đắm chìm hòa nhập vào những thực tại thiên quốc chói lòa tột bực run cạp cạp.',explanation:'Khác với ảo giác chập chờn, thị kiến mở toang đôi mắt đục ngầu vén nhẹ bức màn sừng sững dòm thẳng vào kỳ công chói chang vô song dạt dào ứa lệ.'},
-    {answer:'THIENTHAN',clue:'Lực lượng quang minh chính đại thuần túy thiêng liêng tàng hình mải miết bay lượn reo hò ca tụng và thi hành sứ mạng bẩm báo túc trực hầu cạnh bệ báu.',explanation:'Binh đoàn vạn tuế này chia thành chín phẩm chất chói mắt huy hoàng, vung gươm chém rụng tà khí dơ dáy nhằm gìn giữ bảo kê con cái phàm tục đi lảo đảo cợt nhả.'},
-    {answer:'XATAN',clue:'Kẻ thù nguy hiểm số một mọc sừng nhọn hoắt điêu ngoa gian xảo rúc ráy rình rập cắn gót tiêm nhiễm thọc gậy bánh xe nhằm làm hư nát gỉ sét linh hồn vẹn tuyền.',explanation:'Chúa Tể bóng tối quỷ quyệt chầu chực như sử tử rống xé đói khát, gieo nọc độc phủi tay dối trá để quyến rũ vấp ngã nuốt trửng kẻ dại dột ngông cuồng vô ý.'},
-    {answer:'QUYAM',clue:'Tình trạng kinh khủng giãy giụa điên loạn khi con người trót để tà thần đột nhập xông vào khống chế dày vò làm thân xác rách rưới tơi bời sùi bọt mép.',explanation:'Nhân danh quyền năng cấm rễ tuyệt diệu, Chúa Giê-su quát mắng trói nghiến binh đoàn rống ộp ẹp và đá văng chúng phăng phăng rời khỏi thể xác rã rời hoảng hốt.'},
-  ]},
-  {id:78,theme:'Mười Điều Răn',words:[
-    {answer:'THOPHUONG',clue:'Điều răn thứ nhất nghiêm túc cấm tiệt con người sấp mình quỳ lạy thần tài hão huyền, danh vọng rỗng không thay vì hướng lên Đấng Tối Cao rực rỡ duy nhất.',explanation:'Gạt phăng dẹp bỏ mọi ngai vàng dơ dáy của ngẫu tượng lừa phỉnh, dành vọn vẹn sự bái lạy thần phục triệt để không sứt mẻ độc nhất vô nhị về cội rễ Sinh Thành.'},
-    {answer:'TENTHANH',clue:'Điều răn thứ hai ngăn cấm tuyệt đối lối mỉa mai rêu rao bạ đâu cũng réo gọi danh xưng Thiên Chúa một cách trống rỗng xấc xược buông tuồng ngáo ngơ.',explanation:'Cấm chê bôi rủa xả nguyền chửi bới vứt tọt oán thán. Danh Chúa là bảo chứng cứu chuộc đáng bệ vệ thắp hương, không thể lôi ra làm trò đùa cợt thề thốt vung vít dối gian.'},
-    {answer:'NGAYCHUA',clue:'Giới răn thứ ba truyền lệnh gác lại khỏa lấp mọi lo toan cày cuốc thục mạng để nhường chỗ cho sự nghỉ ngơi, chầu lễ vinh danh Đấng Tạo Hóa rộng lượng.',explanation:'Gập lại sổ sách mồ hôi chua ngoa khép lại tuần làm việc vắt kiệt sức, dành ngày Chủ Nhật để nạp vỗ béo kho tàng thánh thể lót dạ thơn thớt ấm áp phước hạnh tưng bừng.'},
-    {answer:'GIETNGUOI',clue:'Giới răn thứ năm thét lên bản án với những hành động gây hấn phá thai sứt sẹo, tước đoạt tàn bạo tàn nhẫn mạng sống do chính tay Thiên Chúa mớm nhịp.',explanation:'Sự sống là ân lộc quyền bính tuyệt đỉnh được Chúa trao ẵm bồng, vô duyên vô cớ xọc dao triệt hạ sinh linh vô tội là giương nanh cắn nát quy tắc ngự quyền Tối Cao.'},
-    {answer:'NGOAITINH',clue:'Giới răn thứ sáu răn đe sự phản trắc dối gian chà đạp nát bấy lên lời thề chung thủy xé rách khăng khăng giao ước phối ngẫu linh thiêng sùng kính cởi mở.',explanation:'Dung túng luyến dục thấp hèn vứt tọt phá nát gia can, lật tung ổ chăn lụy tình phung phí là cào xé vết nhơ bẩn thỉu vào sự trong vắt kiều diễm của Bí Tích Hôn Phối đan cài.'},
-    {answer:'CHUNGGIAN',clue:'Giới răn thứ tám chĩa mũi dùi vào hành vi bôi nhọ bịa chuyện đâm thọc, tung hỏa mù bóp méo làm vấy bẩn danh dự và nhổ gục nhào ngã chà đạp chân lý ngây thơ.',explanation:'Nói láo đâm chọc ngứa miệng rỉa rói tổn thương lăng nhục là hành vi bẻ cong đâm chọt gian xảo róc xương, đi ngược lại sự công chính tỏa nắng vớt vát của Lời.'},
-  ]},
-  {id:79,theme:'Đường Thánh Giá',words:[
-    {answer:'THAPGIA',clue:'Khúc gỗ mộc thô thiển sần sùi mang án tử nhuốc nhơ bỗng chốc bị lật ngược hàm ý để trở thành biểu tượng cấm rễ vững chãi đùm bọc ơn cứu độ lẫy lừng.',explanation:'Tội lỗi gục nhào vứt só, biến chiếc cột bêu riếu nhầy nhụa mọt gông đóng đinh xé rách thịt này thành cái Thang kiều diễm vàng ngọc cứu vãn gánh gồng đưa vọt lên vinh quang.'},
-    {answer:'PHILATO',clue:'Vị tổng trấn La Mã hèn mạt rửa tay bàng quan đẩy Đấng Vô Tội vào cửa tử hình chỉ vì run sợ phập phồng trước sức ép dư luận xúi giục gào thét mất trí.',explanation:'Dù lùng bục nhận ra trắng đen tỏ tường, ngài thỏa hiệp hất đổ trút mạng đánh đổi một bản án oan xé rách trơ chọi bằng phán quyết hủi lậu ô nhục ngàn đời vương vãi.'},
-    {answer:'CANVE',clue:'Ngọn đồi trọc lóc lốm đốm hình sọ người vươn cao hứng chịu những giọt máu tráng kiện múc cạn cuối cùng túa ra loang lổ sùi thụt nham nhở kinh tế.',explanation:'Nơi khét lẹt oằn mình nứt toạc chịu đòn roi tử tội mòn mỏi đâm rách ráo tạnh rát rúa. Can-vê chính là rốn địa cầu nuốt trọng khổ đau đập tan nhọc nhằn tội lỗi nhầy nhụa.'},
-    {answer:'VERONICA',clue:'Hành động dũng cảm lao ra chọc thủng vòng vây rẽ tay lau sạch úp mặt tướt máu ròng ròng để rồi được rập khắc nắn nót chân dung không phai nhòa nhợt lạt.',explanation:'Một nghĩa cử mềm mỏng vớt vát giọt lệ sầu giữa tiếng nhạo báng chế diễu man rợ nhếch nhác, ghi dấu tạc khắc sừng sững hình dung rạch ròi bầm đen của Đấng ngã khụy.'},
-    {answer:'KYRENE',clue:'Bác nông dân đang mệt nhoài từ đồng áng lê bước về sũng mồ hôi thì bị lính La Mã bắt ép kề vai gánh vác chung thanh gỗ oằn ọc xộc xệch với Đấng Cứu Thế.',explanation:'Hành động miễn cưỡng xô đẩy vỡ òa trở thành ơn phúc dạt dào thắm thiết chia sớt một mảng tủi nhục đánh gục đọa đày tàn độc thâm hiểm cứu nhân thế.'},
-    {answer:'LUOIGIAO',clue:'Mũi vũ khí nhọn hoắt tọc mạch đâm thâu xé toạc cạnh sườn lút cán, làm tuôn trào thác nước và nguồn máu mầu nhiệm tẩy rửa dội ướt ào ào trôi tuột sỏi đá.',explanation:'Tim vỡ nát xẻo vụn đứt từng khúc rụm, ban vãi mạch suối dào dạt tha thứ mướt mượt khơi nguồn bảy Bí Tích dạt dào rửa ruột thanh khiết cứu đắm bầy chiên dại dột.'},
-  ]},
-  {id:80,theme:'Phục Sinh Và Lên Trời',words:[
-    {answer:'MACDALA',clue:'Người phụ nữ đầm đìa vỡ nước mắt hớt hải xõa tóc chạy sút chao ra mộ từ tờ mờ sáng và trở thành người đầu tiên báo tin Chúa sống lại rực rỡ lẫy lừng.',explanation:'Từng vướng ngập tội ác nhưng xối xả đền tội, Mác-đa-la thành đặc ủy tung cờ báo tin hớn hở chưng hửng xoa dịu hoảng loạn vùi dập xao nhãng của đám đông hoang mang.'},
-    {answer:'EMAU',clue:'Làng nhỏ dặm dài chứng kiến hai lữ khách buồn thiu lê gót được sưởi ấm tâm can đến nóng bừng dập dồn nhờ bóng dáng kỳ bí của Chúa rảo bước chung đường chật.',explanation:'Không nhận ra ngay diện mạo bừng lóa cho đến khi mẩu bánh rắc bẻ tỏa sáng, mắt họ thao láo xé toạc vực dậy bấu lấy hy vọng đập nát niềm thất vọng dán chặt bệ rạc.'},
-    {answer:'DIDIMO',clue:'Biệt danh của vị Tông đồ cứng cỏi ngoan cố đòi thọc sâu ngón tay rục rịch vào vết đinh bằng được mới chịu tin mười mươi phép lạ khải hoàn lộn ngược mồ vắng.',explanation:'Thánh Tô-ma đòi gãi đúng chỗ ngứa khăng khăng hoài nghi sồn sồn. Sự cứng lòng ương ngạnh sập bẫy tắp lự khi ngài rạp gối lí nhí thốt lên: "Lạy Chúa, lạy Thiên Chúa con".'},
-    {answer:'THANGTHIEN',clue:'Biến cố vinh hiển huy hoàng khi Chúa cất bổng chân rời mặt đất bay vút hòa mình dạt dào vào mây trời lơ lửng trước ánh mắt há hốc ngơ ngẩn của môn đệ.',explanation:'Chúa rời trần thế để mặc vào cỗ hoàng oai ngự chễm chệ vinh quang tột đỉnh, dọn ổ sưởi ấm lợp ngai nghênh đón những linh hồn đói khát bươn chải vượt khó chạy về nhan rạng rỡ.'},
-    {answer:'GALILE',clue:'Vùng đất mà vị Thiên Thần áo trắng lóa bệ vệ dặn dò các môn đệ nhanh nhẹn chống gậy quay ngược trở về cuống quýt để được giáp mặt Thầy sống lại trẩy bừng.',explanation:'Trở về chốn xuất phát ban tồ đánh cá quê mùa cũng là hồi tưởng mốc ranh giới tiếng gọi dấy dội, rũ bỏ bùn nhơ dớp ngã thất vọng bắt tay xây nền móng phập phồng rao truyền.'},
-    {answer:'HIENRA',clue:'Hành động thình lình đột ngột vồ vập thiêng liêng xuất hiện đi xuyên rào xuyên tường của Đấng Phục Sinh oai phong, kèm theo lời an ủi mát rượi Bình an cho anh em.',explanation:'Không bị ràng buộc vướng mảng dây dợ vật chất thô rát cục mịch. Cơ thể vinh hiển dọn đi hoang mang hóc xương bừng tỉnh trao gửi đôm đốp lửa Thánh Thần xuống cuồng phong.'},
-  ]},
-  { id: 129, theme: 'XH 30-31: Đồ Dùng Thờ Phượng', words: [
-    { answer: 'HUONG', clue: 'Chất liệu thơm ngát đặc biệt được pha chế theo công thức độc quyền chuyên chỉ để dâng lên đốt đượm cho ngai tòa Đức Chúa.', explanation: 'Tuyệt đối cấm pha chế hương liệu thánh này để dùng cho mục đích phàm tục như xức nước hoa, nhấn mạnh sự độc quyền hiến dâng.' },
-    { answer: 'CHETIEU', clue: 'Khoản thuế chuộc mạng bắt buộc mọi nam đinh từ hai mươi tuổi bất kể giàu nghèo đều phải nộp một nửa sê-ken bạc.', explanation: 'Thuế đồng hạng cho thấy trước mặt Thiên Chúa, tính mạng của kẻ giàu sụ hay người nghèo khó đều có giá cả cứu chuộc ngang nhau.' },
-    { answer: 'VAKDONG', clue: 'Chiếc chậu rửa ráy bằng đồng lóng lánh đặt giữa Lều Tạm và bàn thờ để tư tế tự tẩy rửa trước khi dâng lễ vật.', explanation: 'Tẩy rử tay chân biểu trưng cho nhu cầu gột rửa tội lỗi ô uế thường xuyên trước khi con phàm tục bước vào phụng hành việc thánh.' },
-    { answer: 'DAUTHANH', clue: 'Loại dầu thơm được điều chế hảo hạng dùng để xức hiến toàn bộ Nhà Tạm và mọi đồ đạc vật dụng bên trong đó.', explanation: 'Sự xức dầu tách biệt các đồ vật bằng gỗ đá vô tri thành những khí cụ thiêng liêng giành riêng để Thiên Chúa độc chiếm ngự trị.' },
-    { answer: 'BETXANEN', clue: 'Nghệ nhân tài ba được Thiên Chúa ưu ái gọi tên đích danh và đổ đầy thần khí thông minh khéo tay để chế tác.', explanation: 'Bơ-txan-ên là người đầu tiên trong Kinh Thánh được nhắc đến việc "đong đầy Thần Khí", cho thấy cả nghệ thuật thủ công cũng là ơn Chúa.' },
-    { answer: 'OHOLIAP', clue: 'Người thợ khéo tay thuộc chi tộc Đan, được Chúa chỉ định làm cộng sự cho Bơ-txan-ên hoàn tất mỹ thuật của Nhà Tạm.', explanation: 'Việc ghi nhớ tên tuổi các bác thợ điêu khắc chứng tỏ Thiên Chúa trân trọng công sức mồ hôi gọt giũa của người lao động.' }
-  ]},
-  { id: 130, theme: 'XH 32: Con Bê Vàng', words: [
-    { answer: 'BEVANG', clue: 'Cỗ tượng hình thú ngạo nghễ đúc lõi bằng vàng tươm mà dân chúng yêu cầu làm ra để cung kính bái lạy giữa sa mạc.', explanation: 'Con bê vàng đại diện cho khuynh hướng tôn giáo dễ dãi, muốn tạo ra một vị thần vật chất để dễ bề thao túng sờ bấu được.' },
-    { answer: 'AARON', clue: 'Vị đứng đầu nhu nhược đã thu gom lột hết khuyên tai vàng của đám phụ nữ thanh niên để đúc lên pho tượng thú đồi bại.', explanation: 'Sự nhượng bộ của A-ha-ron là một thất bại lãnh đạo thê thảm, khi ông lấy lòng dân thỏa hiệp với điều ác thay vì can đảm bảo vệ lề luật Đức Chúa.' },
-    { answer: 'CHEDON', clue: 'Tiếng hội hè múa hát ăn uống điên loạn reo hò ầm ĩ quanh tượng thần, được Môsê nghe thấy khi vác bia đá đi từ đỉnh núi ngó xuống.', explanation: 'Tiệc tùng linh đình phản trắc biến cuộc hành hương sa mạc thành lễ hội tha thiết bái thần, đập nát lòng chung thủy với hôn ước Sinai.' },
-    { answer: 'KIMDA', clue: 'Hành động nổi giận ném vỡ tung tóe hai bia đá thẳng rầm xuống chân núi của Môsê khi chứng kiến cảnh tượng chướng tay gai mắt.', explanation: 'Việc đập vỡ nham nhở các bia đá là biểu tượng đanh thép về việc Giao Ước bằng đá vừa mới thiết lập đã bị nát tan vì tội chà đạp bội tín.' },
-    { answer: 'BOTROI', clue: 'Việc Môsê lấy tro từ con bê vàng bị đốt nghiền nát pha vào nước rồi bắt toàn bộ dân chúng phải dốc ngửa cổ uống.', explanation: 'Uống thuốc đắng là hình phạt tủi nhục ép người dân tự nuốt lấy sản phẩm tội lỗi dơ dáy do chính tay mình màng muội tạo ra.' },
-    { answer: 'LIVI', clue: 'Chi tộc trung kiên duy nhất đã tuốt gươm hưởng ứng lời kêu gọi vung tàn sát phạt của Môsê để trừng trị những kẻ cầm đầu loạn bái.', explanation: 'Nhờ nỗ lực gươm đao vấy sắc máu tẩy uế phe nội bộ sừng sỏ này, chi tộc Lê-vi đã được tự thánh hiến để gánh vác việc tế tự muôn đời.' }
-  ]}
+  {
+    "id": 76,
+    "theme": "Giáo Hội Việt Nam",
+    "words": [
+      {
+        "answer": "TUDAO",
+        "clue": "Hàng trăm ngàn người Việt đã kiên trung giữ vững đức tin, trong đó có 117 vị được tôn phong Hiển Thánh.",
+        "explanation": "Các Thánh Tử Đạo Việt Nam đã hy sinh mạng sống để làm hạt giống gieo mầm Đức Tin trên đất nước."
+      },
+      {
+        "answer": "DACLO",
+        "clue": "Vị linh mục dòng Tên người Pháp mang tên A-lịch-sơn đã biên soạn cuốn từ điển Việt-Bồ-La, đặt nền móng cho chữ Quốc Ngữ.",
+        "explanation": "Công lao của ngài đã giúp tiếng Việt có chữ viết mẫu tự Latinh, tạo điều kiện thuận lợi cho việc rao giảng Lời Chúa."
+      },
+      {
+        "answer": "GIAMMUC",
+        "clue": "Cơ cấu lãnh đạo cao nhất của Giáo Hội Việt Nam, thường xuyên họp bàn để định hướng giáo hội địa phương.",
+        "explanation": "Hội Đồng Giám Mục tập hợp những vị chủ chăn để dẫn dắt con thuyền đức tin."
+      },
+      {
+        "answer": "ANRE",
+        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: ANRE.",
+        "explanation": ""
+      },
+      {
+        "answer": "THAYGIANG",
+        "clue": "Chức sắc đặc biệt ở giáo hội sơ khai Việt Nam, những giáo dân nhiệt thành đi các xứ đạo để dạy giáo lý thay cho linh mục.",
+        "explanation": "Họ là những người cộng tác đắc lực trong việc rao truyền Tin Mừng khi số lượng linh mục còn rất hạn chế."
+      },
+      {
+        "answer": "TRAKIEU",
+        "clue": "Giáo xứ nơi Đức Mẹ hiện ra để che chở giáo dân đang chạy trốn trong các cuộc bách hại khốc liệt.",
+        "explanation": "Tượng Mẹ đứng vững vàng che chở giáo điểm này thành một phép lạ bảo vệ giáo phận non trẻ."
+      }
+    ]
+  },
+  {
+    "id": 77,
+    "theme": "Hiện Tượng Siêu Nhiên",
+    "words": [
+      {
+        "answer": "PHEPLA",
+        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: PHEPLA.",
+        "explanation": ""
+      },
+      {
+        "answer": "DAULA",
+        "clue": "Bảy sự kiện kỳ diệu trong Tin Mừng thánh Gio-an minh chứng cho quyền năng của Ngôi Lời, như việc hóa bánh ra nhiều.",
+        "explanation": "Thánh Gioan gọi những phép lạ là dấu lạ, nhằm chỉ ra thần tính của Ngài và khơi gọi lòng tin."
+      },
+      {
+        "answer": "THIKIEN",
+        "clue": "Trạng thái mầu nhiệm khi Thiên Chúa ban ơn cho một đấng thiêng liêng chiêm ngưỡng những thực tại vô hình.",
+        "explanation": "Thị kiến mở ra cái nhìn thiêng liêng để thấu hiểu kỳ công của Thiên Chúa."
+      },
+      {
+        "answer": "THIENTHAN",
+        "clue": "Loài thụ tạo thiêng liêng, thi hành sứ mạng phụng sự Thiên Chúa và bảo vệ con người.",
+        "explanation": "Những vị thiêng liêng vô hình này không ngừng ca tụng Thiên Chúa và được cử đến để che chở các tín hữu."
+      },
+      {
+        "answer": "XATAN",
+        "clue": "Kẻ thù nguy hiểm số một luôn rình rập và cám dỗ con người xa rời vòng tay Thiên Chúa.",
+        "explanation": "Chúa Tể bóng tối luôn gieo rắc sự dối trá để quyến rũ kẻ yếu đuối vấp ngã."
+      },
+      {
+        "answer": "QUYAM",
+        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: QUYAM.",
+        "explanation": ""
+      }
+    ]
+  },
+  {
+    "id": 78,
+    "theme": "Mười Điều Răn",
+    "words": [
+      {
+        "answer": "THOPHUONG",
+        "clue": "Điều răn thứ nhất nghiêm cấm việc thờ ngẫu tượng, nhắc nhở con người chỉ tôn thờ một mình Thiên Chúa.",
+        "explanation": "Dành trọn vẹn sự thờ phượng vâng phục cho Đấng Tối Cao thay vì chạy theo danh vọng hay lừa phỉnh."
+      },
+      {
+        "answer": "TENTHANH",
+        "clue": "Điều răn thứ hai nhắc nhở mọi người phải tôn kính danh thánh Chúa, không kêu gọi danh Ngài cách vô cớ.",
+        "explanation": "Danh Chúa là thánh thiện và đáng được tôn vinh, không được dùng để thề thốt dối gian."
+      },
+      {
+        "answer": "NGAYCHUA",
+        "clue": "Kiêng việc xác ngày Chúa Nhật để dành thời gian tham dự Thánh Lễ ngợi khen Thiên Chúa.",
+        "explanation": "Ngày thứ Bảy (Chúa Nhật) là ngày linh thánh để nhắc nhở con người nhớ đến công trình Tạo Dựng và làm mới chính mình."
+      },
+      {
+        "answer": "GIETNGUOI",
+        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: GIETNGUOI.",
+        "explanation": ""
+      },
+      {
+        "answer": "NGOAITINH",
+        "clue": "Giới răn thứ sáu nghiêm cấm mọi hành vi phản bội lời thề chung thủy trong cuộc sống hôn nhân gia đình.",
+        "explanation": "Ngoại tình phá vỡ hạnh phúc gia đình và đi ngược lại với sự thánh thiện của Bí Tích Hôn Phối."
+      },
+      {
+        "answer": "CHUNGGIAN",
+        "clue": "Giới răn thứ tám cấm các hành vi làm chứng gian, vu khống, và làm tổn hại đến danh dự của người khác.",
+        "explanation": "Nói dối, vu khống là hành vi nghịch lại với sự công chính và tình yêu thương."
+      }
+    ]
+  },
+  {
+    "id": 79,
+    "theme": "Đường Thánh Giá",
+    "words": [
+      {
+        "answer": "THAPGIA",
+        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: THAPGIA.",
+        "explanation": ""
+      },
+      {
+        "answer": "PHILATO",
+        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: PHILATO.",
+        "explanation": ""
+      },
+      {
+        "answer": "CANVE",
+        "clue": "Ngọn đồi hình sọ người, nơi Chúa Giêsu chịu đóng đinh hiến tế mạng sống chuộc tội thế gian.",
+        "explanation": "Canvê là nơi đau thương nhưng cũng là trung tâm của tình yêu cứu chuộc ngập tràn hy vọng."
+      },
+      {
+        "answer": "VERONICA",
+        "clue": "Người phụ nữ dũng cảm chen qua đám đông để lau khuôn mặt đẫm máu gươm của Chúa Giêsu.",
+        "explanation": "Hành động yêu thương đó đã để lại chân dung Chúa in dấu trên tấm khăn."
+      },
+      {
+        "answer": "KYRENE",
+        "clue": "Người đàn ông quê ở Kyrênê bị quân lính bắt vác đỡ thập giá cho Chúa Giêsu trên đường lên đồi Sọ.",
+        "explanation": "Hành động của ông minh họa cho việc vác thập giá mình hằng ngày để theo Chúa."
+      },
+      {
+        "answer": "LUOIGIAO",
+        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: LUOIGIAO.",
+        "explanation": ""
+      }
+    ]
+  },
+  {
+    "id": 80,
+    "theme": "Phục Sinh Và Lên Trời",
+    "words": [
+      {
+        "answer": "MACDALA",
+        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: MACDALA.",
+        "explanation": ""
+      },
+      {
+        "answer": "EMAU",
+        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: EMAU.",
+        "explanation": ""
+      },
+      {
+        "answer": "DIDIMO",
+        "clue": "Biệt danh của thánh Tôma, người đã đòi được chạm tay vào vết đinh mới vững vàng xác tín Chúa sống lại.",
+        "explanation": "Sự nghi ngờ của thánh Tôma là dịp để Chúa củng cố đức tin, giúp ông tuyên xưng niềm tin trọn vẹn."
+      },
+      {
+        "answer": "THANGTHIEN",
+        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: THANGTHIEN.",
+        "explanation": ""
+      },
+      {
+        "answer": "GALILE",
+        "clue": "Vùng đất mà thiên thần bảo các môn đệ lui về để được gặp lại Chúa Giêsu sau khi Ngài phục sinh.",
+        "explanation": "Trở về Galilê cũng là trở về nơi khởi đầu ơn gọi để hăng hái ra đi rao giảng Tin Mừng."
+      },
+      {
+        "answer": "HIENRA",
+        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: HIENRA.",
+        "explanation": ""
+      }
+    ]
+  },
+  {
+    "id": 129,
+    "theme": "XH 30-31: Đồ Dùng Thờ Phượng",
+    "words": [
+      {
+        "answer": "HUONG",
+        "clue": "Chất liệu thơm ngát đặc biệt được pha chế theo công thức độc quyền chuyên chỉ để dâng lên đốt đượm cho ngai tòa Đức Chúa.",
+        "explanation": "Tuyệt đối cấm pha chế hương liệu thánh này để dùng cho mục đích phàm tục như xức nước hoa, nhấn mạnh sự độc quyền hiến dâng."
+      },
+      {
+        "answer": "CHETIEU",
+        "clue": "Khoản thuế chuộc mạng bắt buộc mọi nam đinh từ hai mươi tuổi bất kể giàu nghèo đều phải nộp một nửa sê-ken bạc.",
+        "explanation": "Thuế đồng hạng cho thấy trước mặt Thiên Chúa, tính mạng của kẻ giàu sụ hay người nghèo khó đều có giá cả cứu chuộc ngang nhau."
+      },
+      {
+        "answer": "VAKDONG",
+        "clue": "Chiếc chậu rửa ráy bằng đồng lóng lánh đặt giữa Lều Tạm và bàn thờ để tư tế tự tẩy rửa trước khi dâng lễ vật.",
+        "explanation": "Tẩy rử tay chân biểu trưng cho nhu cầu gột rửa tội lỗi ô uế thường xuyên trước khi con phàm tục bước vào phụng hành việc thánh."
+      },
+      {
+        "answer": "DAUTHANH",
+        "clue": "Loại dầu thơm được điều chế hảo hạng dùng để xức hiến toàn bộ Nhà Tạm và mọi đồ đạc vật dụng bên trong đó.",
+        "explanation": "Sự xức dầu tách biệt các đồ vật bằng gỗ đá vô tri thành những khí cụ thiêng liêng giành riêng để Thiên Chúa độc chiếm ngự trị."
+      },
+      {
+        "answer": "BETXANEN",
+        "clue": "Nghệ nhân tài ba được Thiên Chúa ưu ái gọi tên đích danh và đổ đầy thần khí thông minh khéo tay để chế tác.",
+        "explanation": "Bơ-txan-ên là người đầu tiên trong Kinh Thánh được nhắc đến việc \"đong đầy Thần Khí\", cho thấy cả nghệ thuật thủ công cũng là ơn Chúa."
+      },
+      {
+        "answer": "OHOLIAP",
+        "clue": "Người thợ khéo tay thuộc chi tộc Đan, được Chúa chỉ định làm cộng sự cho Bơ-txan-ên hoàn tất mỹ thuật của Nhà Tạm.",
+        "explanation": "Việc ghi nhớ tên tuổi các bác thợ điêu khắc chứng tỏ Thiên Chúa trân trọng công sức mồ hôi gọt giũa của người lao động."
+      }
+    ]
+  },
+  {
+    "id": 130,
+    "theme": "XH 32: Con Bê Vàng",
+    "words": [
+      {
+        "answer": "BEVANG",
+        "clue": "Cỗ tượng hình thú ngạo nghễ đúc lõi bằng vàng tươm mà dân chúng yêu cầu làm ra để cung kính bái lạy giữa sa mạc.",
+        "explanation": "Con bê vàng đại diện cho khuynh hướng tôn giáo dễ dãi, muốn tạo ra một vị thần vật chất để dễ bề thao túng sờ bấu được."
+      },
+      {
+        "answer": "AARON",
+        "clue": "Vị đứng đầu nhu nhược đã thu gom lột hết khuyên tai vàng của đám phụ nữ thanh niên để đúc lên pho tượng thú đồi bại.",
+        "explanation": "Sự nhượng bộ của A-ha-ron là một thất bại lãnh đạo thê thảm, khi ông lấy lòng dân thỏa hiệp với điều ác thay vì can đảm bảo vệ lề luật Đức Chúa."
+      },
+      {
+        "answer": "CHEDON",
+        "clue": "Tiếng hội hè múa hát ăn uống điên loạn reo hò ầm ĩ quanh tượng thần, được Môsê nghe thấy khi vác bia đá đi từ đỉnh núi ngó xuống.",
+        "explanation": "Tiệc tùng linh đình phản trắc biến cuộc hành hương sa mạc thành lễ hội tha thiết bái thần, đập nát lòng chung thủy với hôn ước Sinai."
+      },
+      {
+        "answer": "KIMDA",
+        "clue": "Hành động nổi giận ném vỡ tung tóe hai bia đá thẳng rầm xuống chân núi của Môsê khi chứng kiến cảnh tượng chướng tay gai mắt.",
+        "explanation": "Việc đập vỡ nham nhở các bia đá là biểu tượng đanh thép về việc Giao Ước bằng đá vừa mới thiết lập đã bị nát tan vì tội chà đạp bội tín."
+      },
+      {
+        "answer": "BOTROI",
+        "clue": "Việc Môsê lấy tro từ con bê vàng bị đốt nghiền nát pha vào nước rồi bắt toàn bộ dân chúng phải dốc ngửa cổ uống.",
+        "explanation": "Uống thuốc đắng là hình phạt tủi nhục ép người dân tự nuốt lấy sản phẩm tội lỗi dơ dáy do chính tay mình màng muội tạo ra."
+      },
+      {
+        "answer": "LIVI",
+        "clue": "Chi tộc trung kiên duy nhất đã tuốt gươm hưởng ứng lời kêu gọi vung tàn sát phạt của Môsê để trừng trị những kẻ cầm đầu loạn bái.",
+        "explanation": "Nhờ nỗ lực gươm đao vấy sắc máu tẩy uế phe nội bộ sừng sỏ này, chi tộc Lê-vi đã được tự thánh hiến để gánh vác việc tế tự muôn đời."
+      }
+    ]
+  }
 ];
