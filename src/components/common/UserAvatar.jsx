@@ -84,6 +84,8 @@ const UserAvatar = ({
         alt={name}
         onError={handleError}
         className={className}
+        referrerPolicy="no-referrer"
+        crossOrigin="anonymous"
         style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover', display: 'block', flexShrink: 0, ...style }}
       />
     );
@@ -123,6 +125,8 @@ const UserAvatar = ({
           src={safeSrc}
           alt={name}
           onError={handleError}
+          referrerPolicy="no-referrer"
+          crossOrigin="anonymous"
           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
         />
       </div>

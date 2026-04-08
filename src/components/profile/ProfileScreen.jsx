@@ -4,10 +4,11 @@ import trophyImg from '../../assets/common/trophy.png';
 import { motion } from 'framer-motion';
 import {
     ChevronLeft, Trophy, Star, Award, Swords,
-    User, Shield, Map, ChevronRight, TrendingUp, Crown, Pen,
+    User, Shield, Map, ChevronRight, TrendingUp, Crown, Pen, HelpCircle
 } from 'lucide-react';
 import { usePlayFabStore } from '../../store/playfabStore';
 import UserAvatar from '../common/UserAvatar';
+import DeveloperContactModal from '../common/DeveloperContactModal';
 import {
     RANK_TIERS, getRankByScore, getRankLevel,
     getNextRank, getProgressToNextRank, formatNumber,
@@ -85,6 +86,7 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap, onOpenLeaderboard }) => {
     const xpPlayerRank = usePlayFabStore(state => state.xpPlayerRank);
     const loadXPLeaderboard = usePlayFabStore(state => state.loadXPLeaderboard);
     const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
+    const [showHelp, setShowHelp] = useState(false);
 
     useEffect(() => {
         const check = () => setIsLandscape(window.innerWidth > window.innerHeight);
@@ -443,12 +445,12 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap, onOpenLeaderboard }) => {
     const PortraitLayout = () => (
         <div className="flex-1 overflow-y-auto overflow-x-hidden">
             <div className="w-full max-w-md mx-auto px-4 pt-5 pb-8 flex flex-col gap-4">
-                <motion.div custom={0} variants={fadeUp} initial="hidden" animate="visible"><AvatarSection /></motion.div>
-                <motion.div custom={1} variants={fadeUp} initial="hidden" animate="visible"><CurrencyCards /></motion.div>
-                <motion.div custom={2} variants={fadeUp} initial="hidden" animate="visible"><RankProgress /></motion.div>
-                <motion.div custom={3} variants={fadeUp} initial="hidden" animate="visible"><QuickActions /></motion.div>
-                <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible"><StatsSection /></motion.div>
-                <motion.div custom={5} variants={fadeUp} initial="hidden" animate="visible"><PersonalInfo /></motion.div>
+                <motion.div custom={0} variants={fadeUp} initial="hidden" animate="visible">{AvatarSection()}</motion.div>
+                <motion.div custom={1} variants={fadeUp} initial="hidden" animate="visible">{CurrencyCards()}</motion.div>
+                <motion.div custom={2} variants={fadeUp} initial="hidden" animate="visible">{RankProgress()}</motion.div>
+                <motion.div custom={3} variants={fadeUp} initial="hidden" animate="visible">{QuickActions()}</motion.div>
+                <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible">{StatsSection()}</motion.div>
+                <motion.div custom={5} variants={fadeUp} initial="hidden" animate="visible">{PersonalInfo()}</motion.div>
             </div>
         </div>
     );
@@ -504,7 +506,7 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap, onOpenLeaderboard }) => {
                         <div className="flex items-center gap-4 flex-1">
                             {/* XP */}
                             <motion.div custom={1} variants={popIn} initial="hidden" animate="visible"
-                                className="rounded-xl px-5 py-2.5 flex flex-col items-center relative overflow-hidden"
+                                className="rounded-xl px-5 py-2.5 flex flex-col items-center relative overflow-hidden flex-1"
                                 style={{ background: C.xpCard.bg, border: `2.5px solid ${C.xpCard.border}`, boxShadow: `0 3px 0 ${C.xpCard.shadow}`, minWidth: 100 }}>
                                 <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/20 pointer-events-none" />
                                 <img src={trophyImg} alt="trophy" className="w-9 h-9 relative z-10 object-contain" style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.3))' }} />
@@ -513,19 +515,13 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap, onOpenLeaderboard }) => {
                             </motion.div>
                             {/* Coins */}
                             <motion.div custom={2} variants={popIn} initial="hidden" animate="visible"
-                                className="rounded-xl px-5 py-2.5 flex flex-col items-center relative overflow-hidden"
+                                className="rounded-xl px-5 py-2.5 flex flex-col items-center relative overflow-hidden flex-1"
                                 style={{ background: C.coinCard.bg, border: `2.5px solid ${C.coinCard.border}`, boxShadow: `0 3px 0 ${C.coinCard.shadow}`, minWidth: 100 }}>
                                 <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/20 pointer-events-none" />
                                 <img src={coinImg} alt="coin" className="w-9 h-9 relative z-10 object-contain" style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.3))' }} />
                                 <span className="font-black text-3xl text-white relative z-10"><AnimatedNumber value={userCoins} /></span>
                                 <span className="text-teal-900/60 text-[10px] font-bold tracking-wider uppercase relative z-10">Coins</span>
                             </motion.div>
-                            {/* Total Games */}
-                            <div className="flex-1 flex flex-col items-center justify-center px-4">
-                                <span className="font-black text-6xl" style={{ color: C.textPrimary }}><AnimatedNumber value={totalGames} /></span>
-                                <span className="text-base font-bold mt-0.5" style={{ color: C.textSecondary }}>General Statistics:</span>
-                                <span className="text-sm font-semibold" style={{ color: C.textMuted }}>Total: {totalGames} games</span>
-                            </div>
                         </div>
                     </div>
                 </motion.div>
@@ -623,7 +619,7 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap, onOpenLeaderboard }) => {
 
                 {/* ═══ ROW 5: Personal Info ═══ */}
                 <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible">
-                    <PersonalInfo />
+                    {PersonalInfo()}
                 </motion.div>
             </div>
         </div>
@@ -663,11 +659,18 @@ const ProfileScreen = ({ user, onBack, onOpenRoadmap, onOpenLeaderboard }) => {
                     style={{ color: C.textPrimary, textShadow: 'none' }}>
                     Hồ Sơ
                 </span>
-                <div className="w-8" />
+                <motion.button whileTap={{ y: 2 }} onClick={() => setShowHelp(true)}
+                    className="w-8 h-8 flex items-center justify-center rounded-full transition-colors"
+                    style={{ background: 'rgba(0,180,216,0.1)', border: '1.5px solid rgba(0,180,216,0.25)' }}>
+                    <HelpCircle size={18} strokeWidth={3} style={{ color: '#1b9aaa' }} />
+                </motion.button>
             </div>
 
             {/* ── Content — switches based on orientation ── */}
-            {isLandscape ? <LandscapeLayout /> : <PortraitLayout />}
+            {isLandscape ? LandscapeLayout() : PortraitLayout()}
+
+            {/* Trợ giúp Nhà phát triển Modal */}
+            {showHelp && <DeveloperContactModal onClose={() => setShowHelp(false)} />}
         </div>
     );
 };
