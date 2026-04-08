@@ -755,7 +755,7 @@ const CrosswordGame = ({
         } = usePlayFabStore();
   const { roomData, roomId, myRole } = useRoomStore();
   const { uid: storeUid } = useUserStore();
-  const { leaveRoom, requestRematch, acceptRematch, declineRematch, chargeBet, awardWinner } = useRoom();
+  const { leaveRoom, requestRematch, acceptRematch, declineRematch, chargeBet, awardWinner, watchRoom } = useRoom();
   const myUid = storeUid;
   // Lấy opponentUid từ roomData players (ngoại trừ myUid)
   const opponentUid = useMemo(() => {
@@ -766,6 +766,14 @@ const CrosswordGame = ({
   const FORFEIT_BONUS = 30; // fallback khi không có wager
   const wager = roomData?.wager ?? 0;
   const pot = wager * 2; // tổng coin cược của 2 player cộng lại
+
+  // Lắng nghe toàn bộ phòng real-time vì WaitingRoom đã unmount
+  useEffect(() => {
+    if (!isP2PMode || !roomId) return;
+    const unsub = watchRoom(roomId, () => {}); // update được xử lý bên trong watchRoom thông qua Zustand store
+    return () => unsub?.();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomId, isP2PMode]);
 
   // ── Tên người chơi: luôn đọc từ Firebase roomData (single source of truth) ──
   // Cả 2 client đọc cùng 1 nguồn → tên luôn nhất quán giữa 2 màn hình
@@ -2563,7 +2571,7 @@ const CrosswordGame = ({
 
         {/* ── RIGHT PANE (landscape: hints + clues stacked vertically) ── */}
         {isLandscape ? (
-          <div className="flex-shrink-0 flex flex-col gap-2" style={{ width: 264 }}>
+          <div className="flex-shrink-0 flex flex-col gap-2" style={{ width: 320 }}>
            {/* Hint buttons */}
             <div className="flex flex-col gap-2">
                 <motion.button 

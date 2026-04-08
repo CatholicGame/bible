@@ -120,11 +120,13 @@ const ReactionBubble = ({ reaction, isLandscape, avatarRef, onDone }) => {
     return () => window.removeEventListener('resize', measure);
   }, [avatarRef]);
 
-  // Auto close
+  // Auto close - sử dụng ref để đảm bảo onDone không trigger lại useEffect khi render
+  const onDoneRef = useRef(onDone);
+  useEffect(() => { onDoneRef.current = onDone; }, [onDone]);
   useEffect(() => {
-    const t = setTimeout(onDone, AUTO_CLOSE_MS + 400); // +400 để animation exit xong
+    const t = setTimeout(() => onDoneRef.current?.(), AUTO_CLOSE_MS + 400); // +400 để animation exit xong
     return () => clearTimeout(t);
-  }, [onDone]);
+  }, []);
 
   if (!pos) return null;
 
@@ -330,7 +332,11 @@ const EmojiReactionPanel = ({ roomId, myUid, opponentUid, opponentName = 'Đối
       setIncomingReactions(prev => {
         const existingIds = new Set(prev.map(r => r.id));
         const fresh = incoming.filter(r => !existingIds.has(r.id));
-        return [...prev, ...fresh];
+        if (fresh.length > 0) {
+          // Bất cứ khi nào có tin nhắn mới, chỉ lấy tin mới nhất để thay thế ngay lập tức
+          return [fresh[fresh.length - 1]];
+        }
+        return prev;
       });
     });
     return () => unsub();
