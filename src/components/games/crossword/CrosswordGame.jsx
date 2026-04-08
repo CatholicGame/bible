@@ -243,7 +243,10 @@ const ProgressBar = ({ label, percent, color, avatar, avatarUrl }) => (
     <div className="w-7 h-7 rounded-full flex items-center justify-center font-black text-xs text-white shrink-0 overflow-hidden"
       style={{ background: color, border: '2px solid rgba(0,0,0,0.3)', boxShadow: '0 2px 0 rgba(0,0,0,0.3)' }}>
       {avatarUrl ? (
-        <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <>
+          <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
+          <span style={{ display: 'none', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>{avatar || '?'}</span>
+        </>
       ) : (
         avatar || '?'
       )}
@@ -286,6 +289,13 @@ const CrosswordFinishedOverlay = ({
   const { globalScore, coins: profileCoins, nickname, avatarUrl } = usePlayFabStore();
   const rankName = getRankByScore(globalScore || 0);
   const [showExplain, setShowExplain] = useState(false);
+  const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
+
+  useEffect(() => {
+    const handleResize = () => setIsLandscape(window.innerWidth > window.innerHeight);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Words user actually solved (filter puzzleWords by solvedWords set)
   const solvedWordsList = puzzleWords.filter(w => solvedWords.has(w.id));
@@ -343,6 +353,17 @@ const CrosswordFinishedOverlay = ({
     if (!coinsDone || totalCoins <= 0) return;
     const t = setTimeout(() => {
       spawnFly('coin', coinPillRef, coinTargetRef, Math.min(totalCoins, 9));
+      
+      // Giảm dần displayCoins về 0 trong 1 giây (khớp với thời gian bay)
+      const abs = Math.abs(totalCoins);
+      const STEPS = Math.min(abs, 20), step = Math.ceil(abs / STEPS), ms = 1000 / STEPS;
+      let cur = abs;
+      const decId = setInterval(() => {
+        cur = Math.max(0, cur - step);
+        setDisplayCoins(totalCoins < 0 ? -cur : cur);
+        if (cur <= 0) clearInterval(decId);
+      }, ms);
+
       setTimeout(() => setProfileUpdated(true), 1400);
     }, 300);
     return () => clearTimeout(t);
@@ -366,6 +387,16 @@ const CrosswordFinishedOverlay = ({
     if (!xpDone || totalXP <= 0) return;
     const t = setTimeout(() => {
       spawnFly('xp', xpPillRef, xpTargetRef, Math.min(totalXP, 9));
+      
+      // Giảm dần displayXP về 0
+      const STEPS = Math.min(totalXP, 20), step = Math.ceil(totalXP / STEPS), ms = 1000 / STEPS;
+      let cur = totalXP;
+      const decId = setInterval(() => {
+        cur = Math.max(0, cur - step);
+        setDisplayXP(cur);
+        if (cur <= 0) clearInterval(decId);
+      }, ms);
+
       setTimeout(() => setProfileUpdated(true), 1400);
     }, 300);
     return () => clearTimeout(t);
@@ -395,9 +426,17 @@ const CrosswordFinishedOverlay = ({
       {/* Backdrop */}
       <div style={{ position:'fixed', inset:0, zIndex:9998, background:'rgba(0,0,0,0.65)', backdropFilter:'blur(4px)' }} />
 
-      {/* Profile pill — top */}
+      {/* Profile pill — top or top-right based on orientation */}
       <motion.div initial={{ y:-50, opacity:0 }} animate={{ y:0, opacity:1 }} transition={{ delay:0.3, type:'spring', stiffness:260, damping:26 }}
-        style={{ position:'fixed', top:10, left:0, right:0, display:'flex', justifyContent:'center', zIndex:10001, pointerEvents:'none' }}>
+        style={{ 
+          position:'fixed', 
+          top: 10, 
+          left: isLandscape ? 'auto' : 0, 
+          right: isLandscape ? 16 : 0, 
+          display:'flex', 
+          justifyContent: isLandscape ? 'flex-end' : 'center', 
+          zIndex:10001, pointerEvents:'none' 
+        }}>
         <div style={{
           background:'linear-gradient(135deg,#3f1c00 0%,#78350f 55%,#3f1c00 100%)',
           border:'3px solid #fbbf24', boxShadow:'0 4px 0 #1c0a00, 0 6px 20px rgba(120,53,15,0.6)',
@@ -408,7 +447,10 @@ const CrosswordFinishedOverlay = ({
           <div style={{ display:'flex', alignItems:'center', gap:8, position:'relative', zIndex:10 }}>
             <div style={{ width:28, height:28, borderRadius:'50%', background:'linear-gradient(135deg,#fef3c7,#fbbf24)', border:'2px solid #fef08a', boxShadow:'0 2px 0 #1c0a00', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, color:'#92400e', fontSize:12, overflow: 'hidden' }}>
               {avatarUrl ? (
-                <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <>
+                  <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
+                  <span style={{ display: 'none', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>{nickname?.[0]?.toUpperCase() || '?'}</span>
+                </>
               ) : (
                 nickname?.[0]?.toUpperCase() || '?'
               )}
@@ -451,7 +493,7 @@ const CrosswordFinishedOverlay = ({
       {/* Centering wrapper */}
       <div style={{ position:'fixed', top:'50%', left:'50%', transform:'translate(-50%,-50%)', zIndex:9999, width:'min(520px, calc(100vw - 20px))', maxHeight:'calc(100dvh - 20px)', display:'flex', flexDirection:'column', alignItems:'center', overflow:'visible' }}>
         <motion.div initial={{ scale:0.85, opacity:0 }} animate={{ scale:1, opacity:1 }} transition={{ type:'spring', stiffness:220, damping:22 }}
-          style={{ display:'flex', flexDirection:'column', alignItems:'center', width:'100%' }}>
+          style={{ display:'flex', flexDirection:'column', alignItems:'center', minHeight: 0, maxHeight: '100%', width:'100%' }}>
 
           {/* Trophy banner */}
           <motion.img src={resultBanner} alt="Result"
@@ -461,10 +503,10 @@ const CrosswordFinishedOverlay = ({
           />
 
           {/* Blue card */}
-          <div style={{ background:'#3b82f6', border:'4px solid #1e3a8a', boxShadow:'0 8px 0 rgba(30,58,138,1)', borderRadius:24, width:'100%', flex:'0 0 auto', minHeight:'min(360px,calc(100dvh - 180px))', maxHeight:'calc(100dvh - 20px - clamp(52px,9vw,96px))', display:'flex', flexDirection:'column', overflow:'hidden' }}>
-            <div className="overflow-y-auto scrollbar-hide flex-1 flex flex-col items-center" style={{ padding:'clamp(48px,8vw,76px) 16px 16px' }}>
+          <div style={{ background:'#3b82f6', border:'4px solid #1e3a8a', boxShadow:'0 8px 0 rgba(30,58,138,1)', borderRadius:24, width:'100%', flex:'0 0 auto', minHeight:'200px', maxHeight:'calc(100dvh - 20px - clamp(40px,9vw,80px))', display:'flex', flexDirection:'column', overflow:'hidden' }}>
+            <div className="overflow-y-auto scrollbar-hide flex-1 flex flex-col items-center" style={{ padding:'clamp(32px,6vw,60px) 16px 16px' }}>
 
-              <h2 className="text-xl sm:text-2xl font-black mb-3 tracking-widest text-center text-yellow-300 uppercase"
+              <h2 className="text-xl sm:text-2xl font-black mb-3 tracking-widest text-center text-yellow-300 uppercase shrink-0"
                 style={{ textShadow:'0 4px 0 #78350f,1px 0 0 #78350f,-1px 0 0 #78350f' }}>
                 {titleText}
               </h2>
@@ -775,17 +817,20 @@ const CrosswordGame = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomId, isP2PMode]);
 
-  // ── Tên người chơi: luôn đọc từ Firebase roomData (single source of truth) ──
-  // Cả 2 client đọc cùng 1 nguồn → tên luôn nhất quán giữa 2 màn hình
+  // ── Tên người chơi: Đọc từ Firebase roomData (thay thế cho profile nếu có) ──
+  // Nếu đối thủ thoát (và bị xoá khỏi roomData), dùng fallback từ profile
   const hostUid  = roomData?.hostUid;
   const guestUid = roomData?.guestUid;
-  const p2pHostName  = roomData?.players?.[hostUid]?.nickname  || myProfile?.nickname  || 'Host';
-  const p2pGuestName = roomData?.players?.[guestUid]?.nickname || opponentProfile?.nickname || 'Guest';
-  // Đặt tên cho "tôi" và "đối thủ" dựa theo role
-  const myFBName  = myRole === 'host' ? p2pHostName  : p2pGuestName;
-  const oppFBName = myRole === 'host' ? p2pGuestName : p2pHostName;
-  const hostAvatarUrl  = roomData?.players?.[hostUid]?.avatarUrl  || null;
-  const guestAvatarUrl = roomData?.players?.[guestUid]?.avatarUrl || null;
+  
+  const myFBName  = roomData?.players?.[myUid]?.nickname || myProfile?.nickname || 'Bạn';
+  const oppFBName = roomData?.players?.[opponentUid]?.nickname || opponentProfile?.nickname || 'Đối thủ';
+  const myAvatarFbUrl = roomData?.players?.[myUid]?.avatarUrl || myProfile?.avatarUrl || null;
+  const oppAvatarFbUrl = roomData?.players?.[opponentUid]?.avatarUrl || opponentProfile?.avatarUrl || null;
+  
+  const p2pHostName  = myRole === 'host' ? myFBName : oppFBName;
+  const p2pGuestName = myRole === 'guest' ? myFBName : oppFBName;
+  const hostAvatarUrl  = myRole === 'host' ? myAvatarFbUrl : oppAvatarFbUrl;
+  const guestAvatarUrl = myRole === 'guest' ? myAvatarFbUrl : oppAvatarFbUrl;
 
   // Puzzle — solo: theo thứ tự; P2P: từ roomData.puzzleId (set bởi host trước khi game start)
   const [puzzle, setPuzzle] = useState(() => {
@@ -827,6 +872,7 @@ const CrosswordGame = ({
   const [rematchIncoming, setRematchIncoming] = useState(null);  // { fromName, puzzleId }
   const [rematchStatus, setRematchStatus]     = useState(null);  // 'waiting'|'declined'
   const [rematchHandled, setRematchHandled]   = useState(false); // tránh xử lý 2 lần
+  const [opponentForfeitReason, setOpponentForfeitReason] = useState(null); // 'disconnect' | 'forfeit'
 
   // Bet animation state (matchSetup)
   const [betAnimDone, setBetAnimDone] = useState(false);   // cho phép countdown chạy sau anim
@@ -845,7 +891,7 @@ const CrosswordGame = ({
   const [earnedCoins, setEarnedCoins] = useState(null);
 
   // Timer
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
+  const [timeLeft, setTimeLeft] = useState(480); // 8 minutes
   const timerRef = useRef(null);
   const endTimeRef = useRef(null);
 
@@ -1377,8 +1423,8 @@ const CrosswordGame = ({
   }, [solvedWords.size, totalWords, gameState]);
 
   /* ── Finish game ── */
-  const finishGame = useCallback(() => {
-    console.log(`[CW] finishGame() called. finishCalledRef=${finishCalledRef.current} solvedWords.size=${solvedWords.size} totalWords=${totalWords} gameState=${gameState}`);
+  const finishGame = useCallback((forcedForfeitWinData = null) => {
+    console.log(`[CW] finishGame() called. finishCalledRef=${finishCalledRef.current} solvedWords.size=${solvedWords.size} totalWords=${totalWords} gameState=${gameState} forcedForfeit=${!!forcedForfeitWinData}`);
     // Guard: chỉ chạy 1 lần, tránh double-call từ timer + auto-finish
     if (finishCalledRef.current) {
       console.log('[CW] finishGame() blocked by guard!');
@@ -1408,8 +1454,13 @@ const CrosswordGame = ({
       const rewardCoins = wordCoins + perfectBonus;
 
       setEarnedXP({ wordsXP, completionXP, noHintXP, speedXP, total: totalXP, revealedWordCount: revealedWordIds.size });
-      // hints already deducted live — show gross reward earned
-      setEarnedCoins({ wordCoins, completionCoins, perfectBonus, total: rewardCoins });
+      
+      // Điểm mấu chốt: nếu P2P mà người chơi khác rời mạng/bỏ cuộc -> nhận trọn vẹn giải thưởng pot
+      if (forcedForfeitWinData) {
+        setEarnedCoins({ wordCoins: 0, completionCoins: 0, perfectBonus: 0, total: pot });
+      } else {
+        setEarnedCoins({ wordCoins, completionCoins, perfectBonus, total: rewardCoins });
+      }
 
       if (isSolo) {
         addXP(totalXP);
@@ -1434,16 +1485,18 @@ const CrosswordGame = ({
   // Keep finishGameRef always pointing to the latest finishGame
   finishGameRef.current = finishGame;
 
-  /* ── P2P: distribute pot khi game kết thúc bình thường ── */
+  /* ── P2P: distribute pot khi game kết thúc ── */
   useEffect(() => {
     if (!isP2PMode || gameState !== 'finished') return;
     const myWordsCount  = solvedWords.size;
     const oppWordsCount = opponentProgress?.completedItems?.length || 0;
-    const isDraw = myWordsCount === oppWordsCount;
-    const iWon  = myWordsCount > oppWordsCount;
+    
+    // Nếu có opponentForfeitReason, chắc chắn mình thắng
+    const iWon  = opponentForfeitReason ? true : myWordsCount > oppWordsCount;
+    const isDraw = opponentForfeitReason ? false : myWordsCount === oppWordsCount;
 
-    // Record P2P result
-    addGameResult(isDraw ? 'loss' : iWon ? 'win' : 'loss');
+    // Record P2P result (Thắng, hoặc Thua nếu draw trong P2P)
+    addGameResult(iWon ? 'win' : 'loss');
 
     if (pot <= 0) { clearPendingRefund(); return; } // không có wager
 
@@ -1461,7 +1514,7 @@ const CrosswordGame = ({
     }
     clearPendingRefund();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameState]);
+  }, [gameState, opponentForfeitReason]);
 
 
   /* ── Start game ── */
@@ -1621,6 +1674,7 @@ const CrosswordGame = ({
     if (!isP2PMode || !roomData) return;
     if (gameState !== 'playing' && gameState !== 'matchSetup') return;
     const f = roomData.forfeit;
+    if (f) console.log('[CROSSWORD] Thông tin kết nối đối thủ:', f);
     if (f && f.uid !== myUid) {
       clearInterval(timerRef.current);
       setForfeitWin({ name: f.nickname || 'Đối thủ', coinReward: pot });
@@ -1824,15 +1878,15 @@ const CrosswordGame = ({
     const _isP2P = isP2PMode;
     const myWordsCount = solvedWords.size;
     const oppWordsCount = opponentProgress?.completedItems?.length || 0;
-    const isWinner = _isP2P ? myWordsCount > oppWordsCount : false;
-    const isDraw = _isP2P ? myWordsCount === oppWordsCount : false;
+    const isWinner = _isP2P ? (opponentForfeitReason ? true : myWordsCount > oppWordsCount) : false;
+    const isDraw = _isP2P ? (opponentForfeitReason ? false : myWordsCount === oppWordsCount) : false;
     const isPerfect = solvedWords.size === totalWords;
     const myPercentF = totalWords > 0 ? Math.round((myWordsCount / totalWords) * 100) : 0;
     const opponentPercentF = totalWords > 0 ? Math.round((oppWordsCount / totalWords) * 100) : 0;
     const REMATCH_MIN_COINS = 20;
     const canAffordRematch = userCoins >= REMATCH_MIN_COINS;
     const _opponentUid = Object.keys(roomData?.players ?? {}).find(k => k !== myUid);
-    const opponentStillOnline = roomData?.players?.[_opponentUid]?.isOnline !== false;
+    const opponentStillOnline = (roomData?.players?.[_opponentUid]?.isOnline !== false) && !opponentForfeitReason;
     const handleRequestRematch = async () => {
       if (!canAffordRematch || !roomId || !_opponentUid) return;
       const nextPuzzle = pickNextPuzzle(PUZZLES, playedCrosswordIds);
@@ -2044,9 +2098,9 @@ const CrosswordGame = ({
     const leftAvatarUrl  = hostAvatarUrl;   // host = trái
     const rightAvatarUrl = guestAvatarUrl;  // guest = phải
 
-    // Lấy số coin hiện tại của cả 2 từ Firebase để tránh sai lệch hiển thị
-    const hostCoins  = amHost ? userCoins : (roomData?.players?.[hostUid]?.coins ?? 0);
-    const guestCoins = !amHost ? userCoins : (roomData?.players?.[guestUid]?.coins ?? 0);
+    // Lấy số coin hiện tại của cả 2. Đối với remote player, giả lập trừ dần theo tiến độ gom pot (displayPot/2)
+    const hostCoins  = amHost ? userCoins : Math.max(0, (roomData?.players?.[hostUid]?.coins ?? 0) - Math.floor(displayPot / 2));
+    const guestCoins = !amHost ? userCoins : Math.max(0, (roomData?.players?.[guestUid]?.coins ?? 0) - Math.floor(displayPot / 2));
     const leftCoins  = hostCoins;
     const rightCoins = guestCoins;
 
@@ -2371,7 +2425,7 @@ const CrosswordGame = ({
         {/* Title + Topic */}
         <div className="flex-1 min-w-0 flex flex-col justify-center">
           <span className="font-black text-slate-800 text-sm leading-tight truncate">Giải Ô Chữ</span>
-          <span className="font-bold text-blue-600 text-xs leading-tight truncate" style={{ maxWidth: '100%' }}>📚 {puzzle.theme}</span>
+          {isLandscape && <span className="font-bold text-blue-600 text-xs leading-tight truncate" style={{ maxWidth: '100%' }}>📚 {puzzle.theme}</span>}
         </div>
 
         {/* Timer */}
@@ -2749,6 +2803,14 @@ const CrosswordGame = ({
                   />
                 )}
               </div>
+
+            {/* Theme Display (Portrait only) - right above clues */}
+            <div className="flex-shrink-0 text-center -mb-1 z-10">
+              <span className="font-black text-[11px] text-blue-900 bg-white/80 backdrop-blur-md px-3 py-0.5 rounded-full shadow-sm display-inline-block">
+                📚 Chủ đề: {puzzle.theme}
+              </span>
+            </div>
+
             {/* Clues panel — short, 2-column sorted by number */}
             {(() => {
               const allClues = [...puzzle.words].sort((a, b) => a.num - b.num);
@@ -2882,14 +2944,17 @@ const CrosswordGame = ({
               </div>
               <motion.button whileTap={{ scale: 0.97, y: 2 }}
                 onClick={async () => {
-                  addCoins(forfeitWin.coinReward);
-                  clearPendingRefund(); // nhận thưởng xong, clear pending
+                  const reason = forfeitWin.reason === 'disconnect' ? 'disconnect' : 'forfeit';
+                  setOpponentForfeitReason(reason);
                   setForfeitWin(null);
-                  // Winner cleanup room (người thoát không xóa room để winner nhận được signal)
+                  
+                  // Thay vì quay về Main Menu, ta chuyển cảnh sang Màn hình kết quả (Finish)
+                  if (finishGameRef.current) finishGameRef.current({ isForfeit: reason });
+
+                  // Winner cleanup room 
                   if (roomId && myRole) {
                     await leaveRoom(roomId, myRole, false);
                   }
-                  onLeaveGame?.();
                 }}
                 className="w-full py-3.5 rounded-2xl font-black text-[#1e3a8a] text-lg uppercase"
                 style={{ background: 'linear-gradient(180deg, #fbbf24, #f59e0b)', border: '4px solid #b45309', boxShadow: '0 5px 0 #b45309' }}>

@@ -300,6 +300,7 @@ const EmojiReactionPanel = ({ roomId, myUid, opponentUid, opponentName = 'Đối
   const [incomingReactions, setIncomingReactions] = useState([]);
   const lastSentRef = useRef(0);
   const cooldownIntervalRef = useRef(null);
+  const seenReactionsRef = useRef(new Set()); // Khắc phục bubble spam: lưu lại các ID đã hiển thị
   const { sendReaction } = useRoom();
 
   // Fallback: tự tìm DOM node nếu prop chưa được cấp
@@ -329,15 +330,13 @@ const EmojiReactionPanel = ({ roomId, myUid, opponentUid, opponentName = 'Đối
         .filter(([, v]) => v.fromUid && v.fromUid !== myUid)
         .map(([id, v]) => ({ id, ...v, fromName: opponentName, fromSide: 'right' }));
       if (incoming.length === 0) return;
-      setIncomingReactions(prev => {
-        const existingIds = new Set(prev.map(r => r.id));
-        const fresh = incoming.filter(r => !existingIds.has(r.id));
-        if (fresh.length > 0) {
-          // Bất cứ khi nào có tin nhắn mới, chỉ lấy tin mới nhất để thay thế ngay lập tức
-          return [fresh[fresh.length - 1]];
-        }
-        return prev;
-      });
+      
+      const fresh = incoming.filter(r => !seenReactionsRef.current.has(r.id));
+      if (fresh.length > 0) {
+        fresh.forEach(r => seenReactionsRef.current.add(r.id));
+        // Khi nhận mới, chỉ lấy tin mới nhất để hiện, loại bỏ tin trước đó
+        setIncomingReactions([fresh[fresh.length - 1]]);
+      }
     });
     return () => unsub();
   }, [roomId, myUid, opponentName]);
