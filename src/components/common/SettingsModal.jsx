@@ -231,77 +231,7 @@ const SettingsModal = ({ onClose }) => {
                     />
                 </div>
 
-                {/* ── Contact Developer ── */}
-                <div className="px-5 pt-1 pb-3">
-                    <div className="text-center mb-3">
-                        <p className="text-[10px] font-black tracking-widest uppercase"
-                            style={{ color: 'rgba(100,200,255,0.4)', letterSpacing: '0.25em' }}>
-                            Liên Hệ Nhà Phát Triển
-                        </p>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        {/* Email */}
-                        <motion.a
-                            href="mailto:hapagonmolie@gmail.com"
-                            whileTap={{ scale: 0.97, y: 2 }}
-                            className="flex items-center gap-3 px-4 py-3 rounded-2xl w-full"
-                            style={{
-                                background: 'linear-gradient(135deg, rgba(234,88,12,0.18), rgba(234,88,12,0.08))',
-                                border: '2px solid rgba(234,88,12,0.35)',
-                                boxShadow: '0 3px 0 rgba(154,52,18,0.4)',
-                                color: '#fed7aa',
-                                textDecoration: 'none',
-                                cursor: 'pointer',
-                            }}
-                        >
-                            <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 relative overflow-hidden"
-                                style={{
-                                    background: 'linear-gradient(145deg, #ea580c, #c2410c)',
-                                    border: '2px solid #9a3412',
-                                    boxShadow: '0 3px 0 #7c2d12',
-                                }}>
-                                <div className="absolute inset-0 h-1/2 bg-white/20 pointer-events-none" />
-                                <Mail size={16} color="#fff" strokeWidth={2.5} className="relative z-10" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <p className="font-black text-sm text-white" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>Email</p>
-                                <p className="text-[11px] font-bold truncate" style={{ color: '#fed7aa' }}>hapagonmolie@gmail.com</p>
-                            </div>
-                        </motion.a>
 
-                        {/* Facebook */}
-                        <motion.a
-                            href="https://www.facebook.com/profile.php?id=61584274960298"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            whileTap={{ scale: 0.97, y: 2 }}
-                            className="flex items-center gap-3 px-4 py-3 rounded-2xl w-full"
-                            style={{
-                                background: 'linear-gradient(135deg, rgba(37,99,235,0.22), rgba(37,99,235,0.10))',
-                                border: '2px solid rgba(37,99,235,0.40)',
-                                boxShadow: '0 3px 0 rgba(30,58,138,0.5)',
-                                color: '#bfdbfe',
-                                textDecoration: 'none',
-                                cursor: 'pointer',
-                            }}
-                        >
-                            <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 relative overflow-hidden"
-                                style={{
-                                    background: 'linear-gradient(145deg, #2563eb, #1d4ed8)',
-                                    border: '2px solid #1e3a8a',
-                                    boxShadow: '0 3px 0 #1e3a8a',
-                                }}>
-                                <div className="absolute inset-0 h-1/2 bg-white/20 pointer-events-none" />
-                                <span className="relative z-10 font-black text-white text-sm" style={{ fontFamily: 'serif' }}>f</span>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <p className="font-black text-sm text-white" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>Facebook Page</p>
-                                <p className="text-[11px] font-bold" style={{ color: '#bfdbfe' }}>Catholic Quiz Vietnam</p>
-                            </div>
-                            <span className="text-[10px] font-bold py-0.5 px-2 rounded-full" style={{ background: 'rgba(37,99,235,0.25)', color: '#93c5fd', border: '1px solid rgba(37,99,235,0.3)' }}>↗</span>
-                        </motion.a>
-                    </div>
-                </div>
 
                 {/* ── Footer ── */}
                 <div className="px-5 pb-5 pt-1">

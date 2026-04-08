@@ -141,10 +141,15 @@ export const usePlayFabStore = create((set, get) => ({
       const hat = userData?.Hat?.Value || null;
       const giaophan = userData?.GiaoPhan?.Value || null;
       const tinhthanh = userData?.TinhThanh?.Value || null;
-      const globalScore = parseInt(userData?.GlobalScore?.Value) || 0;
-      const coins = parseInt(userData?.Coins?.Value) || 0;
+      let globalScore = parseInt(userData?.GlobalScore?.Value) || 0;
+      let coins = parseInt(userData?.Coins?.Value) || 0;
       let stats = null;
       if (userData?.Stats?.Value) { try { stats = JSON.parse(userData.Stats.Value); } catch (_) {} }
+
+      if (data.NewlyCreated) {
+        coins = 500;
+        try { await updateUserData({ Coins: '500', GlobalScore: '0' }); } catch (_) {}
+      }
 
       // Rosary data
       const rosaryTotal = parseInt(userData?.RosaryTotal?.Value) || 0;
@@ -425,10 +430,16 @@ export const usePlayFabStore = create((set, get) => ({
       const hat = userData?.Hat?.Value || null;
       const giaophan = userData?.GiaoPhan?.Value || null;
       const tinhthanh = userData?.TinhThanh?.Value || null;
-      const globalScore = parseInt(userData?.GlobalScore?.Value) || 0;
-      const coins = parseInt(userData?.Coins?.Value) || 0;
+      let globalScore = parseInt(userData?.GlobalScore?.Value) || 0;
+      let coins = parseInt(userData?.Coins?.Value) || 0;
       let stats = null;
       if (userData?.Stats?.Value) { try { stats = JSON.parse(userData.Stats.Value); } catch (_) {} }
+
+      // If new account, give 500 free coins default
+      if (data.NewlyCreated) {
+        coins = 500;
+        try { await updateUserData({ Coins: '500', GlobalScore: '0' }); } catch (_) {}
+      }
 
       const pinnacleMyVote = userData?.PinnacleMyVote?.Value || null;
       const crosswordMyVote = userData?.CrosswordMyVote?.Value || null;

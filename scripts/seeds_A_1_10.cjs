@@ -213,7 +213,7 @@ module.exports = [
       {
         "answer": "VUONNHO",
         "clue": "Ông chủ xót thương chi trả một đồng bạc như nhau cho cả người làm lụng từ tinh mơ đến người làm vỏn vẹn một giờ chót.",
-        "explanation": "Lòng quảng đại của Thiên Chúa đôi khi làm con người phán xét \"thiếu công bằng\". Ngài ban ơn cứu độ không dựa vào lương tháng của nỗ lực tính toán."
+        "explanation": "Lòng quảng đại của Thiên Chúa đôi khi làm con người phán xét là \"thiếu công bằng\". Nhưng Ngài ban ơn cứu độ dựa vào tình yêu vô biên tha thứ chứ không phải nhờ công trạng đổi chác tính toán."
       }
     ]
   },
@@ -223,33 +223,33 @@ module.exports = [
     "words": [
       {
         "answer": "GIETSIMANI",
-        "clue": "Khu vườn trồng cây ô liu hoang vắng trong đêm, nơi Chúa Giêsu trĩu nặng buồn tủi đến túa cả mồ hôi máu.",
-        "explanation": "Nơi đây diễn ra một trận chiến thiêng liêng khủng khiếp: vượt thắng ý riêng tự nhiên để phó thác hoàn toàn vào Thánh Ý quyền năng của Chúa Cha."
+        "clue": "Khu vườn hoang vắng trong đêm, nơi Chúa Giêsu cầu nguyện trĩu nặng buồn tủi đến túa cả mồ hôi máu.",
+        "explanation": "Nơi đây diễn ra một trận chiến nội tâm khủng khiếp: vượt qua ý riêng tự nhiên để phó thác hoàn toàn vào Thánh Ý quyền năng của Chúa Cha."
       },
       {
         "answer": "PHILATO",
-        "clue": "Vị quan Tổng trấn La Mã nhu nhược trước sức ép đám đông, đã múc nước rửa tay để từ chối trách nhiệm can dự vào án tử.",
-        "explanation": "Philatô biết Chúa Giêsu vô tội nhưng lo ngại ghế quyền nên để Chúa bị người ta lôi đi. Thái độ hèn nhát đó tiếp tay cho một bản án tàn bạo."
+        "clue": "Vị quan Tổng trấn La Mã nhu nhược trước sức ép đám đông, đã múc nước rửa tay để chối bỏ trách nhiệm can dự vào án tử.",
+        "explanation": "Philatô biết rõ Chúa Giêsu vô tội nhưng lại lo ngại mất đi quyền lực nên đã để mặc Chúa bị người ta lôi đi."
       },
       {
         "answer": "GOLGOTHA",
-        "clue": "Nơi gọi là \"Đồi Sọ\" nằm bên ngoài tường thành Giêrusalem, điểm đến cuối cùng của hành trình kiệt sức vác thập giá.",
-        "explanation": "Gôlgôtha là đại tang của nhân loại, nơi mà cái ác bị đảo ngược: nhờ cái chết xé nát bức màn Đền Thờ, con người mới được hiệp thông cùng Thiên Chúa."
+        "clue": "Ngọn đồi mang tên \"Đồi Sọ\" nằm bên ngoài tường thành Giêrusalem, điểm đến cuối cùng của hành trình kiệt sức vác thập giá.",
+        "explanation": "Gôlgôtha là nơi tội lỗi của nhân loại được gột rửa. Chính từ cái chết trên thập giá, con người mới được hiệp thông trọn vẹn cùng Thiên Chúa."
       },
       {
         "answer": "SIMON",
-        "clue": "Ông lão chân quê dòng dõi Kyrênê vừa đi vác từ đồng về thì bị lính chận ép phải ghé vai vác đỡ Thập Giá cho Chúa.",
-        "explanation": "Dù ban đầu bất đắc dĩ, Simon tượng trưng cho vô vàn Kitô hữu dọc lịch sử đã đỡ lấy thập giá tha nhân và khám phá bình an ẩn giấu."
+        "clue": "Người đàn ông từ Kyrênê đang đi làm đồng về thì bị lính chận ép phải ghé vai vác đỡ Thập Giá cho Chúa.",
+        "explanation": "Dù ban đầu là bất đắc dĩ, nhưng hành động của Simon tượng trưng cho ơn gọi vác thánh giá theo chân Chúa của mỗi Kitô hữu dọc dài lịch sử."
       },
       {
         "answer": "VERONICA",
-        "clue": "Người phụ nữ mang lòng dũng cảm can trường chen lấn qua đám lính để dùng chiếc khăn thấm lau dòng máu trên khuôn mặt Thầy.",
-        "explanation": "Truyền thuyết đạo đức kể lại rằng, khuôn mặt của Chúa Giêsu, hằn những giọt mồ hôi chịu đựng, đã được in sắc nét trọn vẹn vào lại chiếc khăn lụa thánh."
+        "clue": "Người phụ nữ can đảm vượt qua vòng vây đám lính để dùng chiếc khăn thấm lau những giọt mồ hôi đẫm máu trên khuôn mặt Thầy.",
+        "explanation": "Truyền thuyết đạo đức kể lại rằng, khuôn mặt của Chúa Giêsu hằn lên sự chịu đựng tột cùng đã được in rõ nét ngay trên chiếc khăn lụa mà bà trao tặng."
       },
       {
         "answer": "THANHGIA",
-        "clue": "Cây gỗ gồ ghề thấm đẫm mồ hôi máu, từng là biểu tượng sỉ nhục lại trở thành Ánh Sáng vinh hiển cứu rỗi.",
-        "explanation": "Thập Tự giá tự thân không có nghĩa tự hào, nhưng qua tình yêu tử đạo cực bực của Chúa, nó khai trương con đường trở về địa đàng."
+        "clue": "Cây gỗ nhuốm máu từng là hình phạt sỉ nhục, nhưng nhờ Đức Kitô đã trở thành biểu tượng của Ơn Cứu Độ vinh hiển.",
+        "explanation": "Thập tự giá tự thân là công cụ tử hình, nhưng qua tình yêu hiến tế tột cùng của Chúa Giêsu, nó trở thành chìa khóa mở ra con đường trở về thiên đàng."
       }
     ]
   },
@@ -259,33 +259,33 @@ module.exports = [
     "words": [
       {
         "answer": "PHUCSINH",
-        "clue": "Mầu nhiệm nền tảng và vĩ đại nhất của đức tin Kitô giáo: Ngôi Hai sống lại rạng rỡ vào ngày thứ ba bẻ gãy gông cùm sự chết.",
-        "explanation": "\"Nếu Chúa Kitô đã không trỗi dậy, đức tin chúng ta thật là điều viển vông\". Chúa bừng sáng chiến thắng tử thần bằng sự phục sinh bất diệt bảo chứng ngàn đời."
+        "clue": "Mầu nhiệm nền tảng và vĩ đại nhất của đức tin Kitô giáo: Ngôi Hai sống lại rạng rỡ vào ngày thứ ba, chiến thắng khải hoàn sự chết.",
+        "explanation": "\"Nếu Chúa Kitô đã không trỗi dậy, đức tin chúng ta thật là điều viển vông\". Chúa bừng sáng chiến thắng tử thần làm bảo chứng cho niềm hy vọng cứu rỗi ngàn đời."
       },
       {
         "answer": "MOTRONG",
-        "clue": "Tình trạng hiện trường kinh ngạc mà bà Mácđala cùng các Tông Đồ chạy tới thấy vào mờ sáng ngày thứ nhất trong tuần.",
-        "explanation": "Ngôi mộ trống không là câu chuyện thêu dệt, mà là chứng từ hữu hình rõ rệt nhất. Những tấm khăn phủ lại và tảng đá cực lớn bị thiên thần vần qua."
+        "clue": "Tình trạng ngôi mộ mà bà Mácđala cùng các Tông Đồ chạy tới tận mắt chứng kiến vào mờ sáng ngày thứ nhất trong tuần.",
+        "explanation": "Ngôi mộ trống không phải là một câu chuyện hoang đường thêu dệt, mà là bằng chứng hữu hình rõ rệt nhất về sự chỗi dậy hiển vinh của Ngài."
       },
       {
         "answer": "EMMAU",
-        "clue": "Hai môn đệ buồn nản bỏ Giêrusalem đi về ngôi làng này, chỉ chợt bừng tỉnh nhận ra Thầy qua cử chỉ \"Bẻ Bánh\" quen thuộc.",
-        "explanation": "Trái tim rạo rực trên đường Emmau chính là khuôn mẫu hoàn hảo của Thánh Lễ: Lắng nghe tâm sự xé lòng từ Kinh Thánh và đón cõi hằng sống."
+        "clue": "Hai môn đệ buồn bã rời Giêrusalem đi về ngôi làng này, rồi chợt bừng tỉnh nhận ra Thầy qua cử chỉ \"Bẻ Bánh\" quen thuộc.",
+        "explanation": "Trái tim rạo rực trên đường Emmau chính là khuôn mẫu hoàn hảo của Thánh Lễ: Lắng nghe lời giải đáp từ Kinh Thánh và đón cõi hằng sống từ đôi tay bẻ bánh."
       },
       {
         "answer": "MACDALA",
-        "clue": "Người phụ nữ từng được Chúa Giêsu đuổi bảy quỷ dữ, đứng khóc bên mộ và là người vinh dự đầu tiên gặp được Đấng Phục Sinh.",
-        "explanation": "Tình yêu nồng nhiệt không tính toán của Maria Mácđala cho thấy bà đã \"cố chấp\" canh mồ từ khuya, qua đó đã trở thành vị tông đồ chứng nhân của các Tông đồ."
+        "clue": "Người phụ nữ từng được Chúa Giêsu trừ khỏi bảy quỷ dữ, đứng khóc bên mộ và vinh dự trở thành người đầu tiên gặp được Đấng Phục Sinh.",
+        "explanation": "Tình yêu mãnh liệt không tính toán của Maria Mácđala cho thấy bà đã một lòng kiên nhẫn canh mồ từ khuya, qua đó đã trở thành \"tông đồ của các Tông đồ\"."
       },
       {
         "answer": "LENTROI",
-        "clue": "Bốn mươi ngày sau Phục Sinh, Chúa từ giã các môn đệ bằng việc ngự lên đỉnh vinh quang trên núi Cây Dầu che khuất.",
-        "explanation": "Ngày Lên Trời khép lại sứ vụ dưới thế gian và mở tung ra giai đoạn mới để Hội Thánh làm chứng nhân khắp mặt địa cầu để loan báo Nước Trời đến nơi."
+        "clue": "Bốn mươi ngày sau Phục Sinh, Chúa từ giã các môn đệ bằng việc ngự lên đỉnh vinh quang cùng Đức Chúa Cha trên núi Cây Dầu.",
+        "explanation": "Biến cố Lên Trời khép lại sự hiện diện hữu hình của Chúa dưới thế gian và mở ra sứ mạng truyền giáo của Hội Thánh đến khắp cùng cõi bờ địa cầu."
       },
       {
         "answer": "THANHTHAN",
-        "clue": "Trong một buổi sáng Lễ Ngũ Tuần lúc đoàn môn đệ đang tụ họp, lưỡi lửa vô hình hiện ra ngự xuống xua bỏ sự nhút nhát.",
-        "explanation": "Sự can thiệp của Chúa Thánh Thần (Hiện Xuống) tháo tung cánh cửa tĩnh mịch và kích hoạt sự hiên ngang giảng dạy, chính thức khai sinh Hội Thánh truyền giáo."
+        "clue": "Trong buổi sáng Lễ Ngũ Tuần lúc các môn đệ đang tụ họp, ngọn lửa quyền năng vô hình hiện ra ngự xuống xua tan màn sợ hãi.",
+        "explanation": "Sự can thiệp của Chúa Thánh Thần (Hiện Xuống) biến đổi các tông đồ đang nhút nhát sợ hãi trở nên hiên ngang dũng cảm, chính thức khai sinh Hội Thánh truyền giáo."
       }
     ]
   },
@@ -295,33 +295,33 @@ module.exports = [
     "words": [
       {
         "answer": "RUATOI",
-        "clue": "Bí tích tẩy sạch tội tổ tông, mở ra chân trời tái sinh mới rạng rỡ, đón nhận người dự tòng bước vào vòng tay Hội Thánh.",
-        "explanation": "Nước Thanh Tẩy như đưa ta đi qua bóng đêm cõi chết để hòa mình vào cuộc đời mới trắng trong, là dấu chỉ chính thức nhận ấn tín làm con cái Thiên Chúa."
+        "clue": "Bí tích tẩy sạch tội tổ tông, mở ra chân trời sự sống mới rạng rỡ để đón nhận người dự tòng bước vào vòng tay Hội Thánh.",
+        "explanation": "Nước Thanh Tẩy như đưa ta đi qua bóng đêm cõi chết để bước vào cuộc sống mới, qua đó nhận lãnh ấn tín làm con cái Thiên Chúa muôn đời."
       },
       {
         "answer": "THANHTHE",
-        "clue": "Bí tích cao trọng nhất, trung tâm của cả đời sống Kitô, nuôi dưỡng toàn vẹn linh hồn bằng thịt và huyết mầu nhiệm của Chúa Kitô.",
-        "explanation": "Trong Tiệc Cung Thánh, dù hiện tượng là Bánh Rượu nhỏ bé, song bản thể đích thật vẫn đậm ân sủng Mình Máu cực thánh, ngự lại cùng chúng ta mọi lúc."
+        "clue": "Bí tích cao trọng nhất, là trung tâm của đời sống Kitô giáo, nuôi dưỡng linh hồn bằng Mình và Máu mầu nhiệm Chúa Kitô.",
+        "explanation": "Dưới hình bánh rượu bé nhỏ, Chúa Giêsu ẩn mình hiện diện trọn vẹn để làm của ăn thiêng liêng và ở cùng chúng ta mọi ngày cho đến tận thế."
       },
       {
         "answer": "HOAGIAI",
-        "clue": "Bí tích chữa lành vô giá tâm hồn, nơi linh mục thay mặt Chúa để bao dung xá bỏ hoàn toàn tội lỗi khi dốc lòng ăn năn.",
-        "explanation": "Bí tích này không hề là tòa án xử tội lạnh lẽo, mà chính là cuộc hội ngộ thân mật nơi người cha chữa trị lại tâm linh nhẹ nhàng ban ơn tươi mới."
+        "clue": "Bí tích chữa lành tâm hồn, nơi linh mục thay mặt Chúa tha thứ mọi tội lỗi cho những ai thật lòng ăn năn chừa cải.",
+        "explanation": "Đây không phải là tòa án xử tội lạnh lẽo, mà là cuộc hội ngộ thân mật nơi người Cha nhân từ dang tay đón người con hoang đàng trở về."
       },
       {
         "answer": "THEMSUC",
-        "clue": "Bí tích do Giám Mục hay các vị đại diện chủ trì, xức dầu thơm thiêng vào trán giúp đóng vững ấn tín kiên gan của Chúa Thánh Thần.",
-        "explanation": "Dầu Miron thiêng thánh truyền gửi sự dũng cảm trong chứng nhân ánh sáng, làm ngọn đuốc loan báo Tin Mừng luôn rạng cháy rực rỡ và bất thoái nơi tâm linh."
+        "clue": "Bí tích thường do Giám mục cử hành, xức dầu Thánh vào trán để ban phong dồi dào sức mạnh của ơn Chúa Thánh Thần.",
+        "explanation": "Dầu Thánh (Chrism) mang lại ơn sức mạnh, giúp người lãnh nhận noi gương dũng cảm làm chứng nhân cho Đức Kitô và vững vàng sống đức tin."
       },
       {
         "answer": "HONPHOI",
-        "clue": "Giao ước tự do đôi bạn dâng vâng thề nguyền trọn đời yêu thương chung thủy gắn kết sắc son tượng trưng cho tình yêu của Chúa Kitô.",
-        "explanation": "Hôn nhân thiêng thánh do chính cô dâu chú rể cử hành thực rạng ngời được Chúa đoái thương củng cố qua lời chúc chung đời trước sự hiệp dâng của Hội Thánh."
+        "clue": "Giao ước tự do giữa đôi nam nữ thề hứa yêu thương chung thủy trọn đời, tượng trưng cho tình yêu của Chúa Kitô đối với Hội Thánh.",
+        "explanation": "Bí tích do chính đôi bạn tự thề nguyền cử hành trước mặt giáo dân, được Thiên Chúa củng cố qua lời chúc phúc thiêng liêng của linh mục."
       },
       {
         "answer": "XUCDAU",
-        "clue": "Bí tích xoa dầu cầu bình an phước lành xoa dịu đau ốm, nâng đỡ thần trí khi đau nặng và trang bị tâm tính hân hoan trước Thiên Chúa.",
-        "explanation": "Bí tích Bệnh Nhân mang đến sự yên ủi đẩy lùi bóng dáng muộn phiền đau khổ thể lý; xin Chúa làm phép lành an tâm tin yêu vô điều kiện phó thác phận mình."
+        "clue": "Bí tích xức dầu thánh để cầu bình an, xoa dịu bệnh tật thể xác và nâng đỡ tinh thần cho người đang chịu đau ốm nặng.",
+        "explanation": "Bí tích mang đến sự an ủi thiêng liêng lớn lao, giúp người bệnh thêm vững tin phó thác trọn vẹn vào tình yêu và bầu trời quan phòng của Thiên Chúa."
       }
     ]
   },
@@ -331,33 +331,33 @@ module.exports = [
     "words": [
       {
         "answer": "LAVANG",
-        "clue": "Lời hứa chắc nịch của Mẹ ban ra giữa rừng thiêng: \"Ai đến cầu khẩn Mẹ tại chốn này Mẹ sẽ rải ơn toại nguyện vớt vát độ trì.\"",
-        "explanation": "Đức Bà hiện đến bồng ẵm Hài Nhi sưởi ấm che rợp an ủi bao con cái hoảng loạn, biến vũng nước mắt rừng thiêng thành Tòa Cung oai hùng."
+        "clue": "Thánh địa nơi Đức Mẹ từng hiện ra giữa rừng thiêng để hứa ban ơn ban phước cho những ai đến cầu khẩn tại chốn này.",
+        "explanation": "Đức Mẹ bồng ẵm Hài Nhi hiện đến để an ủi những giáo dân đang hoảng sợ trốn tránh sự bách hại, biến vũng nước mắt đầy vất vả thành điểm tựa bình an."
       },
       {
         "answer": "QUANGTRI",
-        "clue": "Mảnh đất miền Trung chan chát nắng rát gió sạm da, nơi được tuyển ưu họa khắc dấu ấn sừng sững Mẹ hiện ra an ủi chở che đoàn con nức nở.",
-        "explanation": "Tỉnh hạt lẫm liệt gánh vác rốn linh địa hành hương quốc gia, quy tụ hàng vạn bước chân hành hương xúm xít dạt dào ứa lệ quỳ sấp năm tháng."
+        "clue": "Mảnh đất miền Trung đầy nắng gió rát bỏng, nơi ghi dấu sự kiện kỳ diệu Đức Mẹ hiện ra để chở che và an ủi đoàn con cái.",
+        "explanation": "Nơi đây có Trung tâm Hành hương Quốc gia La Vang, quy tụ hàng vạn bước chân giáo dân từ khắp các giáo phận tuôn về hành hương dâng Mẹ mỗi năm."
       },
       {
         "answer": "HAILANG",
-        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: HAILANG",
-        "explanation": ""
+        "clue": "Tên huyện trực thuộc tỉnh Quảng Trị, nơi vùng rừng núi La Vang tọa lạc và diễn ra biến cố Mẹ hiện ra nâng đỡ giáo dân.",
+        "explanation": "Rừng La Vang xưa kia thuộc vùng rừng thiêng nước độc tại huyện Hải Lăng, là một khu vực hoang vu đầy thú dữ mà cha ông giáo dân Cổ Vưu đã trốn ẩn."
       },
       {
         "answer": "AOTRANG",
-        "clue": "Vóc dáng uy nghi kiều diễm được quấn bọc bởi tà y phục lấp lánh rạt rào mà Đức Bà bận rợp trên hai nách cành cây bàng bế con vỗ về.",
-        "explanation": "Hiện ra như phu nhân quyền quý mút mắt nhưng đầy ắp lân tuất nhân hậu, tà áo xoa xít dập tắt rét mướt đói khát lảo đảo xó xỉnh bụi rậm."
+        "clue": "Trang phục mang màu sắc tinh khôi, thân thuộc mà Đức Mẹ mặc khi hiện ra bồng ẵm Chúa Hài Đồng đứng trên cành cây bàng cổ thụ.",
+        "explanation": "Đức Mẹ hiện ra như một quý bà chốn thần tiên vô cùng nhân hậu, dùng chiếc áo choàng sáng láng để sưởi ấm những người chịu rét mướt đói khát nơi rừng sâu."
       },
       {
         "answer": "CANHTHINH",
-        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: CANHTHINH",
-        "explanation": ""
+        "clue": "Vị hoàng đế triều Tây Sơn đã ra chiếu chỉ cấm đạo khắt khe, khiến nhiều tín hữu Công giáo phải bỏ nhà chạy hoảng loạn vào rừng sâu.",
+        "explanation": "Dưới triều vua này, cuộc bách hại đạo trở nên rất tàn khốc gay gắt, nhưng từ chính sự đau thương đẫm máu ấy, ơn che chở của Đức Mẹ lại được biểu lộ rõ nét."
       },
       {
         "answer": "CHUALANH",
-        "clue": "Đặc ân phước lộc Mẹ nhỏ giọt rưới tuôn xuống những bệnh tật rên xiết móp méo, ban phương thuốc hái lá quanh vùng nấu nước xoa dịu đớn đau.",
-        "explanation": "Mẹ không chỉ rưới gội xoa thuốc bệnh xác vất vả, mà còn bấu chặt tóm gọn cứu trị những khốn đốn rụt rè bầm dập tinh thần thất thủ nức nẻ lút sâu."
+        "clue": "Đặc ân Mẹ ban để xoa dịu những bệnh tật lo toan nhức nhối, thông qua việc hái lá cây mọc quanh vùng đun nước làm thuốc uống.",
+        "explanation": "Mẹ không chỉ chữa trị dứt điểm những đau đớn thể xác bằng lá rừng thảo dược, mà còn tuôn tràn bình an gột rửa phần linh hồn cho những người hụt hẫng sợ hãi."
       }
     ]
   },

@@ -5,13 +5,14 @@ import {
     LogOut, Map, ChevronRight, ChevronLeft, Power,
     BookOpen, Footprints, Heart, Feather, Wine, Compass,
     HandHeart, BookMarked, Flame, Leaf, Megaphone, Crown,
-    Star, ChevronUp,
+    Star, ChevronUp, HelpCircle
 } from 'lucide-react';
 import { getRankByScore, RANK_TIERS, getNextRank, getProgressToNextRank } from '../../utils/ranks';
 import { usePlayFabStore } from '../../store/playfabStore';
 import UserAvatar from '../common/UserAvatar';
 import RankRoadmap from '../profile/RankRoadmap';
 import SettingsModal from '../common/SettingsModal';
+import DeveloperContactModal from '../common/DeveloperContactModal';
 import RosaryOfferingModal from '../rosary/RosaryOfferingModal';
 import XPLeaderboardModal from './XPLeaderboardModal';
 
@@ -373,6 +374,7 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
     const [showRoadmap, setShowRoadmap] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [showHelp, setShowHelp] = useState(false);
     const [showRosary, setShowRosary] = useState(false);
     const [showLeaderboard, setShowLeaderboard] = useState(false);
     const [ready, setReady] = useState(false);
@@ -664,8 +666,16 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
                                                 className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-sky-50 transition-colors text-left"
                                                 style={{ color: '#1e3a5f' }}
                                             >
-                                                <span className="text-base">⚙️</span>
+                                                <span className="text-base text-gray-500 shrink-0 flex justify-center w-4 text-center items-center">⚙️</span>
                                                 <span className="font-bold text-sm">Cài đặt</span>
+                                            </button>
+                                            <button
+                                                onClick={() => { setShowProfileMenu(false); setShowHelp(true); }}
+                                                className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-sky-50 transition-colors text-left"
+                                                style={{ color: '#1e3a5f' }}
+                                            >
+                                                <HelpCircle size={16} className="text-purple-500 shrink-0" />
+                                                <span className="font-bold text-sm">Trợ giúp</span>
                                             </button>
                                             <div className="my-1" style={{ height: 1.5, background: 'rgba(0,180,216,0.15)' }} />
                                             <button
@@ -687,6 +697,11 @@ const MainMenu = ({ user, returnToGame, returnToMode, onClearReturn, onJoinRoom,
             {/* Settings Modal */}
             <AnimatePresence>
                 {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
+            </AnimatePresence>
+
+            {/* Help Modal */}
+            <AnimatePresence>
+                {showHelp && <DeveloperContactModal onClose={() => setShowHelp(false)} />}
             </AnimatePresence>
 
             {/* XP Leaderboard Modal */}
