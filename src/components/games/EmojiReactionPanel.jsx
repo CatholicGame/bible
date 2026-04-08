@@ -291,7 +291,7 @@ const ReactionBubble = ({ reaction, isLandscape, avatarRef, onDone }) => {
 };
 
 /* ── Main component ── */
-const EmojiReactionPanel = ({ roomId, myUid, opponentUid, opponentName = 'Đối thủ', isLandscape = false, opponentAvatarRef }) => {
+const EmojiReactionPanel = ({ roomId, myUid, opponentUid, opponentName = 'Đối thủ', isLandscape = false, opponentAvatarRef, inline = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState(0);
   const [cooldownLeft, setCooldownLeft] = useState(0);
@@ -383,9 +383,15 @@ const EmojiReactionPanel = ({ roomId, myUid, opponentUid, opponentName = 'Đối
         ))}
       </AnimatePresence>
 
-      {/* ── Floating trigger button ── */}
+      {/* ── Floating or Inline trigger button ── */}
       <div
-        style={{
+        style={inline ? {
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        } : {
           position: 'fixed',
           bottom: 16,
           left: 64, // Dịch sang phải 48px để tránh đè lên nút Fullscreen (left: 14)
@@ -414,9 +420,17 @@ const EmojiReactionPanel = ({ roomId, myUid, opponentUid, opponentName = 'Đối
                 // Portrait: giới hạn chiều cao để không che khu vực gõ/gợi ý
                 maxHeight: isLandscape ? '55vh' : '42vh',
                 overflow: 'hidden',
-                marginBottom: 4,
                 display: 'flex',
                 flexDirection: 'column',
+                ...(inline ? {
+                  position: 'absolute',
+                  bottom: '100%',
+                  right: 0,
+                  marginBottom: 8,
+                  zIndex: 100,
+                } : {
+                  marginBottom: 4,
+                })
               }}
             >
               {/* Group tabs */}

@@ -134,7 +134,7 @@ const VirtualKeyboard = ({ onKey, onBackspace, compact = false }) => (
    Bar fill từ ngoài vo hướng vào avatar ở giữa
    ══════════════════════════════════════════════════════════════ */
 
-const P2PRaceBar = ({ myLabel, myAvatarUrl, myPercent, myColor, opponentLabel, opponentAvatarUrl, opponentPercent, opponentColor, compact = false, opponentAvatarRef }) => {
+const P2PRaceBar = ({ myLabel, myAvatarUrl, myPercent, myColor, opponentLabel, opponentAvatarUrl, opponentPercent, opponentColor, compact = false, opponentAvatarRef, myAvatarRef }) => {
   const clampedMy  = Math.min(100, Math.max(0, myPercent));
   const clampedOpp = Math.min(100, Math.max(0, opponentPercent));
   // compact = landscape strip, !compact = portrait panel
@@ -207,7 +207,7 @@ const P2PRaceBar = ({ myLabel, myAvatarUrl, myPercent, myColor, opponentLabel, o
       </div>
 
       {/* ── MY AVATAR (left of center) ── */}
-      <Avatar label={myLabel} avatarUrl={myAvatarUrl} color={myColor} isLeading={isMyLeading} dataAttr="my" pct={clampedMy} />
+      <Avatar label={myLabel} avatarUrl={myAvatarUrl} color={myColor} isLeading={isMyLeading} dataAttr="my" pct={clampedMy} domRef={myAvatarRef} />
 
       {/* ── CENTER ⚔️ ── */}
       <motion.div
@@ -1615,9 +1615,9 @@ const CrosswordGame = ({
     const f = roomData.forfeit;
     if (f && f.uid !== myUid) {
       clearInterval(timerRef.current);
-      setForfeitWin({ name: f.nickname || 'Đối thủ' });
+      setForfeitWin({ name: f.nickname || 'Đối thủ', coinReward: pot });
     }
-  }, [roomData?.forfeit?.timestamp, gameState, isP2PMode, myUid]);
+  }, [roomData?.forfeit?.timestamp, gameState, isP2PMode, myUid, pot]);
 
   /* ── P2P: Check if opponent disconnects (closes tab/app) mid-game ── */
   useEffect(() => {
@@ -1630,7 +1630,7 @@ const CrosswordGame = ({
       const t = setTimeout(() => {
         if (gameState === 'playing' && !forfeitWin) {
           clearInterval(timerRef.current);
-          setForfeitWin({ name: roomData.players[_opUid].nickname || 'Đối thủ', reason: 'disconnect' });
+          setForfeitWin({ name: roomData.players[_opUid].nickname || 'Đối thủ', reason: 'disconnect', coinReward: pot });
           if (awardWinner) awardWinner(roomId, myUid, pot, false);
         }
       }, 4000);
@@ -2445,6 +2445,7 @@ const CrosswordGame = ({
             opponentAvatarUrl={guestAvatarUrl}
             opponentPercent={myRole === 'host' ? opponentPercent : myPercent}
             opponentColor="#ef4444"
+            myAvatarRef={myRole === 'guest' ? opponentAvatarRef : undefined}
             opponentAvatarRef={myRole === 'host' ? opponentAvatarRef : undefined}
             compact
           />
@@ -2562,7 +2563,7 @@ const CrosswordGame = ({
 
         {/* ── RIGHT PANE (landscape: hints + clues stacked vertically) ── */}
         {isLandscape ? (
-          <div className="flex-shrink-0 flex flex-col gap-2" style={{ width: 220 }}>
+          <div className="flex-shrink-0 flex flex-col gap-2" style={{ width: 264 }}>
            {/* Hint buttons */}
             <div className="flex flex-col gap-2">
                 <motion.button 
@@ -2670,18 +2671,19 @@ const CrosswordGame = ({
                   opponentAvatarUrl={guestAvatarUrl}
                   opponentPercent={myRole === 'host' ? opponentPercent : myPercent}
                   opponentColor="#ef4444"
+                  myAvatarRef={myRole === 'guest' ? opponentAvatarRef : undefined}
                   opponentAvatarRef={myRole === 'host' ? opponentAvatarRef : undefined}
                 />
               </div>
             )}
-            {/* Hint buttons row */}
-              <div className="flex gap-2 flex-shrink-0">
-                {/* Mở 1 chữ — portrait (solo + P2P) */}
+            {/* Hint buttons row + Chat button (P2P portrait) */}
+              <div className="flex gap-2 flex-shrink-0 items-stretch">
+                {/* Mở 1 chữ — portrait (solo + P2P) — compact icon */}
                 <motion.button
                   whileTap={(!isCellCorrect && userCoins >= 5) ? { scale: 0.93, y: 2 } : {}}
                   onClick={(!isCellCorrect && userCoins >= 5) ? handleRevealLetter : undefined}
                   disabled={isCellCorrect || userCoins < 5}
-                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden"
+                  className="flex-1 flex items-center justify-center gap-1 px-2 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden"
                   style={{
                     background: (!isCellCorrect && userCoins >= 5)
                       ? 'linear-gradient(180deg, #06b6d4, #0891b2)'
@@ -2690,22 +2692,23 @@ const CrosswordGame = ({
                     boxShadow: (!isCellCorrect && userCoins >= 5) ? '0 3px 0 #0e7490' : 'none',
                     cursor: (!isCellCorrect && userCoins >= 5) ? 'pointer' : 'not-allowed',
                     opacity: (!isCellCorrect && userCoins >= 5) ? 1 : 0.55,
+                    minWidth: 0,
                   }}>
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
-                  <Eye size={13} className="relative z-10" />
-                  <span className="relative z-10">Mở 1 chữ</span>
-                  <div className={`flex items-center gap-0.5 relative z-10 text-[10px] font-bold ml-auto ${userCoins >= 5 ? 'text-amber-300' : 'text-slate-400'}`}>
-                    5<img src={iconCoin} alt="C" className="w-3.5 h-3.5" />
+                  <Eye size={13} className="relative z-10 shrink-0" />
+                  <span className="relative z-10 whitespace-nowrap">1 chữ</span>
+                  <div className={`flex items-center gap-0.5 relative z-10 text-[10px] font-bold ml-auto shrink-0 ${userCoins >= 5 ? 'text-amber-300' : 'text-slate-400'}`}>
+                    5<img src={iconCoin} alt="C" className="w-3 h-3" />
                   </div>
                 </motion.button>
 
-                {/* Mở cả từ — portrait (solo only) */}
+                {/* Mở cả từ — portrait (solo only) — compact icon */}
                 {isSolo && (
                 <motion.button
                   whileTap={(!isCurrentWordSolved && userCoins >= 15) ? { scale: 0.93, y: 2 } : {}}
                   onClick={(!isCurrentWordSolved && userCoins >= 15) ? handleRevealWord : undefined}
                   disabled={isCurrentWordSolved || userCoins < 15}
-                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden"
+                  className="flex-1 flex items-center justify-center gap-1 px-2 py-2 rounded-xl font-black text-xs text-white relative overflow-hidden"
                   style={{
                     background: (!isCurrentWordSolved && userCoins >= 15)
                       ? 'linear-gradient(180deg, #f59e0b, #d97706)'
@@ -2714,14 +2717,28 @@ const CrosswordGame = ({
                     boxShadow: (!isCurrentWordSolved && userCoins >= 15) ? '0 3px 0 #92400e' : 'none',
                     cursor: (!isCurrentWordSolved && userCoins >= 15) ? 'pointer' : 'not-allowed',
                     opacity: (!isCurrentWordSolved && userCoins >= 15) ? 1 : 0.55,
+                    minWidth: 0,
                   }}>
                   <span className="absolute inset-0 w-full h-1/2 bg-white/15 pointer-events-none" />
-                  <Lightbulb size={13} className="relative z-10" />
-                  <span className="relative z-10">Mở cả từ</span>
-                  <div className={`flex items-center gap-0.5 relative z-10 text-[10px] font-bold ml-auto ${userCoins >= 15 ? 'text-white/80' : 'text-slate-400'}`}>
-                    15<img src={iconCoin} alt="C" className="w-3.5 h-3.5" />
+                  <Lightbulb size={13} className="relative z-10 shrink-0" />
+                  <span className="relative z-10 whitespace-nowrap">1 từ</span>
+                  <div className={`flex items-center gap-0.5 relative z-10 text-[10px] font-bold ml-auto shrink-0 ${userCoins >= 15 ? 'text-white/80' : 'text-slate-400'}`}>
+                    15<img src={iconCoin} alt="C" className="w-3 h-3" />
                   </div>
                 </motion.button>
+                )}
+
+                {/* Chat button inline — P2P only, portrait */}
+                {isP2P && gameState === 'playing' && roomId && !isLandscape && (
+                  <EmojiReactionPanel
+                    roomId={roomId}
+                    myUid={myUid}
+                    opponentUid={opponentUid}
+                    opponentName={oppFBName}
+                    isLandscape={isLandscape}
+                    opponentAvatarRef={opponentAvatarRef}
+                    inline
+                  />
                 )}
               </div>
             {/* Clues panel — short, 2-column sorted by number */}
@@ -2778,8 +2795,8 @@ const CrosswordGame = ({
         </div>
       )}
 
-      {/* ── EMOJI REACTION PANEL (P2P only, khi đang chơi) ── */}
-      {isP2P && gameState === 'playing' && roomId && (
+      {/* ── EMOJI REACTION PANEL (P2P only — landscape only, portrait is inline in hint bar) ── */}
+      {isP2P && gameState === 'playing' && roomId && isLandscape && (
         <EmojiReactionPanel
           roomId={roomId}
           myUid={myUid}
