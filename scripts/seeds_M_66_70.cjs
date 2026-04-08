@@ -5,33 +5,33 @@ module.exports = [
     "words": [
       {
         "answer": "AUGUTINO",
-        "clue": "Giáo phụ nhào nặn tư tưởng siêu phàm vùng Bắc Phi xé rào khóc lóc hoán cải muộn màng nhờ những giọt nước mắt rát mặt cầu nguyện tuôn rơi của mẹ Mo-ni-ca.",
-        "explanation": "Tác giả cuốn Tự Thuật bất hủ thốt lên câu châm ngôn rợp bóng: \"Lạy Chúa, tâm hồn con mãi băn khoăn thao thức cho đến khi được an nghỉ rũ rượi trong Chúa.\""
+        "clue": "Giáo phụ vĩ đại vùng Bắc Phi đã hoán cải thần kỳ nhờ những giọt nước mắt cầu nguyện tuôn rơi của thân mẫu là thánh Mônica.",
+        "explanation": "Tác giả cuốn Tự Thuật bất hủ đã để lại câu châm ngôn: \"Lạy Chúa, tâm hồn con băn khoăn thổn thức cho đến khi được an nghỉ trong Chúa.\""
       },
       {
         "answer": "TOMA",
-        "clue": "Tiến sĩ Thiên Thần khổng lồ kết hợp hài hòa xuất sắc triết học Hy Lạp vào cái nôi thần học Công Giáo, chắp bút quy mô bộ Tổng Luận sắc sảo.",
-        "explanation": "Thánh Tô-ma A-qui-nô làm lu mờ mọi trí tuệ sắc bén nhất, nhưng cuối đời ngài choáng ngợp trước Chúa và thảng thốt coi mọi thứ mình viết chỉ là rơm rác bọt bèo."
+        "clue": "Tiến sĩ Thiên Thần đã kết hợp xuất sắc triết học Hy Lạp vào thần học Công Giáo, chắp bút bộ Tổng Luận Thần Học kinh điển.",
+        "explanation": "Thánh Tôma Aquinô sở hữu trí tuệ sắc bén, nhưng cuối đời ngài choáng ngợp trước mầu nhiệm Chúa và coi mọi thứ mình viết chỉ như rơm rác."
       },
       {
         "answer": "ORIGENE",
-        "clue": "Nhà tư tưởng kiệt xuất vĩ mạo thời sơ khai tại A-lê-xan-ri-a, đã vắt óc biên khảo hàng vạn cuộn sách đục đẽo chú giải rực chiều sâu.",
-        "explanation": "Dù một số lập luận bị lấn cấn sau này, nhưng ngọn lửa thiết tha ôm gọn Kinh Thánh của Ô-ri-gê-nê đã rọi đường đánh dập bao tà thuyết nhạt nhẽo lúc bấy giờ."
+        "clue": "Nhà tư tưởng kiệt xuất thời sơ khai tại Alexandria, đã biên khảo hàng vạn cuộn sách chú giải Kinh Thánh vô cùng đồ sộ sâu sắc.",
+        "explanation": "Đi tiên phong trong khoa chú giải, ngọn lửa tha thiết yêu mến Kinh Thánh của Ôrigiênê đã soi đường đập tan bao tà thuyết chia rẽ đương thời."
       },
       {
         "answer": "TERTULIANO",
-        "clue": "Vị học giả khét tiếng gốc Phi Châu đầu tiên đúc kết tạc nặn ra thuật ngữ thần học cốt tủy \"Chúa Ba Ngôi\" bằng ngôn ngữ La Tinh.",
-        "explanation": "Sự bạo biện hùng hồn của Téc-tu-li-a-nô đã nện búa thép xuống giới dị giáo, khẳng quyết máu các vị tử đạo giọt xuống chính là hạt giống nảy mầm tông đồ."
+        "clue": "Vị học giả danh tiếng gốc Phi Châu đầu tiên đúc kết thuật ngữ thần học cốt lõi \"Chúa Ba Ngôi\" bằng ngôn ngữ La Tinh.",
+        "explanation": "Sự hùng biện của Téctulianô đã giáng đòn mạnh mẽ xuống các dị giáo, với tuyên cáo nổi tiếng: \"Máu các vị tử đạo là hạt giống sinh Kitô hữu.\""
       },
       {
         "answer": "ATANAXIO",
-        "clue": "Vị Giám Mục thép gai kiên gan bất khuất thà chịu đi đày ròng rã năm lần bảy lượt còn hơn nhượng bộ rớt giá trước bè rối A-ri-ô.",
-        "explanation": "\"Một mình chống lại cả thế giới\", thánh A-ta-na-xi-ô gò lưng vác gánh bảo vệ vinh quang đồng bản thể của Ngôi Lời, dẫu bị hoàng đế chèn ép xua đuổi bầm dập."
+        "clue": "Vị Giám Mục kiên gan bất khuất thà chịu lưu đày nhiều lần còn hơn nhượng bộ trước bè rối Ariô chối bỏ bản tính Thiên Chúa của Chúa Con.",
+        "explanation": "\"Một mình chống lại thế giới\", thánh Athanasiô dốc sức bảo vệ tín điều đồng bản thể của Ngôi Lời dẫu bị sự vây bủa hoàng triều áp đảo."
       },
       {
         "answer": "HIERONIMO",
-        "clue": "Ngài lang bạt hoang dã hẻo lánh dịch trọn bộ Kinh Thánh sang tiếng La tinh sần sùi dân dã mang tên bản Phổ Thông (Vulgata).",
-        "explanation": "Mang bản tính gắt gỏng nóng nảy, thánh Hi-ê-rô-ni-mô dùng ngòi bút miệt mài gõ nhịp đục lỗ vách đá Bê-lem để sống chết cùng Lời Chúa cắm mốc soi đường."
+        "clue": "Vị thánh đã lui về nơi hẻo lánh để dịch trọn bộ Kinh Thánh sang tiếng La Tinh bình dân mang tên bản Phổ Thông (Vulgata).",
+        "explanation": "Bằng ngòi bút miệt mài trong hang đá Bêlem, ngài để lại câu nói bất hủ cắm mốc soi đường: \"Không biết Kinh Thánh là không biết Chúa Kitô.\""
       }
     ]
   },
@@ -41,33 +41,33 @@ module.exports = [
     "words": [
       {
         "answer": "LYTRI",
-        "clue": "Đôi cánh bài bản song song bay lượn cùng với Đức Tin để nhấc bổng tinh thần con người bay vút lên bầu trời chiêm ngưỡng chân lý rạng ngời.",
-        "explanation": "Nhờ ơn thông hiểu Chúa ban, hai thái cực này chưa bao giờ dẫm chân xung đột nhau, vì cả cuốn sách thiên nhiên và Kinh Thánh đều do một Đấng trắp bút."
+        "clue": "Đôi cánh song song bay lượn cùng với Đức Tin để nhấc bổng tinh thần con người vút lên chiêm ngưỡng chân lý rạng ngời.",
+        "explanation": "Nhờ ơn thông hiểu Chúa ban, hai phương diện này chưa bao giờ xung đột nghịch lý nhau, vì cả thế giới siêu nhiên lẫn tạo thành đều do một Đấng làm ra."
       },
       {
         "answer": "TAODUNG",
-        "clue": "Hành vi quyền phép tối cao lôi trọn vạn vật từ chân không vô định bước ra múa nhảy dưới ánh sáng, vứt bỏ mọi sự tình cờ may rủi rớt rơi.",
-        "explanation": "Không mớm màng thần thoại nặn đất ngây ngô, thần học về khởi nguyên chối bỏ sự tự có của vật chất, đòi hỏi một nếp gấp từ Ý Định yêu thương rực chói."
+        "clue": "Hành vi quyền phép tối cao tạo thành vạn vật từ hư vô khôn tả, bác bỏ việc hình thành dựa trên ngẫu nhiên tình cờ của thế giới.",
+        "explanation": "Thần học Kitô giáo về khởi nguyên chối bỏ sự tự có của vật chất, khẳng định muôn loài hiện hữu dựa trên một Ý Định yêu thương nhiệm mầu."
       },
       {
         "answer": "BIGBANG",
-        "clue": "Thuyết Vụ Nổ Lớn rúng động nguồn gốc vũ trụ do chính một vị linh mục Công Giáo thông minhn nhạy bén người Bỉ phác họa và gieo mầm.",
-        "explanation": "Linh mục nhà vật lý thiên văn Georges Lemaître củng cố rành rọt đức tin qua nhãn quan vũ trụ giãn nở khổng lồ đi ra từ một giọt điểm năng lượng nhóa vỡ siêu phàm."
+        "clue": "Thuyết Vụ Nổ Lớn lý giải nguồn gốc vũ trụ do chính một vị linh mục Công Giáo người Bỉ phác họa và đề xướng.",
+        "explanation": "Linh mục vật lý thiên văn Georges Lemaître chỉ ra sự phù hợp giữa đức tin và vũ trụ giãn nở khổng lồ khởi nguồn từ điểm năng lượng nguyên thủy."
       },
       {
         "answer": "MENDEN",
-        "clue": "Vị tu sĩ điềm đạm kiên nhẫn lai tạo đo đạc hàng nghìn hạt đậu Hà Lan sần sùi nhằm mở đường lập nên định luật di truyền học kỳ diệu.",
-        "explanation": "Với chiếc áo dòng mộc mạc, cha Men-đen chứng minh hùng hồn vẻ đẹp chi ly toán học sắc lẹm trong kho tàng trật tự sinh học ẩn nấp trượt dài qua phép Tạo Hóa."
+        "clue": "Vị tu sĩ điềm đạm kiên nhẫn lai tạo trên hàng nghìn gốc đậu Hà Lan nhằm lập ra định luật nền tảng của di truyền học.",
+        "explanation": "Với chiếc áo dòng mộc mạc, cha Mendel chứng minh vẻ đẹp chi ly toán học sâu thẳm ẩn chứa trong trật tự sinh thái do Đấng Tạo Hóa làm nên."
       },
       {
         "answer": "LINHHON",
-        "clue": "Chiều kích thiêng liêng rực rỡ trường sinh bất hoại của con người do chính Thiên Chúa trực tiếp thổi khí hà hơi hà rát tạo thành sinh linh.",
-        "explanation": "Giáo Hội nghiêm ngặt bác bỏ việc tinh thần vương giả con người có thể chui ra mọc mầm từ diễn biến tiến hóa cọ xát vật chất thuẩn túy hèn mọn rớt đáy loài vật."
+        "clue": "Chiều kích thiêng liêng trường sinh bất hoại của con người do chính Thiên Chúa trực tiếp thổi sinh khí vào bùn đất dựng nên.",
+        "explanation": "Giáo Hội kiên định khẳng định linh hồn con người linh thiêng là họa ảnh của Ngài, không thể nào tự quy tiến hóa từ vật chất sinh học của giống vật."
       },
       {
         "answer": "TIENHOA",
-        "clue": "Thuyết sinh học vạch lá tìm sâu sự phát triển vạn vật, được Giáo hội gật đầu chấp nhận với điều kiện không phủ nhận gạt bỏ Bàn Tay Thượng Đế.",
-        "explanation": "Ngài không phải ảo thuật gia quơ đũa bùm chéo, mà dùng quy luật biến đổi sinh học chậm rãi oai vệ để lợp nên muôn loài, chờ đợi vạn hóa trổ hoa khoe tự do."
+        "clue": "Thuyết sinh học mô tả sự phát triển kết nối vạn vật, được Giáo Hội nhìn nhận khoan dung miễn là không gạt bỏ bàn tay của Thiên Chúa đằng sau.",
+        "explanation": "Đấng Hóa Công dùng quy luật biến đổi sinh học để liên lỉ hoạt động trên muôn loài vạn vật, vinh danh quyền năng mầu nhiệm của Ngài trong thời gian."
       }
     ]
   },
@@ -77,69 +77,69 @@ module.exports = [
     "words": [
       {
         "answer": "LUAMOI",
-        "clue": "Nghi thức rực rỡ thắp sáng đống lửa rần rật bừng bừng phần phật giữa ban đêm nhằm phá tan khóa chốt xóa nhòa màn sương tử thần đặc quánh.",
-        "explanation": "Linh mục vạch dấu thánh giá ghi khắc niên hiệu năm chúa giáng trần lên nến rực lửa, khẳng định sự khai sinh rũ bỏ bóng tối mục nát để vén màn vinh hiển bình minh."
+        "clue": "Nghi thức thắp sáng đống lửa rực rỡ giữa ban đêm nhằm phá tan màn sương mù của sự chết.",
+        "explanation": "Linh mục vạch dấu thánh giá ghi khắc niên hiệu lên nến rực lửa, khẳng định sự khai sinh vinh hiển vượt qua bóng tối tội lỗi."
       },
       {
         "answer": "NENPHUCSINH",
-        "clue": "Cây sáp khổng lồ to tướng cắm vút lên ngai vinh quang mang theo ghim năm hạt nhũ hương nhắc nhở năm dấu đinh loét máu thánh xót xa.",
-        "explanation": "Điểm nhãn dẫn đầu đoàn kiệu đi trong nhà thờ ngập nhúm bóng đêm, biểu diễn hùng hồn sự lừng lẫy của Đấng ngự trị chôn vùi thần chết đánh thức thế nhân."
+        "clue": "Cây nến vút cao mang theo năm hạt nhũ hương nhắc nhớ đến năm dấu đinh khổ nạn của Đức Kitô.",
+        "explanation": "Dẫn đầu đoàn rước đi vào nhà thờ chìm trong bóng tối, Nến Phục Sinh là biểu tượng sự hiện diện lừng lẫy của Đấng đánh bại thần chết chiếu sáng thế nhân."
       },
       {
         "answer": "MUNGVUILEN",
-        "clue": "Bài ca Phục Sinh hùng hồn nhảy múa vót lên trong đêm Canh Thức gióng tiếng kèn rôm rả kêu gọi trái đất hân hoan rớt tim rũ rượi sầu bi.",
-        "explanation": "Linh mục hay phó tế vung lên bài ca Exsultet lẫy lừng khét tiếng, gọi tội lỗi A-đam là một sự vấp ngã có phúc để dọn đường đón lấy Vua Cứu Độ long trọng."
+        "clue": "Bài ca Exsultet hùng hồn vang lên trong đêm Canh Thức kêu gọi đất trời hân hoan vứt bỏ sầu bi.",
+        "explanation": "Linh mục hay phó tế cất cao bài ca trang trọng này, gọi tội lỗi Ađam là \"một vấp ngã có phúc\" vì đã mang lại cho thế gian Đấng Cứu Độ."
       },
       {
         "answer": "NUOCTHANH",
-        "clue": "Nghi thức làm phép bồn rửa róc rách dội ướt ào ào nhằm dìm tội nhân thối rữa vào trong chính sự chết và phục sinh của Đức Kitô.",
-        "explanation": "Đâm cây nến rực lửa vào giếng nước như cái hôn quyền sủng đẫm đầy của Thánh Thần, gieo vào cung lòng Giáo Hội hạt giống sinh sôi hàng tá đàn con cái trắng trẻo mới tinh."
+        "clue": "Nghi thức làm phép nước phép dội trên giếng rửa tội nhằm tháp nhập các tân tòng vào cái chết và sự phục sinh của Đức Kitô.",
+        "explanation": "Cắm nến Phục Sinh vào giếng nước mang ý nghĩa thông truyền quyền năng sủng ái của Thánh Thần, chuẩn bị cung lòng Giáo Hội để sinh hạ những người con mới."
       },
       {
         "answer": "DUTONG",
-        "clue": "Nhóm người ngập ngừng chập chững được lãnh nhận liên tục ba bí tích khai tâm rạng rỡ ngay trong đêm đỉnh cao nứt vỡ Canh Thức lộng lẫy.",
-        "explanation": "Những giọt lệ sung sướng lăn dài xúng xính mang áo trắng tin khôi và thắp lửa truyền đọn nến xua nát sương bùn tội ác, chính thức rúc vào trướng cung Mẹ Hội Thánh."
+        "clue": "Những ứng viên khao khát Đức Tin được lãnh nhận liên tục ba bí tích khai tâm ngay trong đêm canh thức Cực Thánh.",
+        "explanation": "Vui mừng mặc lấy áo trắng tinh khôi và thắp lên ngọn nến sáng, những người tân tòng chính thức được bước vào Nhiệm Thể Hội Thánh."
       },
       {
         "answer": "ALLELUIA",
-        "clue": "Tiếng tung hô bùng vỡ ngân vang ngất ngây vút lên ba lần sau ròng rã dặn lòng bốn mươi ngày khép nín tuân thủ chay tịnh tủi buồn.",
-        "explanation": "A-lê-lui-a nổ tung như viên pháo hoa xé gầm màn nhung phụng vụ, nhắc nhịp đập con tim dạt dào sướng rơn trào dâng đón lời sấm Sống Lại oai hùng vượt cạn."
+        "clue": "Tiếng tung hô ngân vang vút lên ba lần sau khoảng thời gian ròng rã bốn mươi ngày Mùa Chay tĩnh lặng.",
+        "explanation": "Tiếng tung hô Allêluia như khúc ca khải hoàn đánh thức mùa phụng vụ, nhắc nhở con tim hân hoan chào đón biến cố Sống Lại oai hùng."
       }
     ]
   },
   {
     "id": 69,
-    "theme": "Các Cộng Đoàn",
+    "theme": "Các Công Đồng",
     "words": [
       {
         "answer": "NIXEA",
-        "clue": "Công đồng đập tan tành bè rối ranh ma A-ri-ô, dõng dạc xác quyết Chúa Giê-su đồng bản thể vinh quang chói lòa tột bậc với Đức Chúa Cha.",
-        "explanation": "Biến động thế kỷ tư khép lại với tảng đá góc Kinh Tin Kính Ni-xê-a đùm bọc, vứt sọt rác lời xuyên tạc dơ dáng coi Chúa Con chỉ là một phiến tạo vật trần não."
+        "clue": "Công đồng đầu tiên lên án bác bỏ lạc thuyết Ariô, dõng dạc xác quyết Chúa Giêsu đồng bản thể với Đức Chúa Cha.",
+        "explanation": "Biến động thế kỷ IV khép lại với kinh Tin Kính Nixêa, bảo vệ vững chắc chân lý về Thiên Chúa Con và loại bỏ dị giáo coi Ngài là loài thụ tạo."
       },
       {
         "answer": "EPHESO",
-        "clue": "Cuộc họp khoác áo tước hiệu vĩ đại rầm rộ Mẹ Thiên Chúa (Theotokos) lên đầu Đức Ma-ri-a để khóa miệng lập luận cắt vụn của Nết-tô-ri-ô.",
-        "explanation": "Công đồng tháo sập tư tưởng chia tách cắt ruột Chúa Giê-su làm hai thực thể. Rõ ràng Đấng nằm trong cung lòng Mẹ Đồng Trinh đích thị là Thiên Chúa nhập thể giãi dầu."
+        "clue": "Công đồng tôn vinh tước hiệu vĩ đại \"Mẹ Thiên Chúa\" (Theotokos) dành cho Đức Maria nhằm bác bỏ lập luận của mục tử Néttôriô.",
+        "explanation": "Công đồng bác bỏ tư tưởng chia rẽ Chúa Giêsu làm hai thực thể. Xác quyết rõ ràng Đấng Đầu Thai trong cung lòng Mẹ Đồng Trinh đích thị là Thiên Chúa Nhập Thể."
       },
       {
         "answer": "CANXEDON",
-        "clue": "Công đồng ấn định dứt khoát hai bản tính Thiên Chúa và nhân loại hòa quyện khăng khít không pha trộn tát nước nơi một Ngôi Vị Đức Kitô.",
-        "explanation": "Phá bỏ tà thuyết \"một bản tính\" (Nhất tính thuyết), Can-xê-đôn gõ búa sấm rền đĩnh đạc vạch rõ Chúa Kitô ôm trọn đầy đủ Thiên tính và Nhân tính vẹn toàn nặn nít."
+        "clue": "Công đồng khẳng định dứt khoát hai bản tính Thiên Chúa và nhân loại hòa quyện khăng khít không pha trộn nơi một Ngôi Vị Đức Kitô.",
+        "explanation": "Bác bỏ tà thuyết \"một bản tính\" (Nhất tính thuyết), Canxêđôn minh định rõ ràng Chúa Kitô có trọn vẹn Thiên tính và vẹn toàn Nhân tính."
       },
       {
         "answer": "VATICANMOT",
-        "clue": "Hội nghị giáo hội rình rang xác lập tạc định đặc quyền vô ngộ của Đức Giáo Hoàng khi ngài long trọng phán quyết về luân lý và tín điều che ô.",
-        "explanation": "Được triệu tập giữa biến thiên sụp đổ bão tố cuối thế kỷ XIX, công đồng vội vã khóa chốt vinh quang vị mục tử đàng điếm tối cao trước khi gián đoạn lấp lửng."
+        "clue": "Đại hội giáo hội long trọng định tín đặc quyền vô ngộ của Đức Giáo Hoàng khi ngài phán quyết về luân lý và tín lý từ ngai tòa.",
+        "explanation": "Được triệu tập trong thế kỷ XIX, công đồng củng cố quyền tối thượng của vị mục tử đóng vai trò kế vị thánh Phêrô dẫn dắt toàn Giáo Hội."
       },
       {
         "answer": "VATICANHAI",
-        "clue": "Đỉnh cao cải cách bùng nổ giúp mở toang tung trào những khung cửa mọt nghẹt thở của Giáo Hội hít thở đón lấy luồng sinh khí thời đại tân tiến.",
-        "explanation": "Gió bão Thánh Thần cuốn phăng lối dâng lễ quay lưng tường cổ hủ thinh lặng, đặt Lời Chúa và phụng vụ bản địa vỗ về xào xạc hòa mình vào con thuyền thế giới lượn cánh."
+        "clue": "Công đồng mang tinh thần \"cập nhật hóa\" vĩ đại để canh tân và mở cửa Giáo Hội hiệp thông sâu sắc hơn với ánh sáng thời đại.",
+        "explanation": "Nhờ luồng gió Thánh Thần, nền phụng vụ được canh tân đưa Lời Chúa và ngôn ngữ bản địa dồi dào sức sống vào giữa trung tâm Dân Chúa."
       },
       {
         "answer": "TRENTO",
-        "clue": "Cuộc gồng mình phản Cải Cách lừng lẫy dốc sức chấn chỉnh đàng hoàng tu sĩ và tái niêm phong chốt chặn những tín điều đanh thép bị sứt mẻ rách rưới.",
-        "explanation": "Công đồng kéo dài mười tám năm ròng rã dằng dặc nhưng đáp trả nhịp túng ngoạn mục sự ly giáo của Tin Lành, xác lập vững như bàn thạch ấn tín Bảy Bí Tích cứu chuộc."
+        "clue": "Công đồng lừng lẫy của phong trào Phản Cải Cách dốc sức chấn chỉnh hàng giáo sĩ và tái khẳng định các tín lý Công Giáo.",
+        "explanation": "Kéo dài suốt mười tám năm ròng rã, đại công đồng này đã bảo vệ kho tàng đức tin trước cuộc cải cách Tin Lành, củng cố vững chắc nền tảng của Bảy Bí Tích."
       }
     ]
   },
@@ -149,33 +149,33 @@ module.exports = [
     "words": [
       {
         "answer": "NGHEOKHO",
-        "clue": "[Đang cập nhật lại từ khóa] Ý nghĩa: NGHEOKHO",
-        "explanation": ""
+        "clue": "Phúc cho những ai có tâm hồn thanh thoát không dính bén của cải trần gian, vì Nước Trời là của họ.",
+        "explanation": "Mối phúc đầu tiên mời gọi con người sống tinh thần siêu thoát, phó thác hoàn toàn đời mình vào bàn tay dọng phòng yêu thương của Thiên Chúa."
       },
       {
         "answer": "HIENLANH",
-        "clue": "Phúc cho người êm đềm nhẫn nại nuốt trôi xót xa bất công tủi hổ mà không đay nghiến đáp trả đòn thù, vì sẽ được lãnh trọn gia nghiệp đồi dốc.",
-        "explanation": "Hiền lành tróc nhổ nanh vuốt trả thù man rợ, lột xác trở nên sáp nến chảy nhũn trước thói vũ phu để gom trọn nước Trời vào túi đan bện bằng tình thương xốn xang."
+        "clue": "Phúc cho người êm ái nhẫn nại dẹp bỏ bạo lực hận thù, vì sẽ được lãnh trọn Đất Hứa làm gia nghiệp.",
+        "explanation": "Hiền lành là dứt khoát rũ bỏ thái độ trả thù, lấy sự mẫn tiệp của tình yêu thương tha thứ để chiến thắng sức mạnh bạo lực."
       },
       {
         "answer": "KHOCLOC",
-        "clue": "Mối phúc ủi an dịu ngọt vỗ về rưng rức những trái tim vỡ nát nhỏ lệ tủi hờn nghẹn ngào vì trót mang nặng đẻ đau gánh gồng sầu khổ bầm dập.",
-        "explanation": "Không lấp liếm cười bả gượng gạo, Phúc Âm tuyên cáo dòng nước mắt ứa giàn giụa vì tội lỗi ngậm ngùi sẽ hóa thành nguồn ngọc châu pha lê lót thềm Nước Chúa khỏa lấp."
+        "clue": "Mối phúc ủi an dịu ngọt dành cho những trái tim biết nhỏ lệ và gánh gồng những sầu khổ gian truân hiến tế.",
+        "explanation": "Tuyên ngôn Phúc Âm về sự đền bù: dòng nước mắt rơi xuống vì sự khốn khó và sám hối tội lỗi sẽ được Thiên Chúa ủi an lau sạch trong Nước Trời."
       },
       {
         "answer": "CONGCHINH",
-        "clue": "Phúc cho những kẻ đói khát rát ruột khao khát lẽ ngay thẳng công bằng vọt lên như thể thèm thuồng mâm cỗ thỏa lấp ruột gan đói lả gật gù.",
-        "explanation": "Một khát vọng thiêu cồn cào rực đốt chối từ thói giả hình đui nhọ, để hướng ròng về ý muốn chính trực uy nghi ngả nghiêng của Đấng thấu suốt mọi điều tăm tối khuất tất."
+        "clue": "Phúc cho những ai hằng khao khát lẽ ngay thẳng công bằng thiêng liêng như người khao khát được ăn uống no nê.",
+        "explanation": "Đây là niềm khát vọng mạnh mẽ hướng về Thánh Ý Thiên Chúa, nỗ lực kiến tạo một đời sống trọn vẹn và ngay chính trước nhan Ngài."
       },
       {
         "answer": "XOTTHUONG",
-        "clue": "Đức tính thứ tha ban lộc chóp bu giang tay ôm kẻ thù để nhận lại mạc đại vòng ôm bi tráng từ Đấng giàu lòng lân tuất đoái nhan vô bờ.",
-        "explanation": "Sẵn sàng gạt phăng mọi định kiến xắt xéo thù hằn để vớt vát lấy đứa anh em nhúng chàm tơi tả, vì lòng xót thương xé lưới xóa trắng hết cả muôn ngàn vi phạm rác rưởi."
+        "clue": "Phúc cho những ai có lòng xót thương tha thứ cách quảng đại, vì họ sẽ được chính Đức Chúa đoái thương lại.",
+        "explanation": "Sẵn lòng gạt bỏ định kiến thù hằn để khoan dung cho người khác, cũng chính là phản chiếu lại Tình Yêu bao la của Thiên Chúa."
       },
       {
         "answer": "TRONGSACH",
-        "clue": "Trái tim tinh tuyền vắt kiệt mưu mô thủ đoạn sừng sỏ và tà dâm cáu bẩn sẽ giương mắt nhìn thẳng không chóp nháy vào tôn nhan chói rực uy nghi.",
-        "explanation": "Chẳng hề đeo lớp mặt nạ bịt bùng tô son trét phấn đa đoan, linh hồn phơi mộc dọn sách khỏi mọi ham muốn hạ cấp sẽ hân hạnh thưởng lãm vẻ đẹp khét tiếng nhất."
+        "clue": "Phúc cho những ai giữ được một trái tim tinh tuyền dứt khoát với mọi mưu mô xảo quyệt, vì họ sẽ được nhìn ngắm Thiên Chúa.",
+        "explanation": "Một linh hồn trong sáng giản đơn, không vương víu lối giả hình hai mặt, sẽ vinh dự được chiêm ngắm trọn vẹn nhan thánh Chúa chói lòa."
       }
     ]
   },
@@ -185,33 +185,33 @@ module.exports = [
     "words": [
       {
         "answer": "GIAOUOC",
-        "clue": "Bản hiệp ước linh thiêng đánh dấu sự gắn kết chính thức giữa Đức Chúa và toàn thể dân tộc Ít-ra-en tại chân núi.",
-        "explanation": "Giao ước Sinai không phải là hợp đồng mua bán, mà là mối tình phụ tử, trong đó Thiên Chúa nhận Ít-ra-en làm dân riêng."
+        "clue": "Bản hiệp ước linh thiêng đánh dấu sự gắn kết chính thức giữa Đức Chúa và toàn thể dân tộc Ítraen tại chân núi Sinai.",
+        "explanation": "Giao ước Sinai không phải là hợp đồng mua bán, mà là mối tình phụ tử, trong đó Thiên Chúa nhận Ítraen làm dân riêng."
       },
       {
         "answer": "HUYET",
-        "clue": "Chất lỏng màu đỏ được rảy một nửa lên bàn thờ và một nửa lên mình dân chúng để đóng ấn chuẩn y giao ước.",
-        "explanation": "Máu tượng trưng cho sự sống. Việc cùng chia sẻ chung một nguồn máu hiến tế cho thấy sự sống của Chúa và dân nay đã hòa quyện."
+        "clue": "Dòng máu tuôn rơi từ vật hiến tế, được rảy một nửa lên bàn thờ và một nửa lên đám đông để đóng ấn giao ước.",
+        "explanation": "Máu tượng trưng cho sự sống. Việc cùng chia sẻ chung một kỷ vật hiến tế cho thấy sự sống của Chúa và dân Ngài nay đã hòa hiệp gắn kết."
       },
       {
         "answer": "MUOIHAICOT",
-        "clue": "Những tảng đá được Môsê dựng lên dưới chân núi tượng trưng cho toàn bộ các chi tộc Ít-ra-en cùng tham gia thề nguyền.",
-        "explanation": "Mười hai cột đá là chứng nhân hữu hình cho sự hiện diện đầy đủ và lời cam kết đồng lòng của toàn dân."
+        "clue": "Những trụ đá được Môsê dựng lên dưới chân núi tượng trưng cho toàn bộ các chi tộc Ítraen cùng thề nguyền dự phần.",
+        "explanation": "Mười hai cột đá là chứng nhân hữu hình cho sự hiện diện đầy đủ và lời cam kết đồng lòng của toàn dân Ítraen."
       },
       {
         "answer": "DOCLUAT",
-        "clue": "Hành động Môsê tường thuật trọn vẹn các chỉ thị và quyết định của Đức Chúa lớn tiếng cho cả đám đông nghe rõ.",
-        "explanation": "Lề luật phải được công bố công khai minh bạch để người dân hiểu rõ quyền lợi và nghĩa vụ trước khi thề hứa tuân giữ."
+        "clue": "Hành động Môsê tường thuật trọn vẹn các lời phán và lề luật của Đức Chúa lớn tiếng cho cả cộng đoàn nghe rõ.",
+        "explanation": "Lề luật phải được công bố công khai minh bạch để người dân hiểu trọn vẹn điều khoản giao ước trước khi tự do thề hứa tuân giữ."
       },
       {
         "answer": "VANGPHUC",
-        "clue": "Câu cửa miệng mà dân chúng đồng thanh đáp lại đến hai lần: \"Mọi lời Đức Chúa phán, chúng tôi xin thi hành\".",
-        "explanation": "Lời hứa vâng phục vội vã này sau đó sẽ phải trải qua thử thách nghiệt ngã khi Môsê vắng mặt trên núi quá lâu."
+        "clue": "Lời cam kết mà dân chúng đồng thanh đáp lại đến hai lần: \"Mọi lời Đức Chúa phán, chúng tôi xin nỗ lực thi hành\".",
+        "explanation": "Lời thề hứa vâng phục mãnh liệt này sau đó sẽ phải đối diện với thử thách nghiệt ngã khi Môsê vắng bóng trên núi quá lâu."
       },
       {
         "answer": "MAYPHU",
-        "clue": "Hiện tượng siêu nhiên che khuất đỉnh núi suốt sáu ngày trước khi Đức Chúa lên tiếng gọi Môsê vào ngày thứ bảy.",
-        "explanation": "Đám mây vừa là dấu chỉ sự hiện diện vừa là sự che chở, dạy Môsê bài học kiên nhẫn chờ đợi tĩnh lặng trước Nhan Thánh."
+        "clue": "Hiện tượng siêu nhiên che khuất đỉnh núi suốt sáu ngày trước khi Đức Chúa lên tiếng gọi Môsê vào ngày tận cùng thứ bảy.",
+        "explanation": "Đám mây vừa là dấu chỉ sự hiện diện uy nghi vừa là rèm che chở, dạy Môsê bài học khiêm hạ kiên nhẫn chờ đợi tĩnh lặng trước Nhan Thánh."
       }
     ]
   },
@@ -221,33 +221,33 @@ module.exports = [
     "words": [
       {
         "answer": "HOMBIA",
-        "clue": "Chiếc rương gỗ keo bọc vàng ròng từ trong ra ngoài, vật dụng linh thiêng bậc nhất sẽ chứa đựng hai tấm bia chứng ước.",
-        "explanation": "Hòm Bia không chứa tượng Chúa mà chứa Lời Chúa, nhấn mạnh Thiên Chúa của Ít-ra-en là Đấng vô hình nhưng hiện diện qua Lề Luật."
+        "clue": "Chiếc rương gỗ keo bọc vàng ròng từ trong ra ngoài, kỷ vật thiêng liêng bậc nhất chứa đựng hai tấm bia chứng ước.",
+        "explanation": "Hòm Bia không chứa tượng chạm khắc biểu tượng mà chỉ chứa Lời Chúa, nhấn mạnh Thiên Chúa của Ítraen là Đấng hiện diện thiêng liêng qua Lề Luật."
       },
       {
         "answer": "NAPHADENGIAO",
-        "clue": "Tấm che Hòm Bia đúc bằng vàng khối nguyên chất, nơi Đức Chúa sẽ hội ngộ và ban truyền các quyết định.",
-        "explanation": "Nắp Xá Tội này là tâm điểm của sự giao hòa, nơi máu con vật hiến tế sẽ được rảy lên để xin tha thứ lỗi lầm cho toàn dân."
+        "clue": "Tấm che Hòm Bia đúc bằng vàng khối nguyên chất, nơi Đức Chúa sẽ hiện diện và phán truyền các quyết định cùng giới răn.",
+        "explanation": "Nắp Xá Tội (Kapporet) là tâm điểm của sự giao hòa, nơi máu con vật hiến tế được rảy lên để xin tha thứ lỗi lầm dơ dáy cho toàn dân."
       },
       {
         "answer": "KERUBIM",
-        "clue": "Hai tượng thiên sứ có cánh dang rộng, chầu hai đầu nắp Hòm Bia để làm ngai cho Đức Chúa ngự trị vô hình.",
-        "explanation": "Dù cấm tạc tượng Thiên Chúa, nhưng tượng thiên sứ Kerubim được cho phép để diễn tả dáng vẻ chầu chực hầu hạ Đấng Tối Cao."
+        "clue": "Hai pho tượng thiên thần có cánh dang rộng, chầu hai đầu nắp Hòm Bia để làm ngai cho Thiên Chúa ngự trị.",
+        "explanation": "Dù lề luật nghiêm cấm tạc tượng Thiên Chúa, nhưng tượng thiên thần Kêrubim được đặc cách cho phép để diễn tả dáng vẻ hầu cận Đấng Tối Cao."
       },
       {
         "answer": "DONKHIENG",
-        "clue": "Những thanh gỗ keo bọc vàng xỏ qua các khoen để khiêng Hòm Bia mà không bao giờ được rút ra khỏi khoen.",
-        "explanation": "Quy định không rút đòn khiêng hàm ý sự sẵn sàng lên đường. Thiên Chúa của Ít-ra-en luôn đồng hành xê dịch cùng dân Ngài."
+        "clue": "Những thanh đòn gỗ keo bọc vàng xỏ qua các khoen dùng để khiêng Hòm Bia mà không bao giờ được phép tháo rút.",
+        "explanation": "Quy định không rút đòn khiêng tượng trưng cho sự chực chờ luôn sẵn sàng lên đường. Thiên Chúa mãi đồng hành xê dịch cùng dân Ngài trong hành trình lữ thứ."
       },
       {
-        "answer": "BANTIECLY",
-        "clue": "Chiếc bàn gỗ keo dùng để đặt bánh dâng tiến trước nhan Đức Chúa, luôn luôn có bánh chưng bày trên đó.",
-        "explanation": "Bàn Bánh Dâng Tiến thể hiện lòng biết ơn liên lỉ, nhận thức rằng mọi lương thực nuôi sống đều là nguồn lộc từ tay Thiên Chúa."
+        "answer": "BANBANHTIEN",
+        "clue": "Chiếc bàn thiêng bằng gỗ keo dùng để đặt các ổ bánh dâng tiến trước tôn nhan Đức Chúa cách liên lỉ.",
+        "explanation": "Bàn Bánh Tiến rạng ngời thể hiện lòng biết ơn thường xuyên liên tục, nhìn nhận rằng vạn vật hoa màu nuôi sống con người đều là nguồn lộc dồi dào từ tay Thiên Chúa."
       },
       {
-        "answer": "TRUDEN",
-        "clue": "Chân đèn bảy nhánh đúc bằng vàng ròng, được trang trí tinh xảo mài giũa bằng các hình hoa nụ và cánh dập khuông.",
-        "explanation": "Cây đèn Menorah luôn cháy sáng là biểu tượng của Cây Sự Sống, báo hiệu ánh sáng rạng ngời của Thiên Chúa hiện diện sưởi ấm."
+        "answer": "CHANDEN",
+        "clue": "Trụ đèn bảy nhánh đúc bằng vàng ròng khối, được trang trí rập khuôn tinh xảo với các hình đài hoa và nụ hoa rực rỡ.",
+        "explanation": "Cây đèn Menorah luôn cháy sáng lung linh là biểu hiện của Cây Sự Sống, loan báo hồng ân ánh sáng rạng ngời của Thiên Chúa dẫn dắt và sưởi ấm."
       }
     ]
   }
