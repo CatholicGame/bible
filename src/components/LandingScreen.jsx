@@ -48,7 +48,7 @@ const LandingScreen = () => {
 
             {/* ── Cartoon background decorations ── */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-0 w-full h-full bg-cover bg-center opacity-30 mix-blend-overlay" style={{ backgroundImage: "url('/src/assets/common/common_background.png')" }} />
+                <div className="absolute top-0 w-full h-full bg-cover bg-center opacity-30 mix-blend-overlay" style={{ backgroundImage: "url('/src/assets/common/common_background.webp')" }} />
                 <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-blue-300/30 blur-2xl flex items-center justify-center shadow-[inset_0_-8px_0_rgba(191,219,254,0.3)]" />
                 <div className="absolute -bottom-16 -right-16 w-56 h-56 rounded-full bg-blue-400/20 blur-xl" />
                 <div className="absolute top-1/4 right-10 w-24 h-24 rounded-full bg-yellow-400/20 blur-2xl" />

@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Trophy, Users, Globe, Lock, ChevronRight } from 'lucide-react';
 import { useRoom } from '../../hooks/useRoom';
 import { usePlayFabStore } from '../../store/playfabStore';
-import bgImage from '../../assets/common/common_background.png';
-import iconCoin from '../../assets/common/coin.png';
+import bgImage from '../../assets/common/common_background.webp';
+import iconCoin from '../../assets/common/coin.webp';
 import { getBetOptions } from '../../utils/ranks';
 
 /* ── Stagger animation ── */

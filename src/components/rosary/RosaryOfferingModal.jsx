@@ -6,18 +6,18 @@ import UserAvatar from '../common/UserAvatar';
 import { usePlayFabStore } from '../../store/playfabStore';
 import './RosaryOfferingModal.css';
 
-import rosaryBgLandscape from '../../assets/rosary/rosary_bg_landscape.jpg';
-import rosaryBgPortrait from '../../assets/rosary/rosary_bg_potrait.jpg';
+import rosaryBgLandscape from '../../assets/rosary/rosary_bg_landscape.webp';
+import rosaryBgPortrait from '../../assets/rosary/rosary_bg_potrait.webp';
 import rosaryBgMusic from '../../assets/rosary/rosary_bg_music.mp3';
-import iconCoin from '../../assets/common/coin.png';
+import iconCoin from '../../assets/common/coin.webp';
 import { useSoundManager } from '../../utils/soundManager';
-import rose1 from '../../assets/rosary/rose1.png';
-import rose2 from '../../assets/rosary/rose2.png';
-import rose3 from '../../assets/rosary/rose3.png';
-import roseRed  from '../../assets/rosary/rose_red.png';
-import rosePink from '../../assets/rosary/rose_pink.png';
-import roseGold from '../../assets/rosary/rose_gold.png';
-import iconInfo from '../../assets/rosary/icon_info.png';
+import rose1 from '../../assets/rosary/rose1.webp';
+import rose2 from '../../assets/rosary/rose2.webp';
+import rose3 from '../../assets/rosary/rose3.webp';
+import roseRed  from '../../assets/rosary/rose_red.webp';
+import rosePink from '../../assets/rosary/rose_pink.webp';
+import roseGold from '../../assets/rosary/rose_gold.webp';
+import iconInfo from '../../assets/rosary/icon_info.webp';
 
 const DAILY_MAX = 150;      // số hạt tối đa mỗi ngày
 const COIN_PER_HAT = 1;     // 1 hạt = 1 Coin

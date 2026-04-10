@@ -8,9 +8,9 @@ import {
 } from 'lucide-react';
 import { RANK_TIERS } from '../../utils/ranks';
 
-import imgActive from '../../assets/common/checkpoint_active.jpg';
-import imgInactive from '../../assets/common/checkpoint_inactive.jpg';
-import bgMap from '../../assets/common/bg_map.jpg';
+import imgActive from '../../assets/common/checkpoint_active.webp';
+import imgInactive from '../../assets/common/checkpoint_inactive.webp';
+import bgMap from '../../assets/common/bg_map.webp';
 
 /* ── Layout ── */
 // Using proportional percentage positioning (py out of 100%) so nodes exactly stick to background features 
