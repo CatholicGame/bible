@@ -15,70 +15,130 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7009965786329459" crossorigin="anonymous"></script>
   
   <style>
-    body { background-color: #f8fafc; color: #1e293b; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+    body { background-color: #f8fafc; color: #1e293b; font-family: 'Inter', sans-serif; margin: 0; padding: 0; scroll-behavior: smooth; }
+    html, body {
+      height: auto !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+    }
     .cinzel { font-family: 'Cinzel', serif; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-slate-50 text-slate-800 overflow-x-hidden relative selection:bg-blue-500/30">
   
-  <main class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-16 flex flex-col items-center text-center z-10 relative">
-    
+  <!-- Jumbotron / Hero Section -->
+  <main class="w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 md:py-16 flex flex-col items-center text-center z-10 relative">
     <!-- Tiêu đề -->
     <div class="mb-8 md:mb-10 mt-4">
       <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold cinzel text-blue-900 drop-shadow-sm tracking-wide mb-3">
         CATHOLIC QUIZ
       </h1>
-      <h2 class="text-lg sm:text-xl md:text-2xl font-medium text-slate-600">
-        Khám phá Lời Chúa qua các trò chơi thú vị
+      <h2 class="text-lg sm:text-xl md:text-2xl font-medium text-slate-600 max-w-2xl mx-auto">
+        Khám phá Lời Chúa qua các trò chơi tương tác thú vị
       </h2>
     </div>
 
     <!-- Nút bắt đầu chơi đưa lên sát đầu trang -->
-    <a href="/app.html" class="group relative px-10 py-4 mb-12 md:px-14 md:py-5 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold text-xl md:text-2xl uppercase rounded-full shadow-[0_10px_25px_rgba(37,99,235,0.35)] hover:shadow-[0_15px_35px_rgba(37,99,235,0.5)] transition-all duration-300 hover:-translate-y-1 border border-blue-400">
+    <a href="/app.html" class="group relative px-10 py-4 mb-4 md:px-14 md:py-5 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold text-xl md:text-2xl uppercase rounded-full shadow-[0_10px_25px_rgba(37,99,235,0.35)] hover:shadow-[0_15px_35px_rgba(37,99,235,0.5)] transition-all duration-300 hover:-translate-y-1 border border-blue-400">
       <span class="absolute inset-0 w-full h-full rounded-full ring-4 ring-blue-300/40 group-hover:animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
       THAM GIA CHƠI NGAY
     </a>
 
-    <!-- Khối văn bản SEO (cần người dùng cuộn xuống) -->
-    <div class="max-w-3xl text-left bg-white p-6 sm:p-8 md:p-10 rounded-2xl border border-slate-200 shadow-xl mb-10 relative overflow-hidden">
-      <!-- Decoration -->
-      <div class="absolute top-0 right-0 w-32 h-32 bg-amber-100 rounded-bl-full opacity-40"></div>
-      
-      <div class="relative z-10">
-        <h3 class="text-xl md:text-2xl font-bold mb-5 text-blue-800 border-b-2 border-amber-200 pb-2 inline-block">Về Hệ Thống Học Hỏi</h3>
-        <p class="text-slate-600 leading-relaxed text-base md:text-lg mb-5">
-          Chào mừng bạn đến với <strong class="text-blue-900">Catholic Quiz</strong>, nền tảng số được thiết kế đặc biệt nhằm giúp người chơi vừa giải trí, vừa củng cố và học hỏi thêm những kiến thức sâu sắc về Kinh Thánh và Giáo lý Công Giáo. 
-          Trong cuộc sống hiện đại tất bật, việc giữ vững đức tin và nhạy bén với Lời Chúa mỗi ngày là một điều tuyệt vời.
+    <!-- Hiệu ứng chỉ dẫn cuộn trang (Scroll Down Indicator) -->
+    <div class="mt-12 md:mt-16 flex flex-col items-center justify-center opacity-60 hover:opacity-100 transition-opacity duration-300 cursor-default animate-bounce">
+      <span class="text-xs md:text-sm font-semibold text-blue-800 uppercase tracking-widest mb-1">Khám Phá Tính Năng</span>
+      <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </div>
+  </main>
+
+  <!-- Các khối tính năng giới thiệu Game -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 w-full space-y-16 md:space-y-24 mb-20 z-10 relative">
+    
+    <!-- Section 1: Main Menu -->
+    <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12 bg-white rounded-3xl p-6 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
+      <div class="w-full md:w-1/2 rounded-2xl overflow-hidden shadow-md flex-shrink-0 bg-slate-100 flex items-center justify-center">
+        <!-- Chú ý: Vì ảnh main menu là ảnh dọc đè ngang tùy thiết bị, object-contain giúp không bị móp méo-->
+        <img src="/images/intro/main.jpg" alt="Sảnh chính Catholic Quiz" class="w-full h-auto max-h-[500px] object-contain hover:scale-[1.02] transition-transform duration-500" loading="lazy" />
+      </div>
+      <div class="w-full md:w-1/2 text-left">
+        <h3 class="text-2xl md:text-3xl font-bold text-blue-800 mb-4 border-b-2 border-amber-200 pb-2 inline-block">Sảnh Chờ Đa Năng</h3>
+        <p class="text-slate-600 text-base md:text-lg leading-relaxed mb-4">
+          Ngay khi bước vào <strong class="text-blue-900">Catholic Quiz</strong>, bạn sẽ được chào đón bởi giao diện sảnh chờ trực quan, thiết kế lấy cảm hứng từ sự tôn nghiêm nhưng lại hiện đại. Tại đây, hệ thống liên tục cập nhật danh hiệu, mức Rank, và điểm XP của bạn.
         </p>
-        <p class="text-slate-600 leading-relaxed text-base md:text-lg mb-5">
-          Hệ thống cung cấp đa dạng các thể loại trò chơi từ trắc nghiệm kiến thức tổng hợp, thử thách nhanh, đến giải ô chữ Kinh Thánh (Crossword P2P). Người chơi có thể tham gia chơi ngẫu nhiên để rèn luyện trí nhớ, 
-          hoặc tự tạo phòng thi đấu cùng bạn bè, mở ra không gian giao lưu, học hỏi trực tuyến một cách dễ dàng và hoàn toàn miễn phí.
-        </p>
-        <p class="text-slate-600 leading-relaxed text-base md:text-lg">
-          Mục đích cốt lõi của <strong class="text-blue-900">Catholic Quiz</strong> là biến trải nghiệm thuộc lòng giáo lý vốn khô khan trở nên sinh động và đáng mong chờ nhất. Mỗi đáp án đúng, mỗi ô chữ được giải mã sẽ là một bước đệm giúp bạn 
-          nhìn nhận sâu sắc hơn về tình yêu của Thiên Chúa, các nhân vật trong Cựu Ước, Tân Ước và các lời răn dạy qua từng thế kỷ.
+        <p class="text-slate-600 text-base md:text-lg leading-relaxed">
+          Bạn có thể dễ dàng quản lý hồ sơ, chọn các phòng chơi đơn, hoặc tạo phòng thi đấu mạng (Multiplayer). Cùng với đó là hệ thống Bảng Xếp Hạng giúp theo dõi thành tích học tập tôn giáo một cách minh bạch.
         </p>
       </div>
     </div>
-  </main>
+
+    <!-- Section 2: Dâng Hoa -->
+    <div class="flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12 bg-white rounded-3xl p-6 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
+      <div class="w-full md:w-1/2 rounded-2xl overflow-hidden shadow-md flex-shrink-0 bg-slate-100 flex items-center justify-center">
+        <img src="/images/intro/dang_hoa.jpg" alt="Thành Kính Dâng Hoa" class="w-full h-auto max-h-[500px] object-contain hover:scale-[1.02] transition-transform duration-500" loading="lazy" />
+      </div>
+      <div class="w-full md:w-1/2 text-left">
+        <h3 class="text-2xl md:text-3xl font-bold text-blue-800 mb-4 border-b-2 border-amber-200 pb-2 inline-block">Thành Kính Tiến Hoa</h3>
+        <p class="text-slate-600 text-base md:text-lg leading-relaxed mb-4">
+          Hệ thống không chỉ dừng lại ở các cuộc tranh tài mà còn tích hợp hoạt động mang đậm tinh thần tín hữu: <strong>Dâng Hoa Đức Mẹ</strong>.
+        </p>
+        <p class="text-slate-600 text-base md:text-lg leading-relaxed">
+          Tích lũy các Đồng Xu và thành tích sau khi chinh phục các loại câu hỏi Khó/Dễ, bạn có thể quy đổi thành những khóm hoa hồng tươi thắm nhất dâng lên Đức Mẹ Maria. Đây là giây phút tĩnh lặng đầy ân sủng, gắn kết lại nhịp sống thiêng liêng ngay trên không gian số định hướng giới trẻ.
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 3: Ô Chữ Kinh Thánh -->
+    <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12 bg-white rounded-3xl p-6 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
+      <div class="w-full md:w-1/2 rounded-2xl overflow-hidden shadow-md flex-shrink-0 bg-slate-100 flex items-center justify-center">
+        <img src="/images/intro/o_chữ.jpg" alt="Giải đố Ô chữ Kinh Thánh" class="w-full h-auto max-h-[500px] object-contain hover:scale-[1.02] transition-transform duration-500" loading="lazy" />
+      </div>
+      <div class="w-full md:w-1/2 text-left">
+        <h3 class="text-2xl md:text-3xl font-bold text-blue-800 mb-4 border-b-2 border-amber-200 pb-2 inline-block">Giải Mã Ô Chữ Kinh Thánh</h3>
+        <p class="text-slate-600 text-base md:text-lg leading-relaxed mb-4">
+          Một chế độ chơi đòi hỏi tư duy logic và vốn hiểu biết xuất sắc: <strong>Giải Ô Chữ (Crossword Wordplay)</strong>. Sắp xếp gợi ý theo các Hàng ngang và Hàng dọc, bạn phải nhớ được chính xác tên các địa danh, Tiên Tri, Ngôn Sứ... trong toàn bộ lịch sử Cựu & Tân Ước.
+        </p>
+        <p class="text-slate-600 text-base md:text-lg leading-relaxed">
+          Điều kịch tính nhất là tính năng "Solo 1vs1". Tính năng này đẩy mạnh sự tương tác cộng đồng—bạn và một người chơi khác (hoặc bạn bè) sẽ cùng thi điểm trên một bàn cờ ô chữ trong gian thời gian thực! Ai lật được nhiều bí ẩn nhất, người đó chiến thắng.
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4: Ai là Nhà Thần Học -->
+    <div class="flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12 bg-white rounded-3xl p-6 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
+      <div class="w-full md:w-1/2 rounded-2xl overflow-hidden shadow-md flex-shrink-0 bg-slate-900 flex items-center justify-center">
+        <img src="/images/intro/ai_la_nha_than_hoc.jpg" alt="Chế độ Ai Là Nhà Thần Học" class="w-full h-auto max-h-[500px] object-contain hover:scale-[1.02] transition-transform duration-500" loading="lazy" />
+      </div>
+      <div class="w-full md:w-1/2 text-left">
+        <h3 class="text-2xl md:text-3xl font-bold text-blue-800 mb-4 border-b-2 border-amber-200 pb-2 inline-block">Ai Là Nhà Thần Học?</h3>
+        <p class="text-slate-600 text-base md:text-lg leading-relaxed mb-4">
+          Lấy ý tưởng từ Gameshow nổi tiếng "Ai là triệu phú?", chế độ <strong>Ai Là Nhà Thần Học</strong> là thử thách cuối cùng cho trí nhớ và kho tàng kiến thức thần học của bạn. Bạn sẽ trải qua 15 câu hỏi đi từ mức độ Nhận Biết Cơ Bản đến Suy Luận Cực Khó.
+        </p>
+        <p class="text-slate-600 text-base md:text-lg leading-relaxed">
+          Với 3 quyền trợ giúp quen thuộc (Loại trừ 50:50, Gọi điện ý kiến tổ tư vấn...), bạn phải hết sức cẩn thận. Hình ảnh lôi cuốn, âm thanh gây cấn, đảm bảo sẽ mang lại cho bạn sự hồi hộp để đạt đến mốc đỉnh cao vinh quang kiến thức giáo hội.
+        </p>
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer class="w-full bg-white border-t border-slate-200 py-10 relative z-10 mt-auto shadow-[0_-4px_10px_rgba(0,0,0,0.02)]">
     <div class="max-w-6xl mx-auto px-6 text-center md:flex md:justify-between md:text-left items-center">
       <div class="mb-6 md:mb-0">
         <h4 class="text-xl font-bold cinzel text-blue-900 mb-2">Catholic Quiz</h4>
-        <p class="text-sm text-slate-500 max-w-sm mx-auto md:mx-0">Dự án cộng đồng giáo lý giúp kết nối Kitô hữu thông qua trò chơi trực tuyến.</p>
+        <p class="text-sm text-slate-500 max-w-sm mx-auto md:mx-0">Dự án cộng đồng học hỏi giáo lý Công Giáo qua trò chơi tương tác trực tuyến.</p>
       </div>
       
       <div class="flex flex-col md:flex-row gap-5 md:gap-6 text-sm text-slate-600 font-medium">
-        <a href="/app.html" class="hover:text-blue-600 transition-colors">Trang Chủ App</a>
+        <a href="/app.html" class="hover:text-blue-600 transition-colors">Trang Chủ Khởi Động App</a>
         <a href="/app.html" class="hover:text-blue-600 transition-colors">Chính sách bảo mật (Privacy Policy)</a>
         <a href="/app.html" class="hover:text-blue-600 transition-colors">Điều khoản sử dụng (Terms of Service)</a>
-        <a href="/app.html" class="hover:text-blue-600 transition-colors">Liên hệ - Góp ý</a>
+        <a href="/app.html" class="hover:text-blue-600 transition-colors">Liên hệ - Góp ý Báo lỗi</a>
       </div>
     </div>
     <div class="text-center text-xs text-slate-400 mt-10">
-      &copy; 2026 Catholic Quiz. Mọi bản quyền thuộc về tác giả. Web có sử dụng nền tảng quảng cáo trung gian.
+      &copy; 2026 Catholic Quiz. Mọi bản quyền thuộc tác giả. Trang hiển thị quảng cáo tuân thủ tiêu chuẩn AdSense.
     </div>
   </footer>
 
