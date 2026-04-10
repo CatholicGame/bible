@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, LogIn, AlertCircle, Coins } from 'lucide-react';
 import { useRoom } from '../../hooks/useRoom';
 import { usePlayFabStore } from '../../store/playfabStore';
-import iconCoin from '../../assets/common/coin.png';
+import iconCoin from '../../assets/common/coin.webp';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },

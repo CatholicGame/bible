@@ -16,16 +16,16 @@ import DeveloperContactModal from '../common/DeveloperContactModal';
 import RosaryOfferingModal from '../rosary/RosaryOfferingModal';
 import XPLeaderboardModal from './XPLeaderboardModal';
 
-import bgLandscape from '../../assets/common/common_background_land.png';
-import bgPortrait from '../../assets/common/main_bg_portrait.png';
-import iconCoin from '../../assets/common/coin.png';
-import iconTrophy from '../../assets/common/trophy.png';
-import roseIcon from '../../assets/rosary/rose1.png';
+import bgLandscape from '../../assets/common/common_background_land.webp';
+import bgPortrait from '../../assets/common/main_bg_portrait.webp';
+import iconCoin from '../../assets/common/coin.webp';
+import iconTrophy from '../../assets/common/trophy.webp';
+import roseIcon from '../../assets/rosary/rose1.webp';
 
 // Game thumbnail imports
-import imgMillionaire from '../../assets/games/millionaire.png';
-import imgSorting from '../../assets/games/thumb_secret_words.png';
-import imgGolgotha from '../../assets/games/thumb_golgotha.png';
+import imgMillionaire from '../../assets/games/millionaire.webp';
+import imgSorting from '../../assets/games/thumb_secret_words.webp';
+import imgGolgotha from '../../assets/games/thumb_golgotha.webp';
 
 /* ── Rank icons map (same order as RANK_TIERS) ── */
 const RANK_ICONS_LIST = [

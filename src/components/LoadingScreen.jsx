@@ -3,12 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // ── Critical assets to preload ──
 // Chỉ preload ảnh xuất hiện ngay khi app khởi động
-import bgSrc from '../assets/common/common_background.png';
-import coinSrc from '../assets/common/coin.png';
-import trophySrc from '../assets/common/trophy.png';
-import millionaireSrc from '../assets/games/millionaire.png';
-import crosswordSrc from '../assets/games/thumb_secret_words.png';
-import golgothaSrc from '../assets/games/thumb_golgotha.png';
+import bgSrc from '../assets/common/common_background.webp';
+import coinSrc from '../assets/common/coin.webp';
+import trophySrc from '../assets/common/trophy.webp';
+import millionaireSrc from '../assets/games/millionaire.webp';
+import crosswordSrc from '../assets/games/thumb_secret_words.webp';
+import golgothaSrc from '../assets/games/thumb_golgotha.webp';
 
 const CRITICAL_ASSETS = [
     bgSrc,

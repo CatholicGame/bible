@@ -4,7 +4,7 @@ import { ChevronLeft, RefreshCw, Medal, CalendarDays, Calendar, Infinity as Infi
 import { createPortal } from 'react-dom';
 import { usePlayFabStore } from '../../store/playfabStore';
 import UserAvatar from '../common/UserAvatar';
-import iconTrophy from '../../assets/common/trophy.png';
+import iconTrophy from '../../assets/common/trophy.webp';
 
 /* ── Period tabs ── */
 const TABS = [

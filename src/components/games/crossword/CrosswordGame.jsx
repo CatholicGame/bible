@@ -10,11 +10,11 @@ import { useRoom } from '../../../hooks/useRoom';
 import { setPendingRefund, clearPendingRefund } from '../../../hooks/usePendingRefund';
 import EmojiReactionPanel from '../EmojiReactionPanel';
 import UserAvatar from '../../common/UserAvatar';
-import bgCrosswordLandscape from '../../../assets/common/common_background_land.png';
-import bgCrosswordPortrait from '../../../assets/common/main_bg_portrait.png';
-import resultBanner from '../../../assets/common/result_banner.png';
-import iconCoin from '../../../assets/common/coin.png';
-import iconTrophy from '../../../assets/common/trophy.png';
+import bgCrosswordLandscape from '../../../assets/common/common_background_land.webp';
+import bgCrosswordPortrait from '../../../assets/common/main_bg_portrait.webp';
+import resultBanner from '../../../assets/common/result_banner.webp';
+import iconCoin from '../../../assets/common/coin.webp';
+import iconTrophy from '../../../assets/common/trophy.webp';
 import RAW_PUZZLES from '../../../data/crossword_puzzles.json';
 
 /* ── Physics-based coin burst spawner ──

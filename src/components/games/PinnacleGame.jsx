@@ -8,8 +8,8 @@ import { getRankByScore, getRankLevel } from '../../utils/ranks';
 import { useSoundManager } from '../../utils/soundManager';
 import SettingsModal from '../common/SettingsModal';
 
-import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.png';
-import mcAvatar from '../../assets/pinnacle/MC.png';
+import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.webp';
+import mcAvatar from '../../assets/pinnacle/MC.webp';
 import pointUpSfx from '../../assets/games/SFX/point_up.wav';
 import fireworkSfx from '../../assets/games/SFX/sfx_firework_shot.wav';
 import sfxLaunch from '../../assets/games/SFX/sfx_launch_game_altp.mp3';
@@ -18,9 +18,9 @@ import sfxCorrect from '../../assets/games/SFX/sfx_correct_answer.mp3';
 import sfxCheckpoint from '../../assets/games/SFX/sfx_checkpoint_altp.mp3';
 import sfxIncorrect from '../../assets/games/SFX/sfx_incorrect_answer_altp.mp3';
 import sfxClapEnd from '../../assets/games/SFX/sfx_clap_end.mp3';
-import resultBanner from '../../assets/common/result_banner.png';
-import iconCoin from '../../assets/common/coin.png';
-import iconTrophy from '../../assets/common/trophy.png';
+import resultBanner from '../../assets/common/result_banner.webp';
+import iconCoin from '../../assets/common/coin.webp';
+import iconTrophy from '../../assets/common/trophy.webp';
 
 /* ─── Stage Spotlight overlay — 9 beams in 3 banks ─── */
 // group: 'left' beams lean right toward center, 'right' leans left, 'center' near vertical

@@ -4,7 +4,7 @@ import { X, RefreshCw, Medal, Calendar, CalendarDays, Infinity as InfinityIcon, 
 import { usePlayFabStore } from '../../store/playfabStore';
 import { getRankByScore, RANK_TIERS } from '../../utils/ranks';
 import UserAvatar from '../common/UserAvatar';
-import iconTrophy from '../../assets/common/trophy.png';
+import iconTrophy from '../../assets/common/trophy.webp';
 
 /* ── Period tabs ── */
 const TABS = [

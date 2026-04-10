@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import coinImg from '../../assets/common/coin.png';
-import trophyImg from '../../assets/common/trophy.png';
+import coinImg from '../../assets/common/coin.webp';
+import trophyImg from '../../assets/common/trophy.webp';
 import { motion } from 'framer-motion';
 import {
     ChevronLeft, Trophy, Star, Award, Swords,
