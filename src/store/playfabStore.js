@@ -350,6 +350,12 @@ export const usePlayFabStore = create((set, get) => ({
       const pinnacleMyVote = userData?.PinnacleMyVote?.Value || null;
       const crosswordMyVote = userData?.CrosswordMyVote?.Value || null;
 
+      // GameStats per game
+      let gameStats = {};
+      if (userData?.GameStats?.Value) {
+        try { gameStats = JSON.parse(userData.GameStats.Value); } catch (_) {}
+      }
+
       set({
         isLoggedIn: true,
         isLoading: false,
@@ -367,6 +373,7 @@ export const usePlayFabStore = create((set, get) => ({
         coins,
         rank: getRankByScore(globalScore),
         ...(stats ? { stats } : {}),
+        gameStats,
         pinnacleMyVote,
         crosswordMyVote,
         error: null,
@@ -451,6 +458,12 @@ export const usePlayFabStore = create((set, get) => ({
       const todayStr = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' })).toISOString().slice(0, 10);
       const effectiveRosaryToday = rosaryDate === todayStr ? rosaryToday : 0;
 
+      // GameStats per game
+      let gameStats = {};
+      if (userData?.GameStats?.Value) {
+        try { gameStats = JSON.parse(userData.GameStats.Value); } catch (_) {}
+      }
+
       usePlayFabStore.setState({
         isLoggedIn: true,
         isLoading: false,
@@ -468,6 +481,7 @@ export const usePlayFabStore = create((set, get) => ({
         coins,
         rank: getRankByScore(globalScore),
         ...(stats ? { stats } : {}),
+        gameStats,
         rosaryToday: effectiveRosaryToday,
         rosaryDate: todayStr,
         rosaryTotal,
