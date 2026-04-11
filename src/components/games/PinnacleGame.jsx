@@ -2607,12 +2607,20 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [totalCoins]);
 
-    // After coins done → fly coins (count = totalCoins capped at 9) → addCoins
+    // After coins done → fly coins → addCoins + addGameStats (always records plays)
     useEffect(() => {
-        if (!coinsDone || totalCoins <= 0) return;
+        if (!coinsDone) return;
         const t = setTimeout(() => {
-            spawnFly('coin', coinPillRef, coinTargetRef, totalCoins);
-            setTimeout(() => { if (!savedRef.current) addCoins(totalCoins); setProfileUpdated(true); }, 1400);
+            if (totalCoins > 0) spawnFly('coin', coinPillRef, coinTargetRef, totalCoins);
+            setTimeout(() => {
+                if (!savedRef.current) {
+                    savedRef.current = true;
+                    if (totalCoins > 0) addCoins(totalCoins);
+                    // Always record the play (even if XP=0 / coins=0)
+                    addGameStats('millionaire', { xp: totalXP, coins: totalCoins });
+                }
+                setProfileUpdated(true);
+            }, totalCoins > 0 ? 1400 : 100);
         }, 300);
         return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -2631,17 +2639,13 @@ const EndGameScreen = ({ score, handlePlayAgain, onLeaveGame, currentQuestionInd
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [totalXP]);
 
-    // After XP done → fly XP → addXP + addGameStats
+    // After XP done → fly XP → addXP (addGameStats handled by coin effect above)
     useEffect(() => {
         if (!xpDone || totalXP <= 0) return;
         const t = setTimeout(() => {
             spawnFly('xp', xpPillRef, xpTargetRef, totalXP);
             setTimeout(() => {
-                if (!savedRef.current) {
-                    savedRef.current = true;
-                    addXP(totalXP);
-                    addGameStats('millionaire', { xp: totalXP, coins: totalCoins });
-                }
+                addXP(totalXP);
                 setProfileUpdated(true);
             }, 1400);
         }, 300);
