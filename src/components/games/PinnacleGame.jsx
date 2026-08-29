@@ -494,10 +494,10 @@ const LobbyScreen = ({ onPlay, onShowLeaderboard, onLeaveGame, onSettings, onPla
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-const PinnacleGame = ({ onLeaveGame }) => {
-    // PlayFab store — câu hỏi động từ 1500 câu
+const PinnacleGame = ({ onLeaveGame, customQuestions }) => {
+    // PlayFab store — câu hỏi động từ 1500 câu (hoặc bộ câu hỏi host tự soạn nếu có customQuestions)
     const {
-        currentQuestions, loadNewGame, markAnswered, saveAnsweredQuestions,
+        currentQuestions, loadNewGame, loadCustomGame, markAnswered, saveAnsweredQuestions,
         savePinnacleCompositeScore,
         pinnacleLeaderboard, pinnaclePlayerRank, pinnacleLeaderboardLoading,
         pinnacleActiveTab, loadPinnacleLeaderboard,
@@ -835,7 +835,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
 
 
     const handleStartGame = () => {
-        loadNewGame(); // Rút 15 câu hỏi mới từ pool
+        customQuestions ? loadCustomGame(customQuestions) : loadNewGame(); // Bộ tùy chỉnh của host, hoặc rút ngẫu nhiên từ pool
         setGameState('playing');
         setTimeLeft(getTimeLimitForQuestion(0)); // câu đầu luôn là idx 0 → 30s
         playActiveSound();
@@ -1044,7 +1044,7 @@ const PinnacleGame = ({ onLeaveGame }) => {
             const rfs = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
             if (rfs && !document.fullscreenElement) rfs.call(el).catch(() => {});
         } catch (_) {}
-        loadNewGame(); // Rút 15 câu hỏi mới
+        customQuestions ? loadCustomGame(customQuestions) : loadNewGame(); // Bộ tùy chỉnh của host, hoặc rút ngẫu nhiên từ pool
         setGameState('playing');
         setCurrentQuestionIndex(0);
         setScore(0);

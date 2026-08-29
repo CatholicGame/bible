@@ -579,6 +579,12 @@ export const usePlayFabStore = create((set, get) => ({
     return questions;
   },
 
+  // ── Load a host-curated custom set (15 câu, đã convert sang game format) ──
+  loadCustomGame: (questions) => {
+    set({ currentQuestions: questions });
+    return questions;
+  },
+
   // ── Mark a question as answered (local state only, batched save later) ──
   markAnswered: (questionId) => {
     set(state => {

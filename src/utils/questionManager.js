@@ -34,7 +34,7 @@ const ALL_LEVELS = [
  * JSON:  { id, question, opt_a, opt_b, opt_c, opt_d, correct_ans, explanation, category }
  * Game:  { id, question, options: [a,b,c,d], answer, explanation }
  */
-function toGameFormat(raw) {
+export function toGameFormat(raw) {
   return {
     id: raw.id,
     question: raw.question,
