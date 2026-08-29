@@ -8,23 +8,7 @@ import {
   deleteCustomSet,
   buildTemplateJson,
 } from '../../utils/customQuestionSets';
-
-// Cài đặt riêng của host (chỉ trong trình duyệt máy này)
-const HOST_SETTINGS_KEY = 'pinnacle_host_settings_v1';
-
-const loadHostSettings = () => {
-  try {
-    const raw = localStorage.getItem(HOST_SETTINGS_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch {}
-  return { disableTimer: false };
-};
-
-const saveHostSettings = (settings) => {
-  try {
-    localStorage.setItem(HOST_SETTINGS_KEY, JSON.stringify(settings));
-  } catch {}
-};
+import { getHostSettings, saveHostSettings } from '../../utils/hostSettings';
 
 /**
  * Host Console — trang riêng (?host=1) để chuẩn bị bộ câu hỏi hằng ngày,
@@ -36,7 +20,7 @@ const HostConsole = () => {
   const [setName, setSetName] = useState('');
   const [error, setError] = useState(null);
   const [activeSetId, setActiveSetId] = useState(null);
-  const [hostSettings, setHostSettings] = useState(() => loadHostSettings());
+  const [hostSettings, setHostSettings] = useState(() => getHostSettings());
   const fileInputRef = useRef(null);
 
   const toggleDisableTimer = () => {

@@ -6,6 +6,7 @@ import { Trophy, ArrowLeft, ChevronLeft, CheckCircle2, XCircle, Play, Phone, Use
 import { usePlayFabStore } from '../../store/playfabStore';
 import { getRankByScore, getRankLevel } from '../../utils/ranks';
 import { useSoundManager } from '../../utils/soundManager';
+import { getHostSettings } from '../../utils/hostSettings';
 import SettingsModal from '../common/SettingsModal';
 
 import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.webp';
@@ -494,7 +495,10 @@ const LobbyScreen = ({ onPlay, onShowLeaderboard, onLeaveGame, onSettings, onPla
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-const PinnacleGame = ({ onLeaveGame, customQuestions, disableTimer = false }) => {
+const PinnacleGame = ({ onLeaveGame, customQuestions, disableTimer: disableTimerProp }) => {
+    // Nếu không truyền prop tường minh, dùng cài đặt của host lưu trong trình duyệt này —
+    // để người chơi mở game bình thường trên CÙNG trình duyệt với host cũng bị áp dụng.
+    const [disableTimer] = useState(() => disableTimerProp ?? getHostSettings().disableTimer);
     // PlayFab store — câu hỏi động từ 1500 câu (hoặc bộ câu hỏi host tự soạn nếu có customQuestions)
     const {
         currentQuestions, loadNewGame, loadCustomGame, markAnswered, saveAnsweredQuestions,
