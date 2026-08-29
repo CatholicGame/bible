@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Upload, Trash2, Play, FileDown, AlertCircle } from 'lucide-react';
+import { Upload, Trash2, Play, FileDown, AlertCircle, Timer } from 'lucide-react';
 import PinnacleGame from '../games/PinnacleGame';
 import {
   listCustomSets,
@@ -8,6 +8,23 @@ import {
   deleteCustomSet,
   buildTemplateJson,
 } from '../../utils/customQuestionSets';
+
+// Cài đặt riêng của host (chỉ trong trình duyệt máy này)
+const HOST_SETTINGS_KEY = 'pinnacle_host_settings_v1';
+
+const loadHostSettings = () => {
+  try {
+    const raw = localStorage.getItem(HOST_SETTINGS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return { disableTimer: false };
+};
+
+const saveHostSettings = (settings) => {
+  try {
+    localStorage.setItem(HOST_SETTINGS_KEY, JSON.stringify(settings));
+  } catch {}
+};
 
 /**
  * Host Console — trang riêng (?host=1) để chuẩn bị bộ câu hỏi hằng ngày,
@@ -19,13 +36,26 @@ const HostConsole = () => {
   const [setName, setSetName] = useState('');
   const [error, setError] = useState(null);
   const [activeSetId, setActiveSetId] = useState(null);
+  const [hostSettings, setHostSettings] = useState(() => loadHostSettings());
   const fileInputRef = useRef(null);
+
+  const toggleDisableTimer = () => {
+    setHostSettings((prev) => {
+      const next = { ...prev, disableTimer: !prev.disableTimer };
+      saveHostSettings(next);
+      return next;
+    });
+  };
 
   if (activeSetId) {
     const customQuestions = getCustomSetQuestions(activeSetId);
     return (
       <div className="relative w-full overflow-hidden bg-[#020617]" style={{ height: '100dvh' }}>
-        <PinnacleGame customQuestions={customQuestions} onLeaveGame={() => setActiveSetId(null)} />
+        <PinnacleGame
+          customQuestions={customQuestions}
+          disableTimer={hostSettings.disableTimer}
+          onLeaveGame={() => setActiveSetId(null)}
+        />
       </div>
     );
   }
@@ -79,6 +109,33 @@ const HostConsole = () => {
           <p className="text-blue-200 text-sm mt-1">
             Chuẩn bị bộ câu hỏi riêng cho buổi live hôm nay. Bộ câu hỏi chỉ lưu trên trình duyệt này, không upload lên server.
           </p>
+        </div>
+
+        {/* Settings card */}
+        <div className="bg-[#1e3a8a]/60 border-2 border-blue-400/30 rounded-2xl p-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-blue-700/60 border border-blue-400/40 flex items-center justify-center shrink-0">
+              <Timer size={16} className="text-yellow-300" />
+            </div>
+            <div>
+              <p className="font-bold text-blue-100 text-sm">Tắt đếm giờ trả lời</p>
+              <p className="text-blue-300/70 text-xs">Người chơi có thể suy nghĩ không giới hạn thời gian mỗi câu</p>
+            </div>
+          </div>
+          <button
+            onClick={toggleDisableTimer}
+            role="switch"
+            aria-checked={hostSettings.disableTimer}
+            className={`relative w-12 h-7 rounded-full transition-colors shrink-0 ${
+              hostSettings.disableTimer ? 'bg-green-500' : 'bg-blue-900/70'
+            }`}
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-white transition-transform ${
+                hostSettings.disableTimer ? 'translate-x-5' : ''
+              }`}
+            />
+          </button>
         </div>
 
         {/* Upload card */}

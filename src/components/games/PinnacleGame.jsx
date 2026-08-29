@@ -494,7 +494,7 @@ const LobbyScreen = ({ onPlay, onShowLeaderboard, onLeaveGame, onSettings, onPla
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-const PinnacleGame = ({ onLeaveGame, customQuestions }) => {
+const PinnacleGame = ({ onLeaveGame, customQuestions, disableTimer = false }) => {
     // PlayFab store — câu hỏi động từ 1500 câu (hoặc bộ câu hỏi host tự soạn nếu có customQuestions)
     const {
         currentQuestions, loadNewGame, loadCustomGame, markAnswered, saveAnsweredQuestions,
@@ -843,7 +843,7 @@ const PinnacleGame = ({ onLeaveGame, customQuestions }) => {
     };
 
     useEffect(() => {
-        if (gameState !== 'playing' || introPhase < 4 || isAnswerRevealed || showStopConfirm || confirmFiftyFifty || confirmAudience || confirmPhone || confirmSwap || audienceState || phoneState || isSwapping) return;
+        if (disableTimer || gameState !== 'playing' || introPhase < 4 || isAnswerRevealed || showStopConfirm || confirmFiftyFifty || confirmAudience || confirmPhone || confirmSwap || audienceState || phoneState || isSwapping) return;
 
         const timer = setInterval(() => {
             setTimeLeft(prev => {
@@ -857,7 +857,7 @@ const PinnacleGame = ({ onLeaveGame, customQuestions }) => {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [gameState, introPhase, currentQuestionIndex, isAnswerRevealed, showStopConfirm, confirmFiftyFifty, confirmAudience, confirmPhone, confirmSwap, audienceState, phoneState]);
+    }, [disableTimer, gameState, introPhase, currentQuestionIndex, isAnswerRevealed, showStopConfirm, confirmFiftyFifty, confirmAudience, confirmPhone, confirmSwap, audienceState, phoneState]);
 
     // NOTE: Auto-advance đã bị tắt — user phải bấm "Tiếp tục" thủ công.
     // explanationTimeLeft giữ lại để tránh lỗi reference ở JSX render.
@@ -1964,7 +1964,7 @@ const PinnacleGame = ({ onLeaveGame, customQuestions }) => {
                                     >
                                         {/* Neon timer — outer wrapper handles circular glow via filter:drop-shadow */}
                                         <motion.div
-                                            animate={timeLeft <= 10 ? {
+                                            animate={(!disableTimer && timeLeft <= 10) ? {
                                                 filter: [
                                                     'drop-shadow(0 0 8px rgba(236,72,153,0.7)) drop-shadow(0 0 22px rgba(236,72,153,0.35))',
                                                     'drop-shadow(0 0 20px rgba(236,72,153,1)) drop-shadow(0 0 50px rgba(236,72,153,0.55))',
@@ -1979,7 +1979,7 @@ const PinnacleGame = ({ onLeaveGame, customQuestions }) => {
                                             className="relative w-40 h-40 landscape:w-40 landscape:h-40 md:w-[193px] md:h-[193px] lg:w-[225px] lg:h-[225px] rounded-full overflow-hidden"
                                             style={{
                                                 background: 'radial-gradient(circle at 40% 30%, rgba(14,30,80,0.95) 0%, #020617 70%)',
-                                                border: timeLeft <= 10
+                                                border: (!disableTimer && timeLeft <= 10)
                                                     ? '2px solid rgba(236,72,153,0.5)'
                                                     : '2px solid rgba(34,211,238,0.3)',
                                             }}
@@ -1991,20 +1991,20 @@ const PinnacleGame = ({ onLeaveGame, customQuestions }) => {
                                                     stroke="rgba(255,255,255,0.07)" strokeWidth="4" fill="transparent" />
                                                 {/* Glow duplicate (wider, more transparent) */}
                                                 <circle cx="50" cy="50" r="44"
-                                                    stroke={timeLeft <= 10 ? 'rgba(236,72,153,0.4)' : 'rgba(34,211,238,0.3)'}
+                                                    stroke={(!disableTimer && timeLeft <= 10) ? 'rgba(236,72,153,0.4)' : 'rgba(34,211,238,0.3)'}
                                                     strokeWidth="8" fill="transparent"
                                                     strokeDasharray="276"
-                                                    strokeDashoffset={276 - (timeLeft / 30) * 276}
+                                                    strokeDashoffset={disableTimer ? 0 : 276 - (timeLeft / 30) * 276}
                                                     strokeLinecap="round"
                                                     style={{ transition: 'stroke 0.5s, stroke-dashoffset 1s linear' }}
                                                 />
                                                 {/* Main progress arc */}
                                                 <circle cx="50" cy="50" r="44"
-                                                    stroke={timeLeft <= 10 ? '#ec4899' : '#22d3ee'}
+                                                    stroke={(!disableTimer && timeLeft <= 10) ? '#ec4899' : '#22d3ee'}
                                                     strokeWidth="4" fill="transparent"
                                                     strokeLinecap="round"
                                                     strokeDasharray="276"
-                                                    strokeDashoffset={276 - (timeLeft / 30) * 276}
+                                                    strokeDashoffset={disableTimer ? 0 : 276 - (timeLeft / 30) * 276}
                                                     style={{ transition: 'stroke 0.5s, stroke-dashoffset 1s linear' }}
                                                 />
                                             </svg>
@@ -2013,18 +2013,18 @@ const PinnacleGame = ({ onLeaveGame, customQuestions }) => {
                                                 <span
                                                     className="text-[2.9rem] landscape:text-[3.3rem] md:text-[3.5rem] lg:text-[4.6rem] font-black leading-none tracking-tight"
                                                     style={{
-                                                        color: timeLeft <= 10 ? '#f9a8d4' : '#e0f9ff',
-                                                        textShadow: timeLeft <= 10
+                                                        color: (!disableTimer && timeLeft <= 10) ? '#f9a8d4' : '#e0f9ff',
+                                                        textShadow: (!disableTimer && timeLeft <= 10)
                                                             ? '0 0 12px #ec4899, 0 0 28px rgba(236,72,153,0.7)'
                                                             : '0 0 10px #22d3ee, 0 0 24px rgba(34,211,238,0.5)',
                                                     }}
                                                 >
-                                                    {timeLeft}
+                                                    {disableTimer ? '∞' : timeLeft}
                                                 </span>
                                                 <span
                                                     className="text-[10px] landscape:text-[13px] md:text-[13px] font-bold tracking-[0.2em] uppercase mt-1"
-                                                    style={{ color: timeLeft <= 10 ? 'rgba(236,72,153,0.6)' : 'rgba(34,211,238,0.5)' }}
-                                                >giây</span>
+                                                    style={{ color: (!disableTimer && timeLeft <= 10) ? 'rgba(236,72,153,0.6)' : 'rgba(34,211,238,0.5)' }}
+                                                >{disableTimer ? 'không giới hạn' : 'giây'}</span>
                                             </div>
                                         </motion.div>
                                     </motion.div>
