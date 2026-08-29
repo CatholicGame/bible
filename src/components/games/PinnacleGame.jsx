@@ -1959,13 +1959,12 @@ const PinnacleGame = ({ onLeaveGame, customQuestions, disableTimer: disableTimer
                                         </div>
                                     </motion.div>
 
-                                    {/* Timer — ẩn hoàn toàn khi host tắt đếm giờ */}
-                                    {!disableTimer && (
+                                    {/* Timer — ẩn khi host tắt đếm giờ, nhưng vẫn giữ chỗ để không xô lệch layout */}
                                     <motion.div
                                         initial={{ opacity: 0, scale: 0.5 }}
-                                        animate={introPhase >= 4 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                                        animate={introPhase >= 4 && !disableTimer ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
                                         transition={{ duration: 0.5, type: 'spring' }}
-                                        className="w-full flex flex-col items-center justify-center shrink-0 relative landscape:mt-[100px]"
+                                        className={`w-full flex flex-col items-center justify-center shrink-0 relative landscape:mt-[100px] ${disableTimer ? 'invisible' : ''}`}
                                     >
                                         {/* Neon timer — outer wrapper handles circular glow via filter:drop-shadow */}
                                         <motion.div
@@ -2033,7 +2032,6 @@ const PinnacleGame = ({ onLeaveGame, customQuestions, disableTimer: disableTimer
                                             </div>
                                         </motion.div>
                                     </motion.div>
-                                    )}
 
 
 
