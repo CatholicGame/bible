@@ -307,18 +307,18 @@ const CartoonBox = ({ children, className = "", onClick, disabled, isActive, isC
 
     return (
         <div
-            className={`w-full transition-all duration-500 ${isHidden ? 'opacity-20 pointer-events-none' : ''}`}
+            className={`w-full h-full transition-all duration-500 ${isHidden ? 'opacity-20 pointer-events-none' : ''}`}
             style={{ filter: `drop-shadow(0 5px 0 ${shadow})` }}
         >
             {/* Outer rim — lighter gradient = the "border" */}
             <div
-                className={`w-full transition-all duration-300 ${isInteractive ? 'cursor-pointer hover:brightness-110 active:translate-y-[2px]' : 'cursor-default'} ${className}`}
+                className={`w-full h-full transition-all duration-300 ${isInteractive ? 'cursor-pointer hover:brightness-110 active:translate-y-[2px]' : 'cursor-default'} ${className}`}
                 style={{ clipPath: clip, WebkitClipPath: clip, background: outerBg, padding: '3px 5px' }}
                 onClick={isInteractive ? onClick : undefined}
             >
                 {/* Inner content — darker fill = the "depth" */}
                 <div
-                    className="w-full relative"
+                    className="w-full h-full relative flex items-center"
                     style={{ clipPath: clip, WebkitClipPath: clip, background: innerBg, padding: '9px 28px 9px 20px' }}
                 >
                     {/* Top shine overlay */}
