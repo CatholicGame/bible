@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Upload, Trash2, Play, FileDown, AlertCircle, Timer } from 'lucide-react';
 import PinnacleGame from '../games/PinnacleGame';
 import {
@@ -8,7 +8,7 @@ import {
   deleteCustomSet,
   buildTemplateJson,
 } from '../../utils/customQuestionSets';
-import { getHostSettings, saveHostSettings } from '../../utils/hostSettings';
+import { getHostSettings, saveHostSettings, markHostBrowser } from '../../utils/hostSettings';
 
 /**
  * Host Console — trang riêng (?host=1) để chuẩn bị bộ câu hỏi hằng ngày,
@@ -22,6 +22,10 @@ const HostConsole = () => {
   const [activeSetId, setActiveSetId] = useState(null);
   const [hostSettings, setHostSettings] = useState(() => getHostSettings());
   const fileInputRef = useRef(null);
+
+  // Đánh dấu trình duyệt này là của host — dù chưa đổi cài đặt nào — để bật các phím tắt/tính năng chỉ dành cho host
+  // (vd: tải bộ câu hỏi đang chơi) trên MỌI phiên chơi ở cùng trình duyệt, kể cả ở chế độ khách bình thường.
+  useEffect(() => { markHostBrowser(); }, []);
 
   const toggleDisableTimer = () => {
     setHostSettings((prev) => {

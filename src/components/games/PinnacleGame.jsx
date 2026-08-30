@@ -6,7 +6,7 @@ import { Trophy, ArrowLeft, ChevronLeft, CheckCircle2, XCircle, Play, Phone, Use
 import { usePlayFabStore } from '../../store/playfabStore';
 import { getRankByScore, getRankLevel } from '../../utils/ranks';
 import { useSoundManager } from '../../utils/soundManager';
-import { getHostSettings } from '../../utils/hostSettings';
+import { getHostSettings, isHostBrowser } from '../../utils/hostSettings';
 import SettingsModal from '../common/SettingsModal';
 
 import pinnacleBackground from '../../assets/pinnacle/altp_bg_02.webp';
@@ -576,6 +576,39 @@ const PinnacleGame = ({ onLeaveGame, customQuestions, disableTimer: disableTimer
 
     // Load vote counts when game opens
     useEffect(() => { loadPinnacleVoteCounts(); }, []); // eslint-disable-line
+
+    // Phím tắt cho host: Ctrl+Alt+D tải về bộ câu hỏi (kèm đáp án) của ván đang chơi.
+    // Chỉ hoạt động trên trình duyệt của host (đã từng mở Host Console) — kể cả khi
+    // đang chơi ở chế độ khách bình thường, không riêng qua Host Console.
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (!(e.ctrlKey && e.altKey && (e.key === 'd' || e.key === 'D'))) return;
+            if (!isHostBrowser() || gameState !== 'playing' || !currentQuestions?.length) return;
+            e.preventDefault();
+
+            const exportData = currentQuestions.map((q) => ({
+                question: q.question,
+                opt_a: q.options?.[0] ?? '',
+                opt_b: q.options?.[1] ?? '',
+                opt_c: q.options?.[2] ?? '',
+                opt_d: q.options?.[3] ?? '',
+                correct_ans: q.answer,
+                explanation: q.explanation || '',
+                category: q.category || '',
+            }));
+
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `bo_cau_hoi_dang_choi_${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [gameState, currentQuestions]);
 
     // XP Particle animation
     const [xpParticles, setXpParticles] = useState([]);

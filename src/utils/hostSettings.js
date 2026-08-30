@@ -20,3 +20,17 @@ export function saveHostSettings(settings) {
     localStorage.setItem(HOST_SETTINGS_KEY, JSON.stringify(settings));
   } catch {}
 }
+
+/** true nếu trình duyệt này từng mở Host Console (?host=1) — dùng để bật các tính năng chỉ dành cho host. */
+export function isHostBrowser() {
+  try {
+    return localStorage.getItem(HOST_SETTINGS_KEY) !== null;
+  } catch {
+    return false;
+  }
+}
+
+/** Đánh dấu trình duyệt này là của host, kể cả khi chưa đổi cài đặt nào. */
+export function markHostBrowser() {
+  saveHostSettings(getHostSettings());
+}
