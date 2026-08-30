@@ -1959,16 +1959,18 @@ const PinnacleGame = ({ onLeaveGame, customQuestions, disableTimer: disableTimer
                                         </div>
                                     </motion.div>
 
-                                    {/* Timer — ẩn khi host tắt đếm giờ, nhưng vẫn giữ chỗ để không xô lệch layout */}
+                                    {/* Timer */}
                                     <motion.div
                                         initial={{ opacity: 0, scale: 0.5 }}
-                                        animate={introPhase >= 4 && !disableTimer ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                                        animate={introPhase >= 4 ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
                                         transition={{ duration: 0.5, type: 'spring' }}
-                                        className={`w-full flex flex-col items-center justify-center shrink-0 relative landscape:mt-[100px] ${disableTimer ? 'invisible' : ''}`}
+                                        className="w-full flex flex-col items-center justify-center shrink-0 relative landscape:mt-[100px]"
                                     >
-                                        {/* Neon timer — outer wrapper handles circular glow via filter:drop-shadow */}
+                                        {/* Neon timer — outer wrapper handles circular glow via filter:drop-shadow.
+                                            Khi host tắt đếm giờ: chỉ ẩn bằng opacity (không đổi layout/class) để giữ nguyên khoảng trống. */}
                                         <motion.div
-                                            animate={timeLeft <= 10 ? {
+                                            animate={disableTimer ? { opacity: 0 } : (timeLeft <= 10 ? {
+                                                opacity: 1,
                                                 filter: [
                                                     'drop-shadow(0 0 8px rgba(236,72,153,0.7)) drop-shadow(0 0 22px rgba(236,72,153,0.35))',
                                                     'drop-shadow(0 0 20px rgba(236,72,153,1)) drop-shadow(0 0 50px rgba(236,72,153,0.55))',
@@ -1976,16 +1978,18 @@ const PinnacleGame = ({ onLeaveGame, customQuestions, disableTimer: disableTimer
                                                 ],
                                                 scale: [1, 1.04, 1],
                                             } : {
+                                                opacity: 1,
                                                 filter: 'drop-shadow(0 0 10px rgba(34,211,238,0.55)) drop-shadow(0 0 28px rgba(34,211,238,0.25))',
                                                 scale: 1,
-                                            }}
-                                            transition={{ duration: 0.75, repeat: Infinity, ease: 'easeInOut' }}
+                                            })}
+                                            transition={{ duration: 0.75, repeat: disableTimer ? 0 : Infinity, ease: 'easeInOut' }}
                                             className="relative w-40 h-40 landscape:w-40 landscape:h-40 md:w-[193px] md:h-[193px] lg:w-[225px] lg:h-[225px] rounded-full overflow-hidden"
                                             style={{
                                                 background: 'radial-gradient(circle at 40% 30%, rgba(14,30,80,0.95) 0%, #020617 70%)',
                                                 border: timeLeft <= 10
                                                     ? '2px solid rgba(236,72,153,0.5)'
                                                     : '2px solid rgba(34,211,238,0.3)',
+                                                pointerEvents: disableTimer ? 'none' : 'auto',
                                             }}
                                         >
                                             {/* SVG arc — NO filter on elements, glow comes from outer container */}
